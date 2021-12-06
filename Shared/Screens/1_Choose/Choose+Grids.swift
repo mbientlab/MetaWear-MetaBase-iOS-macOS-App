@@ -18,6 +18,7 @@ extension ChooseDevicesScreen {
                 ScrollView(.horizontal, showsIndicators: true) {
                     grid
                         .padding(.leading, centeringPadding)
+                        .offset(y: -DeviceCell.verticalHoverDelta)
                         .animation(.interactiveSpring(), value: centeringPadding)
                         .animation(.easeInOut, value: vm.groups)
                         .animation(.easeInOut, value: vm.ungrouped)
@@ -26,6 +27,7 @@ extension ChooseDevicesScreen {
             }
             .frame(maxHeight: .infinity, alignment: .bottom)
             .background(measureWidth)
+
         }
 
         private var grid: some View {
@@ -37,7 +39,7 @@ extension ChooseDevicesScreen {
 
         private var divider: some View {
             Rectangle()
-                .frame(width: 1, height: 100)
+                .frame(width: 1)
                 .foregroundColor(Color.white.opacity(0.25))
         }
 

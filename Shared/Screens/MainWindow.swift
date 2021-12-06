@@ -84,7 +84,7 @@ struct MainWindow: View {
             get: { routing.destination },
             set: {
                 guard let next = $0 else { return }
-                routing.setDestination(next, updatingItem: false, item: nil)
+                routing.setDestination(next)
             })
     }
 
@@ -96,19 +96,19 @@ struct MainWindow: View {
         ) { EmptyView() }
 
         NavigationLink(
-            destination: HistoryScreen(routing: routing, factory: factory),
+            destination: HistoryScreen(),
             tag: Routing.Destination.choose,
             selection: destination
         ) { EmptyView() }
 
         NavigationLink(
-            destination: ModuleConfiguratorScreen(),
+            destination: ConfigureScreen(),
             tag: Routing.Destination.choose,
             selection: destination
         ) { EmptyView() }
 
         NavigationLink(
-            destination: ProgressScreen(),
+            destination: ActionScreen(),
             tag: Routing.Destination.choose,
             selection: destination
         ) { EmptyView() }

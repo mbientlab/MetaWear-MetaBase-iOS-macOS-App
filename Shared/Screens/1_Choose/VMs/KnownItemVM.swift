@@ -5,6 +5,7 @@ import Combine
 import MetaWear
 import Metadata
 import mbientSwiftUI
+import CoreBluetooth
 
 /// Provides up-to-date representations of a grouping of MetaWears or a single MetaWear (previously remembered or newly discovered) and related CRUD methods.
 ///
@@ -36,16 +37,18 @@ public class KnownItemVM: ObservableObject, ItemVM {
     public var isGroup: Bool { group != nil }
     public var deviceCount: Int { devices.endIndex }
 
+    @Published public private(set) var connection: CBPeripheralState
     @Published public private(set) var rssi: SignalLevel
-    @Published public private(set) var isAttemptingConnection = false
 
     @Published private var group: MetaWear.Group?
     @Published private var devices: [MWKnownDevice]
-    private var rssiSub: AnyCancellable? = nil
-    private unowned let store: MetaWearStore
+    private var rssiSub:         AnyCancellable? = nil
+    private var connectionSub:   AnyCancellable? = nil
+    private unowned let store:   MetaWearStore
     private unowned let routing: Routing
 
     public init(device: MWKnownDevice, store: MetaWearStore, routing: Routing) {
+        self.connection = device.mw?.isConnectedAndSetup == true ? .connected : .disconnected
         self.store = store
         self.routing = routing
         self.devices = [device]
@@ -58,14 +61,22 @@ public class KnownItemVM: ObservableObject, ItemVM {
         let _devices = store.getDevicesInGroup(group)
         self.devices = _devices
         self.rssi = Self.getLowestSignal(in: _devices)
+        self.connection = Self.getLowestConnectionState(in: _devices)
     }
+}
+
+// MARK: - Lifecycle
+
+public extension KnownItemVM {
 
     func onAppear() {
         trackRSSI()
+        trackConnection()
     }
 
     func onDisappear() {
         rssiSub?.cancel()
+        connectionSub?.cancel()
     }
 
     func connect() {
@@ -76,6 +87,8 @@ public class KnownItemVM: ObservableObject, ItemVM {
         }
     }
 }
+
+// MARK: - Intents
 
 public extension KnownItemVM {
 
@@ -129,6 +142,9 @@ public extension KnownItemVM {
 
 }
 
+
+// MARK: - Internal - State updates
+
 private extension KnownItemVM {
 
     static func getLowestSignal(in devices: [MWKnownDevice]) -> SignalLevel {
@@ -138,16 +154,101 @@ private extension KnownItemVM {
     }
 
     func trackRSSI() {
-        guard let main = devices.first(where: { mw, _ in mw != nil })?.mw else { return }
+        // If MetaWear reference not available at load
+        // (scanner might be slower than persistence),
+        // then keep retrying until found.
+        guard let main = devices.first(where: { mw, _ in mw != nil })?.mw else {
+            rssiSub = retryTimer()
+                .sink { [weak self] _ in
+                    self?.rssiSub?.cancel()
+                    self?.trackRSSI()
+                }
+            return
+        }
 
+        rssiSub?.cancel()
         rssiSub = main.rssiPublisher
             .map { [weak self] first -> SignalLevel in
                 guard let self = self else { return .init(rssi: first) }
                 return Self.getLowestSignal(in: self.devices)
             }
+            .receive(on: DispatchQueue.main)
+            .removeDuplicates()
             .sink { [weak self] update in
-                guard self?.rssi != update else { return }
                 self?.rssi = update
             }
     }
+
+    static func getLowestConnectionState(in devices: [MWKnownDevice]) -> CBPeripheralState {
+        devices.map { $0.mw?.connectionStateCurrent ?? .disconnected }.min() ?? .disconnected
+    }
+
+    func trackConnection() {
+        guard let main = devices.first(where: { mw, _ in mw != nil })?.mw else {
+            // If MetaWear reference not available at load
+            // (scanner might be slower than persistence),
+            // then keep retrying until found.
+            connectionSub = retryTimer()
+                .sink { [weak self] _ in
+                    self?.connectionSub?.cancel()
+                    self?.trackConnection()
+                }
+            return
+        }
+        connectionSub?.cancel()
+        connectionSub = main.connectionState
+            .map { [weak self] first -> CBPeripheralState in
+                guard let self = self else { return first }
+                return Self.getLowestConnectionState(in: self.devices)
+            }
+            .receive(on: DispatchQueue.main)
+            .removeDuplicates()
+            .sink(receiveValue: { [weak self] update in
+                self?.connection = update
+            })
+    }
+
+    /// Retry using updated device references
+    func retryTimer() -> AnyPublisher<[MWKnownDevice],Never> {
+        Timer.TimerPublisher(interval: 1, tolerance: 1, runLoop: RunLoop.main, mode: .default, options: nil)
+            .autoconnect()
+            .compactMap { [weak self] _ -> [MWKnownDevice]? in
+                guard let self = self else { return nil }
+                let newDevices = self.devices.compactMap { self.store.getDeviceAndMetadata($0.meta.mac) }
+                guard newDevices.contains(where: { $0.mw != nil }) else { return nil }
+                return newDevices
+            }
+            .handleEvents(receiveOutput: { [weak self] update in
+                DispatchQueue.main.async { [weak self] in
+                    self?.devices = update
+                }
+            })
+            .eraseToAnyPublisher()
+    }
 }
+
+extension CBPeripheralState {
+    var ranking: Int {
+        switch self {
+            case .disconnecting: return 0
+            case .disconnected: return 1
+            case .connecting: return 2
+            case .connected: return 3
+            default: return 0
+        }
+    }
+}
+
+extension CBPeripheralState: Comparable {
+    public static func < (lhs: CBPeripheralState, rhs: CBPeripheralState) -> Bool {
+        lhs.ranking < rhs.ranking
+    }
+}
+
+
+//ForEach(vm.macs.indices, id: \.self) { index in
+//    Text(vm.macs[index])
+//        .font(.system(.headline, design: .monospaced))
+//        .lineLimit(1)
+//        .fixedSize()
+//}

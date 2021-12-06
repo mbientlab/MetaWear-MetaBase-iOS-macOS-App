@@ -12,6 +12,9 @@ public class Root: ObservableObject {
 
     // Services
     private let scanner: MetaWearScanner
+    private let cloud: NSUbiquitousKeyValueStore
+    private let local: UserDefaults
+    private let metawearLoader: MWKnownDevicesPersistence
 
     // VMs
     public let factory: UIFactory
@@ -19,9 +22,12 @@ public class Root: ObservableObject {
     public let bluetoothVM: BLEStateWarningsVM
 
     public init() {
-        let loader  = MWCloudLoader.shared
+        self.cloud = .default
+        self.local = .standard
+        self.metawearLoader  = MWCloudLoader(local: local, cloud: cloud)
+
         let scanner = MetaWearScanner.sharedRestore
-        let devices = MetaWearStore(scanner: scanner, loader: loader)
+        let devices = MetaWearStore(scanner: scanner, loader: metawearLoader)
         let routing = Routing()
         let factory = UIFactory(devices: devices, scanner: scanner, routing: routing)
 
@@ -37,6 +43,9 @@ public class Root: ObservableObject {
 public extension Root {
 
     func start() {
-        devices.load()
+        do {
+            try devices.load()
+            let _ = cloud.synchronize()
+        } catch { NSLog("Load Failure: \(error.localizedDescription)") }
     }
 }

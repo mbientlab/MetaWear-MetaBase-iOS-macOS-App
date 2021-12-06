@@ -19,14 +19,24 @@ extension ChooseDevicesScreen {
         @EnvironmentObject private var routing: Routing
 
         @State private var isHovering = false
-        static let width = CGFloat(120)
 
         var body: some View {
-            VStack(spacing: 15) {
-                DeviceCell.MobileComponents(isHovering: isHovering, vm: vm)
-                DeviceCell.StationaryComponents(isHovering: isHovering, vm: vm)
+            VStack(spacing: DeviceCell.spacing) {
+                DeviceCell.MobileComponents(
+                    isHovering: isHovering,
+                    connection: vm.connection,
+                    name: vm.name,
+                    models: vm.models,
+                    isLocallyKnown: vm.isLocallyKnown,
+                    isGroup: vm.isGroup
+                )
+                DeviceCell.StationaryComponents(
+                    isHovering: isHovering,
+                    isLocallyKnown: vm.isLocallyKnown,
+                    rssi: vm.rssi
+                )
             }
-            .frame(width: Self.width)
+            .frame(width: DeviceCell.width)
             .animation(.easeOut, value: isHovering)
             .whenHovered { isHovering = $0 }
             .onTapGesture { vm.connect() }

@@ -50,6 +50,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
 
         private func startAnimations() {
             didAppear.toggle()
+            hasUsed = CurrentMetaBaseVersion
             DispatchQueue.main.after(transitionInterval) {
                 animate.toggle()
             }

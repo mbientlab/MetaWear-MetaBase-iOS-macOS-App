@@ -34,7 +34,6 @@ public class DiscoveryListVM: ObservableObject {
         store.unknownDevices
             .sink { [weak self] in self?.unknown = $0.sorted(by: <) }
             .store(in: &subs)
-
     }
 }
 

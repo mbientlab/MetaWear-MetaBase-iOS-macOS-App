@@ -3,6 +3,7 @@
 import SwiftUI
 import mbientSwiftUI
 import MetaWear
+import CoreBluetooth
 
 extension ChooseDevicesScreen {
 
@@ -19,11 +20,24 @@ extension ChooseDevicesScreen {
 
         @State private var isHovering = false
         static let width = CGFloat(120)
+        static let spacing = CGFloat(20)
+        static let verticalHoverDelta = CGFloat(20)
 
-        var body: some View { 
-            VStack(spacing: 15) {
-                MobileComponents(isHovering: isHovering, vm: vm)
-                StationaryComponents(isHovering: isHovering, vm: vm)
+        var body: some View {
+            VStack(spacing: Self.spacing) {
+                MobileComponents(
+                    isHovering: isHovering,
+                    connection: vm.connection,
+                    name: vm.name,
+                    models: vm.models,
+                    isLocallyKnown: vm.isLocallyKnown,
+                    isGroup: vm.isGroup
+                )
+                StationaryComponents(
+                    isHovering: isHovering,
+                    isLocallyKnown: vm.isLocallyKnown,
+                    rssi: vm.rssi
+                )
             }
             .frame(width: Self.width)
             .animation(.easeOut, value: isHovering)
@@ -44,6 +58,13 @@ extension ChooseDevicesScreen.DeviceCell {
     struct ContextMenu: View {
 
         let vm: KnownItemVM
+        let deviceDescriptor: String = {
+#if canImport(AppKit)
+            return "Computer"
+#else
+            return UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
+#endif
+        }()
 
         var body: some View {
             Button("Rename", action: vm.rename)
@@ -59,8 +80,8 @@ extension ChooseDevicesScreen.DeviceCell {
             Divider()
 
             Menu(vm.isGroup ? "Forget All" : "Forget") {
-                Button("Local Device Only") { vm.forgetLocally() }
-                Button("Across All Devices") { vm.forgetGlobally() }
+                Button("For This \(deviceDescriptor) Only") { vm.forgetLocally() }
+                Button("For All Devices") { vm.forgetGlobally() }
             }
         }
     }
@@ -70,21 +91,26 @@ extension ChooseDevicesScreen.DeviceCell {
     struct MobileComponents: View {
 
         var isHovering: Bool
-        var vm: ItemVM
+        var connection: CBPeripheralState
+        var name: String
+        var models: [(mac: String, model: MetaWear.Model)]
+        var isLocallyKnown: Bool
+        var isGroup: Bool
 
         private var imageWidth: CGFloat { 110 }
         private var imageHeight: CGFloat { isHovering ? 150 : 135 }
+        static let verticalHoverDelta = ChooseDevicesScreen.DeviceCell.verticalHoverDelta
 
         var body: some View {
             SFSymbol.connected.image()
                 .font(.headline)
                 .foregroundColor(.white)
-                .opacity(true ? 1 : 0)
-                .offset(y: isHovering ? -20 : 0)
+                .opacity(connection == .connected ? 1 : 0)
+                .offset(y: isHovering ? -Self.verticalHoverDelta : 0)
 
-            Text(vm.name)
+            Text(name)
                 .font(.system(.title, design: .rounded))
-                .offset(y: isHovering ? -20 : 0)
+                .offset(y: isHovering ? -Self.verticalHoverDelta : 0)
                 .foregroundColor(.white)
 
             image
@@ -92,8 +118,8 @@ extension ChooseDevicesScreen.DeviceCell {
 
         var image: some View {
             HStack {
-                if vm.isGroup {
-                    ForEach(vm.models.prefix(3), id: \.mac) { (id, model) in
+                if isGroup {
+                    ForEach(models.prefix(3), id: \.mac) { (id, model) in
                         model.image.image()
                             .resizable()
                             .scaledToFill()
@@ -102,11 +128,12 @@ extension ChooseDevicesScreen.DeviceCell {
                     }
 
                 } else {
-                    (vm.models.first?.model ?? .notFound("")).image.image()
+                    (models.first?.model ?? .notFound("")).image.image()
                         .resizable()
                         .scaledToFill()
                         .scaleEffect(isHovering ? 1.1 : 1, anchor: .bottom)
-                        .opacity(vm.isLocallyKnown ? 1 : 0.5)
+                        .opacity(isLocallyKnown ? 1 : 0.5)
+                        .animation(.easeOut, value: isLocallyKnown)
                 }
             }
             .frame(width: imageWidth, height: imageHeight, alignment: .center)
@@ -118,28 +145,23 @@ extension ChooseDevicesScreen.DeviceCell {
     struct StationaryComponents: View {
 
         var isHovering: Bool
-        var vm: ItemVM
+        var isLocallyKnown: Bool
+        var rssi: SignalLevel
 
         @Namespace private var namespace
 
         var body: some View {
-            mac
-                .opacity(isHovering ? 1 : 0.75)
 
-            LargeSignalDots(signal: vm.rssi, color: .white)
-                .opacity(isHovering ? 1 : 0.75)
-        }
+            SFSymbol.icloud.image()
+                .font(.headline)
+                .help(Text("Synced via iCloud"))
+                .accessibilityLabel(Text(SFSymbol.icloud.accessibilityDescription))
+                .opacity(isLocallyKnown ? 0 : 0.75)
+                .animation(.easeOut, value: isLocallyKnown)
 
-        @ViewBuilder var mac: some View {
-            VStack {
-                ForEach(vm.macs.indices, id: \.self) { index in
-                    Text(vm.macs[index])
-                        .font(.system(.headline, design: .monospaced))
-                        .lineLimit(1)
-                        .fixedSize()
-                }
-            }
-            .foregroundColor(.white.opacity(0.8))
+            LargeSignalDots(signal: rssi, color: .white)
+                .opacity(isHovering ? 1 : 0.75)
+                .padding(.top, 20)
         }
     }
 }
