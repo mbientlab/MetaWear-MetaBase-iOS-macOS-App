@@ -73,8 +73,10 @@
 		9493501B275A112200E388FF /* DiscoveryListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935019275A112200E388FF /* DiscoveryListVM.swift */; };
 		94935023275A11C600E388FF /* KnownItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935022275A11C600E388FF /* KnownItemVM.swift */; };
 		94935024275A11C600E388FF /* KnownItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935022275A11C600E388FF /* KnownItemVM.swift */; };
-		94935026275A120D00E388FF /* HistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935025275A120D00E388FF /* HistoryScreen.swift */; };
-		94935027275A120D00E388FF /* HistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935025275A120D00E388FF /* HistoryScreen.swift */; };
+		94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
+		94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
+		94A165C3275F2F8600FA355D /* History+About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+About.swift */; };
+		94A165C4275F2F8600FA355D /* History+About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+About.swift */; };
 		94DFEC5E275D389700BB80DB /* Choose+UnknownDeviceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC5D275D389700BB80DB /* Choose+UnknownDeviceCell.swift */; };
 		94DFEC5F275D389700BB80DB /* Choose+UnknownDeviceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC5D275D389700BB80DB /* Choose+UnknownDeviceCell.swift */; };
 		94DFEC62275D459B00BB80DB /* ItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC61275D459B00BB80DB /* ItemVM.swift */; };
@@ -89,6 +91,14 @@
 		94E005F3275A07E9001B0DFD /* MetaBaseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E005CA275A07E9001B0DFD /* MetaBaseApp.swift */; };
 		94E005F6275A07E9001B0DFD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94E005CC275A07E9001B0DFD /* Assets.xcassets */; };
 		94E005F7275A07E9001B0DFD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94E005CC275A07E9001B0DFD /* Assets.xcassets */; };
+		94E3A7F1275FF50C007E2BAE /* HistoryScreenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7F0275FF50C007E2BAE /* HistoryScreenVM.swift */; };
+		94E3A7F3275FF519007E2BAE /* AboutDeviceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7F2275FF519007E2BAE /* AboutDeviceVM.swift */; };
+		94E3A7F5275FF557007E2BAE /* HistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7F4275FF557007E2BAE /* HistoryScreen.swift */; };
+		94E3A7F6275FF5CF007E2BAE /* HistoryScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7F4275FF557007E2BAE /* HistoryScreen.swift */; };
+		94E3A7F7275FF5DD007E2BAE /* AboutDeviceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7F2275FF519007E2BAE /* AboutDeviceVM.swift */; };
+		94E3A7F8275FF5DD007E2BAE /* HistoryScreenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7F0275FF50C007E2BAE /* HistoryScreenVM.swift */; };
+		94E3A7FA27603238007E2BAE /* IdentifyByLEDButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7F927603238007E2BAE /* IdentifyByLEDButton.swift */; };
+		94E3A7FB276032BD007E2BAE /* IdentifyByLEDButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7F927603238007E2BAE /* IdentifyByLEDButton.swift */; };
 		94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */; };
 		94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A0275A1298008C62E7 /* ActionScreen.swift */; };
 		94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A2275A14DE008C62E7 /* Dimensions.swift */; };
@@ -147,8 +157,9 @@
 		94935016275A107000E388FF /* DispatchQueue+AsyncAfter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "DispatchQueue+AsyncAfter.swift"; path = "../../../../../Mini/mbientLab/MetaBase5/MetaBase/Shared UI/Extensions/DispatchQueue+AsyncAfter.swift"; sourceTree = "<group>"; };
 		94935019275A112200E388FF /* DiscoveryListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryListVM.swift; sourceTree = "<group>"; };
 		94935022275A11C600E388FF /* KnownItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownItemVM.swift; sourceTree = "<group>"; };
-		94935025275A120D00E388FF /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreen.swift; sourceTree = "<group>"; };
 		94A165BB275E8E0C00FA355D /* MetaBase (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MetaBase (iOS).entitlements"; sourceTree = "<group>"; };
+		94A165BD275F2F8600FA355D /* History+SessionsList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+SessionsList.swift"; sourceTree = "<group>"; };
+		94A165BE275F2F8600FA355D /* History+About.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+About.swift"; sourceTree = "<group>"; };
 		94DFEC5D275D389700BB80DB /* Choose+UnknownDeviceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Choose+UnknownDeviceCell.swift"; sourceTree = "<group>"; };
 		94DFEC61275D459B00BB80DB /* ItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemVM.swift; sourceTree = "<group>"; };
 		94DFEC64275D45F000BB80DB /* UnknownDeviceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownDeviceVM.swift; sourceTree = "<group>"; };
@@ -163,6 +174,10 @@
 		94E005EA275A07E9001B0DFD /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94E005EE275A07E9001B0DFD /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		94E005F0275A07E9001B0DFD /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		94E3A7F0275FF50C007E2BAE /* HistoryScreenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreenVM.swift; sourceTree = "<group>"; };
+		94E3A7F2275FF519007E2BAE /* AboutDeviceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutDeviceVM.swift; sourceTree = "<group>"; };
+		94E3A7F4275FF557007E2BAE /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreen.swift; sourceTree = "<group>"; };
+		94E3A7F927603238007E2BAE /* IdentifyByLEDButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyByLEDButton.swift; sourceTree = "<group>"; };
 		94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureScreen.swift; sourceTree = "<group>"; };
 		94EBA3A0275A1298008C62E7 /* ActionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionScreen.swift; sourceTree = "<group>"; };
 		94EBA3A2275A14DE008C62E7 /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
@@ -273,7 +288,10 @@
 		94934FD9275A0C0A00E388FF /* 2_History */ = {
 			isa = PBXGroup;
 			children = (
-				94935025275A120D00E388FF /* HistoryScreen.swift */,
+				94E3A7EF275FF4FE007E2BAE /* VMs */,
+				94E3A7F4275FF557007E2BAE /* HistoryScreen.swift */,
+				94A165BE275F2F8600FA355D /* History+About.swift */,
+				94A165BD275F2F8600FA355D /* History+SessionsList.swift */,
 			);
 			path = 2_History;
 			sourceTree = "<group>";
@@ -359,6 +377,7 @@
 			children = (
 				94935009275A0DF300E388FF /* CTAButton.swift */,
 				94935008275A0DF300E388FF /* MiniMenuButton.swift */,
+				94E3A7F927603238007E2BAE /* IdentifyByLEDButton.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -441,6 +460,15 @@
 				94E005F0275A07E9001B0DFD /* Tests_macOSLaunchTests.swift */,
 			);
 			path = "Tests macOS";
+			sourceTree = "<group>";
+		};
+		94E3A7EF275FF4FE007E2BAE /* VMs */ = {
+			isa = PBXGroup;
+			children = (
+				94E3A7F0275FF50C007E2BAE /* HistoryScreenVM.swift */,
+				94E3A7F2275FF519007E2BAE /* AboutDeviceVM.swift */,
+			);
+			path = VMs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -625,13 +653,14 @@
 				94528561275BDF8D004D815B /* UserDefaults+Singleton.swift in Sources */,
 				94528564275BE0D8004D815B /* MainWindow.swift in Sources */,
 				94935023275A11C600E388FF /* KnownItemVM.swift in Sources */,
+				94E3A7FA27603238007E2BAE /* IdentifyByLEDButton.swift in Sources */,
 				94528555275BDDB9004D815B /* Choose+Grids.swift in Sources */,
 				94EBA3A5275A150C008C62E7 /* Routing.swift in Sources */,
+				94E3A7F3275FF519007E2BAE /* AboutDeviceVM.swift in Sources */,
 				9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */,
 				9493500C275A0DF300E388FF /* CTAButton.swift in Sources */,
 				94934FF7275A0DD500E388FF /* ProgressBar.swift in Sources */,
 				94528577275BE4BE004D815B /* MetaWearDiscoveryVM.swift in Sources */,
-				94935026275A120D00E388FF /* HistoryScreen.swift in Sources */,
 				9452856D275BE1D5004D815B /* Root.swift in Sources */,
 				94934FFB275A0DD500E388FF /* Header.swift in Sources */,
 				94DFEC5E275D389700BB80DB /* Choose+UnknownDeviceCell.swift in Sources */,
@@ -642,13 +671,17 @@
 				94935017275A107000E388FF /* DispatchQueue+AsyncAfter.swift in Sources */,
 				94935004275A0DE700E388FF /* LargeSignalDots.swift in Sources */,
 				94DFEC62275D459B00BB80DB /* ItemVM.swift in Sources */,
+				94E3A7F1275FF50C007E2BAE /* HistoryScreenVM.swift in Sources */,
 				94934FF9275A0DD500E388FF /* SpotlightShimmerText.swift in Sources */,
 				94528552275BDD81004D815B /* Choose+ToolbarScanningIcon.swift in Sources */,
 				94E005F2275A07E9001B0DFD /* MetaBaseApp.swift in Sources */,
+				94E3A7F5275FF557007E2BAE /* HistoryScreen.swift in Sources */,
 				94528558275BDE1E004D815B /* Choose+DeviceIterator.swift in Sources */,
 				9493501A275A112200E388FF /* DiscoveryListVM.swift in Sources */,
+				94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */,
 				94528570275BE248004D815B /* BLEStateWarningsVM.swift in Sources */,
 				94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */,
+				94A165C3275F2F8600FA355D /* History+About.swift in Sources */,
 				9493500A275A0DF300E388FF /* MiniMenuButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -661,15 +694,17 @@
 				94935007275A0DE700E388FF /* MetaWearAtom.swift in Sources */,
 				94528567275BE128004D815B /* ConfigureScreen.swift in Sources */,
 				94DFEC66275D45F000BB80DB /* UnknownDeviceVM.swift in Sources */,
+				94E3A7F6275FF5CF007E2BAE /* HistoryScreen.swift in Sources */,
 				9493501B275A112200E388FF /* DiscoveryListVM.swift in Sources */,
+				94E3A7F8275FF5DD007E2BAE /* HistoryScreenVM.swift in Sources */,
 				9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
 				94934FFC275A0DD500E388FF /* Header.swift in Sources */,
 				9452855C275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
 				94528550275BDC17004D815B /* ChooseDevicesScreen.swift in Sources */,
 				94528575275BE45F004D815B /* AlertVendors.swift in Sources */,
+				94E3A7FB276032BD007E2BAE /* IdentifyByLEDButton.swift in Sources */,
 				94935005275A0DE700E388FF /* LargeSignalDots.swift in Sources */,
 				94528553275BDD81004D815B /* Choose+ToolbarScanningIcon.swift in Sources */,
-				94935027275A120D00E388FF /* HistoryScreen.swift in Sources */,
 				94528569275BE193004D815B /* Transitions.swift in Sources */,
 				9493500D275A0DF300E388FF /* CTAButton.swift in Sources */,
 				94528556275BDDB9004D815B /* Choose+Grids.swift in Sources */,
@@ -685,14 +720,17 @@
 				9493500B275A0DF300E388FF /* MiniMenuButton.swift in Sources */,
 				94EBA3A6275A160A008C62E7 /* Dimensions.swift in Sources */,
 				94934FF8275A0DD500E388FF /* ProgressBar.swift in Sources */,
+				94E3A7F7275FF5DD007E2BAE /* AboutDeviceVM.swift in Sources */,
 				94DFEC63275D459B00BB80DB /* ItemVM.swift in Sources */,
 				94528565275BE0D8004D815B /* MainWindow.swift in Sources */,
 				94934FF6275A0DD500E388FF /* LabeledItem.swift in Sources */,
 				94934FFE275A0DD500E388FF /* Subheader.swift in Sources */,
 				9452855F275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
 				94528562275BDF8D004D815B /* UserDefaults+Singleton.swift in Sources */,
+				94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */,
 				94934FFA275A0DD500E388FF /* SpotlightShimmerText.swift in Sources */,
 				94528571275BE248004D815B /* BLEStateWarningsVM.swift in Sources */,
+				94A165C4275F2F8600FA355D /* History+About.swift in Sources */,
 				94528559275BDE1E004D815B /* Choose+DeviceIterator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -861,11 +899,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mbientlab.MetaBase;
 				PRODUCT_NAME = MetaBase;
@@ -895,11 +934,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mbientlab.MetaBase;
 				PRODUCT_NAME = MetaBase;
@@ -929,6 +969,7 @@
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Connect and program your MetaWear Bluetooth Low Energy sesnsors.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Connect and program your MetaWear Bluetooth Low Energy sesnsors.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -940,6 +981,8 @@
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				TVOS_DEPLOYMENT_TARGET = 14.0;
+				WATCHOS_DEPLOYMENT_TARGET = 7.5;
 			};
 			name = Debug;
 		};
@@ -961,6 +1004,7 @@
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Connect and program your MetaWear Bluetooth Low Energy sesnsors.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Connect and program your MetaWear Bluetooth Low Energy sesnsors.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -972,6 +1016,8 @@
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				TVOS_DEPLOYMENT_TARGET = 14.0;
+				WATCHOS_DEPLOYMENT_TARGET = 7.5;
 			};
 			name = Release;
 		};

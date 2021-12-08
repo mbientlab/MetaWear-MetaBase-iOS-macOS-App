@@ -48,6 +48,9 @@ extension ChooseDevicesScreen {
             .onAppear(perform: vm.onAppear)
             .onDisappear(perform: vm.onDisappear)
             .environmentObject(vm)
+            .onChange(of: vm.rssi) { newValue in
+                print("---->", newValue)
+            }
         }
     }
 }

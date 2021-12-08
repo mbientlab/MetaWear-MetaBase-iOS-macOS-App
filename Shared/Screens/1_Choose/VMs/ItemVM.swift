@@ -6,7 +6,8 @@ import MetaWear
 import Metadata
 import CoreBluetooth
 
-protocol ItemVM {
+public protocol ItemVM: Identifiable {
+    var id: String { get }
     var name: String { get }
     var isGroup: Bool { get }
     var models: [(mac: String, model: MetaWear.Model)] { get }
@@ -14,4 +15,9 @@ protocol ItemVM {
     var rssi: SignalLevel { get }
     var isLocallyKnown: Bool { get }
     var connection: CBPeripheralState { get }
+    var matchedGeometryID: String { get }
+}
+
+public extension ItemVM {
+    var id: String { matchedGeometryID }
 }

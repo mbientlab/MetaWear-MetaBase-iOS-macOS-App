@@ -30,8 +30,8 @@ struct MainWindow: View {
                     ChooseDevicesScreen(routing: routing, factory: factory)
                         .transition(.add)
 
-                case .history(_):
-                    HistoryScreen()
+                case .history(let item):
+                    HistoryScreen(item: item, factory: factory)
                         .transition(.add)
 
                 case .moduleConfig(_):
@@ -96,7 +96,7 @@ struct MainWindow: View {
         ) { EmptyView() }
 
         NavigationLink(
-            destination: HistoryScreen(),
+            destination: HistoryScreen(routing: routing, factory: factory),
             tag: Routing.Destination.choose,
             selection: destination
         ) { EmptyView() }

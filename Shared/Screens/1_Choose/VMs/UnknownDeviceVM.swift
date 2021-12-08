@@ -8,13 +8,15 @@ import CoreBluetooth
 import Combine
 
 public class UnknownDeviceVM: ObservableObject, ItemVM {
-    var name: String
-    var isGroup: Bool = false
-    var models: [(mac: String, model: MetaWear.Model)] = []
-    var isLocallyKnown: Bool = false
-    var macs: [String] = []
-    var rssi: SignalLevel
-    var connection: CBPeripheralState
+
+    public var matchedGeometryID: String { device.peripheral.identifier.uuidString }
+    public var name: String
+    public var isGroup: Bool = false
+    public var models: [(mac: String, model: MetaWear.Model)] = []
+    public var isLocallyKnown: Bool = false
+    public var macs: [String] = []
+    public var rssi: SignalLevel
+    public var connection: CBPeripheralState
 
     private var rssiSub: AnyCancellable? = nil
     private var connectionSub: AnyCancellable? = nil

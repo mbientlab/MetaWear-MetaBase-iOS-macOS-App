@@ -11,6 +11,43 @@ import CoreBluetooth
 ///
 public class KnownItemVM: ObservableObject, ItemVM {
 
+    public var isGroup: Bool { group != nil }
+    public var deviceCount: Int { devices.endIndex }
+
+    public var name: String {
+        group?.name ?? devices.first?.meta.name ?? "Error"
+    }
+
+    public var macs: [String] {
+        devices.map(\.meta.mac)
+    }
+
+    public var metadata: [MetaWear.Metadata] {
+        devices.map(\.meta)
+    }
+
+    public var localIDs: [String?] { devices.map(\.mw?.peripheral.identifier.uuidString)
+    }
+
+    public var isMetaBoot: Bool {
+        devices.contains { $0.mw?.isMetaBoot == true }
+    }
+
+    public var isConnected: Bool {
+        devices.contains { $0.mw?.isConnectedAndSetup == true }
+    }
+
+    public var isLocallyKnown: Bool {
+        if group == nil { return devices.allSatisfy { $0.mw != nil } }
+        else { return devices.contains(where: { $0.mw != nil } ) }
+    }
+
+    public var models: [(mac: String, model: MetaWear.Model)] {
+        devices.map { device in
+            (device.meta.mac, device.meta.model)
+        }
+    }
+
     public var matchedGeometryID: String {
         if let group = group { return group.id.uuidString }
         return (
@@ -19,26 +56,9 @@ public class KnownItemVM: ObservableObject, ItemVM {
         ) ?? UUID().uuidString
     }
 
-    public var name: String { group?.name ?? devices.first?.meta.name ?? "Error" }
-    public var macs: [String] { devices.map(\.meta.mac) }
-    public var localIDs: [String?] { devices.map(\.mw?.peripheral.identifier.uuidString) }
-    public var isMetaBoot: Bool { devices.contains { $0.mw?.isMetaBoot == true } }
-    public var isConnected: Bool { devices.contains { $0.mw?.isConnectedAndSetup == true } }
-    public var isLocallyKnown: Bool {
-        if group == nil { return devices.allSatisfy { $0.mw != nil } }
-        else { return devices.contains(where: { $0.mw != nil } ) }
-    }
-    public var models: [(mac: String, model: MetaWear.Model)] {
-        devices.map { device in
-            (device.meta.mac, device.meta.model)
-        }
-    }
-
-    public var isGroup: Bool { group != nil }
-    public var deviceCount: Int { devices.endIndex }
-
+    public private(set) var rssi: SignalLevel
+    @Published public private(set) var rssiInt: Int
     @Published public private(set) var connection: CBPeripheralState
-    @Published public private(set) var rssi: SignalLevel
 
     @Published private var group: MetaWear.Group?
     @Published private var devices: [MWKnownDevice]
@@ -52,7 +72,9 @@ public class KnownItemVM: ObservableObject, ItemVM {
         self.store = store
         self.routing = routing
         self.devices = [device]
-        self.rssi = .init(rssi: device.mw?.rssi ?? Int(SignalLevel.noBarsRSSI))
+        let _rssi = device.mw?.rssi ?? Int(SignalLevel.noBarsRSSI)
+        self.rssi = .init(rssi: _rssi)
+        self.rssiInt = _rssi
     }
 
     public init(group: MetaWear.Group, store: MetaWearStore, routing: Routing) {
@@ -60,7 +82,7 @@ public class KnownItemVM: ObservableObject, ItemVM {
         self.routing = routing
         let _devices = store.getDevicesInGroup(group)
         self.devices = _devices
-        self.rssi = Self.getLowestSignal(in: _devices)
+        (self.rssi, self.rssiInt) = Self.getLowestSignal(in: _devices)
         self.connection = Self.getLowestConnectionState(in: _devices)
     }
 }
@@ -70,8 +92,7 @@ public class KnownItemVM: ObservableObject, ItemVM {
 public extension KnownItemVM {
 
     func onAppear() {
-        trackRSSI()
-        trackConnection()
+        trackState()
     }
 
     func onDisappear() {
@@ -86,6 +107,7 @@ public extension KnownItemVM {
             routing.setDestination(.history(.known(device.meta.mac)))
         }
     }
+
 }
 
 // MARK: - Intents
@@ -147,13 +169,13 @@ public extension KnownItemVM {
 
 private extension KnownItemVM {
 
-    static func getLowestSignal(in devices: [MWKnownDevice]) -> SignalLevel {
+    static func getLowestSignal(in devices: [MWKnownDevice]) -> (SignalLevel, Int) {
         let min = Int(SignalLevel.noBarsRSSI)
         let lowest = devices.map { $0.mw?.rssi ?? min }.min() ?? min
-        return .init(rssi: lowest)
+        return (.init(rssi: lowest), lowest)
     }
 
-    func trackRSSI() {
+    func trackState() {
         // If MetaWear reference not available at load
         // (scanner might be slower than persistence),
         // then keep retrying until found.
@@ -161,51 +183,12 @@ private extension KnownItemVM {
             rssiSub = retryTimer()
                 .sink { [weak self] _ in
                     self?.rssiSub?.cancel()
-                    self?.trackRSSI()
+                    self?.trackState()
                 }
             return
         }
-
-        rssiSub?.cancel()
-        rssiSub = main.rssiPublisher
-            .map { [weak self] first -> SignalLevel in
-                guard let self = self else { return .init(rssi: first) }
-                return Self.getLowestSignal(in: self.devices)
-            }
-            .receive(on: DispatchQueue.main)
-            .removeDuplicates()
-            .sink { [weak self] update in
-                self?.rssi = update
-            }
-    }
-
-    static func getLowestConnectionState(in devices: [MWKnownDevice]) -> CBPeripheralState {
-        devices.map { $0.mw?.connectionStateCurrent ?? .disconnected }.min() ?? .disconnected
-    }
-
-    func trackConnection() {
-        guard let main = devices.first(where: { mw, _ in mw != nil })?.mw else {
-            // If MetaWear reference not available at load
-            // (scanner might be slower than persistence),
-            // then keep retrying until found.
-            connectionSub = retryTimer()
-                .sink { [weak self] _ in
-                    self?.connectionSub?.cancel()
-                    self?.trackConnection()
-                }
-            return
-        }
-        connectionSub?.cancel()
-        connectionSub = main.connectionState
-            .map { [weak self] first -> CBPeripheralState in
-                guard let self = self else { return first }
-                return Self.getLowestConnectionState(in: self.devices)
-            }
-            .receive(on: DispatchQueue.main)
-            .removeDuplicates()
-            .sink(receiveValue: { [weak self] update in
-                self?.connection = update
-            })
+        trackRSSI(main: main)
+        trackConnection(main: main)
     }
 
     /// Retry using updated device references
@@ -224,6 +207,39 @@ private extension KnownItemVM {
                 }
             })
             .eraseToAnyPublisher()
+    }
+
+    func trackRSSI(main: MetaWear) {
+        rssiSub?.cancel()
+        rssiSub = main.rssiPublisher
+            .map { [weak self] first -> (SignalLevel, Int) in
+                guard let self = self else { return (.init(rssi: first), first) }
+                return Self.getLowestSignal(in: self.devices)
+            }
+            .receive(on: DispatchQueue.main)
+            .removeDuplicates(by: { $0.0 == $1.0 })
+            .sink { [weak self] update in
+                guard let self = self else { return }
+                (self.rssi, self.rssiInt) = update
+            }
+    }
+
+    func trackConnection(main: MetaWear) {
+        connectionSub?.cancel()
+        connectionSub = main.connectionState
+            .map { [weak self] first -> CBPeripheralState in
+                guard let self = self else { return first }
+                return Self.getLowestConnectionState(in: self.devices)
+            }
+            .receive(on: DispatchQueue.main)
+            .removeDuplicates()
+            .sink(receiveValue: { [weak self] update in
+                self?.connection = update
+            })
+    }
+
+    static func getLowestConnectionState(in devices: [MWKnownDevice]) -> CBPeripheralState {
+        devices.map { $0.mw?.connectionStateCurrent ?? .disconnected }.min() ?? .disconnected
     }
 }
 
