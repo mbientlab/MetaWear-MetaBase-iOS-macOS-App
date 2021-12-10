@@ -19,6 +19,5 @@ struct IdentifyByLEDButton: View {
         .buttonStyle(.borderless)
         .help("Identify by LED and haptics")
         .animation(.linear(duration: 0.1), value: emulator.ledIsOn)
-        .onChange(of: emulator.ledIsOn, perform: { print($0)})
     }
 }

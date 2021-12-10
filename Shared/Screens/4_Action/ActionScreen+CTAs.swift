@@ -25,15 +25,15 @@ extension ActionScreen {
         }
 
         private var download: some View {
-            Button("Download") { }
+            Button("Download") { vm.downloadLogs() }
         }
 
         private var cancel: some View {
-            Button("Cancel") { }
+            Button("Cancel") { vm.cancelAndUndo() }
         }
 
         private var others: some View {
-            Button("Others") { }
+            Button("Other Devices") { vm.goToChooseDevicesScreen() }
         }
     }
 }

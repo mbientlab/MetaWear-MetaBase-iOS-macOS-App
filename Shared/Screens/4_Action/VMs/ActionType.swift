@@ -9,17 +9,25 @@ public enum ActionType {
 
     var title: String {
         switch self {
-            case .stream: return "Stream"
-            case .log: return "Log"
+            case .stream:       return "Stream"
+            case .log:          return "Log"
             case .downloadLogs: return "Download Logs"
         }
     }
 
     var completedLabel: String {
         switch self {
-            case .stream: return "Streaming"
-            case .log: return "Logging"
+            case .stream:       return "Streaming"
+            case .log:          return "Logging"
             case .downloadLogs: return "Downloaded"
+        }
+    }
+
+    var waitForSemaphore: Bool {
+        switch self {
+            case .stream:       return false
+            case .log:          return true
+            case .downloadLogs: return true
         }
     }
 

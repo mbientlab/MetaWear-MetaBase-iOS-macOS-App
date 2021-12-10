@@ -47,6 +47,8 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     }
 }
 
+// MARK: - Intents
+
 public extension ActionVM {
 
     func start() {
@@ -83,17 +85,29 @@ public extension ActionVM {
         start()
     }
 
+    func downloadLogs() {
+        guard actionType == .log else { return }
+        routing.setDestination(.downloadLogs)
+    }
+
+    func goToChooseDevicesScreen() {
+        streamCancel.send()
+        routing.setDestination(.choose)
+    }
+
     func cancelAndUndo() {
-        // erase macros
-        // stop start function
+        actions.forEach { $0.value.cancel() }
+        streamCancel.send()
+        deviceVMs.forEach { $0.reset() }
     }
 
     func didTapBackButton() {
-        // Cancel
+        streamCancel.send()
+        routing.setDestination(.history)
     }
 }
 
-// MARK: - Perform action and update UI state
+// MARK: - Perform generic action and update UI state
 
 private extension ActionVM {
 
@@ -116,11 +130,13 @@ private extension ActionVM {
         actions[current.meta.mac] = getActionPublisher(device, current.meta.mac, current.config)
             .receive(on: queue)
             .sink { [weak self] completion in
+                print("ACTION: Received Completion")
                 guard case let .failure(error) = completion else { return }
                 let timedOut = error.localizedDescription.contains("Timeout")
                 self?.fail(fromCurrent: current, timedOut ? .timeout : .error(error.localizedDescription))
                 semaphore.signal()
             } receiveValue: { [weak self] _ in
+                print("ACTION: Receive Value")
                 self?.succeed(fromCurrent: current.meta)
                 semaphore.signal()
             }
@@ -129,10 +145,14 @@ private extension ActionVM {
         if let vm = deviceVMs.first(where: { $0.meta == current.meta }) {
             vm.connect()
         } else { device.connect() }
+        print("ACTION: Kickoff connection")
 
-        // 5 - Wait for programming to complete (until timeout)
-        semaphore.wait()
-        actions[current.meta.mac]?.cancel()
+        // 5 - Wait for programming to complete (until timeout) if needed (not when streaming)
+        if actionType.waitForSemaphore {
+            semaphore.wait()
+            print("ACTION: Done waiting for semaphore")
+            actions[current.meta.mac]?.cancel()
+        }
     }
 
     /// Populate a queue and set initial state.
@@ -157,6 +177,7 @@ private extension ActionVM {
 
     /// Failure cases: Update UI state to show failure reason and advance to the next queue item
     func fail(fromCurrent: QueueItem, _ reason: ActionState) {
+        print("ACTION: FAIL: \(reason) \(reason.info)")
         if Thread.isMainThread {
             actionFails.append(fromCurrent)
             state[fromCurrent.meta.mac] = reason
@@ -170,6 +191,7 @@ private extension ActionVM {
 
     /// Success cases: Advance to the next item, no need to update UI state
     func succeed(fromCurrent: MetaWear.Metadata) {
+        print("ACTION: SUCCEED")
         if Thread.isMainThread {
             state[fromCurrent.mac] = .completed
         } else {
@@ -182,12 +204,14 @@ private extension ActionVM {
     /// Call on private queue
     func moveToNextQueueItem() {
         self.nextQueueItem = self.actionQueue.popLast()
-
+        print("ACTION: MOVE TO NEXT QUEUE ITEM NAMED: \(nextQueueItem?.meta.name ?? "NIL")")
         DispatchQueue.main.async { [weak self] in
             self?.actionFocus = self?.nextQueueItem?.meta.mac ?? ""
         }
     }
 }
+
+// MARK: - Specific actions
 
 private extension ActionVM {
 
@@ -209,6 +233,7 @@ private extension ActionVM {
             .first()
             .mapToMWError()
             .macro(config)
+            .print()
             .map { _ in () }
             .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
             .eraseToAnyPublisher()
@@ -238,11 +263,12 @@ private extension ActionVM {
 
     func saveData(tables: [MWDataTable], for mac: MACAddress) {
         self.data[mac] = tables
-        print(tables.map(\.source.name), tables.map(\.rows.count))
+        print(Self.self, "saveData", tables.map(\.source.name), tables.map(\.rows.count))
     }
 
     // MARK: - Stream Action
 
+    /// Stream all needed sensors on one device. Times out only when unable to connect.
     func stream(for device: MetaWear,
                 mac: MACAddress,
                 config: SensorConfigContainer) -> MWPublisher<Void> {
@@ -285,25 +311,25 @@ private extension ActionVM {
                                       _ streams: inout [MWPublisher<MWDataTable>],
                                       _ didConnect: MWPublisher<MetaWear>) {
         guard let config = config else { return }
+
         let publisher = didConnect.stream(config)
             .prefix(untilOutputFrom: streamCancel)
             .collect()
-            .map { $0.map { ($0.time, "") } }
-            .map(MWDataTable.init(streamed:))
+            .map { MWDataTable(streamed: $0, config) }
             .eraseToAnyPublisher()
 
         streams.append(publisher)
     }
 
     func buildStream<P: MWPollable>(_ config: P?,
-                                      _ streams: inout [MWPublisher<MWDataTable>],
-                                      _ didConnect: MWPublisher<MetaWear>) {
+                                    _ streams: inout [MWPublisher<MWDataTable>],
+                                    _ didConnect: MWPublisher<MetaWear>) {
         guard let config = config else { return }
+
         let publisher = didConnect.stream(config)
             .prefix(untilOutputFrom: streamCancel)
             .collect()
-            .map { $0.map { ($0.time, "") } }
-            .map(MWDataTable.init(streamed:))
+            .map { MWDataTable(streamed: $0, config) }
             .eraseToAnyPublisher()
 
         streams.append(publisher)

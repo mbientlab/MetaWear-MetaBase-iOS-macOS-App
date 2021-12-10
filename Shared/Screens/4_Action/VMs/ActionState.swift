@@ -18,4 +18,12 @@ public enum ActionState: Hashable, Equatable {
             default: return false
         }
     }
+
+    public var info: String {
+        switch self {
+            case .working(let int): return String(int)
+            case .error(let string): return string
+            default: return ""
+        }
+    }
 }

@@ -17,24 +17,24 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     public var matchedGeometryID: String { meta.id }
     public var id: String { matchedGeometryID }
 
-    @Published public private(set) var info: MetaWear.DeviceInformation
-    @Published public private(set) var meta: MetaWear.Metadata
+    @Published public private(set) var info:    MetaWear.DeviceInformation
+    @Published public private(set) var meta:    MetaWear.Metadata
     @Published public private(set) var battery: String = "–"
 
+    public private(set) var rssi:                  SignalLevel
+    @Published public private(set) var rssiInt:    Int
+    @Published public private(set) var connection: CBPeripheralState
     let led = MWLED.FlashPattern.Emulator(preset: .one)
 
-    public private(set) var rssi: SignalLevel
-    @Published public private(set) var rssiInt: Int
-    @Published public private(set) var connection: CBPeripheralState
-
-    @Published private var device:           MetaWear?
-    private var rssiSub:                     AnyCancellable? = nil
-    private var connectionSub:               AnyCancellable? = nil
-    private var batterySub:                  AnyCancellable? = nil
-    private var infoSub:                     AnyCancellable? = nil
-    private var ledSub:                      AnyCancellable? = nil
-    private var resetSub:                    AnyCancellable? = nil
-    private unowned let store:               MetaWearStore
+    @Published private var device: MetaWear?
+    private var rssiSub:           AnyCancellable? = nil
+    private var connectionSub:     AnyCancellable? = nil
+    private var batterySub:        AnyCancellable? = nil
+    private var infoSub:           AnyCancellable? = nil
+    private var ledSub:            AnyCancellable? = nil
+    private var resetSub:          AnyCancellable? = nil
+    private var refreshSub:        AnyCancellable? = nil
+    private unowned let store:     MetaWearStore
 
     public init(device: MWKnownDevice, store: MetaWearStore) {
         self.connection = device.mw?.isConnectedAndSetup == true ? .connected : .disconnected
@@ -51,6 +51,7 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
                                              hardwareRevision: "—")
     }
 
+    /// Set a unique LED identification pattern when in a group of devices.
     public func configure(for index: Int) {
         led.pattern = MWLED.FlashPattern.Presets.init(rawValue: index % 10)!.pattern
     }
@@ -58,17 +59,10 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
 
 public extension AboutDeviceVM {
 
-    func connect() {
-        device?.connect()
-    }
-
-    func refresh() {
-        refreshBattery()
-        refreshDeviceInformation()
-    }
-
+    /// Starts tracking state and refreshes battery and device information
     func onAppear() {
         trackState()
+        refreshAll()
     }
 
     func onDisappear() {
@@ -76,6 +70,21 @@ public extension AboutDeviceVM {
         connectionSub?.cancel()
         infoSub?.cancel()
         batterySub?.cancel()
+    }
+
+    func connect() {
+        _reloadDevice()
+        device?.connect()
+    }
+
+    func refreshAll() {
+        refreshSub = device?.publishWhenConnected()
+            .first()
+            .sink(receiveValue: { [weak self] _ in
+                self?.refreshBattery()
+                self?.refreshDeviceInformation()
+            })
+        connect()
     }
 
     func identifyByLED() {
@@ -87,7 +96,7 @@ public extension AboutDeviceVM {
                 self?.led.emulate()
             })
 
-        device?.connect()
+        connect()
     }
 
     func reset() {
@@ -98,15 +107,20 @@ public extension AboutDeviceVM {
             .factoryReset()
             .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
 
-        device?.connect()
+        connect()
     }
+
 }
 
 private extension AboutDeviceVM {
 
+    func _reloadDevice() {
+        guard device == nil else { return }
+        self.device = store.getDevice(self.meta)
+    }
+
     func refreshDeviceInformation() {
         infoSub = device?.read(.allDeviceInformation)
-//            .print()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] info in
                 self?.info = info
@@ -115,7 +129,6 @@ private extension AboutDeviceVM {
 
     func refreshBattery() {
         batterySub = device?.read(.batteryLife)
-//            .print()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] percentage in
                 self?.battery = "\(Int(percentage))%"
@@ -126,7 +139,6 @@ private extension AboutDeviceVM {
         // If MetaWear reference not available at load
         // (scanner might be slower than persistence),
         // then keep retrying until found.
-        print(#function)
         guard let device = device else {
             rssiSub = retryTimer()
                 .sink { [weak self] _ in
@@ -138,7 +150,6 @@ private extension AboutDeviceVM {
 
         trackRSSI(device)
         trackConnection(device)
-        refresh()
     }
 
     /// Retry using updated device references
@@ -166,14 +177,10 @@ private extension AboutDeviceVM {
         rssiSub?.cancel()
         rssiSub = device.rssiPublisher
             .removeDuplicates(within: 5)
-            .map { rssi -> (SignalLevel, Int) in
-                print("Received update", rssi, MetaWearScanner.sharedRestore.isScanning)
-                return (.init(rssi: rssi), rssi)
-            }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] update in
                 guard let self = self else { return }
-                (self.rssi, self.rssiInt) = update
+                (self.rssi, self.rssiInt) = (.init(rssi: update), update)
             }
     }
 

@@ -32,7 +32,7 @@ public extension HistoryScreenVM {
     }
 
     func refresh() {
-        items.forEach { $0.refresh() }
+        items.forEach { $0.refreshAll() }
     }
 
     func onAppear() {

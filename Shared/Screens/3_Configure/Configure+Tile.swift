@@ -68,12 +68,16 @@ extension ConfigureScreen {
                 .help(Text("Sampling Frequency"))
         }
 
+        private var showOptions: Bool { alwaysShowOptions || isSelected }
         private var optionsMenu: some View {
             CrossPlatformMenu(selected: $option, options: options, labelFont: .body.weight(.medium))
                 .menuStyle(.borderlessButton)
                 .fixedSize()
                 .help(Text(optionsHelp))
-                .opacity(alwaysShowOptions || isSelected ? 1 : 0)
+
+                .opacity(showOptions ? 1 : 0)
+                .disabled(showOptions == false)
+                .allowsHitTesting(showOptions)
         }
     }
 }

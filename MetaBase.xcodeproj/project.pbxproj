@@ -394,6 +394,7 @@
 				9409C5DE2762E186001FE850 /* Action+ProgrammingState.swift */,
 				94E3A80527608BF8007E2BAE /* ProgressScreen.swift */,
 				9409C5E12762E3FB001FE850 /* ActionScreen+CTAs.swift */,
+				9409C5E42762E732001FE850 /* ActionHeader.swift */,
 			);
 			path = 4_Action;
 			sourceTree = "<group>";
@@ -454,7 +455,6 @@
 				94934FF1275A0DD500E388FF /* ProgressBar.swift */,
 				94934FF2275A0DD500E388FF /* SpotlightShimmerText.swift */,
 				94934FF4275A0DD500E388FF /* Subheader.swift */,
-				9409C5E42762E732001FE850 /* ActionHeader.swift */,
 			);
 			path = Labels;
 			sourceTree = "<group>";
