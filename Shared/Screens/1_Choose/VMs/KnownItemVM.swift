@@ -102,10 +102,11 @@ public extension KnownItemVM {
 
     func connect() {
         if let group = group {
-            routing.setDestination(.history(.group(group.id)))
+            routing.setNewFocus(item: .group(group.id))
         } else if let device = devices.first {
-            routing.setDestination(.history(.known(device.meta.mac)))
+            routing.setNewFocus(item: .known(device.meta.mac))
         }
+        routing.setDestination(.history)
     }
 
 }

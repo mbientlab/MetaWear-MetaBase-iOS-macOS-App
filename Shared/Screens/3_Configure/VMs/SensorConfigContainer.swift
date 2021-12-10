@@ -93,7 +93,5 @@ public struct SensorConfigContainer: Equatable, Hashable {
     }
 
     /// Blank
-    public init() {
-
-    }
+    public init() {}
 }

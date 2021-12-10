@@ -26,24 +26,12 @@ struct MainWindow: View {
     private var stackNavigation: some View {
         ZStack {
             switch routing.destination {
-                case .choose:
-                    ChooseDevicesScreen(routing: routing, factory: factory)
-                        .transition(.add)
-
-                case .history(let item):
-                    HistoryScreen(item: item, factory: factory)
-                        .transition(.add)
-
-                case .moduleConfig(let item):
-                    ConfigureScreen(item: item, factory: factory)
-                        .transition(.add)
-
-                case .log:
-                    ActionScreen(routing: routing, factory: factory)
-                        .transition(.add)
-                case .stream:
-                    ActionScreen(routing: routing, factory: factory)
-                        .transition(.add)
+                case .choose:       ChooseDevicesScreen(routing, factory).transition(.add)
+                case .history:      HistoryScreen(factory).transition(.add)
+                case .configure:    ConfigureScreen(factory).transition(.add)
+                case .log:          ActionScreen(factory).transition(.add)
+                case .stream:       ActionScreen(factory).transition(.add)
+                case .downloadLogs: ActionScreen(factory).transition(.add)
             }
         }
     }
@@ -70,7 +58,7 @@ struct MainWindow: View {
 
     var body: some View {
         NavigationView {
-            ChooseDevicesScreen(routing: routing, factory: factory)
+            ChooseDevicesScreen(routing, factory)
                 .background(navigation.accessibilityHidden(true))
         }
         .navigationViewStyle(.automatic)
@@ -90,26 +78,38 @@ struct MainWindow: View {
 
     @ViewBuilder private var navigation: some View {
         NavigationLink(
-            destination: ChooseDevicesScreen(routing: routing, factory: factory),
+            destination: ChooseDevicesScreen(routing, factory),
             tag: Routing.Destination.choose,
             selection: destination
         ) { EmptyView() }
 
         NavigationLink(
-            destination: HistoryScreen(routing: routing, factory: factory),
-            tag: Routing.Destination.choose,
+            destination: HistoryScreen(factory),
+            tag: Routing.Destination.history,
             selection: destination
         ) { EmptyView() }
 
         NavigationLink(
-            destination: ConfigureScreen(routing: routing, factory: factory),
-            tag: Routing.Destination.choose,
+            destination: ConfigureScreen(factory),
+            tag: Routing.Destination.configure,
             selection: destination
         ) { EmptyView() }
 
         NavigationLink(
-            destination: ActionScreen(routing: routing, factory: factory),
-            tag: Routing.Destination.choose,
+            destination: ActionScreen(factory),
+            tag: Routing.Destination.stream,
+            selection: destination
+        ) { EmptyView() }
+
+        NavigationLink(
+            destination: ActionScreen(factory),
+            tag: Routing.Destination.log,
+            selection: destination
+        ) { EmptyView() }
+
+        NavigationLink(
+            destination: ActionScreen(factory),
+            tag: Routing.Destination.downloadLogs,
             selection: destination
         ) { EmptyView() }
     }

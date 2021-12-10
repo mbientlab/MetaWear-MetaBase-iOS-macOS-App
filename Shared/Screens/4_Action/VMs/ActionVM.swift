@@ -18,6 +18,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     // Per-device action state
     public let deviceVMs:               [AboutDeviceVM]
     @Published private(set) var state:  [MACAddress:ActionState]
+    private var data:                   [MACAddress:[MWDataTable]]
 
     // Queue for performing action device-by-device (on private DispatchQueue)
     private var nextQueueItem:          QueueItem? = nil
@@ -26,35 +27,27 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     private var actions:                [MACAddress:AnyCancellable] = [:]
     private let configs:                [SensorConfigContainer]
     private unowned let queue:          DispatchQueue
+    private let streamCancel = PassthroughSubject<Void,Never>()
 
     // References
     private let devices:                [MWKnownDevice]
-    private let routingItem:            Routing.Item
     private unowned let routing:        Routing
     private unowned let store:          MetaWearStore
 
-    public init(item: Routing.Item, action: ActionType, devices: [MWKnownDevice], vms: [AboutDeviceVM], store: MetaWearStore, routing: Routing, queue: DispatchQueue) {
+    public init(action: ActionType, devices: [MWKnownDevice], vms: [AboutDeviceVM], store: MetaWearStore, routing: Routing, queue: DispatchQueue) {
         self.queue = queue
         self.actionType = action
-        self.routingItem = item
         self.devices = devices
-        self.configs = routing.destination.configs ?? []
+        self.configs = routing.focus?.configs ?? []
         self.routing = routing
         self.store = store
         self.deviceVMs = vms
         self.state = Dictionary(uniqueKeysWithValues: devices.map(\.meta.mac).map { ($0, .notStarted)} )
+        self.data = Dictionary(uniqueKeysWithValues: devices.map(\.meta.mac).map { ($0, [])} )
     }
 }
 
 public extension ActionVM {
-
-    func didTapBackButton() -> Bool {
-        // Cancel
-
-        return true
-    }
-
-    static private let timeoutDuration = DispatchQueue.SchedulerTimeType.Stride(30)
 
     func start() {
         // One attempt at a time
@@ -65,7 +58,7 @@ public extension ActionVM {
         }
         queue.async { [weak self] in
             while let current = self?.nextQueueItem {
-                self?.tryAction(device: current)
+                self?.attemptAction(device: current) // Has optional semaphore
                 self?.moveToNextQueueItem()
             }
         }
@@ -94,35 +87,19 @@ public extension ActionVM {
         // erase macros
         // stop start function
     }
+
+    func didTapBackButton() {
+        // Cancel
+    }
 }
 
-// MARK: - Perform log and update UI state
+// MARK: - Perform action and update UI state
 
 private extension ActionVM {
 
-    /// Populate a queue and set initial state.
-    /// On retries, handle the unfinished queue only.
-    func setupQueue() {
-        if self.actionQueue.isEmpty {
-            self.actionQueue = self.actionFails.isEmpty
-            ? zip(self.devices, self.configs).reversed().map { ($0.0, $0.1, $1) }
-            : self.actionFails.reversed()
-        }
-        for item in actionQueue {
-            self.state[item.meta.mac, default: .notStarted] = .notStarted
-        }
-    }
+    static let timeoutDuration = DispatchQueue.SchedulerTimeType.Stride(30)
 
-    /// Call on private queue
-    func moveToNextQueueItem() {
-        self.nextQueueItem = self.actionQueue.popLast()
-
-        DispatchQueue.main.async { [weak self] in
-            self?.actionFocus = self?.nextQueueItem?.meta.mac ?? ""
-        }
-    }
-
-    func tryAction(device current: QueueItem) {
+    func attemptAction(device current: QueueItem) {
         // 1 - Update UI state
         DispatchQueue.main.sync { [weak self] in
             self?.state[current.meta.mac] = .working(0)
@@ -136,9 +113,8 @@ private extension ActionVM {
 
         // 3 - Setup recording pipeline
         let semaphore = DispatchSemaphore(value: 0)
-        actions[current.meta.mac] = recordMacro(for: device, current.config)
+        actions[current.meta.mac] = getActionPublisher(device, current.meta.mac, current.config)
             .receive(on: queue)
-            .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
             .sink { [weak self] completion in
                 guard case let .failure(error) = completion else { return }
                 let timedOut = error.localizedDescription.contains("Timeout")
@@ -157,6 +133,19 @@ private extension ActionVM {
         // 5 - Wait for programming to complete (until timeout)
         semaphore.wait()
         actions[current.meta.mac]?.cancel()
+    }
+
+    /// Populate a queue and set initial state.
+    /// On retries, handle the unfinished queue only.
+    func setupQueue() {
+        if self.actionQueue.isEmpty {
+            self.actionQueue = self.actionFails.isEmpty
+            ? zip(self.devices, self.configs).reversed().map { ($0.0, $0.1, $1) }
+            : self.actionFails.reversed()
+        }
+        for item in actionQueue {
+            self.state[item.meta.mac, default: .notStarted] = .notStarted
+        }
     }
 
     /// Get a reference to a MetaWear from the store if not available at start
@@ -190,13 +179,133 @@ private extension ActionVM {
         }
     }
 
+    /// Call on private queue
+    func moveToNextQueueItem() {
+        self.nextQueueItem = self.actionQueue.popLast()
+
+        DispatchQueue.main.async { [weak self] in
+            self?.actionFocus = self?.nextQueueItem?.meta.mac ?? ""
+        }
+    }
+}
+
+private extension ActionVM {
+
+    /// A Publisher that emits a value (void) only once when complete, but includes a Timeout operator.
+    func getActionPublisher(_ device: MetaWear, _ mac: MACAddress, _ config: SensorConfigContainer) -> MWPublisher<Void> {
+        switch actionType {
+            case .downloadLogs: return downloadLogs(for: device, mac)
+            case .log: return recordMacro(for: device, config)
+            case .stream: return stream(for: device, mac: mac, config: config)
+        }
+    }
+
+    // MARK: - Log Action
+
     /// Record the macro and update UI state upon completion
-    func recordMacro(for device: MetaWear, _ config: SensorConfigContainer) -> MWPublisher<MWMacroIdentifier> {
+    func recordMacro(for device: MetaWear, _ config: SensorConfigContainer) -> MWPublisher<Void> {
         device
             .publishWhenConnected()
             .first()
             .mapToMWError()
             .macro(config)
+            .map { _ in () }
+            .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
             .eraseToAnyPublisher()
+    }
+
+    // MARK: - Download Action
+
+    func downloadLogs(for device: MetaWear, _ mac: MACAddress) -> MWPublisher<Void> {
+        device
+            .publishWhenConnected()
+            .mapToMWError()
+            .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
+            .first()
+            .logsDownload()
+            .handleEvents(receiveOutput: { [weak self] download in
+                DispatchQueue.main.async { [weak self] in
+                    let percent = Int(download.percentComplete * 100)
+                    self?.state[mac] = .working(percent)
+                }
+                guard download.data.isEmpty == false else { return }
+                self?.saveData(tables: download.data, for: mac)
+            })
+            .drop(while: { $0.percentComplete < 1 })
+            .map { _ in () }
+            .eraseToAnyPublisher()
+    }
+
+    func saveData(tables: [MWDataTable], for mac: MACAddress) {
+        self.data[mac] = tables
+        print(tables.map(\.source.name), tables.map(\.rows.count))
+    }
+
+    // MARK: - Stream Action
+
+    func stream(for device: MetaWear,
+                mac: MACAddress,
+                config: SensorConfigContainer) -> MWPublisher<Void> {
+
+        let didConnect = device
+            .publishWhenConnected()
+            .mapToMWError()
+            .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
+            .first()
+            .share()
+            .eraseToAnyPublisher()
+
+        var streams = [MWPublisher<MWDataTable>]()
+
+        buildStream(config.accelerometer, &streams, didConnect)
+        buildStream(config.altitude, &streams, didConnect)
+        buildStream(config.ambientLight, &streams, didConnect)
+        buildStream(config.color, &streams, didConnect)
+        buildStream(config.gyroscope, &streams, didConnect)
+        buildStream(config.humidity, &streams, didConnect)
+        buildStream(config.magnetometer, &streams, didConnect)
+        buildStream(config.pressure, &streams, didConnect)
+        buildStream(config.proximity, &streams, didConnect)
+        buildStream(config.thermometer, &streams, didConnect)
+        buildStream(config.fusionEuler, &streams, didConnect)
+        buildStream(config.fusionGravity, &streams, didConnect)
+        buildStream(config.fusionLinear, &streams, didConnect)
+        buildStream(config.fusionQuaternion, &streams, didConnect)
+
+        return Publishers.MergeMany(streams)
+            .collect()
+            .handleEvents(receiveOutput: { [weak self] tables in
+                self?.saveData(tables: tables, for: mac)
+            })
+            .map { _ in () }
+            .eraseToAnyPublisher()
+    }
+
+    func buildStream<S: MWStreamable>(_ config: S?,
+                                      _ streams: inout [MWPublisher<MWDataTable>],
+                                      _ didConnect: MWPublisher<MetaWear>) {
+        guard let config = config else { return }
+        let publisher = didConnect.stream(config)
+            .prefix(untilOutputFrom: streamCancel)
+            .collect()
+            .map { $0.map { ($0.time, "") } }
+            .map(MWDataTable.init(streamed:))
+            .eraseToAnyPublisher()
+
+        streams.append(publisher)
+    }
+
+    func buildStream<P: MWPollable>(_ config: P?,
+                                      _ streams: inout [MWPublisher<MWDataTable>],
+                                      _ didConnect: MWPublisher<MetaWear>) {
+        guard let config = config else { return }
+        let publisher = didConnect.stream(config)
+            .prefix(untilOutputFrom: streamCancel)
+            .collect()
+            .map { $0.map { ($0.time, "") } }
+            .map(MWDataTable.init(streamed:))
+            .eraseToAnyPublisher()
+
+        streams.append(publisher)
     }
 }

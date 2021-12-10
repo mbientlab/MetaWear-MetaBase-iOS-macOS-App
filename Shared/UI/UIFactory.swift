@@ -56,21 +56,25 @@ public extension UIFactory {
         .init(device: device, store: store)
     }
 
-    func makeHistoryScreenVM(item: Routing.Item) -> HistoryScreenVM {
+    func makeHistoryScreenVM() -> HistoryScreenVM {
+        guard let item = routing.focus?.item else { fatalError("Set item before navigation") }
         let (title, devices) = getKnownDevices(for: item)
         let vms = makeAboutVMs(for: devices)
-        return .init(title: title, item: item, vms: vms, store: store, routing: routing, scanner: scanner)
+        return .init(title: title, vms: vms, store: store, routing: routing, scanner: scanner)
     }
 
-    func makeSensorConfigurationVM(item: Routing.Item) -> SensorConfigurationVM {
+    func makeSensorConfigurationVM() -> SensorConfigurationVM {
+        guard let item = routing.focus?.item else { fatalError("Set item before navigation") }
         let (title, devices) = getKnownDevices(for: item)
         return .init(title: title, item: item, devices: devices, routing: routing)
     }
 
-    func makeActionVM(item: Routing.Item, action: ActionType) -> ActionVM {
+    func makeActionVM() -> ActionVM {
+        guard let item = routing.focus?.item else { fatalError("Set item before navigation") }
+        let action = ActionType(destination: routing.destination)
         let (_, devices) = getKnownDevices(for: item)
         let vms = makeAboutVMs(for: devices)
-        return .init(item: item, action: action, devices: devices, vms: vms, store: store, routing: routing, queue: actionQueue)
+        return .init(action: action, devices: devices, vms: vms, store: store, routing: routing, queue: actionQueue)
     }
 
 }

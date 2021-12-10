@@ -7,7 +7,7 @@ public protocol ActionHeaderVM {
     var actionType: ActionType { get }
     var representativeConfig: SensorConfigContainer { get }
     var showBackButton: Bool { get }
-    func didTapBackButton() -> Bool
+    func didTapBackButton()
 }
 
 struct ActionHeader: View {

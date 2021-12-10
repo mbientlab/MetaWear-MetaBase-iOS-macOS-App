@@ -23,5 +23,12 @@ public enum ActionType {
         }
     }
 
-
+    init(destination: Routing.Destination) {
+        switch destination {
+            case .stream: self = .stream
+            case .log: self = .log
+            case .downloadLogs: self = .downloadLogs
+            default: fatalError("Unrecognized action")
+        }
+    }
 }

@@ -8,12 +8,8 @@ struct ConfigureScreen: View {
 
     @StateObject private var vm: SensorConfigurationVM
 
-    init(item: Routing.Item, factory: UIFactory) {
-        _vm = .init(wrappedValue: factory.makeSensorConfigurationVM(item: item))
-    }
-
-    init(routing: Routing, factory: UIFactory) {
-        _vm = .init(wrappedValue: factory.makeSensorConfigurationVM(item: routing.destination.item!))
+    init(_ factory: UIFactory) {
+        _vm = .init(wrappedValue: factory.makeSensorConfigurationVM())
     }
 
     var body: some View {

@@ -10,12 +10,8 @@ struct ActionScreen: View {
 
     @StateObject private var vm: ActionVM
 
-    init(item: Routing.Item, factory: UIFactory) {
-        _vm = .init(wrappedValue: factory.makeActionVM(item: item, action: .log))
-    }
-
-    init(routing: Routing, factory: UIFactory) {
-        _vm = .init(wrappedValue: factory.makeActionVM(item: routing.destination.item!, action: .log))
+    init(_ factory: UIFactory) {
+        _vm = .init(wrappedValue: factory.makeActionVM())
     }
 
     var body: some View {

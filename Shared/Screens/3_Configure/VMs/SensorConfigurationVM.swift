@@ -36,11 +36,8 @@ public class SensorConfigurationVM: ObservableObject, HeaderVM {
 extension SensorConfigurationVM {
 
     func requestStart() {
-        let destination: Routing.Destination = shouldStream
-        ? .stream(routingItem, buildConfigContainers())
-        : .log(routingItem, buildConfigContainers())
-
-        routing.setDestination(destination)
+        routing.setConfigs(buildConfigContainers())
+        routing.setDestination(shouldStream ? .stream : .log)
     }
 }
 

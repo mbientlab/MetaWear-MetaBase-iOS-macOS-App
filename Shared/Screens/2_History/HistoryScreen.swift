@@ -13,12 +13,8 @@ struct HistoryScreen: View {
     @EnvironmentObject private var routing: Routing
     @StateObject var vm: HistoryScreenVM
 
-    init(item: Routing.Item, factory: UIFactory) {
-        _vm = .init(wrappedValue: factory.makeHistoryScreenVM(item: item))
-    }
-
-    init(routing: Routing, factory: UIFactory) {
-        _vm = .init(wrappedValue: factory.makeHistoryScreenVM(item: routing.destination.item!))
+    init(_ factory: UIFactory) {
+        _vm = .init(wrappedValue: factory.makeHistoryScreenVM())
     }
 
     var body: some View {

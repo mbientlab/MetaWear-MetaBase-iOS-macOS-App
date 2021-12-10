@@ -13,14 +13,12 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
     public var deviceCount: Int { items.endIndex }
     public let showBackButton = true
 
-    private let routingItem: Routing.Item
     private unowned let routing: Routing
     private unowned let scanner: MetaWearScanner
 
-    public init(title: String, item: Routing.Item, vms: [AboutDeviceVM], store: MetaWearStore, routing: Routing, scanner: MetaWearScanner) {
+    public init(title: String, vms: [AboutDeviceVM], store: MetaWearStore, routing: Routing, scanner: MetaWearScanner) {
         self.routing = routing
         self.scanner = scanner
-        self.routingItem = item
         self.title = title
         self.items = vms
     }
@@ -29,7 +27,8 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
 public extension HistoryScreenVM {
 
     func performCTA() {
-        routing.setDestination(.moduleConfig(routingItem))
+        // No need to reset focus
+        routing.setDestination(.configure)
     }
 
     func refresh() {
