@@ -48,6 +48,9 @@ extension HistoryScreen.AboutColumn {
 
         private var header: some View {
             HStack(spacing: 15) {
+
+                ConnectionButton(size: .subheadline, state: vm.connection)
+
                 Text(vm.meta.name)
                         .font(.title3)
                         .lineLimit(1)
@@ -61,6 +64,7 @@ extension HistoryScreen.AboutColumn {
                     Button("Update Firmware") { }
                     Button("Run Diagnostic") { }
                     Divider()
+                    Button("Factory Reset") { vm.reset() }
                     Text("Advanced")
                 }
             }
@@ -71,7 +75,7 @@ extension HistoryScreen.AboutColumn {
             HLabel("Battery", item: vm.battery,                     align: alignment)
             HLabel("MAC", item: vm.meta.mac,                        align: alignment)
             HLabel("Serial", item: vm.meta.serial,                  align: alignment)
-            HLabel("Model", item: vm.meta.model.isolatedModelName,  align: alignment)
+            HLabel("Model", item: vm.meta.model.name,  align: alignment)
             HLabel("Firmware", item: vm.info.firmwareRevision,      align: alignment)
             HLabel("Hardware", item: vm.info.hardwareRevision,      align: alignment)
         }

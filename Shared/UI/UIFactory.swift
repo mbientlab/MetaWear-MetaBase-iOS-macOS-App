@@ -17,6 +17,7 @@ public class UIFactory: ObservableObject {
     private unowned let store: MetaWearStore
     private unowned let scanner: MetaWearScanner
     private unowned let routing: Routing
+    private lazy var actionQueue = DispatchQueue(label: Bundle.main.bundleIdentifier! + ".action")
 }
 
 public extension UIFactory {
@@ -30,7 +31,7 @@ public extension UIFactory {
     }
 
     func makeMetaWearDiscoveryVM() -> MetaWearDiscoveryVM {
-        .init(store: store)
+        .init(store: store) 
     }
 
     func makeMetaWearItemVM(_ item: Routing.Item) -> KnownItemVM {
@@ -56,17 +57,42 @@ public extension UIFactory {
     }
 
     func makeHistoryScreenVM(item: Routing.Item) -> HistoryScreenVM {
-        var vms: [AboutDeviceVM] = []
+        let (title, devices) = getKnownDevices(for: item)
+        let vms = makeAboutVMs(for: devices)
+        return .init(title: title, item: item, vms: vms, store: store, routing: routing, scanner: scanner)
+    }
+
+    func makeSensorConfigurationVM(item: Routing.Item) -> SensorConfigurationVM {
+        let (title, devices) = getKnownDevices(for: item)
+        return .init(title: title, item: item, devices: devices, routing: routing)
+    }
+
+    func makeActionLogVM(item: Routing.Item) -> ActionLogVM {
+        let (_, devices) = getKnownDevices(for: item)
+        let vms = makeAboutVMs(for: devices)
+        return .init(item: item, devices: devices, vms: vms, store: store, routing: routing, queue: actionQueue)
+    }
+
+}
+
+private extension UIFactory {
+
+    private func makeAboutVMs(for devices: [MWKnownDevice]) -> [AboutDeviceVM] {
+        let vms = devices.map(makeAboutDeviceVM(device:))
+        vms.indices.forEach { vms[$0].configure(for: $0) }
+        return vms
+    }
+
+    private func getKnownDevices(for item: Routing.Item) -> (title: String, devices: [MWKnownDevice]) {
         switch item {
             case .group(let id):
                 guard let group = store.getGroup(id: id) else { break }
-                let devices = store.getDevicesInGroup(group)
-                vms = devices.map(makeAboutDeviceVM(device:))
+                return (group.name, store.getDevicesInGroup(group))
 
             case .known(let mac):
                 guard let device = store.getDeviceAndMetadata(mac) else { break }
-                vms = [makeAboutDeviceVM(device: device)]
+                return (device.meta.name, [device])
         }
-        return .init(item: item, vms: vms, store: store, routing: routing, scanner: scanner)
+        return (title: "Error", devices: [])
     }
 }

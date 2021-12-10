@@ -33,6 +33,7 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     private var batterySub:                  AnyCancellable? = nil
     private var infoSub:                     AnyCancellable? = nil
     private var ledSub:                      AnyCancellable? = nil
+    private var resetSub:                    AnyCancellable? = nil
     private unowned let store:               MetaWearStore
 
     public init(device: MWKnownDevice, store: MetaWearStore) {
@@ -43,11 +44,15 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
         let _rssi = device.mw?.rssi ?? Int(SignalLevel.noBarsRSSI)
         self.rssi = .init(rssi: _rssi)
         self.rssiInt = _rssi
-        self.info = device.mw?.info ?? .init(manufacturer: "–",
-                                             modelNumber: "–",
+        self.info = device.mw?.info ?? .init(manufacturer: "—",
+                                             model: .unknown,
                                              serialNumber: device.meta.serial,
                                              firmwareRevision: "—",
                                              hardwareRevision: "—")
+    }
+
+    public func configure(for index: Int) {
+        led.pattern = MWLED.FlashPattern.Presets.init(rawValue: index % 10)!.pattern
     }
 }
 
@@ -84,12 +89,23 @@ public extension AboutDeviceVM {
 
         device?.connect()
     }
+
+    func reset() {
+        guard resetSub == nil else { return }
+        resetSub = device?
+            .publishWhenConnected()
+            .first()
+            .factoryReset()
+            .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
+
+        device?.connect()
+    }
 }
 
 private extension AboutDeviceVM {
 
     func refreshDeviceInformation() {
-        infoSub = device?.readCharacteristic(.allDeviceInformation)
+        infoSub = device?.read(.allDeviceInformation)
 //            .print()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] info in
@@ -98,7 +114,7 @@ private extension AboutDeviceVM {
     }
 
     func refreshBattery() {
-        batterySub = device?.readCharacteristic(.batteryLife)
+        batterySub = device?.read(.batteryLife)
 //            .print()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] percentage in

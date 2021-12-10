@@ -14,7 +14,6 @@ struct IdentifyByLEDButton: View {
         Button { request() } label: {
             SFSymbol.led.image()
                 .font(.headline)
-                .opacity(emulator.ledIsOn ? 1 : 0.75)
                 .foregroundColor(emulator.ledIsOn ? .init(emulator.pattern.color) : nil)
         }
         .buttonStyle(.borderless)

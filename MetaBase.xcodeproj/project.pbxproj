@@ -7,6 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9409C5C02761383E001FE850 /* SensorConfigurationVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5BF2761383E001FE850 /* SensorConfigurationVM.swift */; };
+		9409C5C227613890001FE850 /* SensorUserParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C127613890001FE850 /* SensorUserParameters.swift */; };
+		9409C5C327613890001FE850 /* SensorUserParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C127613890001FE850 /* SensorUserParameters.swift */; };
+		9409C5C427613895001FE850 /* SensorConfigurationVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5BF2761383E001FE850 /* SensorConfigurationVM.swift */; };
+		9409C5C627613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */; };
+		9409C5C727613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */; };
+		9409C5C927617F35001FE850 /* LegalSensorParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C827617F35001FE850 /* LegalSensorParameters.swift */; };
+		9409C5CA27617F35001FE850 /* LegalSensorParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C827617F35001FE850 /* LegalSensorParameters.swift */; };
+		9409C5CC2761F438001FE850 /* Configure+SensorIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5CB2761F438001FE850 /* Configure+SensorIterator.swift */; };
+		9409C5CD2761F438001FE850 /* Configure+SensorIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5CB2761F438001FE850 /* Configure+SensorIterator.swift */; };
+		9409C5CF2762969B001FE850 /* Configure+Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5CE2762969B001FE850 /* Configure+Grid.swift */; };
+		9409C5D02762969B001FE850 /* Configure+Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5CE2762969B001FE850 /* Configure+Grid.swift */; };
+		9409C5D22762971D001FE850 /* Configure+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D12762971D001FE850 /* Configure+CTAs.swift */; };
+		9409C5D32762971D001FE850 /* Configure+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D12762971D001FE850 /* Configure+CTAs.swift */; };
+		9409C5D62762A367001FE850 /* ActionLogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D52762A367001FE850 /* ActionLogVM.swift */; };
+		9409C5D72762A367001FE850 /* ActionLogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D52762A367001FE850 /* ActionLogVM.swift */; };
+		9409C5D92762D7DA001FE850 /* ActionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D82762D7DA001FE850 /* ActionState.swift */; };
+		9409C5DA2762D7DA001FE850 /* ActionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D82762D7DA001FE850 /* ActionState.swift */; };
+		9409C5DC2762E17D001FE850 /* Action+Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5DB2762E17D001FE850 /* Action+Row.swift */; };
+		9409C5DD2762E17D001FE850 /* Action+Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5DB2762E17D001FE850 /* Action+Row.swift */; };
+		9409C5DF2762E187001FE850 /* Action+ProgrammingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5DE2762E186001FE850 /* Action+ProgrammingState.swift */; };
+		9409C5E02762E187001FE850 /* Action+ProgrammingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5DE2762E186001FE850 /* Action+ProgrammingState.swift */; };
+		9409C5E22762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E12762E3FB001FE850 /* ActionScreen+CTAs.swift */; };
+		9409C5E32762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E12762E3FB001FE850 /* ActionScreen+CTAs.swift */; };
+		9409C5E52762E732001FE850 /* ActionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E42762E732001FE850 /* ActionHeader.swift */; };
+		9409C5E62762E732001FE850 /* ActionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E42762E732001FE850 /* ActionHeader.swift */; };
 		9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		9452854F275BDC17004D815B /* ChooseDevicesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9452854E275BDC17004D815B /* ChooseDevicesScreen.swift */; };
@@ -99,6 +125,14 @@
 		94E3A7F8275FF5DD007E2BAE /* HistoryScreenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7F0275FF50C007E2BAE /* HistoryScreenVM.swift */; };
 		94E3A7FA27603238007E2BAE /* IdentifyByLEDButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7F927603238007E2BAE /* IdentifyByLEDButton.swift */; };
 		94E3A7FB276032BD007E2BAE /* IdentifyByLEDButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7F927603238007E2BAE /* IdentifyByLEDButton.swift */; };
+		94E3A7FD27607075007E2BAE /* ConnectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7FC27607075007E2BAE /* ConnectionButton.swift */; };
+		94E3A7FE27607075007E2BAE /* ConnectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A7FC27607075007E2BAE /* ConnectionButton.swift */; };
+		94E3A80327608BE3007E2BAE /* Configure+Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80027608BE3007E2BAE /* Configure+Tile.swift */; };
+		94E3A80427608BE3007E2BAE /* Configure+Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80027608BE3007E2BAE /* Configure+Tile.swift */; };
+		94E3A80627608BF8007E2BAE /* ProgressScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80527608BF8007E2BAE /* ProgressScreen.swift */; };
+		94E3A80727608BF8007E2BAE /* ProgressScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80527608BF8007E2BAE /* ProgressScreen.swift */; };
+		94E3A80927608ED7007E2BAE /* SensorConfigContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */; };
+		94E3A80A27608ED7007E2BAE /* SensorConfigContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */; };
 		94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */; };
 		94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A0275A1298008C62E7 /* ActionScreen.swift */; };
 		94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A2275A14DE008C62E7 /* Dimensions.swift */; };
@@ -125,6 +159,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9409C5BF2761383E001FE850 /* SensorConfigurationVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorConfigurationVM.swift; sourceTree = "<group>"; };
+		9409C5C127613890001FE850 /* SensorUserParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorUserParameters.swift; sourceTree = "<group>"; };
+		9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MetaWear+WriteSensorMacro.swift"; sourceTree = "<group>"; };
+		9409C5C827617F35001FE850 /* LegalSensorParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalSensorParameters.swift; sourceTree = "<group>"; };
+		9409C5CB2761F438001FE850 /* Configure+SensorIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+SensorIterator.swift"; sourceTree = "<group>"; };
+		9409C5CE2762969B001FE850 /* Configure+Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+Grid.swift"; sourceTree = "<group>"; };
+		9409C5D12762971D001FE850 /* Configure+CTAs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+CTAs.swift"; sourceTree = "<group>"; };
+		9409C5D52762A367001FE850 /* ActionLogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionLogVM.swift; sourceTree = "<group>"; };
+		9409C5D82762D7DA001FE850 /* ActionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionState.swift; sourceTree = "<group>"; };
+		9409C5DB2762E17D001FE850 /* Action+Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Action+Row.swift"; sourceTree = "<group>"; };
+		9409C5DE2762E186001FE850 /* Action+ProgrammingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Action+ProgrammingState.swift"; sourceTree = "<group>"; };
+		9409C5E12762E3FB001FE850 /* ActionScreen+CTAs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActionScreen+CTAs.swift"; sourceTree = "<group>"; };
+		9409C5E42762E732001FE850 /* ActionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionHeader.swift; sourceTree = "<group>"; };
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
 		9420E582275A097200A841D6 /* MetaWear-iOS-Combine-SDK */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "MetaWear-iOS-Combine-SDK"; path = "../../MetaWear-iOS-Combine-SDK"; sourceTree = "<group>"; };
 		9452854E275BDC17004D815B /* ChooseDevicesScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChooseDevicesScreen.swift; path = "../../../../../Mini/mbientLab/MetaBase5/MetaBase/Shared UI/Screens/ChooseDevices/ChooseDevicesScreen.swift"; sourceTree = "<group>"; };
@@ -178,6 +225,10 @@
 		94E3A7F2275FF519007E2BAE /* AboutDeviceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutDeviceVM.swift; sourceTree = "<group>"; };
 		94E3A7F4275FF557007E2BAE /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreen.swift; sourceTree = "<group>"; };
 		94E3A7F927603238007E2BAE /* IdentifyByLEDButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyByLEDButton.swift; sourceTree = "<group>"; };
+		94E3A7FC27607075007E2BAE /* ConnectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionButton.swift; sourceTree = "<group>"; };
+		94E3A80027608BE3007E2BAE /* Configure+Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Configure+Tile.swift"; sourceTree = "<group>"; };
+		94E3A80527608BF8007E2BAE /* ProgressScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressScreen.swift; sourceTree = "<group>"; };
+		94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorConfigContainer.swift; sourceTree = "<group>"; };
 		94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureScreen.swift; sourceTree = "<group>"; };
 		94EBA3A0275A1298008C62E7 /* ActionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionScreen.swift; sourceTree = "<group>"; };
 		94EBA3A2275A14DE008C62E7 /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
@@ -224,6 +275,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9409C5BE27613828001FE850 /* VMs */ = {
+			isa = PBXGroup;
+			children = (
+				9409C5BF2761383E001FE850 /* SensorConfigurationVM.swift */,
+				9409C5C127613890001FE850 /* SensorUserParameters.swift */,
+				94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */,
+				9409C5C827617F35001FE850 /* LegalSensorParameters.swift */,
+			);
+			path = VMs;
+			sourceTree = "<group>";
+		};
+		9409C5D42762A34E001FE850 /* VMs */ = {
+			isa = PBXGroup;
+			children = (
+				9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */,
+				9409C5D52762A367001FE850 /* ActionLogVM.swift */,
+				9409C5D82762D7DA001FE850 /* ActionState.swift */,
+			);
+			path = VMs;
+			sourceTree = "<group>";
+		};
 		9413CEB4275B13F900A36B5E /* Screens */ = {
 			isa = PBXGroup;
 			children = (
@@ -299,7 +371,12 @@
 		94934FDA275A0C1400E388FF /* 3_Configure */ = {
 			isa = PBXGroup;
 			children = (
+				9409C5BE27613828001FE850 /* VMs */,
 				94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */,
+				9409C5CE2762969B001FE850 /* Configure+Grid.swift */,
+				9409C5CB2761F438001FE850 /* Configure+SensorIterator.swift */,
+				94E3A80027608BE3007E2BAE /* Configure+Tile.swift */,
+				9409C5D12762971D001FE850 /* Configure+CTAs.swift */,
 			);
 			path = 3_Configure;
 			sourceTree = "<group>";
@@ -307,7 +384,12 @@
 		94934FDB275A0C5800E388FF /* 4_Action */ = {
 			isa = PBXGroup;
 			children = (
+				9409C5D42762A34E001FE850 /* VMs */,
 				94EBA3A0275A1298008C62E7 /* ActionScreen.swift */,
+				9409C5DB2762E17D001FE850 /* Action+Row.swift */,
+				9409C5DE2762E186001FE850 /* Action+ProgrammingState.swift */,
+				94E3A80527608BF8007E2BAE /* ProgressScreen.swift */,
+				9409C5E12762E3FB001FE850 /* ActionScreen+CTAs.swift */,
 			);
 			path = 4_Action;
 			sourceTree = "<group>";
@@ -368,6 +450,7 @@
 				94934FF1275A0DD500E388FF /* ProgressBar.swift */,
 				94934FF2275A0DD500E388FF /* SpotlightShimmerText.swift */,
 				94934FF4275A0DD500E388FF /* Subheader.swift */,
+				9409C5E42762E732001FE850 /* ActionHeader.swift */,
 			);
 			path = Labels;
 			sourceTree = "<group>";
@@ -378,6 +461,7 @@
 				94935009275A0DF300E388FF /* CTAButton.swift */,
 				94935008275A0DF300E388FF /* MiniMenuButton.swift */,
 				94E3A7F927603238007E2BAE /* IdentifyByLEDButton.swift */,
+				94E3A7FC27607075007E2BAE /* ConnectionButton.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -642,20 +726,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				94934FFD275A0DD500E388FF /* Subheader.swift in Sources */,
+				9409C5D62762A367001FE850 /* ActionLogVM.swift in Sources */,
+				9409C5C627613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */,
 				94934FE8275A0D6800E388FF /* Images.swift in Sources */,
+				94E3A80927608ED7007E2BAE /* SensorConfigContainer.swift in Sources */,
 				9452855E275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
 				94DFEC65275D45F000BB80DB /* UnknownDeviceVM.swift in Sources */,
+				94E3A80327608BE3007E2BAE /* Configure+Tile.swift in Sources */,
+				9409C5E52762E732001FE850 /* ActionHeader.swift in Sources */,
 				94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */,
+				9409C5D92762D7DA001FE850 /* ActionState.swift in Sources */,
 				9452857A275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
 				94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */,
 				9452854F275BDC17004D815B /* ChooseDevicesScreen.swift in Sources */,
 				94528574275BE45F004D815B /* AlertVendors.swift in Sources */,
 				94528561275BDF8D004D815B /* UserDefaults+Singleton.swift in Sources */,
 				94528564275BE0D8004D815B /* MainWindow.swift in Sources */,
+				94E3A7FD27607075007E2BAE /* ConnectionButton.swift in Sources */,
 				94935023275A11C600E388FF /* KnownItemVM.swift in Sources */,
+				9409C5DC2762E17D001FE850 /* Action+Row.swift in Sources */,
+				9409C5CF2762969B001FE850 /* Configure+Grid.swift in Sources */,
 				94E3A7FA27603238007E2BAE /* IdentifyByLEDButton.swift in Sources */,
 				94528555275BDDB9004D815B /* Choose+Grids.swift in Sources */,
 				94EBA3A5275A150C008C62E7 /* Routing.swift in Sources */,
+				9409C5C02761383E001FE850 /* SensorConfigurationVM.swift in Sources */,
 				94E3A7F3275FF519007E2BAE /* AboutDeviceVM.swift in Sources */,
 				9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */,
 				9493500C275A0DF300E388FF /* CTAButton.swift in Sources */,
@@ -671,13 +765,20 @@
 				94935017275A107000E388FF /* DispatchQueue+AsyncAfter.swift in Sources */,
 				94935004275A0DE700E388FF /* LargeSignalDots.swift in Sources */,
 				94DFEC62275D459B00BB80DB /* ItemVM.swift in Sources */,
+				9409C5C927617F35001FE850 /* LegalSensorParameters.swift in Sources */,
+				9409C5DF2762E187001FE850 /* Action+ProgrammingState.swift in Sources */,
+				9409C5C227613890001FE850 /* SensorUserParameters.swift in Sources */,
 				94E3A7F1275FF50C007E2BAE /* HistoryScreenVM.swift in Sources */,
+				94E3A80627608BF8007E2BAE /* ProgressScreen.swift in Sources */,
 				94934FF9275A0DD500E388FF /* SpotlightShimmerText.swift in Sources */,
 				94528552275BDD81004D815B /* Choose+ToolbarScanningIcon.swift in Sources */,
 				94E005F2275A07E9001B0DFD /* MetaBaseApp.swift in Sources */,
 				94E3A7F5275FF557007E2BAE /* HistoryScreen.swift in Sources */,
 				94528558275BDE1E004D815B /* Choose+DeviceIterator.swift in Sources */,
+				9409C5D22762971D001FE850 /* Configure+CTAs.swift in Sources */,
+				9409C5CC2761F438001FE850 /* Configure+SensorIterator.swift in Sources */,
 				9493501A275A112200E388FF /* DiscoveryListVM.swift in Sources */,
+				9409C5E22762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */,
 				94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */,
 				94528570275BE248004D815B /* BLEStateWarningsVM.swift in Sources */,
 				94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */,
@@ -691,9 +792,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				94EBA3A7275A1620008C62E7 /* Routing.swift in Sources */,
+				9409C5D72762A367001FE850 /* ActionLogVM.swift in Sources */,
+				9409C5C727613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */,
 				94935007275A0DE700E388FF /* MetaWearAtom.swift in Sources */,
+				9409C5C327613890001FE850 /* SensorUserParameters.swift in Sources */,
+				94E3A80A27608ED7007E2BAE /* SensorConfigContainer.swift in Sources */,
 				94528567275BE128004D815B /* ConfigureScreen.swift in Sources */,
 				94DFEC66275D45F000BB80DB /* UnknownDeviceVM.swift in Sources */,
+				9409C5E62762E732001FE850 /* ActionHeader.swift in Sources */,
+				94E3A80427608BE3007E2BAE /* Configure+Tile.swift in Sources */,
+				9409C5DA2762D7DA001FE850 /* ActionState.swift in Sources */,
 				94E3A7F6275FF5CF007E2BAE /* HistoryScreen.swift in Sources */,
 				9493501B275A112200E388FF /* DiscoveryListVM.swift in Sources */,
 				94E3A7F8275FF5DD007E2BAE /* HistoryScreenVM.swift in Sources */,
@@ -701,6 +809,9 @@
 				94934FFC275A0DD500E388FF /* Header.swift in Sources */,
 				9452855C275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
 				94528550275BDC17004D815B /* ChooseDevicesScreen.swift in Sources */,
+				94E3A7FE27607075007E2BAE /* ConnectionButton.swift in Sources */,
+				9409C5DD2762E17D001FE850 /* Action+Row.swift in Sources */,
+				9409C5D02762969B001FE850 /* Configure+Grid.swift in Sources */,
 				94528575275BE45F004D815B /* AlertVendors.swift in Sources */,
 				94E3A7FB276032BD007E2BAE /* IdentifyByLEDButton.swift in Sources */,
 				94935005275A0DE700E388FF /* LargeSignalDots.swift in Sources */,
@@ -720,14 +831,21 @@
 				9493500B275A0DF300E388FF /* MiniMenuButton.swift in Sources */,
 				94EBA3A6275A160A008C62E7 /* Dimensions.swift in Sources */,
 				94934FF8275A0DD500E388FF /* ProgressBar.swift in Sources */,
+				9409C5CA27617F35001FE850 /* LegalSensorParameters.swift in Sources */,
+				9409C5E02762E187001FE850 /* Action+ProgrammingState.swift in Sources */,
 				94E3A7F7275FF5DD007E2BAE /* AboutDeviceVM.swift in Sources */,
+				94E3A80727608BF8007E2BAE /* ProgressScreen.swift in Sources */,
 				94DFEC63275D459B00BB80DB /* ItemVM.swift in Sources */,
 				94528565275BE0D8004D815B /* MainWindow.swift in Sources */,
 				94934FF6275A0DD500E388FF /* LabeledItem.swift in Sources */,
 				94934FFE275A0DD500E388FF /* Subheader.swift in Sources */,
 				9452855F275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
 				94528562275BDF8D004D815B /* UserDefaults+Singleton.swift in Sources */,
+				9409C5D32762971D001FE850 /* Configure+CTAs.swift in Sources */,
+				9409C5CD2761F438001FE850 /* Configure+SensorIterator.swift in Sources */,
 				94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */,
+				9409C5E32762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */,
+				9409C5C427613895001FE850 /* SensorConfigurationVM.swift in Sources */,
 				94934FFA275A0DD500E388FF /* SpotlightShimmerText.swift in Sources */,
 				94528571275BE248004D815B /* BLEStateWarningsVM.swift in Sources */,
 				94A165C4275F2F8600FA355D /* History+About.swift in Sources */,

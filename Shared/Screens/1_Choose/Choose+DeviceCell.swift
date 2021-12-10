@@ -105,9 +105,7 @@ extension ChooseDevicesScreen.DeviceCell {
         static let verticalHoverDelta = ChooseDevicesScreen.DeviceCell.verticalHoverDelta
 
         var body: some View {
-            SFSymbol.connected.image()
-                .font(.headline)
-                .foregroundColor(.white)
+            ConnectionButton(state: connection)
                 .opacity(connection == .connected ? 1 : 0)
                 .offset(y: isHovering ? -Self.verticalHoverDelta : 0)
 
@@ -131,7 +129,7 @@ extension ChooseDevicesScreen.DeviceCell {
                     }
 
                 } else {
-                    (models.first?.model ?? .notFound("")).image.image()
+                    (models.first?.model ?? .unknown).image.image()
                         .resizable()
                         .scaledToFill()
                         .scaleEffect(isHovering ? 1.1 : 1, anchor: .bottom)

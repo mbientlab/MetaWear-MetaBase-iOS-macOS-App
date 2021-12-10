@@ -34,15 +34,15 @@ struct MainWindow: View {
                     HistoryScreen(item: item, factory: factory)
                         .transition(.add)
 
-                case .moduleConfig(_):
-                    ConfigureScreen()
+                case .moduleConfig(let item):
+                    ConfigureScreen(item: item, factory: factory)
                         .transition(.add)
 
-                case .log(_):
-                    ActionScreen()
+                case .log:
+                    ActionScreen(routing: routing, factory: factory)
                         .transition(.add)
-                case .stream(_):
-                    ActionScreen()
+                case .stream:
+                    ActionScreen(routing: routing, factory: factory)
                         .transition(.add)
             }
         }
@@ -102,13 +102,13 @@ struct MainWindow: View {
         ) { EmptyView() }
 
         NavigationLink(
-            destination: ConfigureScreen(),
+            destination: ConfigureScreen(routing: routing, factory: factory),
             tag: Routing.Destination.choose,
             selection: destination
         ) { EmptyView() }
 
         NavigationLink(
-            destination: ActionScreen(),
+            destination: ActionScreen(routing: routing, factory: factory),
             tag: Routing.Destination.choose,
             selection: destination
         ) { EmptyView() }

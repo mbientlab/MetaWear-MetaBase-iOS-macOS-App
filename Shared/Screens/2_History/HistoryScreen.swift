@@ -18,17 +18,12 @@ struct HistoryScreen: View {
     }
 
     init(routing: Routing, factory: UIFactory) {
-        guard case let Routing.Destination.history(item) = routing.destination else { fatalError() }
-        _vm = .init(wrappedValue: factory.makeHistoryScreenVM(item: item))
+        _vm = .init(wrappedValue: factory.makeHistoryScreenVM(item: routing.destination.item!))
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Header(
-                text: vm.title,
-                deviceIcons: vm.items.endIndex,
-                showBackButton: true
-            )
+            Header(vm: vm)
 
             HStack(alignment: .firstTextBaseline, spacing: .screenInset) {
                 AboutColumn()
