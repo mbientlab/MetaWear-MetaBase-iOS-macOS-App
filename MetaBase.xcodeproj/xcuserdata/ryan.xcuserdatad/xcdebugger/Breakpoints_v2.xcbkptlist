@@ -14,8 +14,8 @@
             filePath = "Shared/Screens/4_Action/VMs/ActionLogVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
             landmarkName = "markAsFailureAndAdvance(fromCurrent:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "Shared/Screens/4_Action/VMs/ActionLogVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
             landmarkName = "tryToProgram(device:)"
             landmarkType = "7">
          </BreakpointContent>

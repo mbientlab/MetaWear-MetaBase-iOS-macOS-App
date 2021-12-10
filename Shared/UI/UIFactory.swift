@@ -67,10 +67,10 @@ public extension UIFactory {
         return .init(title: title, item: item, devices: devices, routing: routing)
     }
 
-    func makeActionLogVM(item: Routing.Item) -> ActionLogVM {
+    func makeActionVM(item: Routing.Item, action: ActionType) -> ActionVM {
         let (_, devices) = getKnownDevices(for: item)
         let vms = makeAboutVMs(for: devices)
-        return .init(item: item, devices: devices, vms: vms, store: store, routing: routing, queue: actionQueue)
+        return .init(item: item, action: action, devices: devices, vms: vms, store: store, routing: routing, queue: actionQueue)
     }
 
 }

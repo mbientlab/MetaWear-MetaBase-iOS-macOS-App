@@ -21,8 +21,8 @@
 		9409C5D02762969B001FE850 /* Configure+Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5CE2762969B001FE850 /* Configure+Grid.swift */; };
 		9409C5D22762971D001FE850 /* Configure+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D12762971D001FE850 /* Configure+CTAs.swift */; };
 		9409C5D32762971D001FE850 /* Configure+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D12762971D001FE850 /* Configure+CTAs.swift */; };
-		9409C5D62762A367001FE850 /* ActionLogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D52762A367001FE850 /* ActionLogVM.swift */; };
-		9409C5D72762A367001FE850 /* ActionLogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D52762A367001FE850 /* ActionLogVM.swift */; };
+		9409C5D62762A367001FE850 /* ActionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D52762A367001FE850 /* ActionVM.swift */; };
+		9409C5D72762A367001FE850 /* ActionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D52762A367001FE850 /* ActionVM.swift */; };
 		9409C5D92762D7DA001FE850 /* ActionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D82762D7DA001FE850 /* ActionState.swift */; };
 		9409C5DA2762D7DA001FE850 /* ActionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5D82762D7DA001FE850 /* ActionState.swift */; };
 		9409C5DC2762E17D001FE850 /* Action+Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5DB2762E17D001FE850 /* Action+Row.swift */; };
@@ -33,6 +33,8 @@
 		9409C5E32762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E12762E3FB001FE850 /* ActionScreen+CTAs.swift */; };
 		9409C5E52762E732001FE850 /* ActionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E42762E732001FE850 /* ActionHeader.swift */; };
 		9409C5E62762E732001FE850 /* ActionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E42762E732001FE850 /* ActionHeader.swift */; };
+		9409C5E82763B764001FE850 /* ActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E72763B764001FE850 /* ActionType.swift */; };
+		9409C5E92763B764001FE850 /* ActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E72763B764001FE850 /* ActionType.swift */; };
 		9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		9452854F275BDC17004D815B /* ChooseDevicesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9452854E275BDC17004D815B /* ChooseDevicesScreen.swift */; };
@@ -166,12 +168,13 @@
 		9409C5CB2761F438001FE850 /* Configure+SensorIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+SensorIterator.swift"; sourceTree = "<group>"; };
 		9409C5CE2762969B001FE850 /* Configure+Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+Grid.swift"; sourceTree = "<group>"; };
 		9409C5D12762971D001FE850 /* Configure+CTAs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+CTAs.swift"; sourceTree = "<group>"; };
-		9409C5D52762A367001FE850 /* ActionLogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionLogVM.swift; sourceTree = "<group>"; };
+		9409C5D52762A367001FE850 /* ActionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionVM.swift; sourceTree = "<group>"; };
 		9409C5D82762D7DA001FE850 /* ActionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionState.swift; sourceTree = "<group>"; };
 		9409C5DB2762E17D001FE850 /* Action+Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Action+Row.swift"; sourceTree = "<group>"; };
 		9409C5DE2762E186001FE850 /* Action+ProgrammingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Action+ProgrammingState.swift"; sourceTree = "<group>"; };
 		9409C5E12762E3FB001FE850 /* ActionScreen+CTAs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActionScreen+CTAs.swift"; sourceTree = "<group>"; };
 		9409C5E42762E732001FE850 /* ActionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionHeader.swift; sourceTree = "<group>"; };
+		9409C5E72763B764001FE850 /* ActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionType.swift; sourceTree = "<group>"; };
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
 		9420E582275A097200A841D6 /* MetaWear-iOS-Combine-SDK */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "MetaWear-iOS-Combine-SDK"; path = "../../MetaWear-iOS-Combine-SDK"; sourceTree = "<group>"; };
 		9452854E275BDC17004D815B /* ChooseDevicesScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChooseDevicesScreen.swift; path = "../../../../../Mini/mbientLab/MetaBase5/MetaBase/Shared UI/Screens/ChooseDevices/ChooseDevicesScreen.swift"; sourceTree = "<group>"; };
@@ -290,8 +293,9 @@
 			isa = PBXGroup;
 			children = (
 				9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */,
-				9409C5D52762A367001FE850 /* ActionLogVM.swift */,
+				9409C5D52762A367001FE850 /* ActionVM.swift */,
 				9409C5D82762D7DA001FE850 /* ActionState.swift */,
+				9409C5E72763B764001FE850 /* ActionType.swift */,
 			);
 			path = VMs;
 			sourceTree = "<group>";
@@ -726,12 +730,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				94934FFD275A0DD500E388FF /* Subheader.swift in Sources */,
-				9409C5D62762A367001FE850 /* ActionLogVM.swift in Sources */,
+				9409C5D62762A367001FE850 /* ActionVM.swift in Sources */,
 				9409C5C627613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */,
 				94934FE8275A0D6800E388FF /* Images.swift in Sources */,
 				94E3A80927608ED7007E2BAE /* SensorConfigContainer.swift in Sources */,
 				9452855E275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
 				94DFEC65275D45F000BB80DB /* UnknownDeviceVM.swift in Sources */,
+				9409C5E82763B764001FE850 /* ActionType.swift in Sources */,
 				94E3A80327608BE3007E2BAE /* Configure+Tile.swift in Sources */,
 				9409C5E52762E732001FE850 /* ActionHeader.swift in Sources */,
 				94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */,
@@ -792,12 +797,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				94EBA3A7275A1620008C62E7 /* Routing.swift in Sources */,
-				9409C5D72762A367001FE850 /* ActionLogVM.swift in Sources */,
+				9409C5D72762A367001FE850 /* ActionVM.swift in Sources */,
 				9409C5C727613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */,
 				94935007275A0DE700E388FF /* MetaWearAtom.swift in Sources */,
 				9409C5C327613890001FE850 /* SensorUserParameters.swift in Sources */,
 				94E3A80A27608ED7007E2BAE /* SensorConfigContainer.swift in Sources */,
 				94528567275BE128004D815B /* ConfigureScreen.swift in Sources */,
+				9409C5E92763B764001FE850 /* ActionType.swift in Sources */,
 				94DFEC66275D45F000BB80DB /* UnknownDeviceVM.swift in Sources */,
 				9409C5E62762E732001FE850 /* ActionHeader.swift in Sources */,
 				94E3A80427608BE3007E2BAE /* Configure+Tile.swift in Sources */,

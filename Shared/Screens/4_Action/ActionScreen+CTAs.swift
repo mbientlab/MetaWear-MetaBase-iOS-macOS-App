@@ -10,7 +10,7 @@ extension ActionScreen {
 
     struct CTAs: View {
 
-        @EnvironmentObject private var vm: ActionLogVM
+        @EnvironmentObject private var vm: ActionVM
 
         var body: some View {
             HStack {

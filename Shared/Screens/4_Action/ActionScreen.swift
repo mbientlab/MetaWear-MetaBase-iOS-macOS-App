@@ -8,14 +8,14 @@ import Metadata
 
 struct ActionScreen: View {
 
-    @StateObject private var vm: ActionLogVM
+    @StateObject private var vm: ActionVM
 
     init(item: Routing.Item, factory: UIFactory) {
-        _vm = .init(wrappedValue: factory.makeActionLogVM(item: item))
+        _vm = .init(wrappedValue: factory.makeActionVM(item: item, action: .log))
     }
 
     init(routing: Routing, factory: UIFactory) {
-        _vm = .init(wrappedValue: factory.makeActionLogVM(item: routing.destination.item!))
+        _vm = .init(wrappedValue: factory.makeActionVM(item: routing.destination.item!, action: .log))
     }
 
     var body: some View {
@@ -27,7 +27,7 @@ struct ActionScreen: View {
                 ForEach(vm.deviceVMs) { vm in
                     Row(vm: vm)
                 }
-                .animation(.easeOut, value: vm.programmingFocus)
+                .animation(.easeOut, value: vm.actionFocus)
             }
             .padding(.horizontal, .screenInset)
 

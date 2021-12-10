@@ -10,7 +10,7 @@ extension ActionScreen {
 
     struct Row: View {
 
-        @EnvironmentObject private var action: ActionLogVM
+        @EnvironmentObject private var action: ActionVM
         @ObservedObject var vm: AboutDeviceVM
 
         var body: some View {
@@ -32,19 +32,19 @@ extension ActionScreen {
                 ProgressSummary(vm: vm)
                     .frame(maxWidth: .infinity, alignment: .center)
             }
-            .contextMenu { if action.programmingState[vm.meta.mac] == .error {
+            .contextMenu { if case ActionState.error = action.state[vm.meta.mac]! {
                 Button("Factory Reset") { vm.reset() }
             } }
             .onAppear(perform: vm.onAppear)
             .onDisappear(perform: vm.onDisappear)
             .padding()
             .background(background)
-            .animation(.easeOut, value: action.programmingState[vm.meta.mac]!)
+            .animation(.easeOut, value: action.state[vm.meta.mac]!)
         }
 
         private var background: some View {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.white.opacity(action.programmingFocus == vm.meta.mac ? 0.1 : 0))
+                .fill(Color.white.opacity(action.actionFocus == vm.meta.mac ? 0.1 : 0))
         }
     }
 }

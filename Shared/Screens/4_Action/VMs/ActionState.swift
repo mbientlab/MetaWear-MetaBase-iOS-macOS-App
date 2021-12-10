@@ -2,12 +2,20 @@
 
 import Foundation
 
-public enum ActionState: Int, Hashable, Equatable {
+public enum ActionState: Hashable, Equatable {
     case notStarted
-    case working
+    /// Percent complete
+    case working(Int)
     case completed
     case timeout
-    case error
+    case error(String)
 
-    var hasOutcome: Bool { self != .notStarted && self != .working }
+    public var hasOutcome: Bool {
+        switch self {
+            case .completed: fallthrough
+            case .timeout: fallthrough
+            case .error: return true
+            default: return false
+        }
+    }
 }

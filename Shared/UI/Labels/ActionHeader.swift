@@ -4,7 +4,7 @@ import SwiftUI
 import mbientSwiftUI
 
 public protocol ActionHeaderVM {
-    var title: String { get }
+    var actionType: ActionType { get }
     var representativeConfig: SensorConfigContainer { get }
     var showBackButton: Bool { get }
     func didTapBackButton() -> Bool
@@ -62,7 +62,7 @@ struct ActionHeader: View {
     }
 
     private var title: some View {
-        Text(vm.title)
+        Text(vm.actionType.title)
             .font(.largeTitle)
             .lineLimit(nil)
             .fixedSize(horizontal: false, vertical: true)

@@ -10,12 +10,12 @@ extension ActionScreen {
 
     struct ProgrammingState: View {
 
-        @EnvironmentObject private var action: ActionLogVM
+        @EnvironmentObject private var action: ActionVM
         @ObservedObject var vm: AboutDeviceVM
 
         var body: some View {
             ZStack {
-                switch action.programmingState[vm.meta.mac]! {
+                switch action.state[vm.meta.mac]! {
                     case .notStarted: notStartedIndicator
                     case .working: workingIndicator
                     case .completed: completedIndicator
@@ -58,12 +58,12 @@ extension ActionScreen {
 
     struct ProgressSummary: View {
 
-        @EnvironmentObject private var action: ActionLogVM
+        @EnvironmentObject private var action: ActionVM
         @ObservedObject var vm: AboutDeviceVM
 
         var body: some View {
             ZStack {
-                switch action.programmingState[vm.meta.mac]! {
+                switch action.state[vm.meta.mac]! {
                     case .notStarted: notStartedIndicator
                     case .working: workingIndicator
                     case .completed: completedIndicator
