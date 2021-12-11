@@ -236,10 +236,9 @@ private extension ActionVM {
         device
             .publishWhenConnected()
             .first()
-            .mapToMWError()
+            .mapToMWError() //
             .macro(config)
             .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
-            .print()
             .map { _ in () }
             .eraseToAnyPublisher()
     }
@@ -324,6 +323,7 @@ private extension ActionVM {
         _ mac: MACAddress
     ) {
         guard let config = config else { return }
+
 
         let publisher = didConnect.stream(config)
             .handleEvents(receiveOutput: { [weak self] _ in self?.streamCounters.counters[mac]?.send() })

@@ -31,12 +31,15 @@ extension ChooseDevicesScreen {
                     name: vm.name,
                     models: vm.models,
                     isLocallyKnown: vm.isLocallyKnown,
-                    isGroup: vm.isGroup
+                    isGroup: vm.isGroup,
+                    ledEmulator: vm.ledVM
                 )
                 StationaryComponents(
                     isHovering: isHovering,
                     isLocallyKnown: vm.isLocallyKnown,
-                    rssi: vm.rssi
+                    rssi: vm.rssi,
+                    requestIdentify: vm.identify,
+                    isIdentifying: vm.isIdentifying
                 )
             }
             .frame(width: Self.width)
@@ -96,6 +99,7 @@ extension ChooseDevicesScreen.DeviceCell {
         var models: [(mac: String, model: MetaWear.Model)]
         var isLocallyKnown: Bool
         var isGroup: Bool
+        @ObservedObject var ledEmulator: MWLED.FlashPattern.Emulator
 
         private var imageWidth: CGFloat { 110 }
         private var imageHeight: CGFloat { isHovering ? 150 : 135 }
@@ -111,7 +115,14 @@ extension ChooseDevicesScreen.DeviceCell {
                 .offset(y: isHovering ? -Self.verticalHoverDelta : 0)
                 .foregroundColor(.white)
 
+            image.overlay(ledFlash)
+        }
+
+        var ledFlash: some View {
             image
+                .colorMultiply(.init(ledEmulator.pattern.color))
+                .opacity(ledEmulator.ledIsOn ? 1 : 0)
+                .animation(.linear(duration: 0.05), value: ledEmulator.ledIsOn)
         }
 
         var image: some View {
@@ -146,6 +157,9 @@ extension ChooseDevicesScreen.DeviceCell {
         var isLocallyKnown: Bool
         var rssi: SignalLevel
 
+        let requestIdentify: () -> Void
+        var isIdentifying: Bool
+
         @Namespace private var namespace
 
         var body: some View {
@@ -160,6 +174,31 @@ extension ChooseDevicesScreen.DeviceCell {
             LargeSignalDots(signal: rssi, color: .white)
                 .opacity(isHovering ? 1 : 0.75)
                 .padding(.top, 20)
+
+            Button { requestIdentify() } label: {
+                ZStack {
+
+                    Text("Identify")
+                        .font(.headline)
+                        .lineLimit(1)
+                        .fixedSize()
+                        .opacity(isIdentifying ? 0 : 1)
+
+                    ProgressView()
+                        .opacity(isIdentifying ? 1 : 0)
+                        .progressViewStyle(.circular)
+                        #if os(macOS)
+                        .controlSize(.small)
+                        #endif
+
+                }
+            }
+            .buttonStyle(.borderless)
+            .allowsHitTesting(isLocallyKnown)
+            .disabled(isLocallyKnown == false)
+            .opacity(isLocallyKnown ? 1 : 0)
+            .animation(.easeInOut, value: isIdentifying)
+            .opacity(isHovering || isIdentifying ? 1 : 0)
         }
     }
 }

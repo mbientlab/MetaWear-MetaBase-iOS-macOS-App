@@ -28,12 +28,15 @@ extension ChooseDevicesScreen {
                     name: vm.name,
                     models: vm.models,
                     isLocallyKnown: vm.isLocallyKnown,
-                    isGroup: vm.isGroup
+                    isGroup: vm.isGroup,
+                    ledEmulator: .init(preset: .eight)
                 )
                 DeviceCell.StationaryComponents(
                     isHovering: isHovering,
                     isLocallyKnown: vm.isLocallyKnown,
-                    rssi: vm.rssi
+                    rssi: vm.rssi,
+                    requestIdentify: { },
+                    isIdentifying: false
                 )
             }
             .frame(width: DeviceCell.width)

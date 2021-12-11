@@ -191,7 +191,6 @@
 		94528579275BE77A004D815B /* Choose+EditGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+EditGroup.swift"; sourceTree = "<group>"; };
 		94934FD6275A0A2E00E388FF /* MetaBase--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MetaBase--iOS--Info.plist"; sourceTree = "<group>"; };
 		94934FD7275A0A4200E388FF /* MetaBase--macOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MetaBase--macOS--Info.plist"; sourceTree = "<group>"; };
-		9493500E275A0F0300E388FF /* mbientSwiftUI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = mbientSwiftUI; path = ../../mbientLabs/mbientSwiftUI/mbientSwiftUI; sourceTree = "<group>"; };
 		94935019275A112200E388FF /* DiscoveryListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryListVM.swift; sourceTree = "<group>"; };
 		94935022275A11C600E388FF /* KnownItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownItemVM.swift; sourceTree = "<group>"; };
 		94A165BB275E8E0C00FA355D /* MetaBase (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MetaBase (iOS).entitlements"; sourceTree = "<group>"; };
@@ -225,6 +224,7 @@
 		94E005EA275A07E9001B0DFD /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94E005EE275A07E9001B0DFD /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		94E005F0275A07E9001B0DFD /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		94E384DA2764518C001B4F49 /* mbientSwiftUI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = mbientSwiftUI; path = ../../mbientSwiftUI/mbientSwiftUI; sourceTree = "<group>"; };
 		94E3A7F0275FF50C007E2BAE /* HistoryScreenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreenVM.swift; sourceTree = "<group>"; };
 		94E3A7F2275FF519007E2BAE /* AboutDeviceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutDeviceVM.swift; sourceTree = "<group>"; };
 		94E3A7F4275FF557007E2BAE /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreen.swift; sourceTree = "<group>"; };
@@ -323,7 +323,7 @@
 			isa = PBXGroup;
 			children = (
 				9420E582275A097200A841D6 /* MetaWear-iOS-Combine-SDK */,
-				9493500E275A0F0300E388FF /* mbientSwiftUI */,
+				94E384DA2764518C001B4F49 /* mbientSwiftUI */,
 			);
 			name = Packages;
 			sourceTree = "<group>";

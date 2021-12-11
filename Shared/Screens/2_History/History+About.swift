@@ -47,14 +47,15 @@ extension HistoryScreen.AboutColumn {
         }
 
         private var header: some View {
-            HStack(spacing: 15) {
-
-                ConnectionButton(size: .subheadline, state: vm.connection)
+            HStack(spacing: 10) {
 
                 Text(vm.meta.name)
                         .font(.title3)
                         .lineLimit(1)
                         .fixedSize(horizontal: false, vertical: true)
+                        .layoutPriority(1)
+
+                ConnectionButton(size: .subheadline, state: vm.connection)
 
                 Spacer()
 
@@ -70,12 +71,17 @@ extension HistoryScreen.AboutColumn {
             }
         }
 
+        private var rssiRepresentable: String {
+            if vm.isLocallyKnown == false { return "–" }
+            if vm.rssiInt == Int(SignalLevel.noBarsRSSI) { return "–" }
+            return .init(vm.rssiInt)
+        }
         @ViewBuilder private var info: some View {
-            HLabel("RSSI", item: .init(vm.rssiInt),                 align: alignment)
+            HLabel("RSSI", item: rssiRepresentable,                 align: alignment)
             HLabel("Battery", item: vm.battery,                     align: alignment)
             HLabel("MAC", item: vm.meta.mac,                        align: alignment)
             HLabel("Serial", item: vm.meta.serial,                  align: alignment)
-            HLabel("Model", item: vm.meta.model.name,  align: alignment)
+            HLabel("Model", item: vm.meta.model.name,               align: alignment)
             HLabel("Firmware", item: vm.info.firmwareRevision,      align: alignment)
             HLabel("Hardware", item: vm.info.hardwareRevision,      align: alignment)
         }

@@ -56,6 +56,11 @@ public class KnownItemVM: ObservableObject, ItemVM {
         ) ?? UUID().uuidString
     }
 
+    public var isIdentifying: Bool { isIdentifyingMACs.isEmpty == false }
+    @Published private var isIdentifyingMACs = Set<MACAddress>()
+    public let ledVM = MWLED.FlashPattern.Emulator(preset: .zero)
+    private var identifyingSubs = Set<AnyCancellable>()
+
     public private(set) var rssi: SignalLevel
     @Published public private(set) var rssiInt: Int
     @Published public private(set) var connection: CBPeripheralState
@@ -66,6 +71,7 @@ public class KnownItemVM: ObservableObject, ItemVM {
     private var connectionSub:   AnyCancellable? = nil
     private unowned let store:   MetaWearStore
     private unowned let routing: Routing
+
 
     public init(device: MWKnownDevice, store: MetaWearStore, routing: Routing) {
         self.connection = device.mw?.isConnectedAndSetup == true ? .connected : .disconnected
@@ -109,6 +115,30 @@ public extension KnownItemVM {
         routing.setDestination(.history)
     }
 
+    func identify() {
+        devices.forEach { known in
+            guard let device = known.mw else { return }
+            isIdentifyingMACs.insert(known.meta.mac)
+            device.publishWhenConnected()
+                .command(.ledFlash(ledVM.pattern))
+                .first()
+                .receive(on: DispatchQueue.main)
+                .sink(receiveCompletion: { [weak self] completion in
+                    switch completion {
+                        case .failure:
+                            self?.isIdentifyingMACs.remove(known.meta.mac)
+                        case .finished:
+                            DispatchQueue.main.after(self?.ledVM.pattern.totalDuration ?? 1 + 0.25) {
+                                self?.isIdentifyingMACs.remove(known.meta.mac)
+                            }
+                    }
+                }, receiveValue: { [weak self] _ in
+                    self?.ledVM.emulate()
+                })
+                .store(in: &identifyingSubs)
+        }
+        devices.forEach { $0.mw?.connect() }
+    }
 }
 
 // MARK: - Intents

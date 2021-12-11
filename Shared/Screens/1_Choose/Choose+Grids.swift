@@ -46,7 +46,7 @@ extension ChooseDevicesScreen {
         // MARK: - Layout Dimensions
         @State private var windowWidth: CGFloat = MainWindow.minWidth
         private var cellSpacing: CGFloat = .screenInset * 2
-        private static let macItemHeight: CGFloat = 265
+        private static let macItemHeight: CGFloat = 320
         private let rows = [GridItem(.fixed(Self.macItemHeight), spacing: 0, alignment: .bottom)]
 
         private var measureWidth: some View {
