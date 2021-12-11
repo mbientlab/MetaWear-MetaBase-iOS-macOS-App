@@ -20,13 +20,11 @@ public struct LegalSensorParameters {
 
     public let accelerometerRate:   [MWAccelerometer.SampleFrequency]
     public let ambientLightRate:    [MWAmbientLight.MeasurementRate]
-    public let colorRate:           [MWColorDetector.PresetFrequency]
     public let barometerRate:       [MWBarometer.StandbyTime]
     public let fusionRate:          [MWAccelerometer.SampleFrequency]
     public let gyroscopeRate:       [MWGyroscope.Frequency]
     public let humidityRate:        [MWFrequency.CommonCases]
     public let magnetometerRate:    [MWMagnetometer.SampleFrequency]
-    public let proximityRate:       [MWFrequency.CommonCases]
     public let temperatureRate:     [MWFrequency.CommonCases]
 
     public let accelerometerScale:  [MWAccelerometer.GravityRange]
@@ -35,13 +33,11 @@ public struct LegalSensorParameters {
 
     public var accelerometer:       Bool { !accelerometerRate.isEmpty }
     public var ambientLight:        Bool { !ambientLightRate.isEmpty }
-    public var color:               Bool { !colorRate.isEmpty }
     public var barometer:           Bool { !barometerRate.isEmpty }
     public var fusion:              Bool { !fusionRate.isEmpty }
     public var gyroscope:           Bool { !gyroscopeRate.isEmpty }
     public var humidity:            Bool { !humidityRate.isEmpty }
     public var magnetometer:        Bool { !magnetometerRate.isEmpty }
-    public var proximity:           Bool { !proximityRate.isEmpty }
     public var temperature:         Bool { !temperatureRate.isEmpty }
 
 }
@@ -57,10 +53,8 @@ public extension LegalSensorParameters {
         let commonFrequencies = MWFrequency.CommonCases.allCases
 
         self.ambientLightRate = modules.allSatisfy({ $0.keys.contains(.illuminance) })  ? MWAmbientLight.MeasurementRate.allCases   : []
-        self.colorRate = modules.allSatisfy({ $0.keys.contains(.color) })               ? MWColorDetector.PresetFrequency.allCases  : []
         self.humidityRate = modules.allSatisfy({ $0.keys.contains(.humidity) })         ? commonFrequencies                         : []
         self.magnetometerRate = modules.allSatisfy({ $0.keys.contains(.magnetometer) }) ? MWMagnetometer.SampleFrequency.allCases   : []
-        self.proximityRate = modules.allSatisfy({ $0.keys.contains(.proximity) })       ? commonFrequencies                         : []
         self.fusionRate = modules.allSatisfy({ $0.keys.contains(.sensorFusion) })       ? MWAccelerometer.SampleFrequency.allCases  : []
 
         // MARK: - Accelerometers

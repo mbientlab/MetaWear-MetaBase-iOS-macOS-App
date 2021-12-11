@@ -10,12 +10,10 @@ public struct SensorConfigContainer: Equatable, Hashable {
     public var accelerometer: MWAccelerometer? = nil
     public var altitude: MWBarometer.MWAltitude? = nil
     public var ambientLight: MWAmbientLight? = nil
-    public var color: MWColorDetector? = nil
     public var gyroscope: MWGyroscope? = nil
     public var humidity: MWHumidity? = nil
     public var magnetometer: MWMagnetometer? = nil
     public var pressure: MWBarometer.MWPressure? = nil
-    public var proximity: MWProximity? = nil
     public var thermometer: MWThermometer? = nil
 
     public var fusionEuler: MWSensorFusion.EulerAngles? = nil
@@ -42,11 +40,6 @@ public struct SensorConfigContainer: Equatable, Hashable {
                                       rate: config.ambientLightRate)
         }
 
-        if config.color {
-            self.color = .init(gain: .x1,
-                               presetRate: config.colorRate)
-        }
-
         if config.gyroscope {
             self.gyroscope = .init(range: config.gyroscopeScale,
                                    frequency: config.gyroscopeRate)
@@ -64,13 +57,6 @@ public struct SensorConfigContainer: Equatable, Hashable {
             self.pressure = .init(standby: config.barometerRate,
                                   iir: .off,
                                   oversampling: .standard)
-        }
-
-        if config.proximity {
-            self.proximity = .init(current: .mA12_5,
-                                   sensitivity: .init(1),
-                                   integrationTimeMS: 2.73,
-                                   rate: config.proximityRate.freq)
         }
 
         if config.temperature,

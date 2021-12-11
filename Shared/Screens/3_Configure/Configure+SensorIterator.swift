@@ -93,16 +93,6 @@ extension ConfigureScreen {
                     option: $placeholder
                 )
             }
-            if vm.options.color {
-                Tile(
-                    module: "Color",
-                    symbol: .color,
-                    isSelected: $vm.config.color,
-                    frequency: $vm.config.colorRate,
-                    frequencies: vm.options.colorRate,
-                    option: $placeholder
-                )
-            }
             if vm.options.humidity {
                 Tile(
                     module: "Humidity",
@@ -124,16 +114,6 @@ extension ConfigureScreen {
                     option: $placeholder
                 )
             }
-            if vm.options.proximity {
-                Tile(
-                    module: "Proximity",
-                    symbol: .proximity,
-                    isSelected: $vm.config.proximity,
-                    frequency: $vm.config.proximityRate,
-                    frequencies: vm.options.proximityRate,
-                    option: $placeholder
-                )
-            }
             if vm.options.temperature {
                 Tile(
                     module: "Temperature",
@@ -150,7 +130,6 @@ extension ConfigureScreen {
 
 extension MWAccelerometer.SampleFrequency: Listable {}
 extension MWAmbientLight.MeasurementRate: Listable {}
-extension MWColorDetector.PresetFrequency: Listable {}
 extension MWBarometer.StandbyTime: Listable {}
 extension MWGyroscope.Frequency: Listable {}
 extension MWMagnetometer.SampleFrequency: Listable {}

@@ -80,9 +80,6 @@ extension ActionHeader {
                 if config.altitude != nil || config.pressure != nil {
                     ConfigTile(symbol: .barometer)
                 }
-                if config.color != nil {
-                    ConfigTile(symbol: .color)
-                }
                 if config.gyroscope != nil {
                     ConfigTile(symbol: .gyroscope)
                 }
@@ -91,9 +88,6 @@ extension ActionHeader {
                 }
                 if config.magnetometer != nil {
                     ConfigTile(symbol: .magnetometer)
-                }
-                if config.proximity != nil {
-                    ConfigTile(symbol: .proximity)
                 }
                 if config.thermometer != nil {
                     ConfigTile(symbol: .temperature)
