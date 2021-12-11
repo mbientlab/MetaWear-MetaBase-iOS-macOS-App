@@ -35,8 +35,10 @@ extension ActionScreen {
         var workingIndicator: some View {
             ProgressView()
                 .progressViewStyle(.circular)
-                .controlSize(.small)
                 .scaledToFit()
+            #if os(macOS)
+                .controlSize(.small)
+            #endif
         }
 
         var completedIndicator: some View {
@@ -80,13 +82,20 @@ extension ActionScreen {
 
         @ViewBuilder var workingIndicator: some View {
             if action.actionType == .stream, case .working = action.state[vm.meta.mac] {
+                highRefreshWorkingIndicator
+            } else {
+                Text(action.actionType.workingLabel)
+            }
+        }
+
+        @ViewBuilder var highRefreshWorkingIndicator: some View {
+            if #available(iOS 15.0, macOS 12.0, *) {
                 TimelineView(.periodic(from: Date(), by: 3)) { context in
                     Text(action.actionType.workingLabel + " \(action.streamCounters.counts[vm.meta.mac]?.info ?? "")")
                 }
             } else {
-                Text(action.actionType.workingLabel)
+                Text(action.actionType.workingLabel + " \(action.streamCounters.counts[vm.meta.mac]?.info ?? "")")
             }
-
         }
 
         var completedIndicator: some View {
