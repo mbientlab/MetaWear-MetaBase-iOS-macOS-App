@@ -1,0 +1,85 @@
+// Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
+
+import Foundation
+import SwiftUI
+import Combine
+import mbientSwiftUI
+import MetaWear
+import Metadata
+
+public class Routing: ObservableObject {
+
+    /// Programmatically-chosen screen
+    @Published private(set) var destination: Destination = .choose
+    /// Focused item + configs set prior to navigation, read once in VM init or by `UIFactory`
+    private(set) var focus: (item: Item, configs: [SensorConfigContainer])? = nil
+
+    /// Flag that the app has already loaded and "splash" find devices screen needn't be displayed again.
+    private(set) var directlyShowDeviceList = false
+
+    /// Coordinate view custom animations
+    public private(set) lazy var willTransitionFrom = notifyWillTransitionFrom.eraseToAnyPublisher()
+    
+    private let notifyWillTransitionFrom = CurrentValueSubject<Destination,Never>(.choose)
+
+    /// Stand-in for macOS, which lacks a SwiftUI a navigation stack. The system handles this on iOS.
+    private var history = [Destination]()
+}
+
+// MARK: - Intents
+
+public extension Routing {
+
+    /// Use programmatic navigation stack (macOS) that on iOS may differ from the system stack.
+    /// Resets focus on navigating to `.choose`.
+    ///
+    func goBack() {
+        guard let last = history.popLast() else { return }
+        self.destination = last
+        if destination == .choose { focus = nil }
+    }
+
+    /// Programatic navigation.
+    /// Set focus before calling destinations other than `.choose`.
+    ///
+    func setDestination(_ next: Destination) {
+        self.directlyShowDeviceList = true // Flag that empty needn't be shown
+        self.history.append(destination)
+        if next == .choose { focus = nil }
+        self.destination = next // Triggers a diff
+    }
+
+    /// Programmatic navigation's focused item.
+    /// Navigating to `choose` automatically removes focus.
+    ///
+    func setNewFocus(item: Item) {
+        self.focus = (item, [])
+    }
+
+    /// Programmatic navigation's focused item's configs.
+    /// Must be previously focused.
+    ///
+    func setConfigs(_ configs: [SensorConfigContainer]) {
+        guard let item = focus?.item else { fatalError() }
+        focus = (item, configs)
+    }
+}
+
+// MARK: - Model
+
+public extension Routing {
+
+    enum Destination: Hashable, Equatable {
+        case choose
+        case history
+        case configure
+        case stream
+        case log
+        case downloadLogs
+    }
+
+    enum Item: Hashable, Equatable {
+        case group(UUID)
+        case known(MACAddress)
+    }
+}
