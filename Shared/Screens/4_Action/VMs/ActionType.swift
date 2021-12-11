@@ -15,9 +15,17 @@ public enum ActionType {
         }
     }
 
-    var completedLabel: String {
+    var workingLabel: String {
         switch self {
             case .stream:       return "Streaming"
+            case .log:          return "Programming"
+            case .downloadLogs: return "Downloading"
+        }
+    }
+
+    var completedLabel: String {
+        switch self {
+            case .stream:       return "Streamed"
             case .log:          return "Logging"
             case .downloadLogs: return "Downloaded"
         }

@@ -78,12 +78,19 @@ extension ActionScreen {
            EmptyView()
         }
 
-        var workingIndicator: some View {
-            Text("Programming")
+        @ViewBuilder var workingIndicator: some View {
+            if action.actionType == .stream, case .working = action.state[vm.meta.mac] {
+                TimelineView(.periodic(from: Date(), by: 3)) { context in
+                    Text(action.actionType.workingLabel + " \(action.streamCounters.counts[vm.meta.mac]?.info ?? "")")
+                }
+            } else {
+                Text(action.actionType.workingLabel)
+            }
+
         }
 
         var completedIndicator: some View {
-            Text("Logging")
+            Text(action.actionType.completedLabel)
                 .padding(.horizontal)
                 .padding(.vertical, 5)
                 .foregroundColor(.accentColor)

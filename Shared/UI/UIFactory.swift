@@ -17,7 +17,9 @@ public class UIFactory: ObservableObject {
     private unowned let store: MetaWearStore
     private unowned let scanner: MetaWearScanner
     private unowned let routing: Routing
-    private lazy var actionQueue = DispatchQueue(label: Bundle.main.bundleIdentifier! + ".action")
+    private lazy var actionQueue = DispatchQueue(label: Bundle.main.bundleIdentifier! + ".action",
+                                                 qos: .userInitiated,
+                                                 attributes: .concurrent)
 }
 
 public extension UIFactory {
@@ -31,7 +33,7 @@ public extension UIFactory {
     }
 
     func makeMetaWearDiscoveryVM() -> MetaWearDiscoveryVM {
-        .init(store: store) 
+        .init(store: store)
     }
 
     func makeMetaWearItemVM(_ item: Routing.Item) -> KnownItemVM {

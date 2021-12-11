@@ -27,10 +27,13 @@ extension ActionScreen {
                 ConnectionButton(state: vm.connection)
                 LargeSignalDots(signal: vm.rssi, dotSize: 9, spacing: 3, color: .white)
 
-                ProgrammingState(vm: vm)
-                    .padding(.trailing, 10)
-                ProgressSummary(vm: vm)
-                    .frame(maxWidth: .infinity, alignment: .center)
+                HStack {
+                    ProgrammingState(vm: vm)
+                        .padding(.trailing, 10)
+
+                    ProgressSummary(vm: vm)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
             }
             .contextMenu { if case ActionState.error = action.state[vm.meta.mac]! {
                 Button("Factory Reset") { vm.reset() }

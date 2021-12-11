@@ -14,14 +14,25 @@ extension ActionScreen {
 
         var body: some View {
             HStack {
-                if vm.showSuccessCTAs {
-                    others
-                    download
+                if vm.showSuccessCTAs || vm.actionType == .stream {
+                    successCTAs
                 } else {
                     cancel
                 }
             }
             .animation(.easeOut, value: vm.showSuccessCTAs)
+        }
+
+        @ViewBuilder private var successCTAs: some View {
+            switch vm.actionType {
+                case .log: download
+                case .downloadLogs: exportFiles
+                case .stream: stopStreaming
+            }
+        }
+
+        private var exportFiles: some View {
+            Button("Export CSVs") { vm.exportFiles() }
         }
 
         private var download: some View {
@@ -34,6 +45,10 @@ extension ActionScreen {
 
         private var others: some View {
             Button("Other Devices") { vm.goToChooseDevicesScreen() }
+        }
+
+        private var stopStreaming: some View {
+            Button("Stop & Export CSVs") { vm.stopStreaming() }
         }
     }
 }

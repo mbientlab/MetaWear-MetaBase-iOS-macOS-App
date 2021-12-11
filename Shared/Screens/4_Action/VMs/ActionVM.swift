@@ -18,6 +18,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     // Per-device action state
     public let deviceVMs:               [AboutDeviceVM]
     @Published private(set) var state:  [MACAddress:ActionState]
+    public let streamCounters:          StreamingCountersContainer
     private var data:                   [MACAddress:[MWDataTable]]
 
     // Queue for performing action device-by-device (on private DispatchQueue)
@@ -27,7 +28,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     private var actions:                [MACAddress:AnyCancellable] = [:]
     private let configs:                [SensorConfigContainer]
     private unowned let queue:          DispatchQueue
-    private let streamCancel = PassthroughSubject<Void,Never>()
+    private let streamCancel            = PassthroughSubject<Void,Never>()
 
     // References
     private let devices:                [MWKnownDevice]
@@ -42,9 +43,14 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
         self.routing = routing
         self.store = store
         self.deviceVMs = vms
-        self.state = Dictionary(uniqueKeysWithValues: devices.map(\.meta.mac).map { ($0, .notStarted)} )
-        self.data = Dictionary(uniqueKeysWithValues: devices.map(\.meta.mac).map { ($0, [])} )
+        self.state = Dictionary(repeating: .notStarted, keys: devices)
+        self.data = Dictionary(repeating: [], keys: devices)
+        self.streamCounters = .init(action, devices)
     }
+}
+
+fileprivate func Dictionary<V>(repeating: V, keys devices: [MWKnownDevice]) -> [MACAddress:V] {
+    Dictionary(uniqueKeysWithValues: devices.map(\.meta.mac).map { ($0, repeating) })
 }
 
 // MARK: - Intents
@@ -85,9 +91,17 @@ public extension ActionVM {
         start()
     }
 
+    func stopStreaming() {
+        streamCancel.send()
+    }
+
     func downloadLogs() {
         guard actionType == .log else { return }
         routing.setDestination(.downloadLogs)
+    }
+
+    func exportFiles() {
+
     }
 
     func goToChooseDevicesScreen() {
@@ -130,27 +144,21 @@ private extension ActionVM {
         actions[current.meta.mac] = getActionPublisher(device, current.meta.mac, current.config)
             .receive(on: queue)
             .sink { [weak self] completion in
-                print("ACTION: Received Completion")
                 guard case let .failure(error) = completion else { return }
                 let timedOut = error.localizedDescription.contains("Timeout")
                 self?.fail(fromCurrent: current, timedOut ? .timeout : .error(error.localizedDescription))
                 semaphore.signal()
             } receiveValue: { [weak self] _ in
-                print("ACTION: Receive Value")
                 self?.succeed(fromCurrent: current.meta)
                 semaphore.signal()
             }
 
         // 4 - Kickoff through AboutDeviceVM in case design changes later
-        if let vm = deviceVMs.first(where: { $0.meta == current.meta }) {
-            vm.connect()
-        } else { device.connect() }
-        print("ACTION: Kickoff connection")
+        if let vm = deviceVMs.first(where: { $0.meta == current.meta }) { vm.connect() }
 
         // 5 - Wait for programming to complete (until timeout) if needed (not when streaming)
         if actionType.waitForSemaphore {
             semaphore.wait()
-            print("ACTION: Done waiting for semaphore")
             actions[current.meta.mac]?.cancel()
         }
     }
@@ -177,7 +185,6 @@ private extension ActionVM {
 
     /// Failure cases: Update UI state to show failure reason and advance to the next queue item
     func fail(fromCurrent: QueueItem, _ reason: ActionState) {
-        print("ACTION: FAIL: \(reason) \(reason.info)")
         if Thread.isMainThread {
             actionFails.append(fromCurrent)
             state[fromCurrent.meta.mac] = reason
@@ -191,7 +198,6 @@ private extension ActionVM {
 
     /// Success cases: Advance to the next item, no need to update UI state
     func succeed(fromCurrent: MetaWear.Metadata) {
-        print("ACTION: SUCCEED")
         if Thread.isMainThread {
             state[fromCurrent.mac] = .completed
         } else {
@@ -204,7 +210,6 @@ private extension ActionVM {
     /// Call on private queue
     func moveToNextQueueItem() {
         self.nextQueueItem = self.actionQueue.popLast()
-        print("ACTION: MOVE TO NEXT QUEUE ITEM NAMED: \(nextQueueItem?.meta.name ?? "NIL")")
         DispatchQueue.main.async { [weak self] in
             self?.actionFocus = self?.nextQueueItem?.meta.mac ?? ""
         }
@@ -233,9 +238,9 @@ private extension ActionVM {
             .first()
             .mapToMWError()
             .macro(config)
+            .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
             .print()
             .map { _ in () }
-            .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
             .eraseToAnyPublisher()
     }
 
@@ -273,30 +278,35 @@ private extension ActionVM {
                 mac: MACAddress,
                 config: SensorConfigContainer) -> MWPublisher<Void> {
 
+        var streams = [MWPublisher<MWDataTable>]()
+
         let didConnect = device
             .publishWhenConnected()
             .mapToMWError()
             .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
+            .handleEvents(receiveOutput: { [weak self] _ in
+                DispatchQueue.main.async { [weak self] in
+                    self?.state[mac] = .working(0)
+                }
+            })
             .first()
             .share()
             .eraseToAnyPublisher()
 
-        var streams = [MWPublisher<MWDataTable>]()
-
-        buildStream(config.accelerometer, &streams, didConnect)
-        buildStream(config.altitude, &streams, didConnect)
-        buildStream(config.ambientLight, &streams, didConnect)
-        buildStream(config.color, &streams, didConnect)
-        buildStream(config.gyroscope, &streams, didConnect)
-        buildStream(config.humidity, &streams, didConnect)
-        buildStream(config.magnetometer, &streams, didConnect)
-        buildStream(config.pressure, &streams, didConnect)
-        buildStream(config.proximity, &streams, didConnect)
-        buildStream(config.thermometer, &streams, didConnect)
-        buildStream(config.fusionEuler, &streams, didConnect)
-        buildStream(config.fusionGravity, &streams, didConnect)
-        buildStream(config.fusionLinear, &streams, didConnect)
-        buildStream(config.fusionQuaternion, &streams, didConnect)
+        optionallyStream(config.accelerometer, &streams, didConnect, mac)
+        optionallyStream(config.altitude, &streams, didConnect, mac)
+        optionallyStream(config.ambientLight, &streams, didConnect, mac)
+        optionallyStream(config.color, &streams, didConnect, mac)
+        optionallyStream(config.gyroscope, &streams, didConnect, mac)
+        optionallyStream(config.humidity, &streams, didConnect, mac)
+        optionallyStream(config.magnetometer, &streams, didConnect, mac)
+        optionallyStream(config.pressure, &streams, didConnect, mac)
+        optionallyStream(config.proximity, &streams, didConnect, mac)
+        optionallyStream(config.thermometer, &streams, didConnect, mac)
+        optionallyStream(config.fusionEuler, &streams, didConnect, mac)
+        optionallyStream(config.fusionGravity, &streams, didConnect, mac)
+        optionallyStream(config.fusionLinear, &streams, didConnect, mac)
+        optionallyStream(config.fusionQuaternion, &streams, didConnect, mac)
 
         return Publishers.MergeMany(streams)
             .collect()
@@ -307,12 +317,16 @@ private extension ActionVM {
             .eraseToAnyPublisher()
     }
 
-    func buildStream<S: MWStreamable>(_ config: S?,
-                                      _ streams: inout [MWPublisher<MWDataTable>],
-                                      _ didConnect: MWPublisher<MetaWear>) {
+    func optionallyStream<S: MWStreamable>(
+        _ config: S?,
+        _ streams: inout [MWPublisher<MWDataTable>],
+        _ didConnect: MWPublisher<MetaWear>,
+        _ mac: MACAddress
+    ) {
         guard let config = config else { return }
 
         let publisher = didConnect.stream(config)
+            .handleEvents(receiveOutput: { [weak self] _ in self?.streamCounters.counters[mac]?.send() })
             .prefix(untilOutputFrom: streamCancel)
             .collect()
             .map { MWDataTable(streamed: $0, config) }
@@ -321,17 +335,46 @@ private extension ActionVM {
         streams.append(publisher)
     }
 
-    func buildStream<P: MWPollable>(_ config: P?,
-                                    _ streams: inout [MWPublisher<MWDataTable>],
-                                    _ didConnect: MWPublisher<MetaWear>) {
+    func optionallyStream<P: MWPollable>(
+        _ config: P?,
+        _ streams: inout [MWPublisher<MWDataTable>],
+        _ didConnect: MWPublisher<MetaWear>,
+        _ mac: MACAddress
+    ) {
         guard let config = config else { return }
 
         let publisher = didConnect.stream(config)
+            .handleEvents(receiveOutput: { [weak self] _ in self?.streamCounters.counters[mac]?.send() })
             .prefix(untilOutputFrom: streamCancel)
             .collect()
             .map { MWDataTable(streamed: $0, config) }
             .eraseToAnyPublisher()
 
         streams.append(publisher)
+    }
+
+}
+
+/// Segregate high-frequency updates into one object
+public class StreamingCountersContainer: ObservableObject {
+
+    @Published private(set) var counts: [MACAddress:ActionState] = [:]
+    private(set) var counters:          [MACAddress:PassthroughSubject<Void,Never>] = [:]
+    private var subs                    = Set<AnyCancellable>()
+
+    init(_ action: ActionType, _ devices: [MWKnownDevice]) {
+        guard action == .stream else { return }
+
+        self.counters = Dictionary(repeating: .init(), keys: devices)
+
+        counters.forEach { mac, counter in
+            counter
+                .scan(0) { sum, _ in sum + 1 }
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] sum in
+                    self?.counts[mac] = .working(sum)
+                }
+                .store(in: &subs)
+        }
     }
 }
