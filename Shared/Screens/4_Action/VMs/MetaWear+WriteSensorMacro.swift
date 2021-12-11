@@ -29,5 +29,3 @@ public extension AnyPublisher where Output == MetaWear {
 
 
 }
-
-#warning("Finish macro logging/streaming commands")

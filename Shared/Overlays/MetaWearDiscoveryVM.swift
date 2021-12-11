@@ -12,7 +12,6 @@ public class MetaWearDiscoveryVM: ObservableObject {
     @Published public private(set) var showDiagnostics = false
 
     public init(store: MetaWearStore) {
-        #warning("Implement a new discovery process")
 //        store.discoveryDelegate = self
     }
 
