@@ -47,17 +47,15 @@ public extension SensorUserParameters {
         if accelerometer { freq += accelerometerRate.freq }
         if altitude || pressure { freq += barometerRate.freq }
         if ambientLight { freq += ambientLightRate.freq }
-        if color { freq += colorRate.freq }
         if gyroscope { freq += gyroscopeRate.freq }
         if humidity { freq += humidityRate.freq }
         if magnetometer { freq += magnetometerRate.freq }
-        if proximity { freq += proximityRate.freq }
         if sensorFusion { freq += fusionRate.freq }
         if temperature { freq += temperatureRate.freq }
         return freq
     }
 
-    static let streamableLimit = MWFrequency(hz: 100.1) // Allow temperature to stream with sensor fusion, for example
+    static let streamableLimit = MWFrequency(hz: 110) // Allow temperature to stream with sensor fusion, for example
     var exceedsStreamableLimit: Bool { totalFreq > Self.streamableLimit }
 }
 
