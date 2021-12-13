@@ -76,7 +76,7 @@ public extension UIFactory {
         let action = ActionType(destination: routing.destination)
         let (_, devices) = getKnownDevices(for: item)
         let vms = makeAboutVMs(for: devices)
-        return .init(action: action, devices: devices, vms: vms, store: store, routing: routing, queue: actionQueue)
+        return .init(action: action, devices: devices, vms: vms, store: store, routing: routing, backgroundQueue: actionQueue)
     }
 
 }

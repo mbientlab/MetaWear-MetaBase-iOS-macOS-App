@@ -39,6 +39,8 @@
 		9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		944538962767032D00841880 /* MetaWearImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538952767032D00841880 /* MetaWearImage.swift */; };
 		944538972767032D00841880 /* MetaWearImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538952767032D00841880 /* MetaWearImage.swift */; };
+		944538BD2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
+		944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
 		94528552275BDD81004D815B /* Choose+ToolbarScanningIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528551275BDD81004D815B /* Choose+ToolbarScanningIcon.swift */; };
 		94528553275BDD81004D815B /* Choose+ToolbarScanningIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528551275BDD81004D815B /* Choose+ToolbarScanningIcon.swift */; };
 		94528555275BDDB9004D815B /* Choose+Grids.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528554275BDDB9004D815B /* Choose+Grids.swift */; };
@@ -182,6 +184,7 @@
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
 		9420E582275A097200A841D6 /* MetaWear-iOS-Combine-SDK */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "MetaWear-iOS-Combine-SDK"; path = "../../MetaWear-iOS-Combine-SDK"; sourceTree = "<group>"; };
 		944538952767032D00841880 /* MetaWearImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaWearImage.swift; sourceTree = "<group>"; };
+		944538BC2767DCE000841880 /* StreamingCountersContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingCountersContainer.swift; sourceTree = "<group>"; };
 		94528551275BDD81004D815B /* Choose+ToolbarScanningIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+ToolbarScanningIcon.swift"; sourceTree = "<group>"; };
 		94528554275BDDB9004D815B /* Choose+Grids.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+Grids.swift"; sourceTree = "<group>"; };
 		94528557275BDE1E004D815B /* Choose+DeviceIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+DeviceIterator.swift"; sourceTree = "<group>"; };
@@ -303,6 +306,7 @@
 				9409C5D52762A367001FE850 /* ActionVM.swift */,
 				9409C5D82762D7DA001FE850 /* ActionState.swift */,
 				9409C5E72763B764001FE850 /* ActionType.swift */,
+				944538BC2767DCE000841880 /* StreamingCountersContainer.swift */,
 			);
 			path = VMs;
 			sourceTree = "<group>";
@@ -753,6 +757,7 @@
 				94DFEC65275D45F000BB80DB /* UnknownDeviceVM.swift in Sources */,
 				9409C5E82763B764001FE850 /* ActionType.swift in Sources */,
 				94CF3F1E276428CA00C2D8B0 /* DispatchQueue+AsyncAfter.swift in Sources */,
+				944538BD2767DCE000841880 /* StreamingCountersContainer.swift in Sources */,
 				94E3A80327608BE3007E2BAE /* Configure+Tile.swift in Sources */,
 				9409C5E52762E732001FE850 /* ActionHeader.swift in Sources */,
 				94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */,
@@ -821,6 +826,7 @@
 				94528567275BE128004D815B /* ConfigureScreen.swift in Sources */,
 				9409C5E92763B764001FE850 /* ActionType.swift in Sources */,
 				94DFEC66275D45F000BB80DB /* UnknownDeviceVM.swift in Sources */,
+				944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */,
 				94CF3F1F276428CA00C2D8B0 /* DispatchQueue+AsyncAfter.swift in Sources */,
 				9409C5E62762E732001FE850 /* ActionHeader.swift in Sources */,
 				94E3A80427608BE3007E2BAE /* Configure+Tile.swift in Sources */,
