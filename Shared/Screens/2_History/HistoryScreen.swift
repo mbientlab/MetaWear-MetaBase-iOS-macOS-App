@@ -6,7 +6,7 @@ import SwiftUI
 import Combine
 import mbientSwiftUI
 import MetaWear
-import Metadata
+import MetaWearMetadata
 
 struct HistoryScreen: View {
 

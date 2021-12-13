@@ -3,7 +3,7 @@
 import SwiftUI
 import Combine
 import MetaWear
-import Metadata
+import MetaWearMetadata
 
 public class ActionVM: ObservableObject, ActionHeaderVM {
     public typealias QueueItem = (device: MetaWear?, meta: MetaWear.Metadata, config: SensorConfigContainer)

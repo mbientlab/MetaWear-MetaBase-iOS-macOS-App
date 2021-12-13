@@ -2,7 +2,7 @@
 
 import Foundation
 import MetaWear
-import Metadata
+import MetaWearMetadata
 
 /// Validate legal user options for heterogeneous MetaWear groups (or solo device)
 public struct LegalSensorParameters {

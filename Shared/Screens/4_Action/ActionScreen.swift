@@ -4,7 +4,7 @@ import SwiftUI
 import mbientSwiftUI
 import Combine
 import MetaWear
-import Metadata
+import MetaWearMetadata
 
 struct ActionScreen: View {
 

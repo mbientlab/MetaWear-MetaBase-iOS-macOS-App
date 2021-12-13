@@ -1,7 +1,7 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import Foundation
-import Metadata
+import MetaWearMetadata
 
 /// Handles general presentation of errors and rename requests for previously unknown devices during a connection request.
 /// 

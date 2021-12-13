@@ -2,7 +2,7 @@
 
 import Foundation
 import MetaWear
-import Metadata
+import MetaWearMetadata
 
 public class UIFactory: ObservableObject {
 

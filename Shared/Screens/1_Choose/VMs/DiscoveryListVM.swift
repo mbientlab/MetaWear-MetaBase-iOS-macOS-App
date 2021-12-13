@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 import MetaWear
-import Metadata
+import MetaWearMetadata
 
 public class DiscoveryListVM: ObservableObject {
 

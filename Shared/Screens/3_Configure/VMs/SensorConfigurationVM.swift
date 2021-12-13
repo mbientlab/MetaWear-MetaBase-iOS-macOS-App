@@ -2,12 +2,12 @@
 
 import Foundation
 import MetaWear
-import Metadata
+import MetaWearMetadata
 
 /// Organize legal user intents
 public class SensorConfigurationVM: ObservableObject, HeaderVM {
 
-    @Published var shouldStream = false
+    @Published var shouldStream = true
     @Published var config: SensorUserParameters
     public let options: LegalSensorParameters
     public var canStart: Bool { config.totalFreq.rateHz > 0 }

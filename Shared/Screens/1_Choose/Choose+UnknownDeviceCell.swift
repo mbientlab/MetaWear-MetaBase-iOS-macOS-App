@@ -3,7 +3,7 @@
 import SwiftUI
 import mbientSwiftUI
 import MetaWear
-import Metadata
+import MetaWearMetadata
 
 extension ChooseDevicesScreen {
 
