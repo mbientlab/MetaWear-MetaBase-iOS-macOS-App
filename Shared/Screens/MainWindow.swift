@@ -12,8 +12,8 @@ struct MainWindow: View {
     @EnvironmentObject private var routing: Routing
     @EnvironmentObject private var factory: UIFactory
 
-    static let minWidth: CGFloat = 635 // Configure screen showing 3 tiles w/ equal margins
-    static let minHeight: CGFloat = 515 // Configure screen showing 2 tile rows 
+    static let minWidth: CGFloat = 635 // ConfigureScreen showing 3 tiles w/ equal margins
+    static let minHeight: CGFloat = 515 // ConfigureScreen showing 2 tile rows
 
     var body: some View {
         stackNavigation

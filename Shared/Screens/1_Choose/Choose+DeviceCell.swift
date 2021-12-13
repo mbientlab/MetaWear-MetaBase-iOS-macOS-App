@@ -100,7 +100,7 @@ extension ChooseDevicesScreen.DeviceCell {
         var models: [(mac: String, model: MetaWear.Model)]
         var isLocallyKnown: Bool
         var isGroup: Bool
-        @ObservedObject var ledEmulator: MWLED.FlashPattern.Emulator
+        let ledEmulator: MWLED.FlashPattern.Emulator
 
         private var imageWidth: CGFloat { 110 }
         private var imageHeight: CGFloat { isHovering ? 150 : 135 }
@@ -116,38 +116,41 @@ extension ChooseDevicesScreen.DeviceCell {
                 .offset(y: isHovering ? -Self.verticalHoverDelta : 0)
                 .foregroundColor(.white)
 
-            image.overlay(ledFlash)
+            image
         }
 
-        var ledFlash: some View {
-            image
-                .colorMultiply(.init(ledEmulator.pattern.color))
-                .opacity(ledEmulator.ledIsOn ? 1 : 0)
-                .animation(.linear(duration: 0.05), value: ledEmulator.ledIsOn)
-        }
 
         var image: some View {
             HStack {
                 if isGroup {
                     ForEach(models.prefix(3), id: \.mac) { (id, model) in
-                        model.image.image()
-                            .resizable()
-                            .scaledToFill()
-                            .scaleEffect(isHovering ? 1.1 : 1, anchor: .bottom)
-                            .frame(width: imageWidth * 0.4, height: imageHeight * 0.4, alignment: .center)
+                        MetaWearWithLED(
+                            width: imageWidth * 0.4,
+                            height: imageHeight * 0.4,
+                            isLocallyKnown: isLocallyKnown,
+                            isHovering: isHovering,
+                            mac: id,
+                            model: model,
+                            ledEmulator: ledEmulator
+                        )
                     }
 
                 } else {
-                    (models.first?.model ?? .unknown).image.image()
-                        .resizable()
-                        .scaledToFill()
-                        .scaleEffect(isHovering ? 1.1 : 1, anchor: .bottom)
-                        .opacity(isLocallyKnown ? 1 : 0.5)
-                        .animation(.easeOut, value: isLocallyKnown)
+                    MetaWearWithLED(
+                        width: imageWidth,
+                        height: imageHeight,
+                        isLocallyKnown: isLocallyKnown,
+                        isHovering: isHovering,
+                        mac: models.first?.mac ?? "Unknown",
+                        model: models.first?.model ?? .unknown,
+                        ledEmulator: ledEmulator
+                    )
                 }
             }
             .frame(width: imageWidth, height: imageHeight, alignment: .center)
         }
+
+
     }
 
     /// Component of the cell that does not move due to user intents
