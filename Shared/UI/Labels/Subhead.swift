@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-struct Subheader<T: View>: View {
+struct Subhead<T: View>: View {
 
     internal init(label: String, trailing: @escaping () -> T) {
         self.label = label

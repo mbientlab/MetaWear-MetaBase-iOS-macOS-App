@@ -99,8 +99,8 @@
 		94CF3F0D2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F062764286B00C2D8B0 /* SpotlightShimmerText.swift */; };
 		94CF3F0E2764286B00C2D8B0 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F072764286B00C2D8B0 /* ProgressBar.swift */; };
 		94CF3F0F2764286B00C2D8B0 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F072764286B00C2D8B0 /* ProgressBar.swift */; };
-		94CF3F102764286B00C2D8B0 /* Subheader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F082764286B00C2D8B0 /* Subheader.swift */; };
-		94CF3F112764286B00C2D8B0 /* Subheader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F082764286B00C2D8B0 /* Subheader.swift */; };
+		94CF3F102764286B00C2D8B0 /* Subhead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F082764286B00C2D8B0 /* Subhead.swift */; };
+		94CF3F112764286B00C2D8B0 /* Subhead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F082764286B00C2D8B0 /* Subhead.swift */; };
 		94CF3F122764286B00C2D8B0 /* LabeledItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F092764286B00C2D8B0 /* LabeledItem.swift */; };
 		94CF3F132764286B00C2D8B0 /* LabeledItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F092764286B00C2D8B0 /* LabeledItem.swift */; };
 		94CF3F16276428A400C2D8B0 /* LargeSignalDots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F14276428A300C2D8B0 /* LargeSignalDots.swift */; };
@@ -211,7 +211,7 @@
 		94CF3F052764286B00C2D8B0 /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		94CF3F062764286B00C2D8B0 /* SpotlightShimmerText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotlightShimmerText.swift; sourceTree = "<group>"; };
 		94CF3F072764286B00C2D8B0 /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
-		94CF3F082764286B00C2D8B0 /* Subheader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subheader.swift; sourceTree = "<group>"; };
+		94CF3F082764286B00C2D8B0 /* Subhead.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subhead.swift; sourceTree = "<group>"; };
 		94CF3F092764286B00C2D8B0 /* LabeledItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabeledItem.swift; sourceTree = "<group>"; };
 		94CF3F14276428A300C2D8B0 /* LargeSignalDots.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LargeSignalDots.swift; sourceTree = "<group>"; };
 		94CF3F15276428A400C2D8B0 /* MetaWearAtom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaWearAtom.swift; sourceTree = "<group>"; };
@@ -466,7 +466,7 @@
 				94CF3F092764286B00C2D8B0 /* LabeledItem.swift */,
 				94CF3F072764286B00C2D8B0 /* ProgressBar.swift */,
 				94CF3F062764286B00C2D8B0 /* SpotlightShimmerText.swift */,
-				94CF3F082764286B00C2D8B0 /* Subheader.swift */,
+				94CF3F082764286B00C2D8B0 /* Subhead.swift */,
 			);
 			path = Labels;
 			sourceTree = "<group>";
@@ -808,7 +808,7 @@
 				94528570275BE248004D815B /* BLEStateWarningsVM.swift in Sources */,
 				94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */,
 				94A165C3275F2F8600FA355D /* History+About.swift in Sources */,
-				94CF3F102764286B00C2D8B0 /* Subheader.swift in Sources */,
+				94CF3F102764286B00C2D8B0 /* Subhead.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -877,7 +877,7 @@
 				94528571275BE248004D815B /* BLEStateWarningsVM.swift in Sources */,
 				94A165C4275F2F8600FA355D /* History+About.swift in Sources */,
 				94528559275BDE1E004D815B /* Choose+DeviceIterator.swift in Sources */,
-				94CF3F112764286B00C2D8B0 /* Subheader.swift in Sources */,
+				94CF3F112764286B00C2D8B0 /* Subhead.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

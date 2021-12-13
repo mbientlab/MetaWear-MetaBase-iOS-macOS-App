@@ -9,7 +9,7 @@ extension HistoryScreen {
 
         var body: some View {
             VStack {
-                Subheader(label: "Prior Sessions")
+                Subhead(label: "Prior Sessions")
 
                 List {
                     rows

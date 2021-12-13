@@ -24,7 +24,6 @@ extension ConfigureScreen {
             LazyVGrid(columns: [item], alignment: .leading, spacing: Self.gridSpacing) {
                 SensorIterator()
             }
-            .padding(.leading, .screenInset)
             .animation(.interactiveSpring())
         }
     }

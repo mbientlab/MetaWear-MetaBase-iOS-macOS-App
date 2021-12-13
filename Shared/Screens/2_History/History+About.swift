@@ -13,7 +13,7 @@ extension HistoryScreen {
 
         var body: some View {
             VStack {
-                Subheader(label: "About", trailing: {
+                Subhead(label: "About", trailing: {
                     RefreshButton(help: "Refresh", didTap: vm.refresh)
                         .buttonStyle(BorderlessButtonStyle())
                 })
