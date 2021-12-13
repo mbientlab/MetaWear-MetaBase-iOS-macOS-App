@@ -34,8 +34,10 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     private var ledSub:            AnyCancellable? = nil
     private var resetSub:          AnyCancellable? = nil
     private var refreshSub:        AnyCancellable? = nil
+    private var misc = Set<AnyCancellable>()
     private unowned let store:     MetaWearStore
-
+    var isStreaming = false
+    let cancel = PassthroughSubject<Void,Never>()
     public init(device: MWKnownDevice, store: MetaWearStore) {
         self.connection = device.mw?.isConnectedAndSetup == true ? .connected : .disconnected
         self.store = store
@@ -63,6 +65,114 @@ public extension AboutDeviceVM {
     func onAppear() {
         trackState()
         refreshAll()
+    }
+
+    func streamFUNCTIONAL_WHEN_SOLO() {
+        isStreaming = true
+        device?.publishWhenConnected()
+            .handleEvents(receiveOutput: { _ in
+                Swift.print("WHEN CONNECTED OUTPUT")
+            })
+            .first()
+            .handleEvents(receiveOutput: { _ in
+                Swift.print("WHEN CONNECTED OUTPUT -- AFTER FIRST")
+            })
+            .flatMap { [self] metawear in
+                metawear.publish()
+                    .stream(try! .thermometer(type: .onboard, board: device!.board))
+                    .handleEvents(receiveSubscription: { _ in
+                        Swift.print("-> subbed")
+                    }, receiveOutput: { _ in
+                        Swift.print("-> output")
+                    }, receiveCompletion: { _ in
+                        Swift.print("-> completion")
+                    }, receiveCancel: {
+                        Swift.print("-> cancel")
+                    }, receiveRequest: { demand in
+                        Swift.print("-> request", demand)
+                    })
+                    .prefix(untilOutputFrom: cancel)
+                    .collect()
+                    .map { MWDataTable(streamed: $0, try! .thermometer(type: .onboard, board: metawear.board))}
+                    .eraseToAnyPublisher()
+            }
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                    case .failure(let error): print(error.localizedDescription)
+                    case .finished: Swift.print("FINISHED")
+                }
+            }, receiveValue: { value in
+                Swift.print(value.rows.count)
+            })
+            .store(in: &misc)
+
+        device?.connect()
+    }
+
+    func streamExperiment() {
+        isStreaming = true
+
+        let didConnect = device!
+            .publishWhenConnected()
+            .handleEvents(receiveOutput: { _ in
+                Swift.print("WHEN CONNECTED OUTPUT")
+            })
+            .first()
+            .handleEvents(receiveOutput: { _ in
+                Swift.print("WHEN CONNECTED OUTPUT -- AFTER FIRST")
+            })
+            .mapToMWError()
+            .timeout(20, scheduler: DispatchQueue.main) { .operationFailed("Timeout") }
+            .handleEvents(receiveOutput: { _ in
+                Swift.print("WHEN CONNECTED OUTPUT -- AFTER TIMEOUT")
+            })
+            .eraseToAnyPublisher()
+
+        didConnect
+            .handleEvents(receiveOutput: { _ in
+                Swift.print("---------------- STARTING STREAM --------------------")
+            })
+            .stream(try! .thermometer(type: .onboard, board: device!.board))
+            .prefix(untilOutputFrom: cancel)
+            .collect()
+            .map { MWDataTable(streamed: $0, try! .thermometer(type: .onboard, board: self.device!.board))}
+            .handleEvents(receiveSubscription: { _ in
+                Swift.print("-> subbed")
+            }, receiveOutput: { _ in
+                Swift.print("-> output")
+            }, receiveCompletion: { _ in
+                Swift.print("-> completion")
+            }, receiveCancel: {
+                Swift.print("-> cancel")
+            }, receiveRequest: { demand in
+                Swift.print("-> request", demand)
+            })
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                    case .failure(let error): print(error.localizedDescription)
+                    case .finished: Swift.print("FINISHED")
+                }
+            }, receiveValue: { value in
+                Swift.print(value.rows.count)
+            })
+            .store(in: &misc)
+
+        device?.connect()
+    }
+
+
+    func testA() {
+        if isStreaming {
+            cancel.send()
+            isStreaming = false
+        } else { streamFUNCTIONAL_WHEN_SOLO() }
+    }
+
+    func testB() {
+        if isStreaming {
+            cancel.send()
+            isStreaming = false
+        } else { streamExperiment() }
     }
 
     func onDisappear() {

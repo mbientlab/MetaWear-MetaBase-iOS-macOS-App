@@ -1,6 +1,7 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import XCTest
+import MetaWear
 
 class Tests_macOS: XCTestCase {
 
@@ -17,6 +18,10 @@ class Tests_macOS: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testRead() {
+        
+    }
+
     func testExample() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
@@ -26,12 +31,4 @@ class Tests_macOS: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
-    }
 }

@@ -40,6 +40,8 @@ extension HistoryScreen.AboutColumn {
                 header
                 info
                     .font(.body)
+                Button("Test A") { vm.testA() }
+                Button("Test B") { vm.testB() }
             }
             .onPreferenceChange(SubtitleWK.self) { alignment = max($0, alignment) }
             .onAppear(perform: vm.onAppear)

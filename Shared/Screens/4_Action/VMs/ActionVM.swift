@@ -293,11 +293,11 @@ private extension ActionVM {
             .eraseToAnyPublisher()
 
         optionallyStream(config.accelerometer, &streams, didConnect, mac)
+        optionallyStream(config.magnetometer, &streams, didConnect, mac)
         optionallyStream(config.altitude, &streams, didConnect, mac)
         optionallyStream(config.ambientLight, &streams, didConnect, mac)
         optionallyStream(config.gyroscope, &streams, didConnect, mac)
         optionallyStream(config.humidity, &streams, didConnect, mac)
-        optionallyStream(config.magnetometer, &streams, didConnect, mac)
         optionallyStream(config.pressure, &streams, didConnect, mac)
         optionallyStream(config.thermometer, &streams, didConnect, mac)
         optionallyStream(config.fusionEuler, &streams, didConnect, mac)
@@ -323,8 +323,10 @@ private extension ActionVM {
         guard let config = config else { return }
 
 
-        let publisher = didConnect.stream(config)
-            .handleEvents(receiveOutput: { [weak self] _ in self?.streamCounters.counters[mac]?.send() })
+        let publisher = didConnect
+            .stream(config)
+            .handleEvents(receiveOutput: { [weak self] _ in
+                self?.streamCounters.counters[mac]?.send() })
             .prefix(untilOutputFrom: streamCancel)
             .collect()
             .map { MWDataTable(streamed: $0, config) }
@@ -342,7 +344,8 @@ private extension ActionVM {
         guard let config = config else { return }
 
         let publisher = didConnect.stream(config)
-            .handleEvents(receiveOutput: { [weak self] _ in self?.streamCounters.counters[mac]?.send() })
+            .handleEvents(receiveOutput: { [weak self] _ in
+                self?.streamCounters.counters[mac]?.send() })
             .prefix(untilOutputFrom: streamCancel)
             .collect()
             .map { MWDataTable(streamed: $0, config) }
