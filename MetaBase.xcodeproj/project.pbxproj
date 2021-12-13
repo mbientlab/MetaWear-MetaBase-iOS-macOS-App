@@ -37,6 +37,8 @@
 		9409C5E92763B764001FE850 /* ActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E72763B764001FE850 /* ActionType.swift */; };
 		9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
+		944538962767032D00841880 /* MetaWearImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538952767032D00841880 /* MetaWearImage.swift */; };
+		944538972767032D00841880 /* MetaWearImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538952767032D00841880 /* MetaWearImage.swift */; };
 		94528552275BDD81004D815B /* Choose+ToolbarScanningIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528551275BDD81004D815B /* Choose+ToolbarScanningIcon.swift */; };
 		94528553275BDD81004D815B /* Choose+ToolbarScanningIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528551275BDD81004D815B /* Choose+ToolbarScanningIcon.swift */; };
 		94528555275BDDB9004D815B /* Choose+Grids.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528554275BDDB9004D815B /* Choose+Grids.swift */; };
@@ -63,10 +65,12 @@
 		94528578275BE4BE004D815B /* MetaWearDiscoveryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528576275BE4BE004D815B /* MetaWearDiscoveryVM.swift */; };
 		9452857A275BE77A004D815B /* Choose+EditGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528579275BE77A004D815B /* Choose+EditGroup.swift */; };
 		9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528579275BE77A004D815B /* Choose+EditGroup.swift */; };
+		945494F727656A800021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F627656A800021E3D6 /* MetaWear */; };
+		945494F927656A840021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F827656A840021E3D6 /* MetaWear */; };
+		945494FB27656A8C0021E3D6 /* MetaWearMetadata in Frameworks */ = {isa = PBXBuildFile; productRef = 945494FA27656A8C0021E3D6 /* MetaWearMetadata */; };
+		945494FD27656A910021E3D6 /* MetaWearMetadata in Frameworks */ = {isa = PBXBuildFile; productRef = 945494FC27656A910021E3D6 /* MetaWearMetadata */; };
 		94801C7C275A9264005574DF /* MetaWearMetadata in Frameworks */ = {isa = PBXBuildFile; productRef = 94801C7B275A9264005574DF /* MetaWearMetadata */; };
-		94801C7E275A9267005574DF /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 94801C7D275A9267005574DF /* MetaWearCpp */; };
 		94801C80275A926E005574DF /* MetaWearMetadata in Frameworks */ = {isa = PBXBuildFile; productRef = 94801C7F275A926E005574DF /* MetaWearMetadata */; };
-		94801C82275A9271005574DF /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 94801C81275A9271005574DF /* MetaWearCpp */; };
 		94934FD3275A09E700E388FF /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94934FD2275A09E700E388FF /* MetaWear */; };
 		94934FD5275A09EE00E388FF /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94934FD4275A09EE00E388FF /* MetaWear */; };
 		94935010275A0F0A00E388FF /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9493500F275A0F0A00E388FF /* mbientSwiftUI */; };
@@ -177,6 +181,7 @@
 		9409C5E72763B764001FE850 /* ActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionType.swift; sourceTree = "<group>"; };
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
 		9420E582275A097200A841D6 /* MetaWear-iOS-Combine-SDK */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "MetaWear-iOS-Combine-SDK"; path = "../../MetaWear-iOS-Combine-SDK"; sourceTree = "<group>"; };
+		944538952767032D00841880 /* MetaWearImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaWearImage.swift; sourceTree = "<group>"; };
 		94528551275BDD81004D815B /* Choose+ToolbarScanningIcon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+ToolbarScanningIcon.swift"; sourceTree = "<group>"; };
 		94528554275BDDB9004D815B /* Choose+Grids.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+Grids.swift"; sourceTree = "<group>"; };
 		94528557275BDE1E004D815B /* Choose+DeviceIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+DeviceIterator.swift"; sourceTree = "<group>"; };
@@ -243,7 +248,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94801C7E275A9267005574DF /* MetaWearCpp in Frameworks */,
 				94801C7C275A9264005574DF /* MetaWearMetadata in Frameworks */,
 				94934FD3275A09E700E388FF /* MetaWear in Frameworks */,
 				94935010275A0F0A00E388FF /* mbientSwiftUI in Frameworks */,
@@ -254,7 +258,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94801C82275A9271005574DF /* MetaWearCpp in Frameworks */,
 				94801C80275A926E005574DF /* MetaWearMetadata in Frameworks */,
 				94934FD5275A09EE00E388FF /* MetaWear in Frameworks */,
 				94935012275A0F1000E388FF /* mbientSwiftUI in Frameworks */,
@@ -265,6 +268,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				945494F727656A800021E3D6 /* MetaWear in Frameworks */,
+				945494FD27656A910021E3D6 /* MetaWearMetadata in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +277,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				945494F927656A840021E3D6 /* MetaWear in Frameworks */,
+				945494FB27656A8C0021E3D6 /* MetaWearMetadata in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,6 +450,7 @@
 			children = (
 				94CF3F14276428A300C2D8B0 /* LargeSignalDots.swift */,
 				94CF3F15276428A400C2D8B0 /* MetaWearAtom.swift */,
+				944538952767032D00841880 /* MetaWearImage.swift */,
 			);
 			path = Symbols;
 			sourceTree = "<group>";
@@ -579,7 +587,6 @@
 				94934FD2275A09E700E388FF /* MetaWear */,
 				9493500F275A0F0A00E388FF /* mbientSwiftUI */,
 				94801C7B275A9264005574DF /* MetaWearMetadata */,
-				94801C7D275A9267005574DF /* MetaWearCpp */,
 			);
 			productName = "MetaBase (iOS)";
 			productReference = 94E005D1275A07E9001B0DFD /* MetaBase.app */;
@@ -602,7 +609,6 @@
 				94934FD4275A09EE00E388FF /* MetaWear */,
 				94935011275A0F1000E388FF /* mbientSwiftUI */,
 				94801C7F275A926E005574DF /* MetaWearMetadata */,
-				94801C81275A9271005574DF /* MetaWearCpp */,
 			);
 			productName = "MetaBase (macOS)";
 			productReference = 94E005D7275A07E9001B0DFD /* MetaBase.app */;
@@ -622,6 +628,10 @@
 				94E005E0275A07E9001B0DFD /* PBXTargetDependency */,
 			);
 			name = "Tests iOS";
+			packageProductDependencies = (
+				945494F627656A800021E3D6 /* MetaWear */,
+				945494FC27656A910021E3D6 /* MetaWearMetadata */,
+			);
 			productName = "Tests iOS";
 			productReference = 94E005DE275A07E9001B0DFD /* Tests iOS.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -640,6 +650,10 @@
 				94E005EC275A07E9001B0DFD /* PBXTargetDependency */,
 			);
 			name = "Tests macOS";
+			packageProductDependencies = (
+				945494F827656A840021E3D6 /* MetaWear */,
+				945494FA27656A8C0021E3D6 /* MetaWearMetadata */,
+			);
 			productName = "Tests macOS";
 			productReference = 94E005EA275A07E9001B0DFD /* Tests macOS.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -731,6 +745,7 @@
 			files = (
 				94CF3EFD276427F100C2D8B0 /* ChooseDevicesScreen.swift in Sources */,
 				9409C5D62762A367001FE850 /* ActionVM.swift in Sources */,
+				944538962767032D00841880 /* MetaWearImage.swift in Sources */,
 				9409C5C627613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */,
 				94CF3F122764286B00C2D8B0 /* LabeledItem.swift in Sources */,
 				94E3A80927608ED7007E2BAE /* SensorConfigContainer.swift in Sources */,
@@ -798,6 +813,7 @@
 			files = (
 				94CF3EFE276427F100C2D8B0 /* ChooseDevicesScreen.swift in Sources */,
 				9409C5D72762A367001FE850 /* ActionVM.swift in Sources */,
+				944538972767032D00841880 /* MetaWearImage.swift in Sources */,
 				9409C5C727613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */,
 				94CF3F132764286B00C2D8B0 /* LabeledItem.swift in Sources */,
 				9409C5C327613890001FE850 /* SensorUserParameters.swift in Sources */,
@@ -1275,21 +1291,29 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		945494F627656A800021E3D6 /* MetaWear */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MetaWear;
+		};
+		945494F827656A840021E3D6 /* MetaWear */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MetaWear;
+		};
+		945494FA27656A8C0021E3D6 /* MetaWearMetadata */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MetaWearMetadata;
+		};
+		945494FC27656A910021E3D6 /* MetaWearMetadata */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MetaWearMetadata;
+		};
 		94801C7B275A9264005574DF /* MetaWearMetadata */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaWearMetadata;
 		};
-		94801C7D275A9267005574DF /* MetaWearCpp */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MetaWearCpp;
-		};
 		94801C7F275A926E005574DF /* MetaWearMetadata */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaWearMetadata;
-		};
-		94801C81275A9271005574DF /* MetaWearCpp */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MetaWearCpp;
 		};
 		94934FD2275A09E700E388FF /* MetaWear */ = {
 			isa = XCSwiftPackageProductDependency;

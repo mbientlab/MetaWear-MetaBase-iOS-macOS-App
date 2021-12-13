@@ -21,9 +21,9 @@ public struct SensorUserParameters {
     public var barometerRate:      MWBarometer.StandbyTime         = .ms125
     public var fusionRate:         MWAccelerometer.SampleFrequency = .hz100
     public var gyroscopeRate:      MWGyroscope.Frequency           = .hz25
-    public var humidityRate:       MWFrequency.CommonCases         = .every1hr
+    public var humidityRate:       MWFrequency.CommonCases         = .every10sec
     public var magnetometerRate:   MWMagnetometer.SampleFrequency  = .hz10
-    public var temperatureRate:    MWFrequency.CommonCases         = .every1hr
+    public var temperatureRate:    MWFrequency.CommonCases         = .hz1
 
     public var accelerometerScale: MWAccelerometer.GravityRange    = .g16
     public var gyroscopeScale:     MWGyroscope.GraphRange          = .dps2000

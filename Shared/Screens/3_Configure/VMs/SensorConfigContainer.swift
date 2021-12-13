@@ -50,7 +50,7 @@ public struct SensorConfigContainer: Equatable, Hashable {
         }
 
         if config.magnetometer {
-            self.magnetometer = .init(frequency: config.magnetometerRate)
+            self.magnetometer = .init(freq: config.magnetometerRate)
         }
 
         if config.pressure {
