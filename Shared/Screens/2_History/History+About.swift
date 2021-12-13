@@ -57,8 +57,6 @@ extension HistoryScreen.AboutColumn {
                         .fixedSize(horizontal: false, vertical: true)
                         .layoutPriority(1)
 
-                ConnectionButton(size: .subheadline, state: vm.connection)
-
                 Spacer()
 
                 IdentifyByLEDButton(request: vm.identifyByLED, emulator: vm.led)
@@ -78,7 +76,11 @@ extension HistoryScreen.AboutColumn {
             if vm.rssiInt == Int(SignalLevel.noBarsRSSI) { return "–" }
             return .init(vm.rssiInt)
         }
+        private var connectionRepresentable: String {
+            vm.isLocallyKnown ? vm.connection.label : "Cloud Synced"
+        }
         @ViewBuilder private var info: some View {
+            HLabel("Pairing", item: connectionRepresentable,     align: alignment)
             HLabel("RSSI", item: rssiRepresentable,                 align: alignment)
             HLabel("Battery", item: vm.battery,                     align: alignment)
             HLabel("MAC", item: vm.meta.mac,                        align: alignment)

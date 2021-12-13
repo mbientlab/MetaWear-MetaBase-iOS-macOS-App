@@ -284,6 +284,16 @@ extension CBPeripheralState {
             default: return 0
         }
     }
+
+    var label: String {
+        switch self {
+            case .disconnecting: return "Disconnecting"
+            case .disconnected: return "Disconnected"
+            case .connecting: return "Connecting"
+            case .connected: return "Connected"
+            @unknown default: return "Unknown"
+        }
+    }
 }
 
 extension CBPeripheralState: Comparable {

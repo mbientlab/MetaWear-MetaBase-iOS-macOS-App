@@ -23,7 +23,7 @@ struct HistoryScreen: View {
 
             HStack(alignment: .firstTextBaseline, spacing: .screenInset) {
                 AboutColumn()
-                    .frame(minWidth: 200)
+                    .frame(minWidth: 215)
 
                 VStack {
                     SessionsList()
@@ -35,6 +35,7 @@ struct HistoryScreen: View {
                 .layoutPriority(2)
             }
             .padding(.horizontal, .screenInset)
+            .padding(.top, 5)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .environmentObject(vm)
