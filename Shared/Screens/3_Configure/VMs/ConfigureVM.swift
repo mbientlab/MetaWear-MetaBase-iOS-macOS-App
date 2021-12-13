@@ -5,7 +5,7 @@ import MetaWear
 import MetaWearMetadata
 
 /// Organize legal user intents
-public class SensorConfigurationVM: ObservableObject, HeaderVM {
+public class ConfigureVM: ObservableObject, HeaderVM {
 
     @Published var shouldStream = true
     @Published var config: SensorUserParameters
@@ -33,7 +33,7 @@ public class SensorConfigurationVM: ObservableObject, HeaderVM {
 
 // MARK: - Intents: Start
 
-extension SensorConfigurationVM {
+extension ConfigureVM {
 
     func requestStart() {
         routing.setConfigs(buildConfigContainers())
@@ -43,7 +43,7 @@ extension SensorConfigurationVM {
 
 // MARK: - Intents: Toggle Sensor Usage
 
-public extension SensorConfigurationVM {
+public extension ConfigureVM {
 
     func toggleAccelerometer() {
         if config.accelerometer {
@@ -97,7 +97,7 @@ public extension SensorConfigurationVM {
 
 // MARK: - Intents: Start Event
 
-private extension SensorConfigurationVM {
+private extension ConfigureVM {
 
      func buildConfigContainers() -> [SensorConfigContainer] {
         devices.map { device in

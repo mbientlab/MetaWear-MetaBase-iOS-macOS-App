@@ -65,7 +65,7 @@ public extension UIFactory {
         return .init(title: title, vms: vms, store: store, routing: routing, scanner: scanner)
     }
 
-    func makeSensorConfigurationVM() -> SensorConfigurationVM {
+    func makeConfigureVM() -> ConfigureVM {
         guard let item = routing.focus?.item else { fatalError("Set item before navigation") }
         let (title, devices) = getKnownDevices(for: item)
         return .init(title: title, item: item, devices: devices, routing: routing)

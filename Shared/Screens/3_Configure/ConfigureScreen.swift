@@ -6,10 +6,10 @@ import MetaWear
 
 struct ConfigureScreen: View {
 
-    @StateObject private var vm: SensorConfigurationVM
+    @StateObject private var vm: ConfigureVM
 
     init(_ factory: UIFactory) {
-        _vm = .init(wrappedValue: factory.makeSensorConfigurationVM())
+        _vm = .init(wrappedValue: factory.makeConfigureVM())
     }
 
     var body: some View {

@@ -8,7 +8,7 @@ extension ConfigureScreen {
 
     struct SensorIterator: View {
 
-        @EnvironmentObject private var vm: SensorConfigurationVM
+        @EnvironmentObject private var vm: ConfigureVM
         @State private var placeholder = MWFrequency.CommonCases.hz50
         @Namespace var namespace
 
@@ -29,6 +29,9 @@ extension ConfigureScreen {
                     options: vm.options.accelerometerScale,
                     optionsHelp: "Scale"
                 )
+                    .overlay(accelerometerMixedRateWarning
+                                .offset(x: -15, y: -15),
+                             alignment: .bottomTrailing)
             }
             if vm.options.gyroscope {
                 Tile(
@@ -123,6 +126,12 @@ extension ConfigureScreen {
                     frequencies: vm.options.temperatureRate,
                     option: $placeholder
                 )
+            }
+        }
+
+        @ViewBuilder private var accelerometerMixedRateWarning: some View {
+            if vm.options.showAccelerometerMixedRateWarning && vm.config.accelerometer {
+                WarningPopover(message: "MetaWears in this group use different Bosch accelerometers with slightly different sampling rates. One device will record slightly faster than the other(s).")
             }
         }
     }
