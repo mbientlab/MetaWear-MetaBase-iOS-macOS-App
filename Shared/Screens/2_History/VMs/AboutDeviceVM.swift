@@ -217,7 +217,7 @@ public extension AboutDeviceVM {
             .factoryReset()
             .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
 
-        connect()
+        if device?.isConnectedAndSetup == false { connect() }
     }
 
 }
