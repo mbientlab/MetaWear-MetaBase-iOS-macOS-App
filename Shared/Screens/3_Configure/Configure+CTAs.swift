@@ -19,7 +19,7 @@ extension ConfigureScreen {
                 Spacer()
 
                 toggle
-                CTAButton(vm.shouldStream ? "Stream" : "Log", action: vm.requestStart)
+                CTAButton("Start", action: vm.requestStart)
                     .disabled(vm.canStart == false)
             }
             .animation(.easeOut, value: vm.shouldStream)
@@ -29,17 +29,20 @@ extension ConfigureScreen {
         private var toggle: some View {
             Picker(selection: $vm.shouldStream) {
 
-                SFSymbol.stream.image()
+                Text("Stream")
                     .tag(true)
                     .help(SFSymbol.stream.accessibilityDescription)
 
-                SFSymbol.log.image()
+                Text("Log")
                     .tag(false)
                     .help(SFSymbol.log.accessibilityDescription)
 
             } label: { }
             .pickerStyle(.segmented)
             .fixedSize()
+            #if os(macOS)
+            .controlSize(.large)
+            #endif
         }
 
         private var streamRate: some View {
@@ -49,7 +52,7 @@ extension ConfigureScreen {
                     .foregroundColor(vm.config.exceedsStreamableLimit ? .pink : .secondary)
 
                 if vm.config.exceedsStreamableLimit {
-                    Text("Bluetooth Low Energy limits streaming to 100 Hz")
+                    Text("Bluetooth Low Energy can only stream at 100–120 Hz")
                         .font(.caption)
                         .foregroundColor(.pink)
                 }

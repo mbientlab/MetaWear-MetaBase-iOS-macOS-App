@@ -31,18 +31,21 @@ struct CTAButton: View {
                 .padding(.horizontal, 15)
                 .padding(.vertical, 8)
                 .frame(minWidth: 140, maxWidth: maxWidth, alignment: .center)
-            #if os(iOS)
+#if os(iOS)
                 .background(
                     Capsule(style: .continuous)
                         .fill(bg)
                 )
-            #endif
+#endif
         }
-        #if os(iOS)
+#if os(iOS)
         .buttonStyle(.borderless)
-        #else
+#else
         .buttonStyle(.bordered)
-        #endif
+#endif
+#if os(macOS)
+        .controlSize(.large)
+#endif
     }
 }
 
