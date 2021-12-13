@@ -292,18 +292,20 @@ private extension ActionVM {
             .share()
             .eraseToAnyPublisher()
 
-        optionallyStream(config.accelerometer, &streams, didConnect, mac)
-        optionallyStream(config.magnetometer, &streams, didConnect, mac)
-        optionallyStream(config.altitude, &streams, didConnect, mac)
-        optionallyStream(config.ambientLight, &streams, didConnect, mac)
-        optionallyStream(config.gyroscope, &streams, didConnect, mac)
-        optionallyStream(config.humidity, &streams, didConnect, mac)
-        optionallyStream(config.pressure, &streams, didConnect, mac)
-        optionallyStream(config.thermometer, &streams, didConnect, mac)
-        optionallyStream(config.fusionEuler, &streams, didConnect, mac)
-        optionallyStream(config.fusionGravity, &streams, didConnect, mac)
-        optionallyStream(config.fusionLinear, &streams, didConnect, mac)
-        optionallyStream(config.fusionQuaternion, &streams, didConnect, mac)
+        let setup = (didConnect, mac, device.apiAccessQueue)
+
+        optionallyStream(config.thermometer, &streams, setup)
+        optionallyStream(config.accelerometer, &streams, setup)
+        optionallyStream(config.magnetometer, &streams, setup)
+        optionallyStream(config.altitude, &streams, setup)
+        optionallyStream(config.ambientLight, &streams, setup)
+        optionallyStream(config.gyroscope, &streams, setup)
+        optionallyStream(config.humidity, &streams, setup)
+        optionallyStream(config.pressure, &streams, setup)
+        optionallyStream(config.fusionEuler, &streams, setup)
+        optionallyStream(config.fusionGravity, &streams, setup)
+        optionallyStream(config.fusionLinear, &streams, setup)
+        optionallyStream(config.fusionQuaternion, &streams, setup)
 
         return Publishers.MergeMany(streams)
             .collect()
@@ -314,21 +316,25 @@ private extension ActionVM {
             .eraseToAnyPublisher()
     }
 
+    typealias StreamSetup = (didConnect: MWPublisher<MetaWear>,
+                             mac: MACAddress,
+                             queue: DispatchQueue)
+
     func optionallyStream<S: MWStreamable>(
         _ config: S?,
         _ streams: inout [MWPublisher<MWDataTable>],
-        _ didConnect: MWPublisher<MetaWear>,
-        _ mac: MACAddress
+        _ setup: StreamSetup
     ) {
         guard let config = config else { return }
 
 
-        let publisher = didConnect
+        let publisher = setup.didConnect
             .stream(config)
             .handleEvents(receiveOutput: { [weak self] _ in
-                self?.streamCounters.counters[mac]?.send() })
+                self?.streamCounters.counters[setup.mac]?.send() })
             .prefix(untilOutputFrom: streamCancel)
             .collect()
+            .receive(on: setup.queue)
             .map { MWDataTable(streamed: $0, config) }
             .eraseToAnyPublisher()
 
@@ -338,16 +344,17 @@ private extension ActionVM {
     func optionallyStream<P: MWPollable>(
         _ config: P?,
         _ streams: inout [MWPublisher<MWDataTable>],
-        _ didConnect: MWPublisher<MetaWear>,
-        _ mac: MACAddress
+        _ setup: StreamSetup
     ) {
         guard let config = config else { return }
 
-        let publisher = didConnect.stream(config)
+        let publisher = setup.didConnect
+            .stream(config)
             .handleEvents(receiveOutput: { [weak self] _ in
-                self?.streamCounters.counters[mac]?.send() })
+                self?.streamCounters.counters[setup.mac]?.send() })
             .prefix(untilOutputFrom: streamCancel)
             .collect()
+            .receive(on: setup.queue)
             .map { MWDataTable(streamed: $0, config) }
             .eraseToAnyPublisher()
 
