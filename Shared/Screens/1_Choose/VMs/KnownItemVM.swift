@@ -11,52 +11,31 @@ import CoreBluetooth
 ///
 public class KnownItemVM: ObservableObject, ItemVM {
 
-    public var isGroup: Bool { group != nil }
-    public var deviceCount: Int { devices.endIndex }
-
-    public var isMetaBoot:  Bool      { devices.contains { $0.mw?.isMetaBoot == true } }
-    public var isConnected: Bool      { devices.contains { $0.mw?.isConnectedAndSetup == true } }
-    public var name:        String    { group?.name ?? devices.first?.meta.name ?? "Error" }
-    public var macs:        [String]  { devices.map(\.meta.mac) }
-    public var localIDs:    [String?] { devices.map(\.mw?.peripheral.identifier.uuidString) }
-    public var metadata:    [MetaWear.Metadata] { devices.map(\.meta) }
-
-    public var isLocallyKnown: Bool {
-        if group == nil { return devices.allSatisfy { $0.mw != nil } }
-        else { return devices.contains(where: { $0.mw != nil } ) }
-    }
-
-    public var models: [(mac: String, model: MetaWear.Model)] {
-        devices.map { device in
-            (device.meta.mac, device.meta.model)
-        }
-    }
-
-    public var matchedGeometryID: String {
-        if let group = group { return group.id.uuidString }
-        return (
-            localIDs.first { $0 != nil }
-            ?? devices.compactMap { $0.meta.id }.first
-        ) ?? UUID().uuidString
-    }
-
-    public var isIdentifying: Bool { isIdentifyingMACs.isEmpty == false }
-    @Published private var isIdentifyingMACs = Set<MACAddress>()
-    public let ledVM = MWLED.FlashPattern.Emulator(preset: .zero)
-    private var identifyingSubs = Set<AnyCancellable>()
-
-    public private(set) var rssi: SignalLevel
-    @Published public private(set) var rssiInt: Int
-    @Published public private(set) var connection: CBPeripheralState
-
+    // Identity
     @Published private var group: MetaWear.Group?
     @Published private var devices: [MWKnownDevice]
-    private var rssiSub:         AnyCancellable? = nil
-    private var connectionSub:   AnyCancellable? = nil
+
+    // Connection state
+    @Published public private(set) var rssiInt: Int
+    @Published public private(set) var connection: CBPeripheralState
+    public private(set) var rssi: SignalLevel
+
+    // Flash LED action
+    @Published private var isIdentifyingMACs = Set<MACAddress>()
+    public var isIdentifying: Bool { isIdentifyingMACs.isEmpty == false }
+    public let ledVM = MWLED.FlashPattern.Emulator(preset: .zero)
+
+    // Dependencies
     private unowned let store:   MetaWearStore
     private unowned let routing: Routing
 
+    // Subscriptions
+    private var rssiSub:         AnyCancellable? = nil
+    private var connectionSub:   AnyCancellable? = nil
+    private var updateSub:   AnyCancellable? = nil
+    private var identifyingSubs = Set<AnyCancellable>()
 
+    /// Represent a MetaWear (either cloud-synced or locally known) as an item
     public init(device: MWKnownDevice, store: MetaWearStore, routing: Routing) {
         self.connection = device.mw?.isConnectedAndSetup == true ? .connected : .disconnected
         self.store = store
@@ -65,8 +44,13 @@ public class KnownItemVM: ObservableObject, ItemVM {
         let _rssi = device.mw?.rssi ?? Int(SignalLevel.noBarsRSSI)
         self.rssi = .init(rssi: _rssi)
         self.rssiInt = _rssi
+
+        updateSub = store.publisher(for: device.meta.mac)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.devices = [$0] }
     }
 
+    /// Represent a group as a single item
     public init(group: MetaWear.Group, store: MetaWearStore, routing: Routing) {
         self.store = store
         self.routing = routing
@@ -74,7 +58,49 @@ public class KnownItemVM: ObservableObject, ItemVM {
         self.devices = _devices
         (self.rssi, self.rssiInt) = Self.getLowestSignal(in: _devices)
         self.connection = Self.getLowestConnectionState(in: _devices)
+
+        updateSub = store.publisher(for: group)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] groupUpdate, knownUpdate in
+                self?.devices = knownUpdate
+                self?.group = groupUpdate
+            }
     }
+}
+
+// MARK: - Convenience Properties
+
+public extension KnownItemVM {
+
+    var isGroup: Bool { group != nil }
+    var deviceCount: Int { devices.endIndex }
+
+    var isMetaBoot:  Bool      { devices.contains { $0.mw?.isMetaBoot == true } }
+    var isConnected: Bool      { devices.contains { $0.mw?.isConnectedAndSetup == true } }
+    var name:        String    { group?.name ?? devices.first?.meta.name ?? "Error" }
+    var macs:        [String]  { devices.map(\.meta.mac) }
+    var localIDs:    [String?] { devices.map(\.mw?.peripheral.identifier.uuidString) }
+    var metadata:    [MetaWear.Metadata] { devices.map(\.meta) }
+
+    var isLocallyKnown: Bool {
+        if group == nil { return devices.allSatisfy { $0.mw != nil } }
+        else { return devices.contains(where: { $0.mw != nil } ) }
+    }
+
+    var models: [(mac: String, model: MetaWear.Model)] {
+        devices.map { device in
+            (device.meta.mac, device.meta.model)
+        }
+    }
+
+    var matchedGeometryID: String {
+        if let group = group { return group.id.uuidString }
+        return (
+            localIDs.first { $0 != nil }
+            ?? devices.compactMap { $0.meta.id }.first
+        ) ?? UUID().uuidString
+    }
+
 }
 
 // MARK: - Lifecycle
@@ -174,9 +200,29 @@ public extension KnownItemVM {
     }
 
     func rename() {
-        fatalError()
+        let controller = RenamePopupPromptController.shared
+        controller.delegate = self
+
+        if let groupID = group?.id {
+            controller.rename(existingName: name, group: groupID)
+        } else if let mac = macs.first {
+            controller.rename(existingName: name, mac: mac)
+        }
+    }
+}
+
+// MARK: - Rename Delegate
+
+extension KnownItemVM: RenameDelegate {
+    public func userDidRenameMetaWear(mac: MACAddress, newName: String) {
+        guard let metadata = devices.first(where: { $0.meta.mac == mac })?.meta else { return }
+        try? store.rename(known: metadata, to: newName)
     }
 
+    public func userDidRenameGroup(id: UUID, newName: String) {
+        guard let group = self.group else { return }
+        store.rename(group: group, to: newName)
+    }
 }
 
 // MARK: - Internal - State updates

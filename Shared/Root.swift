@@ -18,7 +18,6 @@ public class Root: ObservableObject {
 
     // VMs
     public let factory: UIFactory
-    public let discoveryVM: MetaWearDiscoveryVM
     public let bluetoothVM: BLEStateVM
 
     public init() {
@@ -36,7 +35,6 @@ public class Root: ObservableObject {
         self.scanner = scanner
         self.factory = factory
         self.bluetoothVM = factory.makeBluetoothStateWarningsVM()
-        self.discoveryVM = factory.makeMetaWearDiscoveryVM()
     }
 }
 

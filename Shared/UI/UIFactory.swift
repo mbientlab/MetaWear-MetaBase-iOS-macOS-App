@@ -32,10 +32,6 @@ public extension UIFactory {
         .init(scanner: scanner)
     }
 
-    func makeMetaWearDiscoveryVM() -> MetaWearDiscoveryVM {
-        .init(store: store)
-    }
-
     func makeMetaWearItemVM(_ item: Routing.Item) -> KnownItemVM {
         switch item {
             case .known(let mac):

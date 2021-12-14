@@ -22,7 +22,6 @@ struct MainWindow: View {
             .frame(minWidth: Self.minWidth, minHeight: Self.minHeight)
             .animation(.easeInOut, value: routing.destination)
             .background(Color.accentColor.ignoresSafeArea())
-            .background(AlertVendors())
             .environment(\.namespace, namespace)
     }
 
@@ -68,7 +67,6 @@ struct MainWindow: View {
         .navigationViewStyle(.automatic)
         .frame(minWidth: 600)
         .background(Color.accentColor.ignoresSafeArea())
-        .overlay(AlertVendors())
         .environment(\.namespace, namespace)
     }
 

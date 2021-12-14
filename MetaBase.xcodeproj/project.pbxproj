@@ -11,6 +11,8 @@
 		9408E6DD2767FA290011B5F5 /* WarningPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E6DB2767FA290011B5F5 /* WarningPopover.swift */; };
 		9408E6DF276829280011B5F5 /* BluetoothErrorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E6DE276829280011B5F5 /* BluetoothErrorButton.swift */; };
 		9408E6E0276829280011B5F5 /* BluetoothErrorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E6DE276829280011B5F5 /* BluetoothErrorButton.swift */; };
+		9408E6E2276831140011B5F5 /* RenamePopupPromptController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E6E1276831140011B5F5 /* RenamePopupPromptController.swift */; };
+		9408E6E3276831140011B5F5 /* RenamePopupPromptController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E6E1276831140011B5F5 /* RenamePopupPromptController.swift */; };
 		9409C5C02761383E001FE850 /* ConfigureVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5BF2761383E001FE850 /* ConfigureVM.swift */; };
 		9409C5C227613890001FE850 /* SensorUserParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C127613890001FE850 /* SensorUserParameters.swift */; };
 		9409C5C327613890001FE850 /* SensorUserParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C127613890001FE850 /* SensorUserParameters.swift */; };
@@ -65,10 +67,6 @@
 		9452856E275BE1D5004D815B /* Root.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9452856C275BE1D5004D815B /* Root.swift */; };
 		94528570275BE248004D815B /* BLEStateVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9452856F275BE248004D815B /* BLEStateVM.swift */; };
 		94528571275BE248004D815B /* BLEStateVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9452856F275BE248004D815B /* BLEStateVM.swift */; };
-		94528574275BE45F004D815B /* AlertVendors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528573275BE45F004D815B /* AlertVendors.swift */; };
-		94528575275BE45F004D815B /* AlertVendors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528573275BE45F004D815B /* AlertVendors.swift */; };
-		94528577275BE4BE004D815B /* MetaWearDiscoveryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528576275BE4BE004D815B /* MetaWearDiscoveryVM.swift */; };
-		94528578275BE4BE004D815B /* MetaWearDiscoveryVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528576275BE4BE004D815B /* MetaWearDiscoveryVM.swift */; };
 		9452857A275BE77A004D815B /* Choose+EditGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528579275BE77A004D815B /* Choose+EditGroup.swift */; };
 		9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528579275BE77A004D815B /* Choose+EditGroup.swift */; };
 		945494F727656A800021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F627656A800021E3D6 /* MetaWear */; };
@@ -173,6 +171,7 @@
 /* Begin PBXFileReference section */
 		9408E6DB2767FA290011B5F5 /* WarningPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningPopover.swift; sourceTree = "<group>"; };
 		9408E6DE276829280011B5F5 /* BluetoothErrorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothErrorButton.swift; sourceTree = "<group>"; };
+		9408E6E1276831140011B5F5 /* RenamePopupPromptController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenamePopupPromptController.swift; sourceTree = "<group>"; };
 		9409C5BF2761383E001FE850 /* ConfigureVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureVM.swift; sourceTree = "<group>"; };
 		9409C5C127613890001FE850 /* SensorUserParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorUserParameters.swift; sourceTree = "<group>"; };
 		9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MetaWear+WriteSensorMacro.swift"; sourceTree = "<group>"; };
@@ -200,8 +199,6 @@
 		94528563275BE0D8004D815B /* MainWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
 		9452856C275BE1D5004D815B /* Root.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Root.swift; sourceTree = "<group>"; };
 		9452856F275BE248004D815B /* BLEStateVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEStateVM.swift; sourceTree = "<group>"; };
-		94528573275BE45F004D815B /* AlertVendors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertVendors.swift; sourceTree = "<group>"; };
-		94528576275BE4BE004D815B /* MetaWearDiscoveryVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaWearDiscoveryVM.swift; sourceTree = "<group>"; };
 		94528579275BE77A004D815B /* Choose+EditGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+EditGroup.swift"; sourceTree = "<group>"; };
 		94934FD6275A0A2E00E388FF /* MetaBase--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MetaBase--iOS--Info.plist"; sourceTree = "<group>"; };
 		94934FD7275A0A4200E388FF /* MetaBase--macOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MetaBase--macOS--Info.plist"; sourceTree = "<group>"; };
@@ -348,10 +345,9 @@
 		94528572275BE454004D815B /* Overlays */ = {
 			isa = PBXGroup;
 			children = (
-				94528573275BE45F004D815B /* AlertVendors.swift */,
-				94528576275BE4BE004D815B /* MetaWearDiscoveryVM.swift */,
 				9452856F275BE248004D815B /* BLEStateVM.swift */,
 				9408E6DE276829280011B5F5 /* BluetoothErrorButton.swift */,
+				9408E6E1276831140011B5F5 /* RenamePopupPromptController.swift */,
 			);
 			path = Overlays;
 			sourceTree = "<group>";
@@ -773,7 +769,6 @@
 				9409C5D92762D7DA001FE850 /* ActionState.swift in Sources */,
 				9452857A275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
 				94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */,
-				94528574275BE45F004D815B /* AlertVendors.swift in Sources */,
 				94528561275BDF8D004D815B /* UserDefaults+Singleton.swift in Sources */,
 				94528564275BE0D8004D815B /* MainWindow.swift in Sources */,
 				94E3A7FD27607075007E2BAE /* ConnectionButton.swift in Sources */,
@@ -788,7 +783,6 @@
 				9409C5C02761383E001FE850 /* ConfigureVM.swift in Sources */,
 				94E3A7F3275FF519007E2BAE /* AboutDeviceVM.swift in Sources */,
 				9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */,
-				94528577275BE4BE004D815B /* MetaWearDiscoveryVM.swift in Sources */,
 				9452856D275BE1D5004D815B /* Root.swift in Sources */,
 				94DFEC5E275D389700BB80DB /* Choose+UnknownDeviceCell.swift in Sources */,
 				94CF3F0C2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
@@ -819,6 +813,7 @@
 				94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */,
 				94A165C3275F2F8600FA355D /* History+About.swift in Sources */,
 				94CF3F102764286B00C2D8B0 /* Subhead.swift in Sources */,
+				9408E6E2276831140011B5F5 /* RenamePopupPromptController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -851,14 +846,12 @@
 				9409C5DD2762E17D001FE850 /* Action+Row.swift in Sources */,
 				94CF3EFB276427C300C2D8B0 /* Routing.swift in Sources */,
 				9409C5D02762969B001FE850 /* Configure+Grid.swift in Sources */,
-				94528575275BE45F004D815B /* AlertVendors.swift in Sources */,
 				94E3A7FB276032BD007E2BAE /* IdentifyByLEDButton.swift in Sources */,
 				94CF3F0B2764286B00C2D8B0 /* Header.swift in Sources */,
 				94CF3F19276428A400C2D8B0 /* MetaWearAtom.swift in Sources */,
 				94528553275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */,
 				94528556275BDDB9004D815B /* Choose+Grids.swift in Sources */,
 				94528568275BE12B004D815B /* ActionScreen.swift in Sources */,
-				94528578275BE4BE004D815B /* MetaWearDiscoveryVM.swift in Sources */,
 				94CF3F0D2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
 				94935024275A11C600E388FF /* KnownItemVM.swift in Sources */,
 				9452856E275BE1D5004D815B /* Root.swift in Sources */,
@@ -890,6 +883,7 @@
 				94A165C4275F2F8600FA355D /* History+About.swift in Sources */,
 				94528559275BDE1E004D815B /* Choose+DeviceIterator.swift in Sources */,
 				94CF3F112764286B00C2D8B0 /* Subhead.swift in Sources */,
+				9408E6E3276831140011B5F5 /* RenamePopupPromptController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
