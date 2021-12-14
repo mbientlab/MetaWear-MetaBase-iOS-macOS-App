@@ -228,6 +228,12 @@ public extension AboutDeviceVM {
             .factoryReset()
             .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
 
+
+        refreshSub = device?.publishWhenDisconnected()
+            .first()
+            .delay(for: 1.5, tolerance: 0.5, scheduler: DispatchQueue.main)
+            .sink { $0.connect() }
+
         if device?.isConnectedAndSetup == false { connect() }
     }
 

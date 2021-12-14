@@ -85,8 +85,15 @@ struct HeaderBackButton: View {
     @EnvironmentObject private var routing: Routing
 
     @State private var backIsHovered = false
+
+    var overrideBackAction: (() -> Void)? = nil
+
     var body: some View {
         Button{
+            if let back = overrideBackAction {
+                back()
+                return
+            }
             #if os(iOS)
             nav.wrappedValue.dismiss()
             #else

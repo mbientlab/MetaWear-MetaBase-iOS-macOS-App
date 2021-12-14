@@ -11,7 +11,6 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     // Overview of action
     public var representativeConfig:    SensorConfigContainer { configs.first ?? .init() }
     public let actionType:              ActionType
-    public let showBackButton           = true
     public var showSuccessCTAs:         Bool { state.allSatisfy { $0.value == .completed } }
     @Published public var actionFocus:  MACAddress = ""
 
@@ -103,12 +102,7 @@ public extension ActionVM {
     }
 
     func exportFiles() {
-
-    }
-
-    func goToChooseDevicesScreen() {
-        streamCancel.send()
-        routing.setDestination(.choose)
+        print("EXPORT FILES ACTION TBD")
     }
 
     func cancelAndUndo() {
@@ -117,9 +111,14 @@ public extension ActionVM {
         deviceVMs.forEach { $0.reset() }
     }
 
-    func didTapBackButton() {
+    func backToHistory() {
         streamCancel.send()
-        routing.setDestination(.history)
+        routing.goBack(until: .history)
+    }
+
+    func backToChooseDevices() {
+        streamCancel.send()
+        routing.goBack(until: .choose)
     }
 }
 

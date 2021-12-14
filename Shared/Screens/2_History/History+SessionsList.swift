@@ -40,7 +40,7 @@ extension HistoryScreen.SessionsList {
 
         var body: some View {
             HStack {
-                Text(name)
+                Text(name + " Mockup")
                     .font(.body)
                 Spacer()
                 downloadButton
@@ -51,6 +51,11 @@ extension HistoryScreen.SessionsList {
             if let action = downloadAction {
                 Button(action: action) {
                     SFSymbol.download.image()
+                }
+                .buttonStyle(.borderless)
+            } else {
+                Button(action: {}) {
+                    SFSymbol.icloud.image()
                 }
                 .buttonStyle(.borderless)
             }

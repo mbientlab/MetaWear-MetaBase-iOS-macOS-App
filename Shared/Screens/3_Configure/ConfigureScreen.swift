@@ -28,7 +28,6 @@ struct ConfigureScreen: View {
                 .padding(.bottom, .screenInset)
                 .padding(.horizontal, .screenInset)
         }
-
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .toolbar { BluetoothErrorButton.ToolbarIcon() }
         .environmentObject(vm)

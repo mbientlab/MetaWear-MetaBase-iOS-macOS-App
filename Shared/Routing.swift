@@ -39,6 +39,16 @@ public extension Routing {
         if destination == .choose { focus = nil }
     }
 
+    func goBack(until destination: Destination) {
+        while let last = history.popLast() {
+            if last == destination {
+                self.destination = last
+                if destination == .choose { focus = nil }
+                break
+            }
+        }
+    }
+
     /// Programatic navigation.
     /// Set focus before calling destinations other than `.choose`.
     ///
