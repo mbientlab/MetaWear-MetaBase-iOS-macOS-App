@@ -6,10 +6,9 @@ extension ChooseDevicesScreen {
 
     struct NoDevicesFound: View {
         static var transitionInterval = Double(1)
-        let namespace: Namespace.ID
         let shouldShowList: Binding<Bool>
         var body: some View {
-            GeometryReader { Content(geo: $0, namespace: namespace, shouldDisappear: shouldShowList) }
+            GeometryReader { Content(geo: $0, shouldDisappear: shouldShowList) }
         }
     }
 }
@@ -19,8 +18,8 @@ private extension ChooseDevicesScreen.NoDevicesFound {
     struct Content: View {
 
         let geo: GeometryProxy
-        let namespace: Namespace.ID
         let shouldDisappear: Binding<Bool>
+        @Environment(\.namespace) private var namespace
 
         // Coordinate an animated disappearance
         @EnvironmentObject private var vm: DiscoveryListVM
@@ -79,7 +78,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
                 animate: animate,
                 size: min(180, max(90, geo.size.width * 0.15))
             )
-                .matchedGeometryEffect(id: "scanning", in: namespace)
+                .matchedGeometryEffect(id: "scanning", in: namespace!)
                 .padding(.bottom, 75)
                 .transition(.asymmetric(insertion: insertion, removal: removal))
         }

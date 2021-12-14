@@ -32,6 +32,7 @@ struct ActionScreen: View {
                 .padding(.horizontal, .screenInset)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .toolbar { BluetoothErrorButton.ToolbarIcon() }
         .environmentObject(vm)
         .onAppear(perform: vm.start)
     }

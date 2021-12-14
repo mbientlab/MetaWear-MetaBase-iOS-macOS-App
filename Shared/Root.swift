@@ -19,7 +19,7 @@ public class Root: ObservableObject {
     // VMs
     public let factory: UIFactory
     public let discoveryVM: MetaWearDiscoveryVM
-    public let bluetoothVM: BLEStateWarningsVM
+    public let bluetoothVM: BLEStateVM
 
     public init() {
         self.cloud = .default

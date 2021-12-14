@@ -34,7 +34,6 @@ struct ActionHeader: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.bottom, .screenInset)
-        .padding(.top)
     }
 
     private var title: some View {

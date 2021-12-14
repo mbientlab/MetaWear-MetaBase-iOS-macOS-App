@@ -14,28 +14,12 @@ public class KnownItemVM: ObservableObject, ItemVM {
     public var isGroup: Bool { group != nil }
     public var deviceCount: Int { devices.endIndex }
 
-    public var name: String {
-        group?.name ?? devices.first?.meta.name ?? "Error"
-    }
-
-    public var macs: [String] {
-        devices.map(\.meta.mac)
-    }
-
-    public var metadata: [MetaWear.Metadata] {
-        devices.map(\.meta)
-    }
-
-    public var localIDs: [String?] { devices.map(\.mw?.peripheral.identifier.uuidString)
-    }
-
-    public var isMetaBoot: Bool {
-        devices.contains { $0.mw?.isMetaBoot == true }
-    }
-
-    public var isConnected: Bool {
-        devices.contains { $0.mw?.isConnectedAndSetup == true }
-    }
+    public var isMetaBoot:  Bool      { devices.contains { $0.mw?.isMetaBoot == true } }
+    public var isConnected: Bool      { devices.contains { $0.mw?.isConnectedAndSetup == true } }
+    public var name:        String    { group?.name ?? devices.first?.meta.name ?? "Error" }
+    public var macs:        [String]  { devices.map(\.meta.mac) }
+    public var localIDs:    [String?] { devices.map(\.mw?.peripheral.identifier.uuidString) }
+    public var metadata:    [MetaWear.Metadata] { devices.map(\.meta) }
 
     public var isLocallyKnown: Bool {
         if group == nil { return devices.allSatisfy { $0.mw != nil } }
@@ -195,7 +179,6 @@ public extension KnownItemVM {
 
 }
 
-
 // MARK: - Internal - State updates
 
 private extension KnownItemVM {
@@ -273,39 +256,3 @@ private extension KnownItemVM {
         devices.map { $0.mw?.connectionStateCurrent ?? .disconnected }.min() ?? .disconnected
     }
 }
-
-extension CBPeripheralState {
-    var ranking: Int {
-        switch self {
-            case .disconnecting: return 0
-            case .disconnected: return 1
-            case .connecting: return 2
-            case .connected: return 3
-            default: return 0
-        }
-    }
-
-    var label: String {
-        switch self {
-            case .disconnecting: return "Disconnecting"
-            case .disconnected: return "Disconnected"
-            case .connecting: return "Connecting"
-            case .connected: return "Connected"
-            @unknown default: return "Unknown"
-        }
-    }
-}
-
-extension CBPeripheralState: Comparable {
-    public static func < (lhs: CBPeripheralState, rhs: CBPeripheralState) -> Bool {
-        lhs.ranking < rhs.ranking
-    }
-}
-
-
-//ForEach(vm.macs.indices, id: \.self) { index in
-//    Text(vm.macs[index])
-//        .font(.system(.headline, design: .monospaced))
-//        .lineLimit(1)
-//        .fixedSize()
-//}

@@ -7,10 +7,10 @@ import MetaWearMetadata
 
 public class DiscoveryListVM: ObservableObject {
 
-    @Published public var groups = [MetaWear.Group]()
-    @Published public var ungrouped = [MetaWear.Metadata]()
-    @Published public var unknown = [UUID]()
-    @Published public var isScanning = false
+    @Published private(set) public var groups = [MetaWear.Group]()
+    @Published private(set) public var ungrouped = [MetaWear.Metadata]()
+    @Published private(set) public var unknown = [UUID]()
+    @Published private(set) public var isScanning = false
 
     private unowned let scanner: MetaWearScanner
     private var subs = Set<AnyCancellable>()
@@ -49,5 +49,10 @@ public extension DiscoveryListVM {
 
     func didDisappear() {
         scanner.stopScan()
+    }
+
+    func toggleScanning() {
+        if isScanning { scanner.stopScan() }
+        else { scanner.startScan(higherPerformanceMode: true) }
     }
 }

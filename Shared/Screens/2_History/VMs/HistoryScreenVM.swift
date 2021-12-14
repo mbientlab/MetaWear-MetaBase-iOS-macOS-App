@@ -40,7 +40,7 @@ public extension HistoryScreenVM {
     }
 
     func onDisappear() {
-        scanner.stopScan()
+        
     }
 }
 

@@ -28,7 +28,7 @@ public extension UIFactory {
         .init(scanner: scanner, store: store)
     }
 
-    func makeBluetoothStateWarningsVM() -> BLEStateWarningsVM {
+    func makeBluetoothStateWarningsVM() -> BLEStateVM {
         .init(scanner: scanner)
     }
 

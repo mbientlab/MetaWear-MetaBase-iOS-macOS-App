@@ -4,25 +4,12 @@ import SwiftUI
 
 struct AlertVendors: View {
 
-    @EnvironmentObject private var bluetooth: BLEStateWarningsVM
     @EnvironmentObject private var discovery: MetaWearDiscoveryVM
 
     var body: some View {
         Color.clear
-            .background(bluetoothAlerts)
             .background(discoveryError)
             .hidden()
-    }
-
-    private var bluetoothAlerts: some View {
-        Color.clear
-            .alert(isPresented: $bluetooth.showError) {
-                Alert(
-                    title: Text(bluetooth.errorTitle),
-                    message: Text(bluetooth.errorMessage),
-                    dismissButton: .default(Text("Ok"), action: { })
-                )
-            }
     }
 
     private var discoveryErrorBinding: Binding<Bool> {
@@ -62,9 +49,6 @@ struct AlertVendors: View {
             }
     }
 }
-
-
-
 
 func getNameInputModally(
     prefilledText: String,
@@ -116,8 +100,7 @@ func getNameInputModally(
         }
     }
 #else
-
-
+fatalError()
 #endif
 }
 

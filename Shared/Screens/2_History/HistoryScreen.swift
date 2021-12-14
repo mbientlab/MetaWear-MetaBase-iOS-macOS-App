@@ -7,6 +7,9 @@ import Combine
 import mbientSwiftUI
 import MetaWear
 import MetaWearMetadata
+#if os(iOS)
+import UIKit
+#endif
 
 struct HistoryScreen: View {
 
@@ -21,7 +24,7 @@ struct HistoryScreen: View {
         VStack(alignment: .leading, spacing: 0) {
             Header(vm: vm)
 
-            HStack(alignment: .firstTextBaseline, spacing: .screenInset) {
+            HStack(alignment: .firstTextBaseline, spacing: .screenInset * 2) {
                 AboutColumn()
                     .frame(minWidth: 215)
 
@@ -38,6 +41,7 @@ struct HistoryScreen: View {
             .padding(.top, 5)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .toolbar { BluetoothErrorButton.ToolbarIcon() }
         .environmentObject(vm)
         .onAppear(perform: vm.onAppear)
         .onDisappear(perform: vm.onDisappear)

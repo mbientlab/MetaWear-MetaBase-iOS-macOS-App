@@ -27,7 +27,6 @@ struct Header: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.bottom, .screenInset)
-        .padding(.top)
     }
 
     private var titleIconXOffset: CGFloat {

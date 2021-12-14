@@ -21,6 +21,14 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     @Published public private(set) var meta:    MetaWear.Metadata
     @Published public private(set) var battery: String = "–"
 
+    public var rssiRepresentable: String {
+        if isLocallyKnown == false { return "–" }
+        if rssiInt == Int(SignalLevel.noBarsRSSI) { return "–" }
+        return .init(rssiInt)
+    }
+    public var connectionRepresentable: String {
+        isLocallyKnown ? connection.label : "Cloud Synced"
+    }
     public private(set) var rssi:                  SignalLevel
     @Published public private(set) var rssiInt:    Int
     @Published public private(set) var connection: CBPeripheralState
@@ -34,10 +42,13 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     private var ledSub:            AnyCancellable? = nil
     private var resetSub:          AnyCancellable? = nil
     private var refreshSub:        AnyCancellable? = nil
-    private var misc = Set<AnyCancellable>()
+    private var misc               = Set<AnyCancellable>()
     private unowned let store:     MetaWearStore
-    var isStreaming = false
-    let cancel = PassthroughSubject<Void,Never>()
+
+    // Debug
+    var isStreaming                = false
+    let cancel                     = PassthroughSubject<Void,Never>()
+
     public init(device: MWKnownDevice, store: MetaWearStore) {
         self.connection = device.mw?.isConnectedAndSetup == true ? .connected : .disconnected
         self.store = store

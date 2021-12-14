@@ -1,6 +1,7 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import SwiftUI
+import mbientSwiftUI
 
 // MARK: - MacOS
 
@@ -11,6 +12,7 @@ struct MainWindow: View {
 
     @EnvironmentObject private var routing: Routing
     @EnvironmentObject private var factory: UIFactory
+    @Namespace private var namespace
 
     static let minWidth: CGFloat = 725 // ConfigureScreen showing 3 tiles w/ equal margins (635) + extra width
     static let minHeight: CGFloat = 585 // ConfigureScreen showing 2 tile rows
@@ -21,6 +23,7 @@ struct MainWindow: View {
             .animation(.easeInOut, value: routing.destination)
             .background(Color.accentColor.ignoresSafeArea())
             .background(AlertVendors())
+            .environment(\.namespace, namespace)
     }
 
     private var stackNavigation: some View {
@@ -55,6 +58,7 @@ struct MainWindow: View {
 
     @EnvironmentObject private var routing: Routing
     @EnvironmentObject private var factory: UIFactory
+    @Namespace private var namespace
 
     var body: some View {
         NavigationView {
@@ -65,6 +69,7 @@ struct MainWindow: View {
         .frame(minWidth: 600)
         .background(Color.accentColor.ignoresSafeArea())
         .overlay(AlertVendors())
+        .environment(\.namespace, namespace)
     }
 
     private var destination: Binding<Routing.Destination?> {
