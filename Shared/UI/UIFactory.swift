@@ -46,7 +46,7 @@ public extension UIFactory {
         }
     }
 
-    func makeUnknownItemVM(_ id: CBPeripheralIdentifier) -> UnknownDeviceVM {
+    func makeUnknownItemVM(_ id: CBPeripheralIdentifier) -> UnknownItemVM {
         .init(cbuuid: id, store: store, routing: routing)
     }
 

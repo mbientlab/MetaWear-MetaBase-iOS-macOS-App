@@ -29,6 +29,9 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     public var connectionRepresentable: String {
         isLocallyKnown ? connection.label : "Cloud Synced"
     }
+    public var isNearby: Bool {
+        connection == .connected || (isLocallyKnown && rssiInt != Int(SignalLevel.noBarsRSSI))
+    }
     public private(set) var rssi:                  SignalLevel
     @Published public private(set) var rssiInt:    Int
     @Published public private(set) var connection: CBPeripheralState
@@ -50,7 +53,7 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     let cancel                     = PassthroughSubject<Void,Never>()
 
     public init(device: MWKnownDevice, store: MetaWearStore) {
-        self.connection = device.mw?.isConnectedAndSetup == true ? .connected : .disconnected
+        self.connection = device.mw?.connectionState == .connected ? .connected : .disconnected
         self.store = store
         self.device = device.mw
         self.meta = device.meta
@@ -61,7 +64,8 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
                                              model: .unknown,
                                              serialNumber: device.meta.serial,
                                              firmwareRevision: "—",
-                                             hardwareRevision: "—")
+                                             hardwareRevision: "—",
+                                             mac: device.meta.mac)
     }
 
     /// Set a unique LED identification pattern when in a group of devices.
@@ -234,7 +238,7 @@ public extension AboutDeviceVM {
             .delay(for: 1.5, tolerance: 0.5, scheduler: DispatchQueue.main)
             .sink { $0.connect() }
 
-        if device?.isConnectedAndSetup == false { connect() }
+        if device?.connectionState != .connected { connect() }
     }
 
 }
@@ -247,15 +251,20 @@ private extension AboutDeviceVM {
     }
 
     func refreshDeviceInformation() {
-        infoSub = device?.read(.allDeviceInformation)
+        infoSub = device?.publishWhenConnected()
+            .read(.deviceInformation)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] info in
                 self?.info = info
             })
+
+        if device?.connectionState != .connected { device?.connect() }
     }
 
     func refreshBattery() {
-        batterySub = device?.read(.batteryLife)
+        batterySub = device?.publishWhenConnected()
+            .read(.batteryLevel)
+            .map(\.value)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] percentage in
                 self?.battery = "\(Int(percentage))%"
@@ -313,7 +322,7 @@ private extension AboutDeviceVM {
 
     func trackConnection(_ device: MetaWear) {
         connectionSub?.cancel()
-        connectionSub = device.connectionState
+        connectionSub = device.connectionStatePublisher
             .receive(on: DispatchQueue.main)
             .removeDuplicates()
             .sink(receiveValue: { [weak self] update in

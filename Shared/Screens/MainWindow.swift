@@ -39,7 +39,7 @@ struct MainWindow: View {
     }
 }
 
-/// In macOS, all lists (aka NSTableViews) are forced to have a clear background. This does not change alternating list background colors.
+/// In macOS, all Lists (aka NSTableViews) are forced to have a clear background. This does not change alternating list background colors.
 extension NSTableView {
     open override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()

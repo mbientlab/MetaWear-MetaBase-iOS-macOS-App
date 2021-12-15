@@ -119,8 +119,8 @@
 		94DFEC5F275D389700BB80DB /* Choose+UnknownDeviceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC5D275D389700BB80DB /* Choose+UnknownDeviceCell.swift */; };
 		94DFEC62275D459B00BB80DB /* ItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC61275D459B00BB80DB /* ItemVM.swift */; };
 		94DFEC63275D459B00BB80DB /* ItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC61275D459B00BB80DB /* ItemVM.swift */; };
-		94DFEC65275D45F000BB80DB /* UnknownDeviceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC64275D45F000BB80DB /* UnknownDeviceVM.swift */; };
-		94DFEC66275D45F000BB80DB /* UnknownDeviceVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC64275D45F000BB80DB /* UnknownDeviceVM.swift */; };
+		94DFEC65275D45F000BB80DB /* UnknownItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC64275D45F000BB80DB /* UnknownItemVM.swift */; };
+		94DFEC66275D45F000BB80DB /* UnknownItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC64275D45F000BB80DB /* UnknownItemVM.swift */; };
 		94E005E3275A07E9001B0DFD /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E005E2275A07E9001B0DFD /* Tests_iOS.swift */; };
 		94E005E5275A07E9001B0DFD /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E005E4275A07E9001B0DFD /* Tests_iOSLaunchTests.swift */; };
 		94E005EF275A07E9001B0DFD /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E005EE275A07E9001B0DFD /* Tests_macOS.swift */; };
@@ -145,6 +145,8 @@
 		94E3A80727608BF8007E2BAE /* ProgressScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80527608BF8007E2BAE /* ProgressScreen.swift */; };
 		94E3A80927608ED7007E2BAE /* SensorConfigContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */; };
 		94E3A80A27608ED7007E2BAE /* SensorConfigContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */; };
+		94E76C6E2769A71100A4AAF5 /* ProgressSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E76C6D2769A71100A4AAF5 /* ProgressSpinner.swift */; };
+		94E76C6F2769A71100A4AAF5 /* ProgressSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E76C6D2769A71100A4AAF5 /* ProgressSpinner.swift */; };
 		94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */; };
 		94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A0275A1298008C62E7 /* ActionScreen.swift */; };
 		94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A2275A14DE008C62E7 /* Dimensions.swift */; };
@@ -223,7 +225,7 @@
 		94CF3F20276428F000C2D8B0 /* Images.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		94DFEC5D275D389700BB80DB /* Choose+UnknownDeviceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Choose+UnknownDeviceCell.swift"; sourceTree = "<group>"; };
 		94DFEC61275D459B00BB80DB /* ItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemVM.swift; sourceTree = "<group>"; };
-		94DFEC64275D45F000BB80DB /* UnknownDeviceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownDeviceVM.swift; sourceTree = "<group>"; };
+		94DFEC64275D45F000BB80DB /* UnknownItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownItemVM.swift; sourceTree = "<group>"; };
 		94E005CA275A07E9001B0DFD /* MetaBaseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaBaseApp.swift; sourceTree = "<group>"; };
 		94E005CC275A07E9001B0DFD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94E005D1275A07E9001B0DFD /* MetaBase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetaBase.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -244,6 +246,7 @@
 		94E3A80027608BE3007E2BAE /* Configure+Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Configure+Tile.swift"; sourceTree = "<group>"; };
 		94E3A80527608BF8007E2BAE /* ProgressScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressScreen.swift; sourceTree = "<group>"; };
 		94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorConfigContainer.swift; sourceTree = "<group>"; };
+		94E76C6D2769A71100A4AAF5 /* ProgressSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSpinner.swift; sourceTree = "<group>"; };
 		94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureScreen.swift; sourceTree = "<group>"; };
 		94EBA3A0275A1298008C62E7 /* ActionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionScreen.swift; sourceTree = "<group>"; };
 		94EBA3A2275A14DE008C62E7 /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
@@ -482,6 +485,7 @@
 				94E3A7F927603238007E2BAE /* IdentifyByLEDButton.swift */,
 				94CF3F002764282300C2D8B0 /* MiniMenuButton.swift */,
 				9408E6DB2767FA290011B5F5 /* WarningPopover.swift */,
+				94E76C6D2769A71100A4AAF5 /* ProgressSpinner.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -492,7 +496,7 @@
 				94935019275A112200E388FF /* DiscoveryListVM.swift */,
 				94DFEC61275D459B00BB80DB /* ItemVM.swift */,
 				94935022275A11C600E388FF /* KnownItemVM.swift */,
-				94DFEC64275D45F000BB80DB /* UnknownDeviceVM.swift */,
+				94DFEC64275D45F000BB80DB /* UnknownItemVM.swift */,
 			);
 			path = VMs;
 			sourceTree = "<group>";
@@ -759,7 +763,7 @@
 				9408E6DC2767FA290011B5F5 /* WarningPopover.swift in Sources */,
 				94E3A80927608ED7007E2BAE /* SensorConfigContainer.swift in Sources */,
 				9452855E275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
-				94DFEC65275D45F000BB80DB /* UnknownDeviceVM.swift in Sources */,
+				94DFEC65275D45F000BB80DB /* UnknownItemVM.swift in Sources */,
 				9409C5E82763B764001FE850 /* ActionType.swift in Sources */,
 				94CF3F1E276428CA00C2D8B0 /* DispatchQueue+AsyncAfter.swift in Sources */,
 				944538BD2767DCE000841880 /* StreamingCountersContainer.swift in Sources */,
@@ -787,6 +791,7 @@
 				94DFEC5E275D389700BB80DB /* Choose+UnknownDeviceCell.swift in Sources */,
 				94CF3F0C2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
 				94CF3F16276428A400C2D8B0 /* LargeSignalDots.swift in Sources */,
+				94E76C6E2769A71100A4AAF5 /* ProgressSpinner.swift in Sources */,
 				9452855B275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
 				94DFEC62275D459B00BB80DB /* ItemVM.swift in Sources */,
 				94CF3F21276428F000C2D8B0 /* Images.swift in Sources */,
@@ -831,7 +836,7 @@
 				94E3A80A27608ED7007E2BAE /* SensorConfigContainer.swift in Sources */,
 				94528567275BE128004D815B /* ConfigureScreen.swift in Sources */,
 				9409C5E92763B764001FE850 /* ActionType.swift in Sources */,
-				94DFEC66275D45F000BB80DB /* UnknownDeviceVM.swift in Sources */,
+				94DFEC66275D45F000BB80DB /* UnknownItemVM.swift in Sources */,
 				944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */,
 				94CF3F1F276428CA00C2D8B0 /* DispatchQueue+AsyncAfter.swift in Sources */,
 				9409C5E62762E732001FE850 /* ActionHeader.swift in Sources */,
@@ -857,6 +862,7 @@
 				9452856E275BE1D5004D815B /* Root.swift in Sources */,
 				94CF3F17276428A400C2D8B0 /* LargeSignalDots.swift in Sources */,
 				9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */,
+				94E76C6F2769A71100A4AAF5 /* ProgressSpinner.swift in Sources */,
 				94DFEC5F275D389700BB80DB /* Choose+UnknownDeviceCell.swift in Sources */,
 				94E005F3275A07E9001B0DFD /* MetaBaseApp.swift in Sources */,
 				94CF3F22276428F000C2D8B0 /* Images.swift in Sources */,

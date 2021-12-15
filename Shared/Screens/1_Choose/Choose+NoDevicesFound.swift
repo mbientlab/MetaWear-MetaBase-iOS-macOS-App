@@ -1,6 +1,7 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import SwiftUI
+import MetaWear
 
 extension ChooseDevicesScreen {
 
@@ -26,7 +27,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
         private var willDisappear: Bool { vm.listIsEmpty == false && hasUsed >= CurrentMetaBaseVersion }
 
         // Coordinate the transition animations
-        @AppStorage(wrappedValue: 0.0, UserDefaults.Key.hasUsedMetaBaseVersion.value) private var hasUsed
+        @AppStorage(wrappedValue: 0.0, UserDefaults.MetaWear.Keys.hasUsedMetaBaseVersion) private var hasUsed
         @State private var didAppear = false
         @State private var animate = false
 

@@ -30,9 +30,7 @@ struct HistoryScreen: View {
 
                 VStack {
                     SessionsList()
-
-                    CTAButton(vm.ctaLabel, action: vm.performCTA)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    ctas
                 }
                 .padding(.bottom, .screenInset)
                 .layoutPriority(2)
@@ -45,5 +43,20 @@ struct HistoryScreen: View {
         .environmentObject(vm)
         .onAppear(perform: vm.onAppear)
         .onDisappear(perform: vm.onDisappear)
+    }
+
+    var ctas: some View {
+        HStack(spacing: 15) {
+            Spacer()
+
+            Text(vm.alert)
+                .font(.headline.weight(.semibold))
+                .opacity(vm.showSessionStartAlert ? 1 : 0)
+                .animation(.easeIn, value: vm.showSessionStartAlert)
+                .accessibilityHidden(vm.showSessionStartAlert == false)
+
+            CTAButton(vm.ctaLabel, action: vm.performCTA)
+        }
+        .frame(maxWidth: .infinity, alignment: .trailing)
     }
 }

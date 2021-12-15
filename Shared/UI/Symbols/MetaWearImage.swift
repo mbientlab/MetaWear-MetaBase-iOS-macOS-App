@@ -10,7 +10,6 @@ struct MetaWearWithLED: View {
     var height: CGFloat
     var isLocallyKnown: Bool
     var isHovering: Bool
-    var mac: MACAddress
     var model: MetaWear.Model
     var ledEmulator: MWLED.FlashPattern.Emulator = .init(preset: .zero)
 
@@ -23,7 +22,6 @@ struct MetaWearWithLED: View {
             .scaleEffect(isHovering ? 1.1 : 1, anchor: .bottom)
             .frame(width: width, height: height, alignment: .center)
             .opacity(isLocallyKnown ? 1 : 0.5)
-            .help(Text(mac))
             .animation(.easeOut, value: isLocallyKnown)
             .animation(.easeOut, value: isHovering)
 

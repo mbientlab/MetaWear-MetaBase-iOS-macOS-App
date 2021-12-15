@@ -9,6 +9,8 @@ import CoreBluetooth
 
 /// Provides up-to-date representations of a grouping of MetaWears or a single MetaWear (previously remembered or newly discovered) and related CRUD methods.
 ///
+/// Uniquely identified by the group UUID or a local CoreBluetooth identifier (randomly chosen if known to multiple hosts).
+///
 public class KnownItemVM: ObservableObject, ItemVM {
 
     // Identity
@@ -37,7 +39,7 @@ public class KnownItemVM: ObservableObject, ItemVM {
 
     /// Represent a MetaWear (either cloud-synced or locally known) as an item
     public init(device: MWKnownDevice, store: MetaWearStore, routing: Routing) {
-        self.connection = device.mw?.isConnectedAndSetup == true ? .connected : .disconnected
+        self.connection = device.mw?.connectionState == .connected ? .connected : .disconnected
         self.store = store
         self.routing = routing
         self.devices = [device]
@@ -76,11 +78,14 @@ public extension KnownItemVM {
     var deviceCount: Int { devices.endIndex }
 
     var isMetaBoot:  Bool      { devices.contains { $0.mw?.isMetaBoot == true } }
-    var isConnected: Bool      { devices.contains { $0.mw?.isConnectedAndSetup == true } }
+    var isConnected: Bool      { devices.contains { $0.mw?.connectionState == .connected } }
     var name:        String    { group?.name ?? devices.first?.meta.name ?? "Error" }
     var macs:        [String]  { devices.map(\.meta.mac) }
     var localIDs:    [String?] { devices.map(\.mw?.peripheral.identifier.uuidString) }
     var metadata:    [MetaWear.Metadata] { devices.map(\.meta) }
+    var identifyTip: String {
+        "Flash LED\(macs.endIndex > 1 ? "s" : "") for \(macs.joined(separator: ", "))"
+    }
 
     var isLocallyKnown: Bool {
         if group == nil { return devices.allSatisfy { $0.mw != nil } }
@@ -286,7 +291,7 @@ private extension KnownItemVM {
 
     func trackConnection(main: MetaWear) {
         connectionSub?.cancel()
-        connectionSub = main.connectionState
+        connectionSub = main.connectionStatePublisher
             .map { [weak self] first -> CBPeripheralState in
                 guard let self = self else { return first }
                 return Self.getLowestConnectionState(in: self.devices)
@@ -299,6 +304,6 @@ private extension KnownItemVM {
     }
 
     static func getLowestConnectionState(in devices: [MWKnownDevice]) -> CBPeripheralState {
-        devices.map { $0.mw?.connectionStateCurrent ?? .disconnected }.min() ?? .disconnected
+        devices.map { $0.mw?.connectionState ?? .disconnected }.min() ?? .disconnected
     }
 }

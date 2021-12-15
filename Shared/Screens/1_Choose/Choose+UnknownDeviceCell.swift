@@ -15,7 +15,7 @@ extension ChooseDevicesScreen {
             _vm = .init(wrappedValue: factory.makeUnknownItemVM(device))
         }
 
-        @StateObject var vm: UnknownDeviceVM
+        @StateObject var vm: UnknownItemVM
         @EnvironmentObject private var routing: Routing
 
         @State private var isHovering = false
@@ -34,13 +34,17 @@ extension ChooseDevicesScreen {
                 DeviceCell.StationaryComponents(
                     isHovering: isHovering,
                     isLocallyKnown: vm.isLocallyKnown,
+                    isCloudSynced: vm.isCloudSynced,
                     rssi: vm.rssi,
+                    isConnecting: vm.connection == .connecting,
+                    identifyHelpText: "",
                     requestIdentify: { },
                     isIdentifying: false
                 )
             }
             .frame(width: DeviceCell.width)
             .animation(.easeOut, value: isHovering)
+            .animation(.easeOut, value: vm.connection)
             .whenHovered { isHovering = $0 }
             .onTapGesture { vm.connect() }
             .contextMenu {
