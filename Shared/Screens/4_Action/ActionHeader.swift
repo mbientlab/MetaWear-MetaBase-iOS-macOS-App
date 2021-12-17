@@ -6,8 +6,7 @@ import mbientSwiftUI
 public protocol ActionHeaderVM {
     var actionType: ActionType { get }
     var representativeConfig: SensorConfigContainer { get }
-    var showBackButton: Bool { get }
-    func didTapBackButton()
+    func backToHistory()
 }
 
 struct ActionHeader: View {
@@ -19,7 +18,7 @@ struct ActionHeader: View {
 
     var body: some View {
         HStack(alignment: .top) {
-            backButton
+            HeaderBackButton(overrideBackAction: vm.backToHistory)
 
             VStack(alignment: .center, spacing: 15) {
                 title
@@ -30,11 +29,10 @@ struct ActionHeader: View {
             }
             .frame(maxWidth: .infinity)
 
-            disabledBackButton // Center the title area
+            HeaderBackButton().disabled(true).allowsHitTesting(false).hidden() // Center the title area
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.bottom, .screenInset)
-        .padding(.top)
     }
 
     private var title: some View {
@@ -42,14 +40,6 @@ struct ActionHeader: View {
             .font(.largeTitle)
             .lineLimit(nil)
             .fixedSize(horizontal: false, vertical: true)
-    }
-
-    @ViewBuilder private var backButton: some View {
-        if vm.showBackButton { HeaderBackButton() } else { disabledBackButton }
-    }
-
-    private var disabledBackButton: some View {
-        HeaderBackButton().hidden().disabled(true).allowsHitTesting(false)
     }
 }
 

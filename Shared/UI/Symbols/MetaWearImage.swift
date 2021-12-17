@@ -2,7 +2,7 @@
 
 import SwiftUI
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 struct MetaWearWithLED: View {
 
@@ -10,9 +10,8 @@ struct MetaWearWithLED: View {
     var height: CGFloat
     var isLocallyKnown: Bool
     var isHovering: Bool
-    var mac: MACAddress
     var model: MetaWear.Model
-    var ledEmulator: MWLED.FlashPattern.Emulator = .init(preset: .zero)
+    var ledEmulator: MWLED.Flash.Pattern.Emulator = .init(preset: .zero)
 
     var body: some View {
         model.image.image()
@@ -23,7 +22,6 @@ struct MetaWearWithLED: View {
             .scaleEffect(isHovering ? 1.1 : 1, anchor: .bottom)
             .frame(width: width, height: height, alignment: .center)
             .opacity(isLocallyKnown ? 1 : 0.5)
-            .help(Text(mac))
             .animation(.easeOut, value: isLocallyKnown)
             .animation(.easeOut, value: isHovering)
 
@@ -34,7 +32,7 @@ struct MetaWearWithLED: View {
 
 struct FlashingLEDShine: View {
 
-    @ObservedObject var ledEmulator: MWLED.FlashPattern.Emulator
+    @ObservedObject var ledEmulator: MWLED.Flash.Pattern.Emulator
     var diameter: CGFloat
 
     var body: some View {

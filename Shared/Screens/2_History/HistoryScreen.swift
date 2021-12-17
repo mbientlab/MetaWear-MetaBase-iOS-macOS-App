@@ -6,7 +6,10 @@ import SwiftUI
 import Combine
 import mbientSwiftUI
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
+#if os(iOS)
+import UIKit
+#endif
 
 struct HistoryScreen: View {
 
@@ -21,24 +24,39 @@ struct HistoryScreen: View {
         VStack(alignment: .leading, spacing: 0) {
             Header(vm: vm)
 
-            HStack(alignment: .firstTextBaseline, spacing: .screenInset) {
+            HStack(alignment: .firstTextBaseline, spacing: .screenInset * 2) {
                 AboutColumn()
-                    .frame(minWidth: 200)
+                    .frame(minWidth: 215)
 
                 VStack {
                     SessionsList()
-
-                    CTAButton(vm.ctaLabel, action: vm.performCTA)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    ctas
                 }
                 .padding(.bottom, .screenInset)
                 .layoutPriority(2)
             }
             .padding(.horizontal, .screenInset)
+            .padding(.top, 5)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .toolbar { BluetoothErrorButton.ToolbarIcon() }
         .environmentObject(vm)
         .onAppear(perform: vm.onAppear)
         .onDisappear(perform: vm.onDisappear)
+    }
+
+    var ctas: some View {
+        HStack(spacing: 15) {
+            Spacer()
+
+            Text(vm.alert)
+                .font(.headline.weight(.semibold))
+                .opacity(vm.showSessionStartAlert ? 1 : 0)
+                .animation(.easeIn, value: vm.showSessionStartAlert)
+                .accessibilityHidden(vm.showSessionStartAlert == false)
+
+            CTAButton(vm.ctaLabel, action: vm.performCTA)
+        }
+        .frame(maxWidth: .infinity, alignment: .trailing)
     }
 }

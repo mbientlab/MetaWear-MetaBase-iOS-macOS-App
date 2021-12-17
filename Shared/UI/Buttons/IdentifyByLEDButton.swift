@@ -3,12 +3,12 @@
 import SwiftUI
 import mbientSwiftUI
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 struct IdentifyByLEDButton: View {
 
     var request: () -> Void
-    @ObservedObject var emulator: MWLED.FlashPattern.Emulator
+    @ObservedObject var emulator: MWLED.Flash.Pattern.Emulator
 
     var body: some View {
         Button { request() } label: {
@@ -33,7 +33,7 @@ struct IdentifyByLEDLargeButton: View {
 
     var request: () -> Void
     var isRequesting: Bool
-    @ObservedObject var emulator: MWLED.FlashPattern.Emulator
+    @ObservedObject var emulator: MWLED.Flash.Pattern.Emulator
 
     var body: some View {
         Button { request() } label: {

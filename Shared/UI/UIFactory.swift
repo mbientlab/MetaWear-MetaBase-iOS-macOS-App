@@ -2,11 +2,11 @@
 
 import Foundation
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 public class UIFactory: ObservableObject {
 
-    public init(devices: MetaWearStore,
+    public init(devices: MetaWearSyncStore,
                 scanner: MetaWearScanner,
                 routing: Routing) {
         self.store = devices
@@ -14,7 +14,7 @@ public class UIFactory: ObservableObject {
         self.routing = routing
     }
 
-    private unowned let store: MetaWearStore
+    private unowned let store: MetaWearSyncStore
     private unowned let scanner: MetaWearScanner
     private unowned let routing: Routing
     private lazy var actionQueue = DispatchQueue(label: Bundle.main.bundleIdentifier! + ".action",
@@ -28,12 +28,8 @@ public extension UIFactory {
         .init(scanner: scanner, store: store)
     }
 
-    func makeBluetoothStateWarningsVM() -> BLEStateWarningsVM {
+    func makeBluetoothStateWarningsVM() -> BLEStateVM {
         .init(scanner: scanner)
-    }
-
-    func makeMetaWearDiscoveryVM() -> MetaWearDiscoveryVM {
-        .init(store: store)
     }
 
     func makeMetaWearItemVM(_ item: Routing.Item) -> KnownItemVM {
@@ -50,7 +46,7 @@ public extension UIFactory {
         }
     }
 
-    func makeUnknownItemVM(_ id: CBPeripheralIdentifier) -> UnknownDeviceVM {
+    func makeUnknownItemVM(_ id: CBPeripheralIdentifier) -> UnknownItemVM {
         .init(cbuuid: id, store: store, routing: routing)
     }
 
@@ -65,7 +61,7 @@ public extension UIFactory {
         return .init(title: title, vms: vms, store: store, routing: routing, scanner: scanner)
     }
 
-    func makeSensorConfigurationVM() -> SensorConfigurationVM {
+    func makeConfigureVM() -> ConfigureVM {
         guard let item = routing.focus?.item else { fatalError("Set item before navigation") }
         let (title, devices) = getKnownDevices(for: item)
         return .init(title: title, item: item, devices: devices, routing: routing)
@@ -76,7 +72,7 @@ public extension UIFactory {
         let action = ActionType(destination: routing.destination)
         let (_, devices) = getKnownDevices(for: item)
         let vms = makeAboutVMs(for: devices)
-        return .init(action: action, devices: devices, vms: vms, store: store, routing: routing, queue: actionQueue)
+        return .init(action: action, devices: devices, vms: vms, store: store, routing: routing, backgroundQueue: actionQueue)
     }
 
 }

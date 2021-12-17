@@ -5,7 +5,7 @@ import SwiftUI
 import Combine
 import mbientSwiftUI
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 public class Routing: ObservableObject {
 
@@ -37,6 +37,16 @@ public extension Routing {
         guard let last = history.popLast() else { return }
         self.destination = last
         if destination == .choose { focus = nil }
+    }
+
+    func goBack(until destination: Destination) {
+        while let last = history.popLast() {
+            if last == destination {
+                self.destination = last
+                if destination == .choose { focus = nil }
+                break
+            }
+        }
     }
 
     /// Programatic navigation.

@@ -3,7 +3,7 @@
 import SwiftUI
 import Combine
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 public class ActionVM: ObservableObject, ActionHeaderVM {
     public typealias QueueItem = (device: MetaWear?, meta: MetaWear.Metadata, config: SensorConfigContainer)
@@ -11,7 +11,6 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     // Overview of action
     public var representativeConfig:    SensorConfigContainer { configs.first ?? .init() }
     public let actionType:              ActionType
-    public let showBackButton           = true
     public var showSuccessCTAs:         Bool { state.allSatisfy { $0.value == .completed } }
     @Published public var actionFocus:  MACAddress = ""
 
@@ -21,22 +20,32 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     public let streamCounters:          StreamingCountersContainer
     private var data:                   [MACAddress:[MWDataTable]]
 
+    @Published var deviceCSVsReady:     Int = 0
+    var csvTempURLs:                    [URL] = []
+    @Published var presentExportDialog  = false
+
     // Queue for performing action device-by-device (on private DispatchQueue)
     private var nextQueueItem:          QueueItem? = nil
     private var actionQueue:            [QueueItem] = []
     private var actionFails:            [QueueItem] = []
     private var actions:                [MACAddress:AnyCancellable] = [:]
     private let configs:                [SensorConfigContainer]
-    private unowned let queue:          DispatchQueue
     private let streamCancel            = PassthroughSubject<Void,Never>()
+    private unowned let workQueue:      DispatchQueue
+    private var bleQueue:               DispatchQueue { store.bleQueue }
 
     // References
     private let devices:                [MWKnownDevice]
     private unowned let routing:        Routing
-    private unowned let store:          MetaWearStore
+    private unowned let store:          MetaWearSyncStore
 
-    public init(action: ActionType, devices: [MWKnownDevice], vms: [AboutDeviceVM], store: MetaWearStore, routing: Routing, queue: DispatchQueue) {
-        self.queue = queue
+    public init(action: ActionType,
+                devices: [MWKnownDevice],
+                vms: [AboutDeviceVM],
+                store: MetaWearSyncStore,
+                routing: Routing,
+                backgroundQueue: DispatchQueue) {
+        self.workQueue = backgroundQueue
         self.actionType = action
         self.devices = devices
         self.configs = routing.focus?.configs ?? []
@@ -49,22 +58,18 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     }
 }
 
-fileprivate func Dictionary<V>(repeating: V, keys devices: [MWKnownDevice]) -> [MACAddress:V] {
-    Dictionary(uniqueKeysWithValues: devices.map(\.meta.mac).map { ($0, repeating) })
-}
-
 // MARK: - Intents
 
 public extension ActionVM {
 
     func start() {
         // One attempt at a time
-        queue.sync(flags: .barrier) {
+        workQueue.sync(flags: .barrier) {
             guard self.nextQueueItem == nil else { return }
             setupQueue()
             moveToNextQueueItem()
         }
-        queue.async { [weak self] in
+        workQueue.async { [weak self] in
             while let current = self?.nextQueueItem {
                 self?.attemptAction(device: current) // Has optional semaphore
                 self?.moveToNextQueueItem()
@@ -73,7 +78,7 @@ public extension ActionVM {
     }
 
     func retry(_ meta: MetaWear.Metadata) {
-        queue.sync {
+        workQueue.sync {
             guard nextQueueItem?.meta != meta else { return }
         }
 
@@ -82,7 +87,7 @@ public extension ActionVM {
             return
         }
 
-        queue.sync {
+        workQueue.sync {
             if let failure = actionFails.first(where: { $0.meta == meta }) {
                 actionFails.removeAll(where: { $0.meta == meta })
                 actionQueue.insert(failure, at: 0)
@@ -101,12 +106,9 @@ public extension ActionVM {
     }
 
     func exportFiles() {
-
-    }
-
-    func goToChooseDevicesScreen() {
-        streamCancel.send()
-        routing.setDestination(.choose)
+        if self.deviceCSVsReady == self.deviceVMs.endIndex {
+            self.presentExportDialog = true
+        }
     }
 
     func cancelAndUndo() {
@@ -115,9 +117,14 @@ public extension ActionVM {
         deviceVMs.forEach { $0.reset() }
     }
 
-    func didTapBackButton() {
+    func backToHistory() {
         streamCancel.send()
-        routing.setDestination(.history)
+        routing.goBack(until: .history)
+    }
+
+    func backToChooseDevices() {
+        streamCancel.send()
+        routing.goBack(until: .choose)
     }
 }
 
@@ -142,7 +149,7 @@ private extension ActionVM {
         // 3 - Setup recording pipeline
         let semaphore = DispatchSemaphore(value: 0)
         actions[current.meta.mac] = getActionPublisher(device, current.meta.mac, current.config)
-            .receive(on: queue)
+            .receive(on: workQueue)
             .sink { [weak self] completion in
                 guard case let .failure(error) = completion else { return }
                 let timedOut = error.localizedDescription.contains("Timeout")
@@ -238,7 +245,7 @@ private extension ActionVM {
             .first()
             .mapToMWError() //
             .macro(config)
-            .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
+            .timeout(Self.timeoutDuration, scheduler: workQueue) { .operationFailed("Timeout") }
             .map { _ in () }
             .eraseToAnyPublisher()
     }
@@ -249,28 +256,76 @@ private extension ActionVM {
         device
             .publishWhenConnected()
             .mapToMWError()
-            .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
+            .timeout(Self.timeoutDuration, scheduler: workQueue) { .operationFailed("Timeout") }
             .first()
-            .logsDownload()
+            .downloadLogs()
             .handleEvents(receiveOutput: { [weak self] download in
                 DispatchQueue.main.async { [weak self] in
                     let percent = Int(download.percentComplete * 100)
                     self?.state[mac] = .working(percent)
                 }
                 guard download.data.isEmpty == false else { return }
-                self?.saveData(tables: download.data, for: mac)
+                self?.workQueue.async { [weak self] in
+                    self?.saveData(tables: download.data, for: mac)
+                }
             })
             .drop(while: { $0.percentComplete < 1 })
             .map { _ in () }
             .eraseToAnyPublisher()
     }
 
+    func tempURL() -> URL {
+        FileManager.default
+            .temporaryDirectory
+            .appendingPathComponent(Bundle.main.bundleIdentifier!, isDirectory: true)
+    }
+
+    func tempFolder(for mac: MACAddress) -> URL {
+        tempURL().appendingPathComponent(mac.components(separatedBy: .alphanumerics.inverted).joined(separator: ""), isDirectory: true)
+    }
+
+    static let dateFormatter: DateFormatter = {
+        let date = DateFormatter()
+        date.dateStyle = .short
+        date.timeStyle = .short
+        return date
+    }()
+
+    func tempFileName(for signal: MWNamedSignal, date: Date) -> String {
+        let dateString = Self.dateFormatter.string(from: date)
+        let dateStringTrimmed = dateString.components(separatedBy: .alphanumerics.inverted).joined(separator: "-")
+        return signal.name + " " + dateStringTrimmed
+    }
+
     func saveData(tables: [MWDataTable], for mac: MACAddress) {
         self.data[mac] = tables
-        print(Self.self, "saveData", tables.map(\.source.name), tables.map(\.rows.count))
+        print(mac, tables.map { ($0.source, $0.rows.endIndex) })
+        writeTemporaryCSV(tables: tables, for: mac)
+    }
+
+    func writeTemporaryCSV(tables: [MWDataTable], for mac: MACAddress) {
+        let date = Date()
+        let folder = tempFolder(for: mac)
+        tables.forEach { sensor in
+            let fileName = tempFileName(for: sensor.source, date: date)
+            let fileURL = folder.appendingPathComponent(fileName).appendingPathExtension("csv")
+            do {
+                try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true, attributes: nil)
+                try sensor.makeCSV().write(to: fileURL, atomically: true, encoding: .utf8)
+                self.csvTempURLs.append(fileURL)
+            } catch { print(fileName, error) }
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.deviceCSVsReady += 1
+            if self?.deviceCSVsReady == self?.deviceVMs.endIndex {
+                self?.presentExportDialog = true
+            }
+        }
     }
 
     // MARK: - Stream Action
+
+    typealias StreamSetup = (didConnect: MWPublisher<MetaWear>, mac: MACAddress)
 
     /// Stream all needed sensors on one device. Times out only when unable to connect.
     func stream(for device: MetaWear,
@@ -282,7 +337,7 @@ private extension ActionVM {
         let didConnect = device
             .publishWhenConnected()
             .mapToMWError()
-            .timeout(Self.timeoutDuration, scheduler: queue) { .operationFailed("Timeout") }
+            .timeout(Self.timeoutDuration, scheduler: workQueue) { .operationFailed("Timeout") }
             .handleEvents(receiveOutput: { [weak self] _ in
                 DispatchQueue.main.async { [weak self] in
                     self?.state[mac] = .working(0)
@@ -292,20 +347,23 @@ private extension ActionVM {
             .share()
             .eraseToAnyPublisher()
 
-        optionallyStream(config.accelerometer, &streams, didConnect, mac)
-        optionallyStream(config.magnetometer, &streams, didConnect, mac)
-        optionallyStream(config.altitude, &streams, didConnect, mac)
-        optionallyStream(config.ambientLight, &streams, didConnect, mac)
-        optionallyStream(config.gyroscope, &streams, didConnect, mac)
-        optionallyStream(config.humidity, &streams, didConnect, mac)
-        optionallyStream(config.pressure, &streams, didConnect, mac)
-        optionallyStream(config.thermometer, &streams, didConnect, mac)
-        optionallyStream(config.fusionEuler, &streams, didConnect, mac)
-        optionallyStream(config.fusionGravity, &streams, didConnect, mac)
-        optionallyStream(config.fusionLinear, &streams, didConnect, mac)
-        optionallyStream(config.fusionQuaternion, &streams, didConnect, mac)
+        let setup = (didConnect, mac)
+
+        optionallyStream(config.thermometer, &streams, setup)
+        optionallyStream(config.accelerometer, &streams, setup)
+        optionallyStream(config.magnetometer, &streams, setup)
+        optionallyStream(config.altitude, &streams, setup)
+        optionallyStream(config.ambientLight, &streams, setup)
+        optionallyStream(config.gyroscope, &streams, setup)
+        optionallyStream(config.humidity, &streams, setup)
+        optionallyStream(config.pressure, &streams, setup)
+        optionallyStream(config.fusionEuler, &streams, setup)
+        optionallyStream(config.fusionGravity, &streams, setup)
+        optionallyStream(config.fusionLinear, &streams, setup)
+        optionallyStream(config.fusionQuaternion, &streams, setup)
 
         return Publishers.MergeMany(streams)
+            .receive(on: workQueue)
             .collect()
             .handleEvents(receiveOutput: { [weak self] tables in
                 self?.saveData(tables: tables, for: mac)
@@ -317,65 +375,38 @@ private extension ActionVM {
     func optionallyStream<S: MWStreamable>(
         _ config: S?,
         _ streams: inout [MWPublisher<MWDataTable>],
-        _ didConnect: MWPublisher<MetaWear>,
-        _ mac: MACAddress
+        _ setup: StreamSetup
     ) {
         guard let config = config else { return }
 
+        let publisher = setup.didConnect
+            .stream(config)
+            .handleEvents(receiveOutput: { [weak self] _ in self?.streamCounters.counters[setup.mac]?.send() })
+            .prefix(untilOutputFrom: streamCancel.receive(on: bleQueue))
+            .collect()
+            .receive(on: workQueue)
+            .map { MWDataTable(streamed: $0, config) }
+            .eraseToAnyPublisher()
 
-        let publisher = didConnect
+        streams.append(publisher)
+    }
+
+    func optionallyStream<P: MWPollable>(_ config: P?,
+                                         _ streams: inout [MWPublisher<MWDataTable>],
+                                         _ setup: StreamSetup
+    ) {
+        guard let config = config else { return }
+
+        let publisher = setup.didConnect
             .stream(config)
             .handleEvents(receiveOutput: { [weak self] _ in
-                self?.streamCounters.counters[mac]?.send() })
-            .prefix(untilOutputFrom: streamCancel)
+                self?.streamCounters.counters[setup.mac]?.send() })
+            .prefix(untilOutputFrom: streamCancel.receive(on: bleQueue))
             .collect()
+            .receive(on: workQueue)
             .map { MWDataTable(streamed: $0, config) }
             .eraseToAnyPublisher()
 
         streams.append(publisher)
-    }
-
-    func optionallyStream<P: MWPollable>(
-        _ config: P?,
-        _ streams: inout [MWPublisher<MWDataTable>],
-        _ didConnect: MWPublisher<MetaWear>,
-        _ mac: MACAddress
-    ) {
-        guard let config = config else { return }
-
-        let publisher = didConnect.stream(config)
-            .handleEvents(receiveOutput: { [weak self] _ in
-                self?.streamCounters.counters[mac]?.send() })
-            .prefix(untilOutputFrom: streamCancel)
-            .collect()
-            .map { MWDataTable(streamed: $0, config) }
-            .eraseToAnyPublisher()
-
-        streams.append(publisher)
-    }
-
-}
-
-/// Segregate high-frequency updates into one object
-public class StreamingCountersContainer: ObservableObject {
-
-    @Published private(set) var counts: [MACAddress:ActionState] = [:]
-    private(set) var counters:          [MACAddress:PassthroughSubject<Void,Never>] = [:]
-    private var subs                    = Set<AnyCancellable>()
-
-    init(_ action: ActionType, _ devices: [MWKnownDevice]) {
-        guard action == .stream else { return }
-
-        self.counters = Dictionary(repeating: .init(), keys: devices)
-
-        counters.forEach { mac, counter in
-            counter
-                .scan(0) { sum, _ in sum + 1 }
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] sum in
-                    self?.counts[mac] = .working(sum)
-                }
-                .store(in: &subs)
-        }
     }
 }

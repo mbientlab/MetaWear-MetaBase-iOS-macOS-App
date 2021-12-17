@@ -3,7 +3,7 @@
 import Foundation
 import mbientSwiftUI
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 import CoreBluetooth
 
 public protocol ItemVM: Identifiable {

@@ -9,7 +9,7 @@ extension ConfigureScreen {
 
     struct CTAs: View {
 
-        @EnvironmentObject private var vm: SensorConfigurationVM
+        @EnvironmentObject private var vm: ConfigureVM
 
         var body: some View {
             HStack(alignment: .center, spacing: .screenInset) {

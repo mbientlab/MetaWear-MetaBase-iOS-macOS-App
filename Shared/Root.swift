@@ -2,12 +2,12 @@
 
 import Foundation
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 public class Root: ObservableObject {
 
     // State
-    public let devices: MetaWearStore
+    public let devices: MetaWearSyncStore
     public let routing: Routing
 
     // Services
@@ -18,16 +18,15 @@ public class Root: ObservableObject {
 
     // VMs
     public let factory: UIFactory
-    public let discoveryVM: MetaWearDiscoveryVM
-    public let bluetoothVM: BLEStateWarningsVM
+    public let bluetoothVM: BLEStateVM
 
     public init() {
         self.cloud = .default
         self.local = .standard
-        self.metawearLoader  = MWCloudLoader(local: local, cloud: cloud)
+        self.metawearLoader  = MWCloudLoader(local: local, cloud: cloud) 
 
         let scanner = MetaWearScanner.sharedRestore
-        let devices = MetaWearStore(scanner: scanner, loader: metawearLoader)
+        let devices = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
         let routing = Routing()
         let factory = UIFactory(devices: devices, scanner: scanner, routing: routing)
 
@@ -36,7 +35,6 @@ public class Root: ObservableObject {
         self.scanner = scanner
         self.factory = factory
         self.bluetoothVM = factory.makeBluetoothStateWarningsVM()
-        self.discoveryVM = factory.makeMetaWearDiscoveryVM()
     }
 }
 
@@ -46,6 +44,36 @@ public extension Root {
         do {
             try devices.load()
             let _ = cloud.synchronize()
+#if DEBUG
+            debugs()
+#endif
         } catch { NSLog("Load Failure: \(error.localizedDescription)") }
+    }
+}
+
+fileprivate func debugs() {
+    let bundle = Bundle.main.bundleIdentifier!
+    let defaults = UserDefaults.standard.persistentDomain(forName: bundle) ?? [:]
+    let defaultsPath = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first ?? "Error"
+
+    print("")
+    for key in defaults.sorted(by: { $0.key < $1.key }) {
+        if key.key.contains("NSWindow Frame"), let value = key.value as? String {
+            let dimensions = value.components(separatedBy: .whitespaces)
+            let width = dimensions[2]
+            let height = dimensions[3]
+            print("Window", "w", width, "h", height)
+        } else {
+            print(key.key, ":", key.value)
+        }
+    }
+    print("")
+    print("Defaults stored at:", defaultsPath)
+    print("")
+}
+
+fileprivate func wipeDefaults() {
+    UserDefaults.standard.dictionaryRepresentation().forEach { element in
+        UserDefaults.standard.removeObject(forKey: element.key)
     }
 }

@@ -1,6 +1,7 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import SwiftUI
+import mbientSwiftUI
 
 // MARK: - MacOS
 
@@ -11,16 +12,17 @@ struct MainWindow: View {
 
     @EnvironmentObject private var routing: Routing
     @EnvironmentObject private var factory: UIFactory
+    @Namespace private var namespace
 
-    static let minWidth: CGFloat = 635 // ConfigureScreen showing 3 tiles w/ equal margins
-    static let minHeight: CGFloat = 515 // ConfigureScreen showing 2 tile rows
+    static let minWidth: CGFloat = 725 // ConfigureScreen showing 3 tiles w/ equal margins (635) + extra width
+    static let minHeight: CGFloat = 585 // ConfigureScreen showing 2 tile rows
 
     var body: some View {
         stackNavigation
             .frame(minWidth: Self.minWidth, minHeight: Self.minHeight)
             .animation(.easeInOut, value: routing.destination)
             .background(Color.accentColor.ignoresSafeArea())
-            .background(AlertVendors())
+            .environment(\.namespace, namespace)
     }
 
     private var stackNavigation: some View {
@@ -37,7 +39,7 @@ struct MainWindow: View {
     }
 }
 
-/// In macOS, all lists (aka NSTableViews) are forced to have a clear background. This does not change alternating list background colors.
+/// In macOS, all Lists (aka NSTableViews) are forced to have a clear background. This does not change alternating list background colors.
 extension NSTableView {
     open override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
@@ -55,6 +57,7 @@ struct MainWindow: View {
 
     @EnvironmentObject private var routing: Routing
     @EnvironmentObject private var factory: UIFactory
+    @Namespace private var namespace
 
     var body: some View {
         NavigationView {
@@ -64,7 +67,7 @@ struct MainWindow: View {
         .navigationViewStyle(.automatic)
         .frame(minWidth: 600)
         .background(Color.accentColor.ignoresSafeArea())
-        .overlay(AlertVendors())
+        .environment(\.namespace, namespace)
     }
 
     private var destination: Binding<Routing.Destination?> {

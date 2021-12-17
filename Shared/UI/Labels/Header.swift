@@ -17,25 +17,34 @@ struct Header: View {
         HStack {
             backButton
 
-            if vm.deviceCount > 0 { icons.padding(.trailing, 12 * CGFloat(vm.deviceCount)) }
+            HStack {
+                icons
+                title
+            }
+            .offset(x: titleIconXOffset)
+            .frame(maxWidth: .infinity, alignment: .center)
 
-            title
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.bottom, .screenInset)
-        .padding(.top)
     }
 
+    private var titleIconXOffset: CGFloat {
+        Self.deviceIconMaxSize * -CGFloat(vm.deviceCount) - (Self.deviceIconMaxSize / 2)
+    }
     @State private var iconsDidAppear = false
     private static let deviceIconMaxSize = CGFloat(30)
-    private var icons: some View {
-        deviceImage
-            .rotationEffect(.degrees(-3))
-            .frame(width: Self.deviceIconMaxSize)
-            .background(secondDevice.offset(x: iconsDidAppear ? Self.deviceIconMaxSize / 3.3 : 0), alignment: .topTrailing)
-            .background(thirdDevice.offset(x: iconsDidAppear ? Self.deviceIconMaxSize / 2 : 0), alignment: .topTrailing)
-            .animation(.easeOut, value: iconsDidAppear)
-            .onAppear { DispatchQueue.main.after(0.5) { iconsDidAppear.toggle() } }
+    @ViewBuilder private var icons: some View {
+        if vm.deviceCount > 0 {
+            deviceImage
+                .rotationEffect(.degrees(-3))
+                .frame(width: Self.deviceIconMaxSize)
+                .background(secondDevice.offset(x: iconsDidAppear ? Self.deviceIconMaxSize / 3.3 : 0), alignment: .topTrailing)
+                .background(thirdDevice.offset(x: iconsDidAppear ? Self.deviceIconMaxSize / 2 : 0), alignment: .topTrailing)
+                .animation(.easeOut, value: iconsDidAppear)
+                .onAppear { DispatchQueue.main.after(0.5) { iconsDidAppear.toggle() } }
+                .padding(.trailing, 12 * CGFloat(vm.deviceCount))
+        }
     }
 
     @ViewBuilder private var secondDevice: some View {
@@ -76,8 +85,15 @@ struct HeaderBackButton: View {
     @EnvironmentObject private var routing: Routing
 
     @State private var backIsHovered = false
+
+    var overrideBackAction: (() -> Void)? = nil
+
     var body: some View {
         Button{
+            if let back = overrideBackAction {
+                back()
+                return
+            }
             #if os(iOS)
             nav.wrappedValue.dismiss()
             #else

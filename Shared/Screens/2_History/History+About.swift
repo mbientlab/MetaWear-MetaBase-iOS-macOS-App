@@ -3,7 +3,7 @@
 import SwiftUI
 import mbientSwiftUI
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 extension HistoryScreen {
 
@@ -13,7 +13,7 @@ extension HistoryScreen {
 
         var body: some View {
             VStack {
-                Subheader(label: "About", trailing: {
+                Subhead(label: "About", trailing: {
                     RefreshButton(help: "Refresh", didTap: vm.refresh)
                         .buttonStyle(BorderlessButtonStyle())
                 })
@@ -40,8 +40,6 @@ extension HistoryScreen.AboutColumn {
                 header
                 info
                     .font(.body)
-                Button("Test A") { vm.testA() }
-                Button("Test B") { vm.testB() }
             }
             .onPreferenceChange(SubtitleWK.self) { alignment = max($0, alignment) }
             .onAppear(perform: vm.onAppear)
@@ -57,8 +55,6 @@ extension HistoryScreen.AboutColumn {
                         .fixedSize(horizontal: false, vertical: true)
                         .layoutPriority(1)
 
-                ConnectionButton(size: .subheadline, state: vm.connection)
-
                 Spacer()
 
                 IdentifyByLEDButton(request: vm.identifyByLED, emulator: vm.led)
@@ -73,13 +69,9 @@ extension HistoryScreen.AboutColumn {
             }
         }
 
-        private var rssiRepresentable: String {
-            if vm.isLocallyKnown == false { return "–" }
-            if vm.rssiInt == Int(SignalLevel.noBarsRSSI) { return "–" }
-            return .init(vm.rssiInt)
-        }
         @ViewBuilder private var info: some View {
-            HLabel("RSSI", item: rssiRepresentable,                 align: alignment)
+            HLabel("Pairing", item: vm.connectionRepresentable,     align: alignment)
+            HLabel("RSSI", item: vm.rssiRepresentable,              align: alignment)
             HLabel("Battery", item: vm.battery,                     align: alignment)
             HLabel("MAC", item: vm.meta.mac,                        align: alignment)
             HLabel("Serial", item: vm.meta.serial,                  align: alignment)

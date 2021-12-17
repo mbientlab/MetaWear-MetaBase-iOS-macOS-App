@@ -9,7 +9,7 @@ extension ConfigureScreen {
 
     struct Grid: View {
 
-        @EnvironmentObject private var vm: SensorConfigurationVM
+        @EnvironmentObject private var vm: ConfigureVM
 
         static let tileWidth = CGFloat(180)
         static let tileHeight = CGFloat(170)
@@ -24,7 +24,6 @@ extension ConfigureScreen {
             LazyVGrid(columns: [item], alignment: .leading, spacing: Self.gridSpacing) {
                 SensorIterator()
             }
-            .padding(.leading, .screenInset)
             .animation(.interactiveSpring())
         }
     }

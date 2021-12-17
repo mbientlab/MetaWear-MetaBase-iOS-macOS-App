@@ -11,9 +11,9 @@ struct ChooseDevicesScreen: View {
         _shouldShowList = .init(initialValue: routing.directlyShowDeviceList)
     }
 
+    @EnvironmentObject private var bluetooth: BLEStateVM
     @EnvironmentObject private var routing: Routing
     @StateObject private var vm: DiscoveryListVM
-    @Namespace private var namespace
 
     /// Locally managed flag to change "splash" and "list" screens, accounting for animation time needed for a transition.
     @State private var shouldShowList: Bool
@@ -21,7 +21,7 @@ struct ChooseDevicesScreen: View {
     var body: some View {
         VStack {
             if shouldShowList { grid }
-            else { NoDevicesFound(namespace: namespace, shouldShowList: $shouldShowList) }
+            else { NoDevicesFound(shouldShowList: $shouldShowList) }
         }
         .animation(.easeOut, value: vm.listIsEmpty)
         .animation(.easeOut, value: shouldShowList)
@@ -33,7 +33,7 @@ struct ChooseDevicesScreen: View {
 
     @ViewBuilder private var grid: some View {
 #if os(macOS)
-        ToolbarAreaScanningIcon(namespace: namespace)
+        ScanningIndicator()
 
         MacOSGrid()
             .toolbar {

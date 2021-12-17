@@ -16,7 +16,8 @@ struct MetaWearAtomAnimation: View {
         .repeatForever(autoreverses: false)
 
     private var path: some View {
-        MetaWearShape()
+        Circle()
+        //        MetaWearShape()
             .stroke(lineWidth: size > 50 ? 2 : 1)
             .aspectRatio(1, contentMode: .fit)
     }

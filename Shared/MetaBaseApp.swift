@@ -12,7 +12,6 @@ struct MetaBaseApp: App {
             MainWindow()
                 .onAppear { root.start() }
                 .environmentObject(root.bluetoothVM)
-                .environmentObject(root.discoveryVM)
                 .environmentObject(root.factory)
                 .environmentObject(root.routing)
         }
