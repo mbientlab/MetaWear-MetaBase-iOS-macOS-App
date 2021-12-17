@@ -35,6 +35,9 @@ extension ChooseDevicesScreen {
                     isGroup: vm.isGroup,
                     ledEmulator: vm.ledVM
                 )
+                    .onTapGesture { vm.connect() }
+                    .onDrag(vm.createDragRepresentation)
+
                 StationaryComponents(
                     isHovering: isHovering,
                     isLocallyKnown: vm.isLocallyKnown,
@@ -50,8 +53,8 @@ extension ChooseDevicesScreen {
             .animation(.easeOut, value: isHovering)
             .animation(.easeOut, value: vm.connection)
             .whenHovered { isHovering = $0 }
-            .onTapGesture { vm.connect() }
-
+            .onDrop(of: [.plainText], delegate: vm)
+            .background(DropOutcomeIndicator(outcome: vm.dropOutcome))
             .contextMenu { DeviceCell.ContextMenu(vm: vm) }
             .onAppear(perform: vm.onAppear)
             .onDisappear(perform: vm.onDisappear)

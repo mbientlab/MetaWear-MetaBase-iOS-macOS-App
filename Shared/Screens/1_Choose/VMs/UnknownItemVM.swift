@@ -73,3 +73,10 @@ public extension UnknownItemVM {
         rssiSub?.cancel()
     }
 }
+
+extension UnknownItemVM {
+
+    func createDragRepresentation() -> NSItemProvider {
+        NSItemProvider() // Drag not used for unknown items. Tap to connect.
+    }
+}

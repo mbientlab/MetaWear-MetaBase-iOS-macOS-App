@@ -6,20 +6,20 @@ import MetaWear
 import MetaWearSync
 
 extension ChooseDevicesScreen {
-
+    
     /// Multi-purpose list cell for MetaWear device groups, solo devices, and unknown devices
     ///
     struct UnknownDeviceCell: View {
-
+        
         init(unknown device: CBPeripheralIdentifier, factory: UIFactory) {
             _vm = .init(wrappedValue: factory.makeUnknownItemVM(device))
         }
-
+        
         @StateObject var vm: UnknownItemVM
         @EnvironmentObject private var routing: Routing
-
+        
         @State private var isHovering = false
-
+        
         var body: some View {
             VStack(spacing: DeviceCell.spacing) {
                 DeviceCell.MobileComponents(
@@ -31,6 +31,9 @@ extension ChooseDevicesScreen {
                     isGroup: vm.isGroup,
                     ledEmulator: .init(preset: .eight)
                 )
+                    .onTapGesture { vm.connect() }
+                    .onDrag(vm.createDragRepresentation)
+                
                 DeviceCell.StationaryComponents(
                     isHovering: isHovering,
                     isLocallyKnown: vm.isLocallyKnown,
@@ -46,7 +49,7 @@ extension ChooseDevicesScreen {
             .animation(.easeOut, value: isHovering)
             .animation(.easeOut, value: vm.connection)
             .whenHovered { isHovering = $0 }
-            .onTapGesture { vm.connect() }
+            
             .contextMenu {
                 Button("Connect") { vm.connect() }
             }

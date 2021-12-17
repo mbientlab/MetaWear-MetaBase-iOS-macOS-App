@@ -6,6 +6,7 @@ import MetaWear
 import MetaWearSync
 import mbientSwiftUI
 import CoreBluetooth
+import SwiftUI
 
 /// Provides up-to-date representations of a grouping of MetaWears or a single MetaWear (previously remembered or newly discovered) and related CRUD methods.
 ///
@@ -26,6 +27,9 @@ public class KnownItemVM: ObservableObject, ItemVM {
     @Published private var isIdentifyingMACs = Set<MACAddress>()
     public var isIdentifying: Bool { isIdentifyingMACs.isEmpty == false }
     public let ledVM = MWLED.Flash.Pattern.Emulator(preset: .zero)
+
+    // Drag/drop
+    @Published private(set) var dropOutcome: DropOutcome = .noDrop
 
     // Dependencies
     private unowned let store:   MetaWearSyncStore
@@ -213,6 +217,40 @@ public extension KnownItemVM {
         } else if let mac = macs.first {
             controller.rename(existingName: name, mac: mac)
         }
+    }
+
+}
+
+// MARK: - Drag and Drop
+
+extension KnownItemVM: DropOutcomeVM {
+
+    func createDragRepresentation() -> NSItemProvider {
+        let temp = NSString("Hello")
+        let provider = NSItemProvider(object: temp)
+        print(#function, Self.self, provider.registeredTypeIdentifiers, provider.debugDescription)
+        return provider
+    }
+
+    public func validateDrop(info: DropInfo) -> Bool {
+        guard let provider = info.itemProviders(for: [.plainText]).first else { return false }
+        provider.loadObject(ofClass: NSString.self) { reading, error in
+            if let error = error { print(error) }
+            if let item = reading as? NSString { print("READING:", item) }
+        }
+        return true
+    }
+
+    public func dropEntered(info: DropInfo) {
+        self.dropOutcome = .addToGroup
+    }
+
+    public func dropExited(info: DropInfo) {
+        self.dropOutcome = .noDrop
+    }
+
+    public func performDrop(info: DropInfo) -> Bool {
+        true
     }
 }
 
