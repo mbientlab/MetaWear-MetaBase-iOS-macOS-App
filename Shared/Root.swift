@@ -2,12 +2,12 @@
 
 import Foundation
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 public class Root: ObservableObject {
 
     // State
-    public let devices: MetaWearStore
+    public let devices: MetaWearSyncStore
     public let routing: Routing
 
     // Services
@@ -23,10 +23,10 @@ public class Root: ObservableObject {
     public init() {
         self.cloud = .default
         self.local = .standard
-        self.metawearLoader  = MWCloudLoader(local: local, cloud: cloud)
+        self.metawearLoader  = MWCloudLoader(local: local, cloud: cloud) 
 
         let scanner = MetaWearScanner.sharedRestore
-        let devices = MetaWearStore(scanner: scanner, loader: metawearLoader)
+        let devices = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
         let routing = Routing()
         let factory = UIFactory(devices: devices, scanner: scanner, routing: routing)
 

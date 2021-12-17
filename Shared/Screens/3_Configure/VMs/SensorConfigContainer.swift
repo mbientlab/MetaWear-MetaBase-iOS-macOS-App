@@ -2,7 +2,7 @@
 
 import Foundation
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 /// Generate sensor configuration based on user parameters
 public struct SensorConfigContainer: Equatable, Hashable {

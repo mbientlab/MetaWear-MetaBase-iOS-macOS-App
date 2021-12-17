@@ -4,7 +4,7 @@ import SwiftUI
 import mbientSwiftUI
 import Combine
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 extension ActionScreen {
 
@@ -23,6 +23,12 @@ extension ActionScreen {
             }
             .frame(maxWidth: .infinity)
             .animation(.easeOut, value: vm.showSuccessCTAs)
+            .fileMover(isPresented: $vm.presentExportDialog, files: vm.csvTempURLs) { result in
+                switch result {
+                    case .failure(let error): print(error)
+                    case .success(let urls): print(urls)
+                }
+            }
             #if os(macOS)
             .controlSize(.large)
             #endif

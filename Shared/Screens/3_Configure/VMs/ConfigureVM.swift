@@ -2,7 +2,7 @@
 
 import Foundation
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 /// Organize legal user intents
 public class ConfigureVM: ObservableObject, HeaderVM {

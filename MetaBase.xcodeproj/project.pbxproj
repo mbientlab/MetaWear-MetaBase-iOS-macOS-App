@@ -43,6 +43,10 @@
 		9409C5E92763B764001FE850 /* ActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E72763B764001FE850 /* ActionType.swift */; };
 		9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
+		941DF258276C34E300C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF257276C34E300C5978F /* MetaWearSync */; };
+		941DF25A276C34EE00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF259276C34EE00C5978F /* MetaWearSync */; };
+		941DF25C276C34FB00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF25B276C34FB00C5978F /* MetaWearSync */; };
+		941DF25E276C350400C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF25D276C350400C5978F /* MetaWearSync */; };
 		944538962767032D00841880 /* MetaWearImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538952767032D00841880 /* MetaWearImage.swift */; };
 		944538972767032D00841880 /* MetaWearImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538952767032D00841880 /* MetaWearImage.swift */; };
 		944538BD2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
@@ -71,14 +75,8 @@
 		9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528579275BE77A004D815B /* Choose+EditGroup.swift */; };
 		945494F727656A800021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F627656A800021E3D6 /* MetaWear */; };
 		945494F927656A840021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F827656A840021E3D6 /* MetaWear */; };
-		945494FB27656A8C0021E3D6 /* MetaWearMetadata in Frameworks */ = {isa = PBXBuildFile; productRef = 945494FA27656A8C0021E3D6 /* MetaWearMetadata */; };
-		945494FD27656A910021E3D6 /* MetaWearMetadata in Frameworks */ = {isa = PBXBuildFile; productRef = 945494FC27656A910021E3D6 /* MetaWearMetadata */; };
-		94801C7C275A9264005574DF /* MetaWearMetadata in Frameworks */ = {isa = PBXBuildFile; productRef = 94801C7B275A9264005574DF /* MetaWearMetadata */; };
-		94801C80275A926E005574DF /* MetaWearMetadata in Frameworks */ = {isa = PBXBuildFile; productRef = 94801C7F275A926E005574DF /* MetaWearMetadata */; };
 		94934FD3275A09E700E388FF /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94934FD2275A09E700E388FF /* MetaWear */; };
 		94934FD5275A09EE00E388FF /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94934FD4275A09EE00E388FF /* MetaWear */; };
-		94935010275A0F0A00E388FF /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9493500F275A0F0A00E388FF /* mbientSwiftUI */; };
-		94935012275A0F1000E388FF /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94935011275A0F1000E388FF /* mbientSwiftUI */; };
 		9493501A275A112200E388FF /* DiscoveryListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935019275A112200E388FF /* DiscoveryListVM.swift */; };
 		9493501B275A112200E388FF /* DiscoveryListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935019275A112200E388FF /* DiscoveryListVM.swift */; };
 		94935023275A11C600E388FF /* KnownItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935022275A11C600E388FF /* KnownItemVM.swift */; };
@@ -151,6 +149,8 @@
 		94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A0275A1298008C62E7 /* ActionScreen.swift */; };
 		94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A2275A14DE008C62E7 /* Dimensions.swift */; };
 		94EBA3A6275A160A008C62E7 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A2275A14DE008C62E7 /* Dimensions.swift */; };
+		94F34A09276C370300A456B3 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94F34A08276C370300A456B3 /* mbientSwiftUI */; };
+		94F34A0B276C371900A456B3 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94F34A0A276C371900A456B3 /* mbientSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -189,7 +189,6 @@
 		9409C5E42762E732001FE850 /* ActionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionHeader.swift; sourceTree = "<group>"; };
 		9409C5E72763B764001FE850 /* ActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionType.swift; sourceTree = "<group>"; };
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
-		9420E582275A097200A841D6 /* MetaWear-iOS-Combine-SDK */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "MetaWear-iOS-Combine-SDK"; path = "../../MetaWear-iOS-Combine-SDK"; sourceTree = "<group>"; };
 		944538952767032D00841880 /* MetaWearImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaWearImage.swift; sourceTree = "<group>"; };
 		944538BC2767DCE000841880 /* StreamingCountersContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingCountersContainer.swift; sourceTree = "<group>"; };
 		94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+ScanningIndicator.swift"; sourceTree = "<group>"; };
@@ -237,7 +236,6 @@
 		94E005EA275A07E9001B0DFD /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		94E005EE275A07E9001B0DFD /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		94E005F0275A07E9001B0DFD /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
-		94E384DA2764518C001B4F49 /* mbientSwiftUI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = mbientSwiftUI; path = ../../mbientSwiftUI/mbientSwiftUI; sourceTree = "<group>"; };
 		94E3A7F0275FF50C007E2BAE /* HistoryScreenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreenVM.swift; sourceTree = "<group>"; };
 		94E3A7F2275FF519007E2BAE /* AboutDeviceVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutDeviceVM.swift; sourceTree = "<group>"; };
 		94E3A7F4275FF557007E2BAE /* HistoryScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryScreen.swift; sourceTree = "<group>"; };
@@ -257,9 +255,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94801C7C275A9264005574DF /* MetaWearMetadata in Frameworks */,
+				941DF258276C34E300C5978F /* MetaWearSync in Frameworks */,
+				94F34A09276C370300A456B3 /* mbientSwiftUI in Frameworks */,
 				94934FD3275A09E700E388FF /* MetaWear in Frameworks */,
-				94935010275A0F0A00E388FF /* mbientSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,9 +265,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94801C80275A926E005574DF /* MetaWearMetadata in Frameworks */,
+				941DF25A276C34EE00C5978F /* MetaWearSync in Frameworks */,
+				94F34A0B276C371900A456B3 /* mbientSwiftUI in Frameworks */,
 				94934FD5275A09EE00E388FF /* MetaWear in Frameworks */,
-				94935012275A0F1000E388FF /* mbientSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,7 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				945494F727656A800021E3D6 /* MetaWear in Frameworks */,
-				945494FD27656A910021E3D6 /* MetaWearMetadata in Frameworks */,
+				941DF25E276C350400C5978F /* MetaWearSync in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,7 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				945494F927656A840021E3D6 /* MetaWear in Frameworks */,
-				945494FB27656A8C0021E3D6 /* MetaWearMetadata in Frameworks */,
+				941DF25C276C34FB00C5978F /* MetaWearSync in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,8 +337,6 @@
 		9420E581275A097200A841D6 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				9420E582275A097200A841D6 /* MetaWear-iOS-Combine-SDK */,
-				94E384DA2764518C001B4F49 /* mbientSwiftUI */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -597,8 +593,8 @@
 			name = "MetaBase (iOS)";
 			packageProductDependencies = (
 				94934FD2275A09E700E388FF /* MetaWear */,
-				9493500F275A0F0A00E388FF /* mbientSwiftUI */,
-				94801C7B275A9264005574DF /* MetaWearMetadata */,
+				941DF257276C34E300C5978F /* MetaWearSync */,
+				94F34A08276C370300A456B3 /* mbientSwiftUI */,
 			);
 			productName = "MetaBase (iOS)";
 			productReference = 94E005D1275A07E9001B0DFD /* MetaBase.app */;
@@ -619,8 +615,8 @@
 			name = "MetaBase (macOS)";
 			packageProductDependencies = (
 				94934FD4275A09EE00E388FF /* MetaWear */,
-				94935011275A0F1000E388FF /* mbientSwiftUI */,
-				94801C7F275A926E005574DF /* MetaWearMetadata */,
+				941DF259276C34EE00C5978F /* MetaWearSync */,
+				94F34A0A276C371900A456B3 /* mbientSwiftUI */,
 			);
 			productName = "MetaBase (macOS)";
 			productReference = 94E005D7275A07E9001B0DFD /* MetaBase.app */;
@@ -642,7 +638,7 @@
 			name = "Tests iOS";
 			packageProductDependencies = (
 				945494F627656A800021E3D6 /* MetaWear */,
-				945494FC27656A910021E3D6 /* MetaWearMetadata */,
+				941DF25D276C350400C5978F /* MetaWearSync */,
 			);
 			productName = "Tests iOS";
 			productReference = 94E005DE275A07E9001B0DFD /* Tests iOS.xctest */;
@@ -664,7 +660,7 @@
 			name = "Tests macOS";
 			packageProductDependencies = (
 				945494F827656A840021E3D6 /* MetaWear */,
-				945494FA27656A8C0021E3D6 /* MetaWearMetadata */,
+				941DF25B276C34FB00C5978F /* MetaWearSync */,
 			);
 			productName = "Tests macOS";
 			productReference = 94E005EA275A07E9001B0DFD /* Tests macOS.xctest */;
@@ -705,6 +701,10 @@
 				Base,
 			);
 			mainGroup = 94E005C4275A07E9001B0DFD;
+			packageReferences = (
+				947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */,
+				94F34A07276C370300A456B3 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */,
+			);
 			productRefGroup = 94E005D2275A07E9001B0DFD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1308,7 +1308,46 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mbientlab/MetaWear-SDK-Swift-Combine";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.1;
+			};
+		};
+		94F34A07276C370300A456B3 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://importRyan@github.com/mbientlab/mbientSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		941DF257276C34E300C5978F /* MetaWearSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWearSync;
+		};
+		941DF259276C34EE00C5978F /* MetaWearSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWearSync;
+		};
+		941DF25B276C34FB00C5978F /* MetaWearSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWearSync;
+		};
+		941DF25D276C350400C5978F /* MetaWearSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWearSync;
+		};
 		945494F627656A800021E3D6 /* MetaWear */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaWear;
@@ -1316,22 +1355,6 @@
 		945494F827656A840021E3D6 /* MetaWear */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaWear;
-		};
-		945494FA27656A8C0021E3D6 /* MetaWearMetadata */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MetaWearMetadata;
-		};
-		945494FC27656A910021E3D6 /* MetaWearMetadata */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MetaWearMetadata;
-		};
-		94801C7B275A9264005574DF /* MetaWearMetadata */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MetaWearMetadata;
-		};
-		94801C7F275A926E005574DF /* MetaWearMetadata */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MetaWearMetadata;
 		};
 		94934FD2275A09E700E388FF /* MetaWear */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1341,12 +1364,14 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaWear;
 		};
-		9493500F275A0F0A00E388FF /* mbientSwiftUI */ = {
+		94F34A08276C370300A456B3 /* mbientSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 94F34A07276C370300A456B3 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
 			productName = mbientSwiftUI;
 		};
-		94935011275A0F1000E388FF /* mbientSwiftUI */ = {
+		94F34A0A276C371900A456B3 /* mbientSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 94F34A07276C370300A456B3 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
 			productName = mbientSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -3,7 +3,7 @@
 import SwiftUI
 import mbientSwiftUI
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 import CoreBluetooth
 import Combine
 
@@ -24,12 +24,12 @@ public class UnknownItemVM: ObservableObject, ItemVM {
 
     private var rssiSub: AnyCancellable? = nil
     private var connectionSub: AnyCancellable? = nil
-    private unowned let store: MetaWearStore
+    private unowned let store: MetaWearSyncStore
     private unowned let routing: Routing
     private unowned let device: MetaWear
 
     public init(cbuuid: CBPeripheralIdentifier,
-                store: MetaWearStore,
+                store: MetaWearSyncStore,
                 routing: Routing) {
         self.store = store
         self.routing = routing

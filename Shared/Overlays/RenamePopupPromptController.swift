@@ -3,7 +3,7 @@
 import Foundation
 import mbientSwiftUI
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 public class RenamePopupPromptController {
     public weak var delegate: RenameDelegate? = nil

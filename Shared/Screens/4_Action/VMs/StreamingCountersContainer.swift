@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 /// Segregate high-frequency updates into one object
 public class StreamingCountersContainer: ObservableObject {

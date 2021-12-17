@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 import mbientSwiftUI
 import CoreBluetooth
 
@@ -25,10 +25,10 @@ public class KnownItemVM: ObservableObject, ItemVM {
     // Flash LED action
     @Published private var isIdentifyingMACs = Set<MACAddress>()
     public var isIdentifying: Bool { isIdentifyingMACs.isEmpty == false }
-    public let ledVM = MWLED.FlashPattern.Emulator(preset: .zero)
+    public let ledVM = MWLED.Flash.Pattern.Emulator(preset: .zero)
 
     // Dependencies
-    private unowned let store:   MetaWearStore
+    private unowned let store:   MetaWearSyncStore
     private unowned let routing: Routing
 
     // Subscriptions
@@ -38,7 +38,7 @@ public class KnownItemVM: ObservableObject, ItemVM {
     private var identifyingSubs = Set<AnyCancellable>()
 
     /// Represent a MetaWear (either cloud-synced or locally known) as an item
-    public init(device: MWKnownDevice, store: MetaWearStore, routing: Routing) {
+    public init(device: MWKnownDevice, store: MetaWearSyncStore, routing: Routing) {
         self.connection = device.mw?.connectionState == .connected ? .connected : .disconnected
         self.store = store
         self.routing = routing
@@ -53,7 +53,7 @@ public class KnownItemVM: ObservableObject, ItemVM {
     }
 
     /// Represent a group as a single item
-    public init(group: MetaWear.Group, store: MetaWearStore, routing: Routing) {
+    public init(group: MetaWear.Group, store: MetaWearSyncStore, routing: Routing) {
         self.store = store
         self.routing = routing
         let _devices = store.getDevicesInGroup(group)

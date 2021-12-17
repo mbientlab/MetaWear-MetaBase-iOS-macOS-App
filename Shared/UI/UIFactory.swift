@@ -2,11 +2,11 @@
 
 import Foundation
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 public class UIFactory: ObservableObject {
 
-    public init(devices: MetaWearStore,
+    public init(devices: MetaWearSyncStore,
                 scanner: MetaWearScanner,
                 routing: Routing) {
         self.store = devices
@@ -14,7 +14,7 @@ public class UIFactory: ObservableObject {
         self.routing = routing
     }
 
-    private unowned let store: MetaWearStore
+    private unowned let store: MetaWearSyncStore
     private unowned let scanner: MetaWearScanner
     private unowned let routing: Routing
     private lazy var actionQueue = DispatchQueue(label: Bundle.main.bundleIdentifier! + ".action",

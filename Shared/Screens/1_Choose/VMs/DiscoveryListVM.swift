@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 public class DiscoveryListVM: ObservableObject {
 
@@ -15,7 +15,7 @@ public class DiscoveryListVM: ObservableObject {
     private unowned let scanner: MetaWearScanner
     private var subs = Set<AnyCancellable>()
 
-    public init(scanner: MetaWearScanner = .sharedRestore, store: MetaWearStore) {
+    public init(scanner: MetaWearScanner = .sharedRestore, store: MetaWearSyncStore) {
         self.scanner = scanner
 
         scanner.isScanningPublisher

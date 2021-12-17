@@ -3,7 +3,7 @@
 import SwiftUI
 import Combine
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 public class ActionVM: ObservableObject, ActionHeaderVM {
     public typealias QueueItem = (device: MetaWear?, meta: MetaWear.Metadata, config: SensorConfigContainer)
@@ -20,6 +20,10 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     public let streamCounters:          StreamingCountersContainer
     private var data:                   [MACAddress:[MWDataTable]]
 
+    @Published var deviceCSVsReady:     Int = 0
+    var csvTempURLs:                    [URL] = []
+    @Published var presentExportDialog  = false
+
     // Queue for performing action device-by-device (on private DispatchQueue)
     private var nextQueueItem:          QueueItem? = nil
     private var actionQueue:            [QueueItem] = []
@@ -33,12 +37,12 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     // References
     private let devices:                [MWKnownDevice]
     private unowned let routing:        Routing
-    private unowned let store:          MetaWearStore
+    private unowned let store:          MetaWearSyncStore
 
     public init(action: ActionType,
                 devices: [MWKnownDevice],
                 vms: [AboutDeviceVM],
-                store: MetaWearStore,
+                store: MetaWearSyncStore,
                 routing: Routing,
                 backgroundQueue: DispatchQueue) {
         self.workQueue = backgroundQueue
@@ -102,7 +106,9 @@ public extension ActionVM {
     }
 
     func exportFiles() {
-        print("EXPORT FILES ACTION TBD")
+        if self.deviceCSVsReady == self.deviceVMs.endIndex {
+            self.presentExportDialog = true
+        }
     }
 
     func cancelAndUndo() {
@@ -252,7 +258,7 @@ private extension ActionVM {
             .mapToMWError()
             .timeout(Self.timeoutDuration, scheduler: workQueue) { .operationFailed("Timeout") }
             .first()
-            .logsDownload()
+            .downloadLogs()
             .handleEvents(receiveOutput: { [weak self] download in
                 DispatchQueue.main.async { [weak self] in
                     let percent = Int(download.percentComplete * 100)
@@ -268,9 +274,53 @@ private extension ActionVM {
             .eraseToAnyPublisher()
     }
 
+    func tempURL() -> URL {
+        FileManager.default
+            .temporaryDirectory
+            .appendingPathComponent(Bundle.main.bundleIdentifier!, isDirectory: true)
+    }
+
+    func tempFolder(for mac: MACAddress) -> URL {
+        tempURL().appendingPathComponent(mac.components(separatedBy: .alphanumerics.inverted).joined(separator: ""), isDirectory: true)
+    }
+
+    static let dateFormatter: DateFormatter = {
+        let date = DateFormatter()
+        date.dateStyle = .short
+        date.timeStyle = .short
+        return date
+    }()
+
+    func tempFileName(for signal: MWNamedSignal, date: Date) -> String {
+        let dateString = Self.dateFormatter.string(from: date)
+        let dateStringTrimmed = dateString.components(separatedBy: .alphanumerics.inverted).joined(separator: "-")
+        return signal.name + " " + dateStringTrimmed
+    }
+
     func saveData(tables: [MWDataTable], for mac: MACAddress) {
         self.data[mac] = tables
-        print(Self.self, "saveData", tables.map(\.source.name), tables.map(\.rows.count))
+        print(mac, tables.map { ($0.source, $0.rows.endIndex) })
+        writeTemporaryCSV(tables: tables, for: mac)
+    }
+
+    func writeTemporaryCSV(tables: [MWDataTable], for mac: MACAddress) {
+        let date = Date()
+        let folder = tempFolder(for: mac)
+        tables.forEach { sensor in
+            let fileName = tempFileName(for: sensor.source, date: date)
+            let fileURL = folder.appendingPathComponent(fileName).appendingPathExtension("csv")
+            do {
+                try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true, attributes: nil)
+                try sensor.makeCSV().write(to: fileURL, atomically: true, encoding: .utf8)
+                self.csvTempURLs.append(fileURL)
+            } catch { print(fileName, error) }
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.deviceCSVsReady += 1
+            if self?.deviceCSVsReady == self?.deviceVMs.endIndex {
+                self?.presentExportDialog = true
+            }
+        }
     }
 
     // MARK: - Stream Action
@@ -342,8 +392,8 @@ private extension ActionVM {
     }
 
     func optionallyStream<P: MWPollable>(_ config: P?,
-        _ streams: inout [MWPublisher<MWDataTable>],
-        _ setup: StreamSetup
+                                         _ streams: inout [MWPublisher<MWDataTable>],
+                                         _ setup: StreamSetup
     ) {
         guard let config = config else { return }
 

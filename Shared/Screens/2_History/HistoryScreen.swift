@@ -6,7 +6,7 @@ import SwiftUI
 import Combine
 import mbientSwiftUI
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 #if os(iOS)
 import UIKit
 #endif

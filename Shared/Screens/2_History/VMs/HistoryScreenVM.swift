@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 public class HistoryScreenVM: ObservableObject, HeaderVM {
 
@@ -21,7 +21,7 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
     private unowned let routing: Routing
     private unowned let scanner: MetaWearScanner
 
-    public init(title: String, vms: [AboutDeviceVM], store: MetaWearStore, routing: Routing, scanner: MetaWearScanner) {
+    public init(title: String, vms: [AboutDeviceVM], store: MetaWearSyncStore, routing: Routing, scanner: MetaWearScanner) {
         self.routing = routing
         self.scanner = scanner
         self.title = title

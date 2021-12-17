@@ -47,7 +47,7 @@ private extension BLEStateVM {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.isScanning = $0 }
 
-        bleStateUpdates = scanner.centralManagerDidUpdateState
+        bleStateUpdates = scanner.bluetoothState
             .receive(on: DispatchQueue.main, options: nil)
             .sink { [weak self] in self?.state = $0  }
     }

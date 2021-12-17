@@ -5,7 +5,7 @@ import SwiftUI
 import Combine
 import mbientSwiftUI
 import MetaWear
-import MetaWearMetadata
+import MetaWearSync
 
 public class Routing: ObservableObject {
 

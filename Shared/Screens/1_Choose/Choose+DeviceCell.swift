@@ -4,7 +4,7 @@ import SwiftUI
 import mbientSwiftUI
 import MetaWear
 import CoreBluetooth
-import MetaWearMetadata
+import MetaWearSync
 
 extension ChooseDevicesScreen {
 
@@ -104,7 +104,7 @@ extension ChooseDevicesScreen.DeviceCell {
         var models: [(mac: String, model: MetaWear.Model)]
         var isLocallyKnown: Bool
         var isGroup: Bool
-        let ledEmulator: MWLED.FlashPattern.Emulator
+        let ledEmulator: MWLED.Flash.Pattern.Emulator
 
         private var imageWidth: CGFloat { 110 }
         private var imageHeight: CGFloat { isHovering ? 150 : 135 }
@@ -210,7 +210,7 @@ extension ChooseDevicesScreen.DeviceCell {
                         .help(Text(identifyHelpText))
 
                     ProgressSpinner()
-                        .opacity(isIdentifying ? 1 : 0)
+                        .opacity(isIdentifying && !isConnecting ? 1 : 0)
                 }
             }
             .buttonStyle(.borderless)
