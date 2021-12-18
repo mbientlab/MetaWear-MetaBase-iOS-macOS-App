@@ -1,6 +1,6 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
+import mbientSwiftUI
 
 struct ChooseDevicesScreen: View {
 
@@ -11,7 +11,7 @@ struct ChooseDevicesScreen: View {
         _shouldShowList = .init(initialValue: routing.directlyShowDeviceList)
     }
 
-    @EnvironmentObject private var bluetooth: BLEStateVM
+    @EnvironmentObject private var bluetooth: BluetoothStateVM
     @EnvironmentObject private var routing: Routing
     @StateObject private var vm: DiscoveryListVM
 
@@ -36,12 +36,6 @@ struct ChooseDevicesScreen: View {
         ScanningIndicator()
 
         MacOSGrid()
-            .toolbar {
-                ToolbarItemGroup(placement: .automatic) {
-                    Spacer()
-                    EditGroupsButton()
-                }
-            }
 #else
         EmptyView()
 #endif

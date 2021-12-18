@@ -2,7 +2,6 @@
 
 
 import Foundation
-import SwiftUI
 import Combine
 import mbientSwiftUI
 import MetaWear
@@ -26,7 +25,7 @@ struct HistoryScreen: View {
 
             HStack(alignment: .firstTextBaseline, spacing: .screenInset * 2) {
                 AboutColumn()
-                    .frame(minWidth: 215)
+                    .frame(minWidth: 230)
 
                 VStack {
                     SessionsList()
@@ -39,7 +38,6 @@ struct HistoryScreen: View {
             .padding(.top, 5)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .toolbar { BluetoothErrorButton.ToolbarIcon() }
         .environmentObject(vm)
         .onAppear(perform: vm.onAppear)
         .onDisappear(perform: vm.onDisappear)

@@ -1,12 +1,12 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
 import mbientSwiftUI
 import MetaWear
 import MetaWearSync
 
 struct IdentifyByLEDButton: View {
 
+    var flashScale: CGFloat = 1.3
     var request: () -> Void
     @ObservedObject var emulator: MWLED.Flash.Pattern.Emulator
 
@@ -16,16 +16,16 @@ struct IdentifyByLEDButton: View {
                 .font(.headline)
                 .foregroundColor(emulator.ledIsOn ? .accentColor : nil)
                 .padding(4)
-                .background(flashingBackground)
         }
         .buttonStyle(.borderless)
+        .background(flashingBackground)
         .help("Identify by LED and haptics (if available)")
         .animation(.linear(duration: 0.1), value: emulator.ledIsOn)
     }
 
     var flashingBackground: some View {
-        RoundedRectangle(cornerRadius: 2)
-            .foregroundColor(emulator.ledIsOn ? .init(emulator.pattern.color) : .clear)
+        Circle().foregroundColor(emulator.ledIsOn ? .init(emulator.pattern.color) : .clear)
+            .scaleEffect(flashScale)
     }
 }
 

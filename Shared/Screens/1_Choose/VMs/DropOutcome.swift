@@ -1,24 +1,28 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import Foundation
-import SwiftUI
+import mbientSwiftUI
 import MetaWearSync
 
 struct DropOutcomeIndicator: View {
 
-    let outcome: DraggableMetaWear.DropOutcome
+    @Environment(\.dropOutcome) var outcome
 
     var body: some View {
-        ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(.white)
-                .opacity(outcome == .noDrop ? 0 : 0.1)
+        Text(outcome.label)
+            .lineLimit(0)
+            .fixedSize()
+            .font(.title.weight(.semibold))
+            .foregroundColor(.accentColor)
+            .animation(nil, value: outcome)
 
-            Text(outcome.label)
-                .opacity(outcome == .noDrop ? 0 : 1)
-                .accessibilityHidden(outcome == .noDrop)
-        }
-        .animation(.easeOut, value: outcome)
+            .padding(.vertical, 5)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .background(Capsule(style: .continuous).foregroundColor(.yellow))
+
+            .opacity(outcome == .noDrop ? 0 : 1)
+            .animation(.easeOut(duration: 0.2), value: outcome)
+            .accessibilityHidden(outcome == .noDrop)
     }
 }
 
@@ -27,8 +31,8 @@ public extension DraggableMetaWear.DropOutcome {
     var label: String {
         switch self {
             case .addToGroup: return "Add"
-            case .newGroup: return "New Group"
-            case .deleteFromGroup: return "Remove from Group"
+            case .newGroup: return "Group"
+            case .deleteFromGroup: return "Ungroup"
             case .noDrop: return ""
         }
     }

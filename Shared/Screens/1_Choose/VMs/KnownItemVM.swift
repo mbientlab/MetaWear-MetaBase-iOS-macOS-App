@@ -6,7 +6,6 @@ import MetaWear
 import MetaWearSync
 import mbientSwiftUI
 import CoreBluetooth
-import SwiftUI
 
 /// Provides up-to-date representations of a grouping of MetaWears or a single MetaWear (previously remembered or newly discovered) and related CRUD methods.
 ///
@@ -103,12 +102,28 @@ public extension KnownItemVM {
         }
     }
 
+    /// Group ID or Local CBUUID or MAC
     var matchedGeometryID: String {
         if let group = group { return group.id.uuidString }
         return (
             localIDs.first { $0 != nil }
             ?? devices.compactMap { $0.meta.id }.first
         ) ?? UUID().uuidString
+    }
+
+    var state: ItemState {
+        .init(
+            name: name,
+            isGroup: isGroup,
+            models: models,
+            macs: macs,
+            rssi: rssi,
+            isLocallyKnown: isLocallyKnown,
+            connection: connection,
+            identifyTip: identifyTip,
+            isIdentifying: isIdentifying,
+            ledVM: ledVM
+        )
     }
 
 }
@@ -173,7 +188,9 @@ public extension KnownItemVM {
         devices.map(\.meta).forEach { store.forget(globally: $0) }
     }
 
+    // Forms a new group or merges items into self (as a gorup)
     func group(withItems: [MetaWear.Metadata]) {
+        guard withItems.isEmpty == false else { return }
         if var group = group {
             group.deviceMACs.formUnion(withItems.map(\.mac))
             store.update(group: group)
@@ -186,21 +203,31 @@ public extension KnownItemVM {
         }
     }
 
+    // Merges the group into self (whether self is a group or solo device)
     func group(withGroup: MetaWear.Group) {
         if var group = group {
             group.deviceMACs.formUnion(withGroup.deviceMACs)
             store.update(group: group)
             store.remove(group: withGroup.id)
-            self.group = group
-            self.devices = store.getDevicesInGroup(group)
+            DispatchQueue.main.async {
+                self.group = group
+                self.devices = self.store.getDevicesInGroup(group)
+            }
         } else {
             var withGroup = withGroup
             withGroup.deviceMACs.formUnion(devices.map(\.meta.mac))
             store.update(group: withGroup)
-            self.group = withGroup
-            self.devices = store.getDevicesInGroup(withGroup)
+            DispatchQueue.main.async {
+                self.group = withGroup
+                self.devices = self.store.getDevicesInGroup(withGroup)
+            }
         }
+    }
 
+    func removeFromGroup(_ item: MACAddress) {
+        guard var group = self.group else { return }
+        group.deviceMACs.remove(item)
+        store.update(group: group)
     }
 
     func disbandGroup() {
@@ -221,11 +248,10 @@ public extension KnownItemVM {
     }
 
 }
-import UniformTypeIdentifiers
+
 // MARK: - Drag and Drop
 
-
-extension KnownItemVM: MetaWearDropTargetVM {
+extension KnownItemVM: MWDropTargetVM {
 
     private func _makeDraggableContents() -> DraggableMetaWear.Item? {
         if let group = group { return .group(group) }
@@ -237,49 +263,97 @@ extension KnownItemVM: MetaWearDropTargetVM {
 
     func createDragRepresentation() -> NSItemProvider {
         guard let item = _makeDraggableContents() else { return NSItemProvider() }
-        let provider = makeDraggableMetaWearProvider(item)
-        return provider
+        return .init(metawear: item, visibility: .ownProcess, plainTextVisibility: .all)
     }
 
     public func updateDropOutcome(for drop: [DraggableMetaWear.Item]) {
-        guard let first = drop.first else { dropOutcome = .noDrop; return }
+        guard let firstDroppedItem = drop.first else { dropOutcome = .noDrop; return }
 
-        switch first {
-
-                // Don't accept unrecognized MetaWears
-            case .unknown: self.dropOutcome = .noDrop
+        switch firstDroppedItem {
+            case .unknown:
+                self.dropOutcome = .noDrop // Don't accept unrecognized MetaWears
 
             case .group(let droppedGroup):
-
-                // Merge dropped group into recipient group
                 if let group = self.group {
-                    let isDroppingOnSelf = group.id == droppedGroup.id
-                    self.dropOutcome = isDroppingOnSelf ? .noDrop : .addToGroup
+                    // A - Merge dropped device/group into self, except when that item is self!
+                    self.dropOutcome = group.id == droppedGroup.id ? .noDrop : .addToGroup
 
-                    // Add self (solo device) into dropped group
-                } else { self.dropOutcome = .addToGroup }
+                } else {
+                    // B - Add self (a solo device) into the dropped group
+                    self.dropOutcome = .addToGroup
+                }
 
             case .remembered(meta: let metadata, localID: _):
-
-                // Merge only novel devices into recipient group
                 if let group = self.group {
-                    let alreadyContains = group.deviceMACs.contains(metadata.mac)
-                    self.dropOutcome = alreadyContains ? .noDrop : .addToGroup
+                    // A - Merge only novel devices into recipient group
+                    self.dropOutcome = group.deviceMACs.contains(metadata.mac) ? .noDrop : .addToGroup // Is the drop already in this group?
 
-                    // Form new group only with non-self devices
                 } else if let ownMac = self.macs.first {
-                    let isDroppingOnSelf = ownMac == metadata.mac
-                    self.dropOutcome = isDroppingOnSelf ? .noDrop : .newGroup
+                    // B - Form new group only with non-self devices
+                    self.dropOutcome = ownMac == metadata.mac ? .noDrop : .newGroup // Is dropping on self?
 
-                    // Reject other situations
+                    // C - Reject other situations
                 } else { print("Unexpected drop"); self.dropOutcome = .noDrop }
         }
     }
 
-    public func performDrop(info: DropInfo) -> Bool {
-        guard let metawears = info.loadMetaWears() else { return false }
-        print(metawears.count)
-        return true
+    public func receiveDrop(_ drop: [DraggableMetaWear.Item], intent: DraggableMetaWear.DropOutcome) {
+        guard let first = drop.first else { return }
+
+        switch intent {
+            case .newGroup:
+                // Form new group only with non-self devices
+                let nonSelfDevices = drop.rememberedDevices(excluding: Set(self.macs)).map(\.metadata)
+                group(withItems: nonSelfDevices)
+
+            case .addToGroup:
+                if case .group(let group) = first {
+                    // Dropped a group
+                    // Merge dropped group into self (which is a group, too)
+                    // Add self (solo device) into the dropped group
+                    self.group(withGroup: group)
+                    return
+                }
+
+                // Dropped device(s)
+                // Merge only novel devices into self (which is a group)
+                let nonSelfDevices = drop.rememberedDevices(excluding: Set(self.macs)).map(\.metadata)
+                group(withItems: nonSelfDevices)
+
+            case .noDrop: return
+            case .deleteFromGroup: return
+
+        }
+    }
+
+}
+
+public extension Array where Element == DraggableMetaWear.Item {
+
+    /// Extracts remembered devices, preserving order
+    func rememberedDevices(excluding: Set<MACAddress> = []) -> [(metadata: MetaWear.Metadata, localID: CBPeripheralIdentifier?)] {
+        reduce(into: [(metadata: MetaWear.Metadata, localID: CBPeripheralIdentifier?)](), { result, item in
+            guard case .remembered(meta: let meta, localID: let id) = item,
+                  excluding.contains(meta.mac) == false
+            else { return }
+            result.append((meta, id))
+        })
+    }
+
+    /// Extracts groups, preserving order
+    func groups() -> [MetaWear.Group] {
+        reduce(into: [MetaWear.Group](), { result, item in
+            guard case .group(let group) = item else { return }
+            result.append(group)
+        })
+    }
+
+    /// Extracts unknown devices, preserving order
+    func unknownDevices() -> [CBPeripheralIdentifier] {
+        reduce(into: [CBPeripheralIdentifier](), { result, item in
+            guard case .unknown(let id) = item else { return }
+            result.append(id)
+        })
     }
 }
 

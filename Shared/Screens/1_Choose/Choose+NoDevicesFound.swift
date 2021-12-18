@@ -1,6 +1,6 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
+import mbientSwiftUI
 import MetaWear
 
 extension ChooseDevicesScreen {
@@ -75,7 +75,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
                     blendDuration: 1
                 ).delay(transitionInterval + 0.15))
 
-            return MetaWearAtomAnimation(
+            return AtomAnimation(
                 animate: animate,
                 size: min(180, max(90, geo.size.width * 0.15))
             )
@@ -117,7 +117,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
                     blendDuration: transitionInterval
                 ))
 
-            return Images.metawearSide.image()
+            return SharedImages.metawearSide.image()
                 .resizable()
                 .scaledToFit()
                 .alignmentGuide(VerticalAlignment.center) { _ in

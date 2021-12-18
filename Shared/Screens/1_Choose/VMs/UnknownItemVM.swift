@@ -1,6 +1,5 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
 import mbientSwiftUI
 import MetaWear
 import MetaWearSync
@@ -12,13 +11,13 @@ import Combine
 ///
 public class UnknownItemVM: ObservableObject, ItemVM {
 
+    public let ledVM: MWLED.Flash.Pattern.Emulator = .init(preset: .eight)
+
     public var matchedGeometryID: String { device.peripheral.identifier.uuidString }
-    public var name: String
-    public var isGroup: Bool = false
-    public var models: [(mac: String, model: MetaWear.Model)] = []
-    public var isLocallyKnown = false
-    public var isCloudSynced = false
-    public var macs: [String] = []
+    public private(set) var name: String
+    public private(set) var models: [(mac: String, model: MetaWear.Model)] = []
+    public private(set) var isCloudSynced = false
+    public private(set) var macs: [String] = []
     @Published public private(set) var rssi: SignalLevel
     @Published public private(set) var connection: CBPeripheralState
 
@@ -71,6 +70,25 @@ public extension UnknownItemVM {
 
     func onDisappear() {
         rssiSub?.cancel()
+    }
+
+    func identify() {
+        // Not offered
+    }
+
+    var state: ItemState {
+        .init(
+            name: name,
+            isGroup: false,
+            models: models,
+            macs: macs,
+            rssi: rssi,
+            isLocallyKnown: false,
+            connection: connection,
+            identifyTip: "",
+            isIdentifying: false,
+            ledVM: ledVM
+        )
     }
 }
 
