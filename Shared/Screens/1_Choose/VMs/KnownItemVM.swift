@@ -29,7 +29,8 @@ public class KnownItemVM: ObservableObject, ItemVM {
     public let ledVM = MWLED.Flash.Pattern.Emulator(preset: .zero)
 
     // Drag/drop
-    @Published private(set) var dropOutcome: DropOutcome = .noDrop
+    @Published private(set) public var dropOutcome: DraggableMetaWear.DropOutcome = .noDrop
+    public let dropQueue: DispatchQueue = .global(qos: .background)
 
     // Dependencies
     private unowned let store:   MetaWearSyncStore
@@ -220,37 +221,65 @@ public extension KnownItemVM {
     }
 
 }
-
+import UniformTypeIdentifiers
 // MARK: - Drag and Drop
 
-extension KnownItemVM: DropOutcomeVM {
+
+extension KnownItemVM: MetaWearDropTargetVM {
+
+    private func _makeDraggableContents() -> DraggableMetaWear.Item? {
+        if let group = group { return .group(group) }
+        if deviceCount == 1 {
+            return .remembered(meta: metadata[0], localID: devices.compactMap(\.mw?.localBluetoothID).first)
+        }
+        return nil
+    }
 
     func createDragRepresentation() -> NSItemProvider {
-        let temp = NSString("Hello")
-        let provider = NSItemProvider(object: temp)
-        print(#function, Self.self, provider.registeredTypeIdentifiers, provider.debugDescription)
+        guard let item = _makeDraggableContents() else { return NSItemProvider() }
+        let provider = makeDraggableMetaWearProvider(item)
         return provider
     }
 
-    public func validateDrop(info: DropInfo) -> Bool {
-        guard let provider = info.itemProviders(for: [.plainText]).first else { return false }
-        provider.loadObject(ofClass: NSString.self) { reading, error in
-            if let error = error { print(error) }
-            if let item = reading as? NSString { print("READING:", item) }
+    public func updateDropOutcome(for drop: [DraggableMetaWear.Item]) {
+        guard let first = drop.first else { dropOutcome = .noDrop; return }
+
+        switch first {
+
+                // Don't accept unrecognized MetaWears
+            case .unknown: self.dropOutcome = .noDrop
+
+            case .group(let droppedGroup):
+
+                // Merge dropped group into recipient group
+                if let group = self.group {
+                    let isDroppingOnSelf = group.id == droppedGroup.id
+                    self.dropOutcome = isDroppingOnSelf ? .noDrop : .addToGroup
+
+                    // Add self (solo device) into dropped group
+                } else { self.dropOutcome = .addToGroup }
+
+            case .remembered(meta: let metadata, localID: _):
+
+                // Merge only novel devices into recipient group
+                if let group = self.group {
+                    let alreadyContains = group.deviceMACs.contains(metadata.mac)
+                    self.dropOutcome = alreadyContains ? .noDrop : .addToGroup
+
+                    // Form new group only with non-self devices
+                } else if let ownMac = self.macs.first {
+                    let isDroppingOnSelf = ownMac == metadata.mac
+                    self.dropOutcome = isDroppingOnSelf ? .noDrop : .newGroup
+
+                    // Reject other situations
+                } else { print("Unexpected drop"); self.dropOutcome = .noDrop }
         }
-        return true
-    }
-
-    public func dropEntered(info: DropInfo) {
-        self.dropOutcome = .addToGroup
-    }
-
-    public func dropExited(info: DropInfo) {
-        self.dropOutcome = .noDrop
     }
 
     public func performDrop(info: DropInfo) -> Bool {
-        true
+        guard let metawears = info.loadMetaWears() else { return false }
+        print(metawears.count)
+        return true
     }
 }
 

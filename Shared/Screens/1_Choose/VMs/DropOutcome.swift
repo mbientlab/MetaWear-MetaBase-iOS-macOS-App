@@ -1,28 +1,12 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import Foundation
-
-public enum DropOutcome {
-    case addToGroup
-    case formNewGroup
-    case removeFromGroup
-    case noDrop
-
-    var label: String {
-        switch self {
-            case .addToGroup: return "Add"
-            case .formNewGroup: return "New Group"
-            case .removeFromGroup: return "Remove from Group"
-            case .noDrop: return ""
-        }
-    }
-}
-
 import SwiftUI
+import MetaWearSync
 
 struct DropOutcomeIndicator: View {
 
-    let outcome: DropOutcome
+    let outcome: DraggableMetaWear.DropOutcome
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -38,6 +22,14 @@ struct DropOutcomeIndicator: View {
     }
 }
 
-protocol DropOutcomeVM: DropDelegate {
-    var dropOutcome: DropOutcome { get }
+public extension DraggableMetaWear.DropOutcome {
+
+    var label: String {
+        switch self {
+            case .addToGroup: return "Add"
+            case .newGroup: return "New Group"
+            case .deleteFromGroup: return "Remove from Group"
+            case .noDrop: return ""
+        }
+    }
 }

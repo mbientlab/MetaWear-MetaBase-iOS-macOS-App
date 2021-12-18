@@ -23,6 +23,7 @@ extension ChooseDevicesScreen {
         var body: some View {
             VStack(spacing: DeviceCell.spacing) {
                 DeviceCell.MobileComponents(
+                    didDrag: vm.createDragRepresentation,
                     isHovering: isHovering,
                     connection: vm.connection,
                     name: vm.name,
@@ -32,7 +33,6 @@ extension ChooseDevicesScreen {
                     ledEmulator: .init(preset: .eight)
                 )
                     .onTapGesture { vm.connect() }
-                    .onDrag(vm.createDragRepresentation)
                 
                 DeviceCell.StationaryComponents(
                     isHovering: isHovering,

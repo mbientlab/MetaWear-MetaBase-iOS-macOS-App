@@ -27,6 +27,7 @@ extension ChooseDevicesScreen {
         var body: some View {
             VStack(spacing: Self.spacing) {
                 MobileComponents(
+                    didDrag: vm.createDragRepresentation,
                     isHovering: isHovering,
                     connection: vm.connection,
                     name: vm.name,
@@ -36,7 +37,6 @@ extension ChooseDevicesScreen {
                     ledEmulator: vm.ledVM
                 )
                     .onTapGesture { vm.connect() }
-                    .onDrag(vm.createDragRepresentation)
 
                 StationaryComponents(
                     isHovering: isHovering,
@@ -101,6 +101,7 @@ extension ChooseDevicesScreen.DeviceCell {
     ///
     struct MobileComponents: View {
 
+        var didDrag: () -> NSItemProvider
         var isHovering: Bool
         var connection: CBPeripheralState
         var name: String
@@ -123,7 +124,7 @@ extension ChooseDevicesScreen.DeviceCell {
                 .offset(y: isHovering ? -Self.verticalHoverDelta : 0)
                 .foregroundColor(.white)
 
-            image
+            image.onDrag(didDrag)
         }
 
 
