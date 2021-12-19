@@ -1,6 +1,5 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
 import mbientSwiftUI
 
 // Scanning toggle
@@ -8,7 +7,7 @@ import mbientSwiftUI
 
 struct BluetoothErrorButton: View {
 
-    @EnvironmentObject private var bluetooth: BLEStateVM
+    @EnvironmentObject private var bluetooth: BluetoothStateVM
 
     var body: some View {
         if bluetooth.showError {

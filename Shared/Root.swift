@@ -3,6 +3,7 @@
 import Foundation
 import MetaWear
 import MetaWearSync
+import mbientSwiftUI
 
 public class Root: ObservableObject {
 
@@ -18,7 +19,7 @@ public class Root: ObservableObject {
 
     // VMs
     public let factory: UIFactory
-    public let bluetoothVM: BLEStateVM
+    public let bluetoothVM: BluetoothStateVM
 
     public init() {
         self.cloud = .default

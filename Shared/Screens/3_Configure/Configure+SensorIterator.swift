@@ -1,6 +1,5 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
 import mbientSwiftUI
 import MetaWear
 
@@ -10,7 +9,6 @@ extension ConfigureScreen {
 
         @EnvironmentObject private var vm: ConfigureVM
         @State private var placeholder = MWFrequency.CommonCases.hz50
-        @Namespace var namespace
 
         var body: some View {
             exclusive3Dsensors

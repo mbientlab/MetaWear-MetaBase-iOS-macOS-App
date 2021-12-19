@@ -1,192 +1,119 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
 import mbientSwiftUI
 import MetaWear
 import CoreBluetooth
 import MetaWearSync
+import SwiftUI
 
 extension ChooseDevicesScreen {
 
     /// Multi-purpose list cell for MetaWear device groups, solo devices, and unknown devices
     ///
-    struct DeviceCell: View {
+    struct DeviceCell<VM: ItemVM>: View {
 
-        init(_ item: Routing.Item, factory: UIFactory) {
-            _vm = .init(wrappedValue: factory.makeMetaWearItemVM(item))
-        }
+        let state: ItemState
+        let vm: VM
 
-        @StateObject var vm: KnownItemVM
-        @EnvironmentObject private var routing: Routing
-
-        @State private var isHovering = false
-        static let width = CGFloat(120)
-        static let spacing = CGFloat(20)
-        static let verticalHoverDelta = CGFloat(20)
+        @State private var isHovered = false
+        let spacing = CGFloat(20)
 
         var body: some View {
-            VStack(spacing: Self.spacing) {
+            VStack(spacing: spacing) {
                 MobileComponents(
-                    isHovering: isHovering,
-                    connection: vm.connection,
-                    name: vm.name,
-                    models: vm.models,
-                    isLocallyKnown: vm.isLocallyKnown,
-                    isGroup: vm.isGroup,
-                    ledEmulator: vm.ledVM
+                    name: state.name,
+                    models: state.models,
+                    isGroup: state.isGroup,
+                    ledEmulator: state.ledVM
                 )
-                StationaryComponents(
-                    isHovering: isHovering,
-                    isLocallyKnown: vm.isLocallyKnown,
-                    isCloudSynced: vm.isLocallyKnown == false,
-                    rssi: vm.rssi,
-                    isConnecting: vm.connection == .connecting,
-                    identifyHelpText: vm.identifyTip,
-                    requestIdentify: vm.identify,
-                    isIdentifying: vm.isIdentifying
-                )
-            }
-            .frame(width: Self.width)
-            .animation(.easeOut, value: isHovering)
-            .animation(.easeOut, value: vm.connection)
-            .whenHovered { isHovering = $0 }
-            .onTapGesture { vm.connect() }
+                    .onTapGesture { vm.connect() }
 
-            .contextMenu { DeviceCell.ContextMenu(vm: vm) }
+                StatusIndicator(
+                    isWorking: state.isIdentifying || state.connection == .connecting,
+                    showCloudSync: state.isLocallyKnown == false
+                )
+
+                LargeSignalDots(color: .white)
+                    .opacity(isHovered ? 1 : 0.75)
+                    .padding(.top, 20)
+
+                IdentifyTextButton(
+                    identifyHelpText: state.identifyTip,
+                    requestIdentify: vm.identify,
+                    allowIdentification: state.isLocallyKnown
+                )
+                    .opacity(isHovered ? 1 : 0)
+            }
+            .frame(width: .deviceCellWidth)
+            .whenHovered { isHovered = $0 }
+
+            .environment(\.isHovered, isHovered)
+            .environment(\.isDimmed, state.isLocallyKnown == false)
+            .environment(\.connectionState, state.connection)
+            .environment(\.signalLevel, state.rssi)
+
+            .animation(.spring(), value: isHovered)
+            .animation(.easeOut, value: state.connection)
+            .animation(.spring(), value: state.isIdentifying)
+
             .onAppear(perform: vm.onAppear)
             .onDisappear(perform: vm.onDisappear)
-            .environmentObject(vm)
         }
     }
 }
 
 extension ChooseDevicesScreen.DeviceCell {
 
-
-    struct ContextMenu: View {
-
-        let vm: KnownItemVM
-        let deviceDescriptor: String = {
-#if canImport(AppKit)
-            return "Computer"
-#else
-            return UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
-#endif
-        }()
-
-        var body: some View {
-            Button("Rename", action: vm.rename)
-
-            Divider()
-
-            if vm.isGroup {
-                Button("Disband group") { vm.disbandGroup() }
-            } else {
-                Button("Create Group") { vm.group(withItems: []) }
-            }
-
-            Divider()
-
-            Menu(vm.isGroup ? "Forget All" : "Forget") {
-                Button("For This \(deviceDescriptor) Only") { vm.forgetLocally() }
-                Button("For All Devices") { vm.forgetGlobally() }
-            }
-        }
-    }
-
-    /// Component of the cell that moves up and down in response to user hovering/selection behaviors
+    /// Components of the cell that move up and down in response to user hover/select/drop behaviors
     ///
     struct MobileComponents: View {
 
-        var isHovering: Bool
-        var connection: CBPeripheralState
+        @Environment(\.isDropTarget) private var isDropping
+        @Environment(\.isHovered) private var isHovering
+        @Environment(\.connectionState) private var connection
         var name: String
         var models: [(mac: String, model: MetaWear.Model)]
-        var isLocallyKnown: Bool
         var isGroup: Bool
         let ledEmulator: MWLED.Flash.Pattern.Emulator
 
-        private var imageWidth: CGFloat { 110 }
-        private var imageHeight: CGFloat { isHovering ? 150 : 135 }
-        static let verticalHoverDelta = ChooseDevicesScreen.DeviceCell.verticalHoverDelta
-
         var body: some View {
-            ConnectionButton(state: connection)
+            DropOutcomeIndicator()
+                .offset(y: connection == .connected ? .verticalHoverDelta / 2 : 0)
+                .zIndex(2)
+
+            ConnectionIcon()
                 .opacity(connection == .connected ? 1 : 0)
-                .offset(y: isHovering ? -Self.verticalHoverDelta : 0)
+                .offset(y: isHovering ? -.verticalHoverDelta : 0)
+                .offset(y: isDropping ? -.verticalHoverDelta * 2 : 0)
 
             Text(name)
                 .font(.system(.title, design: .rounded))
-                .offset(y: isHovering ? -Self.verticalHoverDelta : 0)
+                .offset(y: isHovering ? -.verticalHoverDelta : 0)
+                .offset(y: isDropping ? -.verticalHoverDelta * 2 : 0)
                 .foregroundColor(.white)
 
-            image
+            MetaWearImages(isGroup: isGroup, models: models, ledEmulator: ledEmulator)
         }
-
-
-        var image: some View {
-            HStack {
-                if isGroup {
-                    ForEach(models.prefix(3), id: \.mac) { (id, model) in
-                        MetaWearWithLED(
-                            width: imageWidth * 0.4,
-                            height: imageHeight * 0.4,
-                            isLocallyKnown: isLocallyKnown,
-                            isHovering: isHovering,
-                            model: model,
-                            ledEmulator: ledEmulator
-                        )
-                    }
-
-                } else {
-                    MetaWearWithLED(
-                        width: imageWidth,
-                        height: imageHeight,
-                        isLocallyKnown: isLocallyKnown,
-                        isHovering: isHovering,
-                        model: models.first?.model ?? .unknown,
-                        ledEmulator: ledEmulator
-                    )
-                }
-            }
-            .frame(width: imageWidth, height: imageHeight, alignment: .center)
-        }
-
-
     }
 
-    /// Component of the cell that does not move due to user intents
+    /// Without changing vertical spacing, alternately show the optional
+    /// cloud sync icon or express some "is working" state
     ///
-    struct StationaryComponents: View {
+    struct StatusIndicator: View {
 
-        var isHovering: Bool
-        var isLocallyKnown: Bool
-        var isCloudSynced: Bool
-        var rssi: SignalLevel
-        var isConnecting: Bool
-
-        /// MAC string(s)
-        var identifyHelpText: String
-        let requestIdentify: () -> Void
-        var isIdentifying: Bool
-
-        @Namespace private var namespace
+        var isWorking: Bool
+        var showCloudSync: Bool
 
         var body: some View {
-
             icloudSynced
-                .opacity(isConnecting ? 0 : 1)
+                .opacity(isWorking ? 0 : 1)
                 .overlay(connectionIndicator)
-
-            LargeSignalDots(signal: rssi, color: .white)
-                .opacity(isHovering ? 1 : 0.75)
-                .padding(.top, 20)
-
-            identifyButton
+                .animation(.easeOut, value: isWorking)
+                .animation(.easeOut, value: showCloudSync)
         }
 
         @ViewBuilder private var connectionIndicator: some View {
-            if isConnecting { ProgressSpinner() }
+            if isWorking { ProgressSpinner() }
         }
 
         private var icloudSynced: some View {
@@ -194,31 +121,160 @@ extension ChooseDevicesScreen.DeviceCell {
                 .font(.headline)
                 .help(Text("Synced via iCloud"))
                 .accessibilityLabel(Text(SFSymbol.icloud.accessibilityDescription))
-                .opacity(isCloudSynced ? 0.75 : 0)
-                .animation(.easeOut, value: isCloudSynced)
-                .accessibilityHidden(isCloudSynced == false)
-        }
-
-        private var identifyButton: some View {
-            Button { requestIdentify() } label: {
-                ZStack {
-                    Text("Identify")
-                        .font(.headline)
-                        .lineLimit(1)
-                        .fixedSize()
-                        .opacity(isIdentifying ? 0 : 1)
-                        .help(Text(identifyHelpText))
-
-                    ProgressSpinner()
-                        .opacity(isIdentifying && !isConnecting ? 1 : 0)
-                }
-            }
-            .buttonStyle(.borderless)
-            .allowsHitTesting(isLocallyKnown)
-            .disabled(isLocallyKnown == false)
-            .opacity(isLocallyKnown ? 1 : 0)
-            .animation(.easeInOut, value: isIdentifying)
-            .opacity(isHovering || isIdentifying ? 1 : 0)
+                .opacity(showCloudSync ? 0.75 : 0)
+                .accessibilityHidden(showCloudSync == false)
         }
     }
+
+    /// Trigger LED and haptic-based identification
+    ///
+    struct IdentifyTextButton: View {
+
+        /// MAC string(s)
+        var identifyHelpText: String
+        let requestIdentify: () -> Void
+        var allowIdentification: Bool
+
+        var body: some View {
+            Button { requestIdentify() } label: { label }
+            .buttonStyle(.borderless)
+            .allowsHitTesting(allowIdentification)
+            .disabled(allowIdentification == false)
+            .opacity(allowIdentification ? 1 : 0)
+        }
+
+        private var label: some View {
+            Text("Identify")
+                .font(.headline)
+                .lineLimit(1)
+                .fixedSize()
+                .help(Text(identifyHelpText))
+        }
+    }
+
+    struct MetaWearImages: View {
+
+        var isGroup: Bool
+        var models: [(mac: String, model: MetaWear.Model)]
+        let ledEmulator: MWLED.Flash.Pattern.Emulator
+
+        @Environment(\.isDropTarget) private var isDropping
+        @Environment(\.isHovered) private var isHovering
+        @Environment(\.dragProvider) private var dragProvider
+
+        private var imageWidth: CGFloat { 140 }
+
+        private var imageHeight: CGFloat { isHovering ? 160 : 135 }
+
+        var overlap: CGFloat { models.endIndex <= 2 ? 0.2 : 0.4 }
+
+        private var groupCenteringXOffset: CGFloat {
+            let oneLess = max(0, min(3, models.endIndex - 1))
+            return CGFloat(oneLess) * imageWidth * overlap / 2
+        }
+
+        var body: some View {
+            HStack(spacing: 0) {
+                if isGroup { groupImages } else {
+                    MetaWearWithLED(
+                        width: imageWidth,
+                        height: imageHeight,
+                        ledEmulator: ledEmulator
+                    ).environment(\.metaWearModel, models.first?.model ?? .unknown)
+                }
+            }
+            .frame(width: imageWidth, height: imageHeight, alignment: .center)
+            .onDrag(dragProvider)
+
+            .background(backgrounds)
+            .animation(.spring(), value: isDropping)
+            .animation(.spring(), value: isHovering)
+        }
+
+        private var backgrounds: some View {
+            HStack {
+                if isGroup { groupBackgrounds } else {
+                    ZStack {
+                        MetaWearOutline(width: imageWidth, height: imageHeight)
+                        MetaWearShadow(width: imageWidth, height: imageHeight)
+                    }
+                    .environment(\.metaWearModel, models.first?.model ?? .unknown)
+                }
+            }
+            .frame(width: imageWidth, height: imageHeight, alignment: .center)
+        }
+
+        private let groupItemScale: CGFloat = 0.6
+
+        private var groupImages: some View {
+            let centering = groupCenteringXOffset
+            return ForEach(models.prefix(3), id: \.mac) { (id, model) in
+                let index = models.firstIndex(where: { $0.mac == id }) ?? 0
+
+                MetaWearWithLED(
+                    width: imageWidth * groupItemScale,
+                    height: imageHeight * groupItemScale,
+                    ledEmulator: ledEmulator
+                )
+                    .environment(\.metaWearModel, model)
+                    .arrangeGroupedMetaWearImages(at: index, overlap: imageWidth * overlap, xCentering: centering)
+            }
+        }
+
+        /// Split into two layers so the solid color appears unified, not split per device
+        private var groupBackgrounds: some View {
+            let centering = groupCenteringXOffset
+            let width = imageWidth * groupItemScale
+            let height = imageHeight * groupItemScale
+            return ZStack {
+
+                // Solid color
+                HStack(spacing: 0) {
+                    ForEach(models.prefix(3), id: \.mac) { (id, model) in
+                        let index = models.firstIndex(where: { $0.mac == id }) ?? 0
+
+                        MetaWearOutline(width: width, height: height)
+                            .environment(\.metaWearModel, model)
+                            .arrangeGroupedMetaWearImages(at: index, overlap: imageWidth * overlap, xCentering: centering)
+                    }
+                }
+
+                // Shadows
+                HStack(spacing: 0) {
+                    ForEach(models.prefix(3), id: \.mac) { (id, model) in
+                        let index = models.firstIndex(where: { $0.mac == id }) ?? 0
+
+                        MetaWearShadow(width: width, height: height)
+                            .environment(\.metaWearModel, model)
+                            .opacity(0.5) // Reduce overlap of group shadows
+                            .arrangeGroupedMetaWearImages(at: index, overlap: imageWidth * overlap, xCentering: centering)
+                    }
+                }
+            }
+        }
+    }
+}
+
+fileprivate extension View {
+
+    func arrangeGroupedMetaWearImages(at index: Int, overlap: CGFloat, xCentering: CGFloat) -> some View {
+
+        var rotation: Angle {
+            switch index {
+                case 0: return .degrees(5)
+                case 1: return .degrees(-5)
+                case 2: return .degrees(2)
+                default: return .degrees(0)
+            }
+        }
+
+        return self
+            .offset(x: CGFloat(index) * -overlap)
+            .offset(x: xCentering)
+            .rotationEffect(rotation)
+            .zIndex(-Double(index))
+            .offset(y: index == 2 ? 9 : 0)
+
+    }
+
 }

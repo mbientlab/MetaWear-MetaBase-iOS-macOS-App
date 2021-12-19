@@ -1,6 +1,5 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
 import mbientSwiftUI
 
 extension ChooseDevicesScreen {
@@ -13,26 +12,28 @@ extension ChooseDevicesScreen {
         @EnvironmentObject private var vm: DiscoveryListVM
         @EnvironmentObject private var routing: Routing
         @EnvironmentObject private var factory: UIFactory
-        @Namespace private var list
+        @Environment(\.namespace) var list
 
         var body: some View {
             ForEach(vm.groups) { group in
-                DeviceCell(.group(group.id), factory: factory)
-                    .matchedGeometryEffect(id: group.id, in: list)
+                KnownDeviceCell(.group(group.id), factory: factory)
+                    .matchedGeometryEffect(id: group.id, in: list!)
             }
 
+            #if os(iOS)
             if showDividerA { divider }
+            #endif
 
             ForEach(vm.ungrouped) { metadata in
-                DeviceCell(.known(metadata.id), factory: factory)
-                    .matchedGeometryEffect(id: metadata.mac, in: list)
+                KnownDeviceCell(.known(metadata.id), factory: factory)
+                    .matchedGeometryEffect(id: metadata.mac, in: list!)
             }
 
             if showDividerB { divider }
 
             ForEach(vm.unknown) { deviceID in
                 UnknownDeviceCell(unknown: deviceID, factory: factory)
-                    .matchedGeometryEffect(id: deviceID.uuidString, in: list)
+                    .matchedGeometryEffect(id: deviceID.uuidString, in: list!)
             }
         }
     }

@@ -1,6 +1,5 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
 import mbientSwiftUI
 
 public protocol HeaderVM {
@@ -62,7 +61,7 @@ struct Header: View {
     }
 
     private var deviceImage: some View {
-        Images.metawearTop.image()
+        SharedImages.metawearTop.image()
             .resizable()
             .scaledToFit()
     }

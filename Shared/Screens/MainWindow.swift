@@ -1,6 +1,5 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
 import mbientSwiftUI
 
 // MARK: - MacOS
@@ -23,6 +22,7 @@ struct MainWindow: View {
             .animation(.easeInOut, value: routing.destination)
             .background(Color.accentColor.ignoresSafeArea())
             .environment(\.namespace, namespace)
+            .toolbar { BluetoothErrorButton.ToolbarIcon() }
     }
 
     private var stackNavigation: some View {

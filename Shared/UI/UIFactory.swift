@@ -3,6 +3,7 @@
 import Foundation
 import MetaWear
 import MetaWearSync
+import mbientSwiftUI
 
 public class UIFactory: ObservableObject {
 
@@ -28,7 +29,7 @@ public extension UIFactory {
         .init(scanner: scanner, store: store)
     }
 
-    func makeBluetoothStateWarningsVM() -> BLEStateVM {
+    func makeBluetoothStateWarningsVM() -> BluetoothStateVM {
         .init(scanner: scanner)
     }
 

@@ -1,6 +1,5 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
 import mbientSwiftUI
 import Combine
 import MetaWear
@@ -32,7 +31,6 @@ struct ActionScreen: View {
                 .padding(.horizontal, .screenInset)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .toolbar { BluetoothErrorButton.ToolbarIcon() }
         .environmentObject(vm)
         .onAppear(perform: vm.start)
     }

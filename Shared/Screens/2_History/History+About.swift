@@ -1,6 +1,5 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
 import mbientSwiftUI
 import MetaWear
 import MetaWearSync
@@ -18,10 +17,13 @@ extension HistoryScreen {
                         .buttonStyle(BorderlessButtonStyle())
                 })
 
-                ScrollView {
-                    ForEach(vm.items) { vm in
-                        Box(vm: vm)
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 40) {
+                        ForEach(vm.items) { vm in
+                            AboutBox(vm: vm)
+                        }
                     }
+                    .padding(.bottom, 25)
                 }
             }
         }
@@ -30,15 +32,21 @@ extension HistoryScreen {
 
 extension HistoryScreen.AboutColumn {
 
-    struct Box: View {
+    struct AboutBox: View {
 
         @ObservedObject var vm: AboutDeviceVM
         @State private var alignment = CGFloat(65)
 
         var body: some View {
             VStack(alignment: .leading, spacing: 10) {
+
                 header
+                    .padding(.horizontal, 8)
+                    .background(headerShading)
+                    .padding(.bottom, 5)
+
                 info
+                    .padding(.leading, 10)
                     .font(.body)
             }
             .onPreferenceChange(SubtitleWK.self) { alignment = max($0, alignment) }
@@ -47,17 +55,19 @@ extension HistoryScreen.AboutColumn {
         }
 
         private var header: some View {
-            HStack(spacing: 10) {
+            let verticalPadding: CGFloat = 8
+            return HStack(spacing: 10) {
 
                 Text(vm.meta.name)
-                        .font(.title3)
-                        .lineLimit(1)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .layoutPriority(1)
+                    .font(.title3.weight(.medium))
+                    .foregroundColor(.primary)
+                    .lineLimit(1)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .layoutPriority(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, verticalPadding)
 
-                Spacer()
-
-                IdentifyByLEDButton(request: vm.identifyByLED, emulator: vm.led)
+                IdentifyByLEDButton(flashScale: 2, request: vm.identifyByLED, emulator: vm.led)
 
                 MiniMenuButton {
                     Button("Update Firmware") { }
@@ -66,7 +76,14 @@ extension HistoryScreen.AboutColumn {
                     Button("Factory Reset") { vm.reset() }
                     Text("Advanced")
                 }
+                .padding(.vertical, verticalPadding)
             }
+            .clipShape(RoundedRectangle(cornerRadius: 6)) // LED Button
+        }
+
+        private var headerShading: some View {
+            RoundedRectangle(cornerRadius: 6)
+                .foregroundColor(.secondary).opacity(0.2)
         }
 
         @ViewBuilder private var info: some View {

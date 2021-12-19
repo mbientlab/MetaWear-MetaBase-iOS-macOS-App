@@ -1,6 +1,6 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import SwiftUI
+import mbientSwiftUI
 
 // MARK: - MacOS
 
@@ -18,7 +18,7 @@ extension ChooseDevicesScreen {
                 ScrollView(.horizontal, showsIndicators: true) {
                     grid
                         .padding(.leading, centeringPadding)
-                        .offset(y: -DeviceCell.verticalHoverDelta)
+                        .offset(y: -.verticalHoverDelta)
                         .animation(.interactiveSpring(), value: centeringPadding)
                         .animation(.easeInOut, value: vm.groups)
                         .animation(.easeInOut, value: vm.ungrouped)
@@ -74,7 +74,7 @@ extension ChooseDevicesScreen.MacOSGrid {
         let sections = CGFloat(countSections())
         let interItemSpacing = cellSpacing * (cells - 1)
         let interSectionSpacing = (cellSpacing + 1) * (max(0, sections - 1))
-        let cellsContentWidth = ChooseDevicesScreen.DeviceCell.width * cells
+        let cellsContentWidth = .deviceCellWidth * cells
         return interItemSpacing + interSectionSpacing + cellsContentWidth
     }
 
