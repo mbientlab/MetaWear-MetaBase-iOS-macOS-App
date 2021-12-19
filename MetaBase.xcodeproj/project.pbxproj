@@ -49,6 +49,8 @@
 		944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
 		9445E58F276D493300B8E8F3 /* DropOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9445E58E276D493300B8E8F3 /* DropOutcome.swift */; };
 		9445E590276D493300B8E8F3 /* DropOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9445E58E276D493300B8E8F3 /* DropOutcome.swift */; };
+		944C1761276F9FF0006003C9 /* SensorUserParametersPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944C1760276F9FF0006003C9 /* SensorUserParametersPersistence.swift */; };
+		944C1762276F9FF0006003C9 /* SensorUserParametersPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944C1760276F9FF0006003C9 /* SensorUserParametersPersistence.swift */; };
 		94528552275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */; };
 		94528553275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */; };
 		94528555275BDDB9004D815B /* Choose+Grids.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528554275BDDB9004D815B /* Choose+Grids.swift */; };
@@ -172,6 +174,7 @@
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
 		944538BC2767DCE000841880 /* StreamingCountersContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingCountersContainer.swift; sourceTree = "<group>"; };
 		9445E58E276D493300B8E8F3 /* DropOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropOutcome.swift; sourceTree = "<group>"; };
+		944C1760276F9FF0006003C9 /* SensorUserParametersPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorUserParametersPersistence.swift; sourceTree = "<group>"; };
 		94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+ScanningIndicator.swift"; sourceTree = "<group>"; };
 		94528554275BDDB9004D815B /* Choose+Grids.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+Grids.swift"; sourceTree = "<group>"; };
 		94528557275BDE1E004D815B /* Choose+DeviceIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+DeviceIterator.swift"; sourceTree = "<group>"; };
@@ -462,6 +465,7 @@
 				9452856C275BE1D5004D815B /* Root.swift */,
 				94CF3EF9276427C300C2D8B0 /* Routing.swift */,
 				94528560275BDF8D004D815B /* UserDefaults+.swift */,
+				944C1760276F9FF0006003C9 /* SensorUserParametersPersistence.swift */,
 				9413CEB4275B13F900A36B5E /* Screens */,
 				94934FDC275A0C8800E388FF /* UI */,
 				94934FE5275A0D3C00E388FF /* Support */,
@@ -721,6 +725,7 @@
 				94528555275BDDB9004D815B /* Choose+Grids.swift in Sources */,
 				94CF3F0A2764286B00C2D8B0 /* Header.swift in Sources */,
 				9409C5C02761383E001FE850 /* ConfigureVM.swift in Sources */,
+				944C1761276F9FF0006003C9 /* SensorUserParametersPersistence.swift in Sources */,
 				94E3A7F3275FF519007E2BAE /* AboutDeviceVM.swift in Sources */,
 				9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */,
 				9452856D275BE1D5004D815B /* Root.swift in Sources */,
@@ -783,6 +788,7 @@
 				94CF3F0B2764286B00C2D8B0 /* Header.swift in Sources */,
 				94528553275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */,
 				94528556275BDDB9004D815B /* Choose+Grids.swift in Sources */,
+				944C1762276F9FF0006003C9 /* SensorUserParametersPersistence.swift in Sources */,
 				94528568275BE12B004D815B /* ActionScreen.swift in Sources */,
 				94CF3F0D2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
 				94935024275A11C600E388FF /* KnownItemVM.swift in Sources */,
