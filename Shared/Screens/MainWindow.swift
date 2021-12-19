@@ -22,6 +22,8 @@ struct MainWindow: View {
             .animation(.easeInOut, value: routing.destination)
             .foregroundColor(.myPrimary)
             .background(Color.myBackground.ignoresSafeArea())
+            .colorScheme(.dark) // Workaround for macOS as some Menu and built-in components do not properly accept reverse-out shading
+//            .preferredColorScheme(.dark) // Setting this would force system dialogs into dark mode
             .environment(\.namespace, namespace)
             .toolbar { BluetoothErrorButton.ToolbarIcon() }
     }
