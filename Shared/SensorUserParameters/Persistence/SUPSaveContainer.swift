@@ -9,8 +9,8 @@ public struct MBSensorUserParametersSaveContainer: Codable {
     public var versionSentinel = 1
     public let data: Data
 
-    public init(parameters: [SensorUserParameters], encoder: JSONEncoder = .init()) throws {
-        let dto = parameters.map(MBSensorUserParametersDTO1.init)
+    public init(parameters: [SUPPreset], encoder: JSONEncoder = .init()) throws {
+        let dto = parameters.map(MBSUPPresetDTO1.init)
         self.data = try encoder.encode(dto)
     }
 
@@ -18,14 +18,30 @@ public struct MBSensorUserParametersSaveContainer: Codable {
         self = try decoder.decode(MBSensorUserParametersSaveContainer.self, from: data)
     }
 
-    public func load(_ decoder: JSONDecoder = .init()) throws -> [SensorUserParameters] {
+    public func load(_ decoder: JSONDecoder = .init()) throws -> [SUPPreset] {
         try decoder
-            .decode([MBSensorUserParametersDTO1].self, from: data)
-            .map { try $0.load() }
+            .decode([MBSUPPresetDTO1].self, from: data)
+            .map { $0.load() }
     }
 }
 
 // MARK: - DTOs
+
+fileprivate struct MBSUPPresetDTO1: Codable {
+    let id: UUID
+    let name: String
+    let parameters: MBSensorUserParametersDTO1
+
+    init(model: SUPPreset) {
+        self.id = model.id
+        self.name = model.name
+        self.parameters = .init(model: model.parameters)
+    }
+
+    func load() -> SUPPreset {
+        .init(id: id, name: name, parameters: parameters.load())
+    }
+}
 
 fileprivate struct MBSensorUserParametersDTO1: Codable {
 
@@ -77,7 +93,7 @@ fileprivate struct MBSensorUserParametersDTO1: Codable {
         self.sensorFusionType = .init(model: model.sensorFusionType)
     }
 
-    func load() throws -> SensorUserParameters {
+    func load() -> SensorUserParameters {
         .init(accelerometer: accelerometer,
               altitude: altitude,
               ambientLight: ambientLight,

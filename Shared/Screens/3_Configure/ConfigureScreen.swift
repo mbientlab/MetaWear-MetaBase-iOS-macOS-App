@@ -14,8 +14,11 @@ struct ConfigureScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Header(vm: vm)
-            Subhead(label: selection, trailing: { presetSessions })
-                .padding(.horizontal, .screenInset)
+
+            Subhead(
+                label: vm.selectedPreset?.name ?? "New Session",
+                trailing: { PresetsMenu() }
+            ).padding(.horizontal, .screenInset)
 
             ScrollView {
                 Grid()
@@ -27,29 +30,8 @@ struct ConfigureScreen: View {
                 .padding(.bottom, .screenInset)
                 .padding(.horizontal, .screenInset)
         }
+        .animation(.easeInOut, value: vm.selectedPreset)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .environmentObject(vm)
-    }
-
-    @State private var hasPresets = false
-    @State private var selection = "New Session"
-    private var presetSessions: some View {
-        Menu("Presets") {
-            Button("Save current as...") { hasPresets.toggle(); selection = "Mockup Example" }
-            .disabled(vm.canStart == false)
-            Divider()
-            if hasPresets {
-                Picker("Presets", selection: $selection) {
-                    Text("Mockup Example").tag("Mockup Example")
-                    Text("Example 2").tag("Example 2")
-                }
-                .pickerStyle(.inline)
-            } else { Text("No compatible saved presets") }
-        }
-        .fixedSize()
-#if os(macOS)
-        .controlSize(.large)
-#endif
-
     }
 }

@@ -4,7 +4,7 @@ import Foundation
 import MetaWear
 
 /// Model User Configurable Parameters
-public struct SensorUserParameters {
+public struct SensorUserParameters: Hashable, Equatable {
 
     public private(set) var accelerometer   = false
     public private(set) var altitude        = false

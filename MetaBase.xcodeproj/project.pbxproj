@@ -41,6 +41,12 @@
 		9409C5E92763B764001FE850 /* ActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E72763B764001FE850 /* ActionType.swift */; };
 		9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
+		941A08F6276FB2AE006D52E3 /* SensorUserParametersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F5276FB2AE006D52E3 /* SensorUserParametersStore.swift */; };
+		941A08F7276FB2AE006D52E3 /* SensorUserParametersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F5276FB2AE006D52E3 /* SensorUserParametersStore.swift */; };
+		941A08FA276FB432006D52E3 /* SensorUserParametersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F9276FB432006D52E3 /* SensorUserParametersLoader.swift */; };
+		941A08FB276FB432006D52E3 /* SensorUserParametersLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F9276FB432006D52E3 /* SensorUserParametersLoader.swift */; };
+		941A08FD276FB75C006D52E3 /* SUPPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* SUPPreset.swift */; };
+		941A08FE276FB75C006D52E3 /* SUPPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* SUPPreset.swift */; };
 		941DF258276C34E300C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF257276C34E300C5978F /* MetaWearSync */; };
 		941DF25A276C34EE00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF259276C34EE00C5978F /* MetaWearSync */; };
 		941DF25C276C34FB00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF25B276C34FB00C5978F /* MetaWearSync */; };
@@ -49,8 +55,8 @@
 		944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
 		9445E58F276D493300B8E8F3 /* DropOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9445E58E276D493300B8E8F3 /* DropOutcome.swift */; };
 		9445E590276D493300B8E8F3 /* DropOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9445E58E276D493300B8E8F3 /* DropOutcome.swift */; };
-		944C1761276F9FF0006003C9 /* SensorUserParametersPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944C1760276F9FF0006003C9 /* SensorUserParametersPersistence.swift */; };
-		944C1762276F9FF0006003C9 /* SensorUserParametersPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944C1760276F9FF0006003C9 /* SensorUserParametersPersistence.swift */; };
+		944C1761276F9FF0006003C9 /* SUPSaveContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944C1760276F9FF0006003C9 /* SUPSaveContainer.swift */; };
+		944C1762276F9FF0006003C9 /* SUPSaveContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944C1760276F9FF0006003C9 /* SUPSaveContainer.swift */; };
 		94528552275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */; };
 		94528553275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */; };
 		94528555275BDDB9004D815B /* Choose+Grids.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528554275BDDB9004D815B /* Choose+Grids.swift */; };
@@ -73,6 +79,8 @@
 		9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528579275BE77A004D815B /* Choose+EditGroup.swift */; };
 		945494F727656A800021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F627656A800021E3D6 /* MetaWear */; };
 		945494F927656A840021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F827656A840021E3D6 /* MetaWear */; };
+		9481D768276FD5CE00AB97FA /* Configure+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481D767276FD5CE00AB97FA /* Configure+Presets.swift */; };
+		9481D769276FD5CE00AB97FA /* Configure+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481D767276FD5CE00AB97FA /* Configure+Presets.swift */; };
 		94934FD3275A09E700E388FF /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94934FD2275A09E700E388FF /* MetaWear */; };
 		94934FD5275A09EE00E388FF /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94934FD4275A09EE00E388FF /* MetaWear */; };
 		9493501A275A112200E388FF /* DiscoveryListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935019275A112200E388FF /* DiscoveryListVM.swift */; };
@@ -172,9 +180,12 @@
 		9409C5E42762E732001FE850 /* ActionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionHeader.swift; sourceTree = "<group>"; };
 		9409C5E72763B764001FE850 /* ActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionType.swift; sourceTree = "<group>"; };
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
+		941A08F5276FB2AE006D52E3 /* SensorUserParametersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorUserParametersStore.swift; sourceTree = "<group>"; };
+		941A08F9276FB432006D52E3 /* SensorUserParametersLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorUserParametersLoader.swift; sourceTree = "<group>"; };
+		941A08FC276FB75C006D52E3 /* SUPPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUPPreset.swift; sourceTree = "<group>"; };
 		944538BC2767DCE000841880 /* StreamingCountersContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingCountersContainer.swift; sourceTree = "<group>"; };
 		9445E58E276D493300B8E8F3 /* DropOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropOutcome.swift; sourceTree = "<group>"; };
-		944C1760276F9FF0006003C9 /* SensorUserParametersPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorUserParametersPersistence.swift; sourceTree = "<group>"; };
+		944C1760276F9FF0006003C9 /* SUPSaveContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SUPSaveContainer.swift; sourceTree = "<group>"; };
 		94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+ScanningIndicator.swift"; sourceTree = "<group>"; };
 		94528554275BDDB9004D815B /* Choose+Grids.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+Grids.swift"; sourceTree = "<group>"; };
 		94528557275BDE1E004D815B /* Choose+DeviceIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+DeviceIterator.swift"; sourceTree = "<group>"; };
@@ -184,6 +195,7 @@
 		94528563275BE0D8004D815B /* MainWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
 		9452856C275BE1D5004D815B /* Root.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Root.swift; sourceTree = "<group>"; };
 		94528579275BE77A004D815B /* Choose+EditGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+EditGroup.swift"; sourceTree = "<group>"; };
+		9481D767276FD5CE00AB97FA /* Configure+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+Presets.swift"; sourceTree = "<group>"; };
 		94934FD6275A0A2E00E388FF /* MetaBase--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MetaBase--iOS--Info.plist"; sourceTree = "<group>"; };
 		94934FD7275A0A4200E388FF /* MetaBase--macOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MetaBase--macOS--Info.plist"; sourceTree = "<group>"; };
 		94935019275A112200E388FF /* DiscoveryListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryListVM.swift; sourceTree = "<group>"; };
@@ -272,7 +284,6 @@
 			isa = PBXGroup;
 			children = (
 				9409C5BF2761383E001FE850 /* ConfigureVM.swift */,
-				9409C5C127613890001FE850 /* SensorUserParameters.swift */,
 				94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */,
 				9409C5C827617F35001FE850 /* LegalSensorParameters.swift */,
 			);
@@ -301,6 +312,34 @@
 				94934FDB275A0C5800E388FF /* 4_Action */,
 			);
 			path = Screens;
+			sourceTree = "<group>";
+		};
+		941A08F8276FB423006D52E3 /* SensorUserParameters */ = {
+			isa = PBXGroup;
+			children = (
+				941A08F5276FB2AE006D52E3 /* SensorUserParametersStore.swift */,
+				941A0900276FB79C006D52E3 /* Persistence */,
+				941A08FF276FB789006D52E3 /* Model */,
+			);
+			path = SensorUserParameters;
+			sourceTree = "<group>";
+		};
+		941A08FF276FB789006D52E3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				941A08FC276FB75C006D52E3 /* SUPPreset.swift */,
+				9409C5C127613890001FE850 /* SensorUserParameters.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		941A0900276FB79C006D52E3 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				941A08F9276FB432006D52E3 /* SensorUserParametersLoader.swift */,
+				944C1760276F9FF0006003C9 /* SUPSaveContainer.swift */,
+			);
+			path = Persistence;
 			sourceTree = "<group>";
 		};
 		9420E580275A090600A841D6 /* iOS */ = {
@@ -359,6 +398,7 @@
 				9409C5CE2762969B001FE850 /* Configure+Grid.swift */,
 				9409C5CB2761F438001FE850 /* Configure+SensorIterator.swift */,
 				94E3A80027608BE3007E2BAE /* Configure+Tile.swift */,
+				9481D767276FD5CE00AB97FA /* Configure+Presets.swift */,
 				9409C5D12762971D001FE850 /* Configure+CTAs.swift */,
 			);
 			path = 3_Configure;
@@ -461,11 +501,11 @@
 		94E005C9275A07E9001B0DFD /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				941A08F8276FB423006D52E3 /* SensorUserParameters */,
 				94E005CA275A07E9001B0DFD /* MetaBaseApp.swift */,
 				9452856C275BE1D5004D815B /* Root.swift */,
 				94CF3EF9276427C300C2D8B0 /* Routing.swift */,
 				94528560275BDF8D004D815B /* UserDefaults+.swift */,
-				944C1760276F9FF0006003C9 /* SensorUserParametersPersistence.swift */,
 				9413CEB4275B13F900A36B5E /* Screens */,
 				94934FDC275A0C8800E388FF /* UI */,
 				94934FE5275A0D3C00E388FF /* Support */,
@@ -712,6 +752,7 @@
 				94E3A80327608BE3007E2BAE /* Configure+Tile.swift in Sources */,
 				9409C5E52762E732001FE850 /* ActionHeader.swift in Sources */,
 				94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */,
+				9481D768276FD5CE00AB97FA /* Configure+Presets.swift in Sources */,
 				9409C5D92762D7DA001FE850 /* ActionState.swift in Sources */,
 				9452857A275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
 				94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */,
@@ -725,7 +766,7 @@
 				94528555275BDDB9004D815B /* Choose+Grids.swift in Sources */,
 				94CF3F0A2764286B00C2D8B0 /* Header.swift in Sources */,
 				9409C5C02761383E001FE850 /* ConfigureVM.swift in Sources */,
-				944C1761276F9FF0006003C9 /* SensorUserParametersPersistence.swift in Sources */,
+				944C1761276F9FF0006003C9 /* SUPSaveContainer.swift in Sources */,
 				94E3A7F3275FF519007E2BAE /* AboutDeviceVM.swift in Sources */,
 				9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */,
 				9452856D275BE1D5004D815B /* Root.swift in Sources */,
@@ -744,6 +785,9 @@
 				94CF3F0E2764286B00C2D8B0 /* ProgressBar.swift in Sources */,
 				94528552275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */,
 				94E005F2275A07E9001B0DFD /* MetaBaseApp.swift in Sources */,
+				941A08F6276FB2AE006D52E3 /* SensorUserParametersStore.swift in Sources */,
+				941A08FA276FB432006D52E3 /* SensorUserParametersLoader.swift in Sources */,
+				941A08FD276FB75C006D52E3 /* SUPPreset.swift in Sources */,
 				94E3A7F5275FF557007E2BAE /* HistoryScreen.swift in Sources */,
 				94528558275BDE1E004D815B /* Choose+DeviceIterator.swift in Sources */,
 				9409C5D22762971D001FE850 /* Configure+CTAs.swift in Sources */,
@@ -775,6 +819,7 @@
 				944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */,
 				9409C5E62762E732001FE850 /* ActionHeader.swift in Sources */,
 				94E3A80427608BE3007E2BAE /* Configure+Tile.swift in Sources */,
+				9481D769276FD5CE00AB97FA /* Configure+Presets.swift in Sources */,
 				9409C5DA2762D7DA001FE850 /* ActionState.swift in Sources */,
 				94E3A7F6275FF5CF007E2BAE /* HistoryScreen.swift in Sources */,
 				9493501B275A112200E388FF /* DiscoveryListVM.swift in Sources */,
@@ -788,7 +833,7 @@
 				94CF3F0B2764286B00C2D8B0 /* Header.swift in Sources */,
 				94528553275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */,
 				94528556275BDDB9004D815B /* Choose+Grids.swift in Sources */,
-				944C1762276F9FF0006003C9 /* SensorUserParametersPersistence.swift in Sources */,
+				944C1762276F9FF0006003C9 /* SUPSaveContainer.swift in Sources */,
 				94528568275BE12B004D815B /* ActionScreen.swift in Sources */,
 				94CF3F0D2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
 				94935024275A11C600E388FF /* KnownItemVM.swift in Sources */,
@@ -807,6 +852,9 @@
 				94CF3F0F2764286B00C2D8B0 /* ProgressBar.swift in Sources */,
 				94CF3F022764282300C2D8B0 /* CTAButton.swift in Sources */,
 				94528565275BE0D8004D815B /* MainWindow.swift in Sources */,
+				941A08F7276FB2AE006D52E3 /* SensorUserParametersStore.swift in Sources */,
+				941A08FB276FB432006D52E3 /* SensorUserParametersLoader.swift in Sources */,
+				941A08FE276FB75C006D52E3 /* SUPPreset.swift in Sources */,
 				9452855F275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
 				94528562275BDF8D004D815B /* UserDefaults+.swift in Sources */,
 				9409C5D32762971D001FE850 /* Configure+CTAs.swift in Sources */,

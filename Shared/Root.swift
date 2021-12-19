@@ -9,6 +9,7 @@ public class Root: ObservableObject {
 
     // State
     public let devices: MetaWearSyncStore
+    public let presets: SensorUserParametersStore
     public let routing: Routing
 
     // Services
@@ -16,6 +17,7 @@ public class Root: ObservableObject {
     private let cloud: NSUbiquitousKeyValueStore
     private let local: UserDefaults
     private let metawearLoader: MWKnownDevicesPersistence
+    private let presetsLoader: SensorUserParametersPersistence
 
     // VMs
     public let factory: UIFactory
@@ -24,12 +26,14 @@ public class Root: ObservableObject {
     public init() {
         self.cloud = .default
         self.local = .standard
-        self.metawearLoader  = MWCloudLoader(local: local, cloud: cloud) 
+        self.metawearLoader  = MWCloudLoader(local: local, cloud: cloud)
+        self.presetsLoader   = SensorUserParametersLoader()
 
         let scanner = MetaWearScanner.sharedRestore
         let devices = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
+        self.presets = SensorUserParametersStore(loader: presetsLoader)
         let routing = Routing()
-        let factory = UIFactory(devices: devices, scanner: scanner, routing: routing)
+        let factory = UIFactory(devices, presets, scanner, routing)
 
         self.devices = devices
         self.routing = routing
@@ -45,6 +49,7 @@ public extension Root {
         do {
             try devices.load()
             let _ = cloud.synchronize()
+            presets.load()
 #if DEBUG
             debugs()
 #endif

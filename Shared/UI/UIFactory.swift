@@ -7,15 +7,18 @@ import mbientSwiftUI
 
 public class UIFactory: ObservableObject {
 
-    public init(devices: MetaWearSyncStore,
-                scanner: MetaWearScanner,
-                routing: Routing) {
+    public init(_ devices: MetaWearSyncStore,
+                _ presets: SensorUserParametersStore,
+                _ scanner: MetaWearScanner,
+                _ routing: Routing) {
+        self.presets = presets
         self.store = devices
         self.scanner = scanner
         self.routing = routing
     }
 
     private unowned let store: MetaWearSyncStore
+    private unowned let presets: SensorUserParametersStore
     private unowned let scanner: MetaWearScanner
     private unowned let routing: Routing
     private lazy var actionQueue = DispatchQueue(label: Bundle.main.bundleIdentifier! + ".action",
@@ -65,7 +68,7 @@ public extension UIFactory {
     func makeConfigureVM() -> ConfigureVM {
         guard let item = routing.focus?.item else { fatalError("Set item before navigation") }
         let (title, devices) = getKnownDevices(for: item)
-        return .init(title: title, item: item, devices: devices, routing: routing)
+        return .init(title: title, item: item, devices: devices, presets: presets, routing: routing)
     }
 
     func makeActionVM() -> ActionVM {
