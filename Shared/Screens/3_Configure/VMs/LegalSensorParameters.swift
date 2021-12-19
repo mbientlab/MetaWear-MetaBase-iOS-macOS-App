@@ -86,13 +86,14 @@ public extension LegalSensorParameters {
         }
 
         // MARK: - Barometers
+        let allHaveBarometers = modules.allSatisfy { device in device.keys.contains(.barometer) }
 
         let barometers = modules.reduce(into: Set<MWBarometer.Model>()) { result, dict in
             if let unit = dict[.barometer], case MWModules.barometer(let model) = unit {
                 result.insert(model)
             }
         }
-        if barometers.isEmpty == false {
+        if allHaveBarometers && barometers.isEmpty == false {
             var barometerRates = Set(MWBarometer.StandbyTime.allCases)
             if barometers.contains(.bme280) {
                 barometerRates.formIntersection(Set(MWBarometer.StandbyTime.BMEoptions))
@@ -119,9 +120,10 @@ public extension LegalSensorParameters {
 
         let allHaveOnboardThermometer: Bool = {
             for device in modules {
-                guard let unit = device[.thermometer] else { return false }
-                guard case MWModules.thermometer(let sources) = unit else { return false }
-                guard sources.contains(.onboard) else { return false }
+                guard let unit = device[.thermometer],
+                      case MWModules.thermometer(let sources) = unit,
+                      sources.contains(.onboard)
+                else { return false }
             }
             return true
         }()
