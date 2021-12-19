@@ -13,12 +13,12 @@ struct DropOutcomeIndicator: View {
             .lineLimit(0)
             .fixedSize()
             .font(.title.weight(.semibold))
-            .foregroundColor(.accentColor)
+            .foregroundColor(.myBackground)
             .animation(nil, value: outcome)
 
             .padding(.vertical, 5)
             .frame(maxWidth: .infinity, alignment: .center)
-            .background(Capsule(style: .continuous).foregroundColor(.yellow))
+            .background(Capsule(style: .continuous).foregroundColor(.myHighlight))
 
             .opacity(outcome == .noDrop ? 0 : 1)
             .animation(.easeOut(duration: 0.2), value: outcome)

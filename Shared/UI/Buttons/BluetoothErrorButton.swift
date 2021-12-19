@@ -19,7 +19,7 @@ struct BluetoothErrorButton: View {
                 }
                 .font(.body.weight(.medium))
             }
-            .foregroundColor(.yellow)
+            .foregroundColor(.myFailure)
             .whenHovered { bluetooth.isHovered = $0 }
             .animation(.easeInOut, value: bluetooth.isHovered)
         }

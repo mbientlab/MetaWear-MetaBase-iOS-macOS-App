@@ -60,7 +60,7 @@ extension HistoryScreen.AboutColumn {
 
                 Text(vm.meta.name)
                     .font(.title3.weight(.medium))
-                    .foregroundColor(.primary)
+                    .foregroundColor(.myPrimary)
                     .lineLimit(1)
                     .fixedSize(horizontal: false, vertical: true)
                     .layoutPriority(1)
@@ -83,7 +83,7 @@ extension HistoryScreen.AboutColumn {
 
         private var headerShading: some View {
             RoundedRectangle(cornerRadius: 6)
-                .foregroundColor(.secondary).opacity(0.2)
+                .foregroundColor(.myGroupBackground)
         }
 
         @ViewBuilder private var info: some View {

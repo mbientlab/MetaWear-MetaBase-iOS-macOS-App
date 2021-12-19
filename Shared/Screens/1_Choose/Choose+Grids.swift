@@ -40,7 +40,7 @@ extension ChooseDevicesScreen {
         private var divider: some View {
             Rectangle()
                 .frame(width: 1)
-                .foregroundColor(Color.white.opacity(0.25))
+                .foregroundColor(.myGroupBackground)
         }
 
         // MARK: - Layout Dimensions

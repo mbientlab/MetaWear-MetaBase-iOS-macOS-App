@@ -14,7 +14,7 @@ struct IdentifyByLEDButton: View {
         Button { request() } label: {
             SFSymbol.led.image()
                 .font(.headline)
-                .foregroundColor(emulator.ledIsOn ? .accentColor : nil)
+                .foregroundColor(emulator.ledIsOn ? .myBackground : .myPrimary)
                 .padding(4)
         }
         .buttonStyle(.borderless)
@@ -54,7 +54,7 @@ struct IdentifyByLEDLargeButton: View {
     var requestingState: some View {
         SFSymbol.led.image()
             .font(.headline)
-            .foregroundColor(.accentColor)
+            .foregroundColor(.myBackground)
             .padding(4)
             .frame(maxWidth: .infinity)
             .background(flashingBackground)

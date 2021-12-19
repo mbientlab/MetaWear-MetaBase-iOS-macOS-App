@@ -316,13 +316,6 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
-		94528572275BE454004D815B /* Overlays */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Overlays;
-			sourceTree = "<group>";
-		};
 		94934FD1275A09E700E388FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -472,7 +465,6 @@
 				94CF3EF9276427C300C2D8B0 /* Routing.swift */,
 				94528560275BDF8D004D815B /* UserDefaults+.swift */,
 				9413CEB4275B13F900A36B5E /* Screens */,
-				94528572275BE454004D815B /* Overlays */,
 				94934FDC275A0C8800E388FF /* UI */,
 				94934FE5275A0D3C00E388FF /* Support */,
 			);

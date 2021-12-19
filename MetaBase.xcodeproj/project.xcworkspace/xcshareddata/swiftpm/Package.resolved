@@ -11,15 +11,6 @@
         }
       },
       {
-        "package": "MetaWear",
-        "repositoryURL": "https://github.com/mbientlab/MetaWear-SDK-Swift-Combine",
-        "state": {
-          "branch": null,
-          "revision": "b49f26cc5b688ae345bd40126ff5223e24d33b29",
-          "version": "0.1.8"
-        }
-      },
-      {
         "package": "ZIPFoundation",
         "repositoryURL": "https://github.com/weichsel/ZIPFoundation",
         "state": {
