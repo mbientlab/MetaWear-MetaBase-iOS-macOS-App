@@ -22,7 +22,7 @@ struct Subhead<T: View>: View {
             HStack {
                 Text(label)
                     .font(.title2)
-                    .foregroundColor(.white)
+                    .foregroundColor(.myPrimary)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(1)
                     .padding(.horizontal, 4)

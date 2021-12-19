@@ -101,8 +101,8 @@ extension ActionHeader {
                 .frame(width: ConfigTileComposer.imageSize, height: ConfigTileComposer.imageSize, alignment: .center)
                 .frame(width: ConfigTileComposer.tileSize, height: ConfigTileComposer.tileSize, alignment: .center)
                 .help(Text(symbol.accessibilityDescription))
-                .foregroundColor(isHovered ? .primary : .secondary)
-                .background(RoundedRectangle(cornerRadius: 8).strokeBorder(lineWidth: 2).foregroundColor(.secondary.opacity(0.1)))
+                .foregroundColor(isHovered ? .myPrimary : .mySecondary)
+                .background(RoundedRectangle(cornerRadius: 8).strokeBorder(lineWidth: 2).foregroundColor(.mySecondary.opacity(0.1)))
                 .whenHovered { isHovered = $0 }
                 .animation(.easeOut, value: isHovered)
         }

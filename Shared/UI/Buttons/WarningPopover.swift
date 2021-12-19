@@ -10,7 +10,7 @@ struct WarningPopover: View {
     var body: some View {
         SFSymbol.error.image()
             .font(.title3.bold())
-            .foregroundColor(isHovering ? .yellow : .secondary)
+            .foregroundColor(isHovering ? .myFailure : .mySecondary)
             .popover(isPresented: $isHovering) {
                 Text(message)
                     .lineLimit(nil)

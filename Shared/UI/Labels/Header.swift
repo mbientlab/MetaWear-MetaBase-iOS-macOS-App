@@ -102,11 +102,11 @@ struct HeaderBackButton: View {
         } label: {
             ZStack {
                 CorneredRect(rounding: [.topRight, .bottomRight], by: 10)
-                    .fill(.white.opacity(backIsHovered ? 0.2 : 0))
+                    .fill(Color.myPrimary.opacity(backIsHovered ? 0.2 : 0))
 
                 SFSymbol.back.image()
                     .font(.title2)
-                    .foregroundColor(.white.opacity(backIsHovered ? 1 : 0.4))
+                    .foregroundColor(.myPrimary.opacity(backIsHovered ? 1 : 0.4))
                     .padding(.vertical, 9)
                     .padding(.trailing, 12)
                     .padding(.leading, .screenInset / 2)

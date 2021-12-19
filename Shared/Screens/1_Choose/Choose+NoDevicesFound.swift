@@ -133,7 +133,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
 
         private var hueGradient: some View {
             Circle()
-                .fill(Color.accentColor)
+                .fill(Color.myBackground)
                 .hueRotation(.degrees(-5))
                 .blur(radius: 100)
                 .offset(y: geo.size.height / 4)

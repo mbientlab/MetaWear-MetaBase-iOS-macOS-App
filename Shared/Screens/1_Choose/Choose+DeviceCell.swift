@@ -33,7 +33,7 @@ extension ChooseDevicesScreen {
                     showCloudSync: state.isLocallyKnown == false
                 )
 
-                LargeSignalDots(color: .white)
+                LargeSignalDots(color: .myPrimary)
                     .opacity(isHovered ? 1 : 0.75)
                     .padding(.top, 20)
 
@@ -90,7 +90,7 @@ extension ChooseDevicesScreen.DeviceCell {
                 .font(.system(.title, design: .rounded))
                 .offset(y: isHovering ? -.verticalHoverDelta : 0)
                 .offset(y: isDropping ? -.verticalHoverDelta * 2 : 0)
-                .foregroundColor(.white)
+                .foregroundColor(.myPrimary)
 
             MetaWearImages(isGroup: isGroup, models: models, ledEmulator: ledEmulator)
         }
@@ -137,6 +137,7 @@ extension ChooseDevicesScreen.DeviceCell {
 
         var body: some View {
             Button { requestIdentify() } label: { label }
+            .foregroundColor(.myPrimary)
             .buttonStyle(.borderless)
             .allowsHitTesting(allowIdentification)
             .disabled(allowIdentification == false)

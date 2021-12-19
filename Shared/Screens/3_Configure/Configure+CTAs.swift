@@ -48,12 +48,12 @@ extension ConfigureScreen {
             VStack {
                 Text(String(int: vm.config.totalFreq.rateHz) + " Hz")
                     .font(.headline)
-                    .foregroundColor(vm.config.exceedsStreamableLimit ? .pink : .secondary)
+                    .foregroundColor(vm.config.exceedsStreamableLimit ? .myFailure : .mySecondary)
 
                 if vm.config.exceedsStreamableLimit {
                     Text("Bluetooth Low Energy can only stream at 100–120 Hz")
                         .font(.caption)
-                        .foregroundColor(.pink)
+                        .foregroundColor(.myFailure)
                 }
             }
         }

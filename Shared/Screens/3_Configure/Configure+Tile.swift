@@ -53,8 +53,8 @@ extension ConfigureScreen {
         private var background: some View {
             ZStack {
                 let shape = RoundedRectangle(cornerRadius: 8)
-                shape.foregroundColor(.white.opacity(backgroundOpacity))
-                shape.strokeBorder(lineWidth: 2).foregroundColor(.white.opacity(isSelected ? 0 : 0.2))
+                shape.foregroundColor(.myPrimary.opacity(backgroundOpacity))
+                shape.strokeBorder(lineWidth: 2).foregroundColor(.myPrimary.opacity(isSelected ? 0 : 0.2))
             }
             .contentShape(Rectangle())
             .whenHovered { isHovered = $0 }

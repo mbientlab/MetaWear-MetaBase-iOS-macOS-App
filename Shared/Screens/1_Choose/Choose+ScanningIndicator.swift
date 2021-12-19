@@ -50,7 +50,7 @@ extension ChooseDevicesScreen {
             Text(vm.isScanning ? "Discovering nearby MetaWears" : "Tap to restart Bluetooth discovery")
                 .font(.headline)
                 .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(.secondary)
+                .foregroundColor(.mySecondary)
                 .opacity(iconIsHovered ? 1 : 0)
         }
     }

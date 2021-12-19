@@ -1,6 +1,7 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import mbientSwiftUI
+import SwiftUI
 
 struct CTAButton: View {
 
@@ -10,9 +11,11 @@ struct CTAButton: View {
     let text: Color
     let maxWidth: CGFloat?
 
+    @Environment(\.colorScheme) var scheme
+
     init(_ cta: String,
-         bg: Color = .black.opacity(0.1),
-         text: Color = .white,
+         bg: Color = .accentColor,
+         text: Color = .myBackground,
          maxWidth: CGFloat? = nil,
          action: @escaping () -> Void) {
         self.cta = cta
@@ -25,6 +28,7 @@ struct CTAButton: View {
     var body: some View {
         Button(action: action) {
             Text(cta)
+                .fontWeight(scheme == .light ? .medium : .medium)
                 .lineLimit(1)
                 .fixedSize(horizontal: false, vertical: true)
 
@@ -58,8 +62,8 @@ struct MinorCTAButton: View {
     let maxWidth: CGFloat?
 
     init(_ cta: String,
-         bg: Color = .white.opacity(0.15),
-         text: Color = .white,
+         bg: Color = .myGroupBackground,
+         text: Color = .myPrimary,
          maxWidth: CGFloat? = nil,
          action: @escaping () -> Void) {
         self.cta = cta

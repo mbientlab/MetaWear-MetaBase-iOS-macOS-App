@@ -20,7 +20,10 @@ struct MainWindow: View {
         stackNavigation
             .frame(minWidth: Self.minWidth, minHeight: Self.minHeight)
             .animation(.easeInOut, value: routing.destination)
-            .background(Color.accentColor.ignoresSafeArea())
+            .foregroundColor(.myPrimary)
+            .background(Color.myBackground.ignoresSafeArea())
+            .colorScheme(.dark) // Workaround for macOS as some Menu and built-in components do not properly accept reverse-out shading
+//            .preferredColorScheme(.dark) // Setting this would force system dialogs into dark mode
             .environment(\.namespace, namespace)
             .toolbar { BluetoothErrorButton.ToolbarIcon() }
     }
@@ -66,7 +69,7 @@ struct MainWindow: View {
         }
         .navigationViewStyle(.automatic)
         .frame(minWidth: 600)
-        .background(Color.accentColor.ignoresSafeArea())
+        .background(Color.myBackground.ignoresSafeArea())
         .environment(\.namespace, namespace)
     }
 

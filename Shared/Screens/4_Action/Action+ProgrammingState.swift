@@ -28,7 +28,7 @@ extension ActionScreen {
         var notStartedIndicator: some View {
             Circle()
                 .strokeBorder(lineWidth: 2)
-                .foregroundColor(.secondary.opacity(0.8))
+                .foregroundColor(.myTertiary)
         }
 
         var workingIndicator: some View {
@@ -45,7 +45,7 @@ extension ActionScreen {
                 .resizable()
                 .scaledToFit()
                 .font(.title.weight(.semibold))
-                .foregroundColor(.green)
+                .foregroundColor(.mySuccess)
         }
 
         var failureIndicator: some View {
@@ -53,7 +53,7 @@ extension ActionScreen {
                 .resizable()
                 .scaledToFit()
                 .font(.title.weight(.semibold))
-                .foregroundColor(.yellow)
+                .foregroundColor(.myFailure)
         }
     }
 
@@ -101,8 +101,8 @@ extension ActionScreen {
             Text(action.actionType.completedLabel)
                 .padding(.horizontal)
                 .padding(.vertical, 5)
-                .foregroundColor(.accentColor)
-                .background(Capsule().foregroundColor(.green))
+                .foregroundColor(.myBackground)
+                .background(Capsule().foregroundColor(.mySuccess))
         }
 
         var failureIndicator: some View {
@@ -112,8 +112,8 @@ extension ActionScreen {
             }
                 .padding(.horizontal)
                 .padding(.vertical, 3)
-                .foregroundColor(.accentColor)
-                .background(Capsule().foregroundColor(.pink))
+                .foregroundColor(.myBackground)
+                .background(Capsule().foregroundColor(.myFailure))
         }
 
         var timeoutIndicator: some View {
@@ -123,8 +123,8 @@ extension ActionScreen {
             }
                 .padding(.horizontal)
                 .padding(.vertical, 3)
-                .foregroundColor(.accentColor)
-                .background(Capsule().foregroundColor(.yellow))
+                .foregroundColor(.myBackground)
+                .background(Capsule().foregroundColor(.myFailure))
         }
 
         var refresh: some View {

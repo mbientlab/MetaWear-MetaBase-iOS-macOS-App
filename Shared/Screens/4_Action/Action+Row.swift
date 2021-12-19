@@ -24,7 +24,7 @@ extension ActionScreen {
                     .font(.title2)
 
                 ConnectionIcon()
-                LargeSignalDots(color: .white, dotSize: 9, spacing: 3)
+                LargeSignalDots(color: .myPrimary, dotSize: 9, spacing: 3)
 
                 HStack {
                     ProgrammingState(vm: vm)
@@ -48,7 +48,7 @@ extension ActionScreen {
 
         private var background: some View {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.white.opacity(action.actionFocus == vm.meta.mac ? 0.1 : 0))
+                .fill(Color.myPrimary.opacity(action.actionFocus == vm.meta.mac ? 0.1 : 0))
         }
     }
 }

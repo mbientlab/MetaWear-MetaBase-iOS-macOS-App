@@ -5,9 +5,9 @@ import mbientSwiftUI
 struct ProgressBar: View  {
 
     let value: CGFloat
-    let progress: Color = .white
-    let track: Color = .white.opacity(0.1)
-
+    let progress: Color = .myPrimary
+    let track: Color = .myGroupBackground2
+    
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
