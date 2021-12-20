@@ -68,25 +68,11 @@ private extension PresetSensorParametersStore {
 
 public typealias Dict<I:Identifiable> = [I.ID:I]
 
-extension Array where Element: Identifiable {
-    /// Creates a dictionary, with identifier collisions prioritizing the latter-most element.
-    func dictionary() -> Dictionary<Element.ID,Element> {
-        reduce(into: [Element.ID:Element]()) { $0[$1.id] = $1 }
-    }
-}
-
 extension Publisher where Output == Dict<PresetSensorConfiguration> {
 
     /// Outputs name-sorted array of matching presets
     func filter(matching legal: LegalSensorParameters) -> AnyPublisher<[PresetSensorConfiguration], Failure> {
         map { $0.filter(matching: legal) }
         .eraseToAnyPublisher()
-    }
-}
-
-extension Publisher {
-
-    func mapValues<T:Identifiable>() -> AnyPublisher<[T],Failure> where Output == Dictionary<T.ID,T> {
-        map { Array($0.values) }.eraseToAnyPublisher()
     }
 }
