@@ -10,6 +10,7 @@ public class SensorUserParametersStore {
 
     private unowned let loader: SensorUserParametersPersistence
     private var loading: AnyCancellable? = nil
+    private var saving: AnyCancellable? = nil
 
     public init(loader: SensorUserParametersPersistence) {
         self.loader = loader
@@ -56,6 +57,13 @@ private extension SensorUserParametersStore {
             }
     }
 
+    func save(to loader: SensorUserParametersPersistence) {
+       saving = parameters
+            .dropFirst()
+            .mapValues()
+            .sink { loader.save($0) }
+    }
+
 }
 
 public typealias Dict<I:Identifiable> = [I.ID:I]
@@ -73,5 +81,12 @@ extension Publisher where Output == Dict<SUPPreset> {
     func filter(matching legal: LegalSensorParameters) -> AnyPublisher<[SUPPreset], Failure> {
         map { $0.filter(matching: legal) }
         .eraseToAnyPublisher()
+    }
+}
+
+extension Publisher {
+
+    func mapValues<T:Identifiable>() -> AnyPublisher<[T],Failure> where Output == Dictionary<T.ID,T> {
+        map { Array($0.values) }.eraseToAnyPublisher()
     }
 }

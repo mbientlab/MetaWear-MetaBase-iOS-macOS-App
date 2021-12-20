@@ -91,6 +91,10 @@
 		94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
 		94A165C3275F2F8600FA355D /* History+About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+About.swift */; };
 		94A165C4275F2F8600FA355D /* History+About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+About.swift */; };
+		94BCCE43276FE8E9009832E1 /* Directories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94BCCE42276FE8E9009832E1 /* Directories.swift */; };
+		94BCCE44276FE8E9009832E1 /* Directories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94BCCE42276FE8E9009832E1 /* Directories.swift */; };
+		94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE45276FE9AC009832E1 /* CloudKit.framework */; };
+		94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE47276FE9BE009832E1 /* CloudKit.framework */; };
 		94CB2D31276F108A005C0A08 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94CB2D30276F108A005C0A08 /* mbientSwiftUI */; };
 		94CB2D33276F1091005C0A08 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94CB2D32276F1091005C0A08 /* mbientSwiftUI */; };
 		94CF3EFA276427C300C2D8B0 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3EF9276427C300C2D8B0 /* Routing.swift */; };
@@ -203,6 +207,9 @@
 		94A165BB275E8E0C00FA355D /* MetaBase (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MetaBase (iOS).entitlements"; sourceTree = "<group>"; };
 		94A165BD275F2F8600FA355D /* History+SessionsList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+SessionsList.swift"; sourceTree = "<group>"; };
 		94A165BE275F2F8600FA355D /* History+About.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+About.swift"; sourceTree = "<group>"; };
+		94BCCE42276FE8E9009832E1 /* Directories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Directories.swift; sourceTree = "<group>"; };
+		94BCCE45276FE9AC009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
+		94BCCE47276FE9BE009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		94CF3EF9276427C300C2D8B0 /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
 		94CF3EFC276427F100C2D8B0 /* ChooseDevicesScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseDevicesScreen.swift; sourceTree = "<group>"; };
 		94CF3EFF2764282300C2D8B0 /* CTAButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CTAButton.swift; sourceTree = "<group>"; };
@@ -244,6 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				941DF258276C34E300C5978F /* MetaWearSync in Frameworks */,
+				94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */,
 				94CB2D33276F1091005C0A08 /* mbientSwiftUI in Frameworks */,
 				94934FD3275A09E700E388FF /* MetaWear in Frameworks */,
 			);
@@ -254,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				941DF25A276C34EE00C5978F /* MetaWearSync in Frameworks */,
+				94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */,
 				94CB2D31276F108A005C0A08 /* mbientSwiftUI in Frameworks */,
 				94934FD5275A09EE00E388FF /* MetaWear in Frameworks */,
 			);
@@ -336,6 +345,7 @@
 		941A0900276FB79C006D52E3 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				94BCCE42276FE8E9009832E1 /* Directories.swift */,
 				941A08F9276FB432006D52E3 /* SensorUserParametersLoader.swift */,
 				944C1760276F9FF0006003C9 /* SUPSaveContainer.swift */,
 			);
@@ -359,6 +369,8 @@
 		94934FD1275A09E700E388FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				94BCCE47276FE9BE009832E1 /* CloudKit.framework */,
+				94BCCE45276FE9AC009832E1 /* CloudKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -761,6 +773,7 @@
 				94935023275A11C600E388FF /* KnownItemVM.swift in Sources */,
 				94CF3EFA276427C300C2D8B0 /* Routing.swift in Sources */,
 				9409C5DC2762E17D001FE850 /* Action+Row.swift in Sources */,
+				94BCCE43276FE8E9009832E1 /* Directories.swift in Sources */,
 				9409C5CF2762969B001FE850 /* Configure+Grid.swift in Sources */,
 				94E3A7FA27603238007E2BAE /* IdentifyByLEDButton.swift in Sources */,
 				94528555275BDDB9004D815B /* Choose+Grids.swift in Sources */,
@@ -828,6 +841,7 @@
 				9452855C275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
 				9409C5DD2762E17D001FE850 /* Action+Row.swift in Sources */,
 				94CF3EFB276427C300C2D8B0 /* Routing.swift in Sources */,
+				94BCCE44276FE8E9009832E1 /* Directories.swift in Sources */,
 				9409C5D02762969B001FE850 /* Configure+Grid.swift in Sources */,
 				94E3A7FB276032BD007E2BAE /* IdentifyByLEDButton.swift in Sources */,
 				94CF3F0B2764286B00C2D8B0 /* Header.swift in Sources */,
