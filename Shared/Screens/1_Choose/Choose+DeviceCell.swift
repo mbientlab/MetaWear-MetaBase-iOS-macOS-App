@@ -24,13 +24,14 @@ extension ChooseDevicesScreen {
                     name: state.name,
                     models: state.models,
                     isGroup: state.isGroup,
-                    ledEmulator: state.ledVM
+                    ledEmulator: state.ledVM,
+                    isUnrecognized: state.isUnrecognized
                 )
                     .onTapGesture { vm.connect() }
 
                 StatusIndicator(
-                    isWorking: state.isIdentifying || state.connection == .connecting,
-                    showCloudSync: state.isLocallyKnown == false
+                    isWorking: state.isWorking,
+                    showCloudSync: state.showCloudSync
                 )
 
                 LargeSignalDots(color: .myPrimary)
@@ -75,6 +76,7 @@ extension ChooseDevicesScreen.DeviceCell {
         var models: [(mac: String, model: MetaWear.Model)]
         var isGroup: Bool
         let ledEmulator: MWLED.Flash.Pattern.Emulator
+        let isUnrecognized: Bool
 
         var body: some View {
             DropOutcomeIndicator()
@@ -93,6 +95,15 @@ extension ChooseDevicesScreen.DeviceCell {
                 .foregroundColor(.myPrimary)
 
             MetaWearImages(isGroup: isGroup, models: models, ledEmulator: ledEmulator)
+                .overlay(unknownPrompt)
+        }
+
+        @ViewBuilder private var unknownPrompt: some View {
+            if isUnrecognized {
+                OutcomeIndicator(outcome: "Add to List", show: isHovering)
+                    .compositingGroup()
+                    .shadow(radius: 10)
+            }
         }
     }
 

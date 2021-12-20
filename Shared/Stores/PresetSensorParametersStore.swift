@@ -2,6 +2,8 @@
 
 import Foundation
 import Combine
+import MetaWear
+import MetaWearSync
 
 public class PresetSensorParametersStore {
 
@@ -59,9 +61,15 @@ private extension PresetSensorParametersStore {
 
     func save(to loader: MWLoader<[PresetSensorConfiguration]>) {
         saving = _parameters
-            .dropFirst(2)
+            .dropFirst(2) // This VM's subject + persistence's first load
             .mapValues()
-            .sink { try? loader.save($0) }
+            .sink {
+                do { try loader.save($0) }
+                catch {
+                    let message = "\(Self.self) \(#function) \(error.localizedDescription)"
+                    MWConsoleLogger.shared.logWith(.error, message: message)
+                }
+            }
     }
 
 }

@@ -4,12 +4,13 @@ import Foundation
 import mbientSwiftUI
 import MetaWearSync
 
-struct DropOutcomeIndicator: View {
+struct OutcomeIndicator: View {
 
-    @Environment(\.dropOutcome) var outcome
+    var outcome: String
+    var show: Bool
 
     var body: some View {
-        Text(outcome.label)
+        Text(outcome)
             .lineLimit(0)
             .fixedSize()
             .font(.title.weight(.semibold))
@@ -20,9 +21,18 @@ struct DropOutcomeIndicator: View {
             .frame(maxWidth: .infinity, alignment: .center)
             .background(Capsule(style: .continuous).foregroundColor(.myHighlight))
 
-            .opacity(outcome == .noDrop ? 0 : 1)
-            .animation(.easeOut(duration: 0.2), value: outcome)
-            .accessibilityHidden(outcome == .noDrop)
+            .opacity(show ? 1 : 0)
+            .animation(.easeOut(duration: 0.2), value: show)
+            .accessibilityHidden(show == false)
+    }
+}
+
+struct DropOutcomeIndicator: View {
+
+    @Environment(\.dropOutcome) var outcome
+
+    var body: some View {
+        OutcomeIndicator(outcome: outcome.label, show: outcome != .noDrop)
     }
 }
 
