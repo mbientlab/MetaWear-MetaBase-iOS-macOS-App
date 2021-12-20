@@ -2,6 +2,8 @@
 
 import Foundation
 import Combine
+import MetaWear
+import MetaWearSync
 
 public class PresetSensorParametersStore {
 
@@ -59,21 +61,20 @@ private extension PresetSensorParametersStore {
 
     func save(to loader: MWLoader<[PresetSensorConfiguration]>) {
         saving = _parameters
-            .dropFirst(2)
+            .dropFirst(2) // This VM's subject + persistence's first load
             .mapValues()
-            .sink { try? loader.save($0) }
+            .sink {
+                do { try loader.save($0) }
+                catch {
+                    let message = "\(Self.self) \(#function) \(error.localizedDescription)"
+                    MWConsoleLogger.shared.logWith(.error, message: message)
+                }
+            }
     }
 
 }
 
 public typealias Dict<I:Identifiable> = [I.ID:I]
-
-extension Array where Element: Identifiable {
-    /// Creates a dictionary, with identifier collisions prioritizing the latter-most element.
-    func dictionary() -> Dictionary<Element.ID,Element> {
-        reduce(into: [Element.ID:Element]()) { $0[$1.id] = $1 }
-    }
-}
 
 extension Publisher where Output == Dict<PresetSensorConfiguration> {
 
@@ -81,12 +82,5 @@ extension Publisher where Output == Dict<PresetSensorConfiguration> {
     func filter(matching legal: LegalSensorParameters) -> AnyPublisher<[PresetSensorConfiguration], Failure> {
         map { $0.filter(matching: legal) }
         .eraseToAnyPublisher()
-    }
-}
-
-extension Publisher {
-
-    func mapValues<T:Identifiable>() -> AnyPublisher<[T],Failure> where Output == Dictionary<T.ID,T> {
-        map { Array($0.values) }.eraseToAnyPublisher()
     }
 }

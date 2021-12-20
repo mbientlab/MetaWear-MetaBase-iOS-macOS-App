@@ -18,6 +18,11 @@ struct MetaBaseApp: App {
 #if os(macOS)
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unified)
+        #if DEBUG
+        .commands { CommandMenu("Debug") {
+            Button("Wipe UserDefaults Local & Cloud") { wipeDefaults() }
+        } }
+        #endif
 #endif
     }
 }

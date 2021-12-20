@@ -5,17 +5,19 @@ import MetaWear
 import MetaWearSync
 import SwiftUI
 
-public struct MBPresetSensorConfigurationsContainer: Codable, MWContainer {
+public struct MBPresetSensorConfigurationsContainer: Codable, MWVersioningContainer {
     public typealias Loadable = [PresetSensorConfiguration]
     public var versionSentinel = 1
-    private let data: Data
+    private var data: Data = .init()
 
     public init(data: Data, decoder: JSONDecoder) throws {
+        guard data.isEmpty == false else { return }
         self = try decoder.decode(Self.self, from: data)
     }
 
     public func load(_ decoder: JSONDecoder) throws -> Loadable {
-        try decoder
+        guard self.data.isEmpty == false else { return .init() }
+        return try decoder
             .decode([MBPresetSensorConfigurationDTO1].self, from: data)
             .map { $0.load() }
     }

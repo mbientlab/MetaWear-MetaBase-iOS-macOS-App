@@ -1,6 +1,7 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import Foundation
+import MetaWearSync
 
 public class SensorPresetsCloudLoader: MWCloudKeyValueDataLoader<[PresetSensorConfiguration]> {
 
@@ -11,6 +12,6 @@ public class SensorPresetsCloudLoader: MWCloudKeyValueDataLoader<[PresetSensorCo
     }
 }
 
-extension Array: ContainerLoadable where Element == PresetSensorConfiguration {
+extension Array: VersionedContainerLoadable where Element == PresetSensorConfiguration {
     public typealias Container = MBPresetSensorConfigurationsContainer
 }

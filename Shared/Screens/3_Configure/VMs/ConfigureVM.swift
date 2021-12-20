@@ -63,7 +63,7 @@ public extension ConfigureVM {
         getNameInputModally(
             prefilledText: "Untitled",
             primaryLabel: "Save",
-            secondaryLabel: nil,
+            secondaryLabel: "Cancel",
             title: "Save Sensor Configuration",
             message: nil,
             primary: { [weak presetsStore] newName in
@@ -77,7 +77,7 @@ public extension ConfigureVM {
         getNameInputModally(
             prefilledText: preset.name,
             primaryLabel: "Rename",
-            secondaryLabel: nil,
+            secondaryLabel: "Cancel",
             title: "Rename \(preset.name)",
             message: nil,
             primary: { [weak presetsStore] newName in

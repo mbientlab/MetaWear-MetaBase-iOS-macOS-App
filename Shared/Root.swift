@@ -16,8 +16,8 @@ public class Root: ObservableObject {
     private let scanner: MetaWearScanner
      let cloud: NSUbiquitousKeyValueStore
     private let local: UserDefaults
-    private let metawearLoader: MWKnownDevicesPersistence
-    private let presetsLoader: MWLoader<[PresetSensorConfiguration]>
+    private let metawearLoader: MWLoader<MWKnownDevicesLoadable>
+    private let presetsLoader:  MWLoader<[PresetSensorConfiguration]>
 
     // VMs
     public let factory: UIFactory
@@ -26,7 +26,7 @@ public class Root: ObservableObject {
     public init() {
         self.cloud = .default
         self.local = .standard
-        self.metawearLoader  = MWCloudLoader(local: local, cloud: cloud)
+        self.metawearLoader  = MetaWeariCloudSyncLoader(local, cloud)
         self.presetsLoader   = SensorPresetsCloudLoader(local, cloud)
 
         let scanner = MetaWearScanner.sharedRestore
@@ -57,6 +57,7 @@ public extension Root {
     }
 }
 
+#if DEBUG
 fileprivate func debugs() {
     let bundle = Bundle.main.bundleIdentifier!
     let defaults = UserDefaults.standard.persistentDomain(forName: bundle) ?? [:]
@@ -78,8 +79,12 @@ fileprivate func debugs() {
     print("")
 }
 
-fileprivate func wipeDefaults() {
+func wipeDefaults() {
     UserDefaults.standard.dictionaryRepresentation().forEach { element in
         UserDefaults.standard.removeObject(forKey: element.key)
     }
+    NSUbiquitousKeyValueStore.default.dictionaryRepresentation.keys.forEach {
+        NSUbiquitousKeyValueStore.default.removeObject(forKey: $0)
+    }
 }
+#endif
