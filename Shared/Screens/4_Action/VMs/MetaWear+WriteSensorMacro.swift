@@ -6,7 +6,7 @@ import Combine
 
 public extension AnyPublisher where Output == MetaWear {
 
-    func macro(_ config: SensorConfigContainer) -> MWPublisher<MWMacroIdentifier> {
+    func macro(_ config: ModulesConfiguration) -> MWPublisher<MWMacroIdentifier> {
         self.macro(executeOnBoot: true) { metawear in
             metawear
                 .optionallyLog(config.accelerometer)

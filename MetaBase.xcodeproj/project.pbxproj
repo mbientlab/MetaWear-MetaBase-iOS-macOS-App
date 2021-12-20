@@ -12,8 +12,8 @@
 		9408E6DF276829280011B5F5 /* BluetoothErrorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E6DE276829280011B5F5 /* BluetoothErrorButton.swift */; };
 		9408E6E0276829280011B5F5 /* BluetoothErrorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E6DE276829280011B5F5 /* BluetoothErrorButton.swift */; };
 		9409C5C02761383E001FE850 /* ConfigureVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5BF2761383E001FE850 /* ConfigureVM.swift */; };
-		9409C5C227613890001FE850 /* SensorUserParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C127613890001FE850 /* SensorUserParameters.swift */; };
-		9409C5C327613890001FE850 /* SensorUserParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C127613890001FE850 /* SensorUserParameters.swift */; };
+		9409C5C227613890001FE850 /* UserSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C127613890001FE850 /* UserSensorConfiguration.swift */; };
+		9409C5C327613890001FE850 /* UserSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C127613890001FE850 /* UserSensorConfiguration.swift */; };
 		9409C5C427613895001FE850 /* ConfigureVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5BF2761383E001FE850 /* ConfigureVM.swift */; };
 		9409C5C627613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */; };
 		9409C5C727613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */; };
@@ -41,6 +41,14 @@
 		9409C5E92763B764001FE850 /* ActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5E72763B764001FE850 /* ActionType.swift */; };
 		9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
+		94196C12277089BE000377A6 /* MWCloudKeyValueDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94196C11277089BE000377A6 /* MWCloudKeyValueDataLoader.swift */; };
+		94196C13277089BE000377A6 /* MWCloudKeyValueDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94196C11277089BE000377A6 /* MWCloudKeyValueDataLoader.swift */; };
+		94196C152770DF61000377A6 /* SensorPresetsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94196C142770DF61000377A6 /* SensorPresetsLoader.swift */; };
+		94196C162770DF61000377A6 /* SensorPresetsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94196C142770DF61000377A6 /* SensorPresetsLoader.swift */; };
+		941A08F6276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */; };
+		941A08F7276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */; };
+		941A08FD276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */; };
+		941A08FE276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */; };
 		941DF258276C34E300C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF257276C34E300C5978F /* MetaWearSync */; };
 		941DF25A276C34EE00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF259276C34EE00C5978F /* MetaWearSync */; };
 		941DF25C276C34FB00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF25B276C34FB00C5978F /* MetaWearSync */; };
@@ -49,6 +57,8 @@
 		944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
 		9445E58F276D493300B8E8F3 /* DropOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9445E58E276D493300B8E8F3 /* DropOutcome.swift */; };
 		9445E590276D493300B8E8F3 /* DropOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9445E58E276D493300B8E8F3 /* DropOutcome.swift */; };
+		944C1761276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944C1760276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift */; };
+		944C1762276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944C1760276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift */; };
 		94528552275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */; };
 		94528553275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */; };
 		94528555275BDDB9004D815B /* Choose+Grids.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528554275BDDB9004D815B /* Choose+Grids.swift */; };
@@ -71,6 +81,12 @@
 		9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528579275BE77A004D815B /* Choose+EditGroup.swift */; };
 		945494F727656A800021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F627656A800021E3D6 /* MetaWear */; };
 		945494F927656A840021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F827656A840021E3D6 /* MetaWear */; };
+		9473B7AC2770E5A3006F4994 /* MWLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473B7AB2770E5A3006F4994 /* MWLoading.swift */; };
+		9473B7AD2770E5A3006F4994 /* MWLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473B7AB2770E5A3006F4994 /* MWLoading.swift */; };
+		9473B7B52770FAC4006F4994 /* MWKnownDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473B7B42770FAC4006F4994 /* MWKnownDevice+.swift */; };
+		9473B7B62770FAC4006F4994 /* MWKnownDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473B7B42770FAC4006F4994 /* MWKnownDevice+.swift */; };
+		9481D768276FD5CE00AB97FA /* Configure+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481D767276FD5CE00AB97FA /* Configure+Presets.swift */; };
+		9481D769276FD5CE00AB97FA /* Configure+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481D767276FD5CE00AB97FA /* Configure+Presets.swift */; };
 		94934FD3275A09E700E388FF /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94934FD2275A09E700E388FF /* MetaWear */; };
 		94934FD5275A09EE00E388FF /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94934FD4275A09EE00E388FF /* MetaWear */; };
 		9493501A275A112200E388FF /* DiscoveryListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935019275A112200E388FF /* DiscoveryListVM.swift */; };
@@ -81,6 +97,8 @@
 		94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
 		94A165C3275F2F8600FA355D /* History+About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+About.swift */; };
 		94A165C4275F2F8600FA355D /* History+About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+About.swift */; };
+		94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE45276FE9AC009832E1 /* CloudKit.framework */; };
+		94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE47276FE9BE009832E1 /* CloudKit.framework */; };
 		94CB2D31276F108A005C0A08 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94CB2D30276F108A005C0A08 /* mbientSwiftUI */; };
 		94CB2D33276F1091005C0A08 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94CB2D32276F1091005C0A08 /* mbientSwiftUI */; };
 		94CF3EFA276427C300C2D8B0 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3EF9276427C300C2D8B0 /* Routing.swift */; };
@@ -127,8 +145,8 @@
 		94E3A80427608BE3007E2BAE /* Configure+Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80027608BE3007E2BAE /* Configure+Tile.swift */; };
 		94E3A80627608BF8007E2BAE /* ProgressScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80527608BF8007E2BAE /* ProgressScreen.swift */; };
 		94E3A80727608BF8007E2BAE /* ProgressScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80527608BF8007E2BAE /* ProgressScreen.swift */; };
-		94E3A80927608ED7007E2BAE /* SensorConfigContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */; };
-		94E3A80A27608ED7007E2BAE /* SensorConfigContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */; };
+		94E3A80927608ED7007E2BAE /* ModulesConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80827608ED7007E2BAE /* ModulesConfiguration.swift */; };
+		94E3A80A27608ED7007E2BAE /* ModulesConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E3A80827608ED7007E2BAE /* ModulesConfiguration.swift */; };
 		94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */; };
 		94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A0275A1298008C62E7 /* ActionScreen.swift */; };
 		94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A2275A14DE008C62E7 /* Dimensions.swift */; };
@@ -156,7 +174,7 @@
 		9408E6DB2767FA290011B5F5 /* WarningPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningPopover.swift; sourceTree = "<group>"; };
 		9408E6DE276829280011B5F5 /* BluetoothErrorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothErrorButton.swift; sourceTree = "<group>"; };
 		9409C5BF2761383E001FE850 /* ConfigureVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureVM.swift; sourceTree = "<group>"; };
-		9409C5C127613890001FE850 /* SensorUserParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorUserParameters.swift; sourceTree = "<group>"; };
+		9409C5C127613890001FE850 /* UserSensorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSensorConfiguration.swift; sourceTree = "<group>"; };
 		9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MetaWear+WriteSensorMacro.swift"; sourceTree = "<group>"; };
 		9409C5C827617F35001FE850 /* LegalSensorParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalSensorParameters.swift; sourceTree = "<group>"; };
 		9409C5CB2761F438001FE850 /* Configure+SensorIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+SensorIterator.swift"; sourceTree = "<group>"; };
@@ -170,8 +188,13 @@
 		9409C5E42762E732001FE850 /* ActionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionHeader.swift; sourceTree = "<group>"; };
 		9409C5E72763B764001FE850 /* ActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionType.swift; sourceTree = "<group>"; };
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
+		94196C11277089BE000377A6 /* MWCloudKeyValueDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCloudKeyValueDataLoader.swift; sourceTree = "<group>"; };
+		94196C142770DF61000377A6 /* SensorPresetsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorPresetsLoader.swift; sourceTree = "<group>"; };
+		941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorParametersStore.swift; sourceTree = "<group>"; };
+		941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorConfiguration.swift; sourceTree = "<group>"; };
 		944538BC2767DCE000841880 /* StreamingCountersContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingCountersContainer.swift; sourceTree = "<group>"; };
 		9445E58E276D493300B8E8F3 /* DropOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropOutcome.swift; sourceTree = "<group>"; };
+		944C1760276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBPresetSensorConfigurationsContainer.swift; sourceTree = "<group>"; };
 		94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+ScanningIndicator.swift"; sourceTree = "<group>"; };
 		94528554275BDDB9004D815B /* Choose+Grids.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+Grids.swift"; sourceTree = "<group>"; };
 		94528557275BDE1E004D815B /* Choose+DeviceIterator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+DeviceIterator.swift"; sourceTree = "<group>"; };
@@ -181,6 +204,9 @@
 		94528563275BE0D8004D815B /* MainWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
 		9452856C275BE1D5004D815B /* Root.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Root.swift; sourceTree = "<group>"; };
 		94528579275BE77A004D815B /* Choose+EditGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+EditGroup.swift"; sourceTree = "<group>"; };
+		9473B7AB2770E5A3006F4994 /* MWLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWLoading.swift; sourceTree = "<group>"; };
+		9473B7B42770FAC4006F4994 /* MWKnownDevice+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MWKnownDevice+.swift"; sourceTree = "<group>"; };
+		9481D767276FD5CE00AB97FA /* Configure+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+Presets.swift"; sourceTree = "<group>"; };
 		94934FD6275A0A2E00E388FF /* MetaBase--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MetaBase--iOS--Info.plist"; sourceTree = "<group>"; };
 		94934FD7275A0A4200E388FF /* MetaBase--macOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MetaBase--macOS--Info.plist"; sourceTree = "<group>"; };
 		94935019275A112200E388FF /* DiscoveryListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryListVM.swift; sourceTree = "<group>"; };
@@ -188,6 +214,8 @@
 		94A165BB275E8E0C00FA355D /* MetaBase (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MetaBase (iOS).entitlements"; sourceTree = "<group>"; };
 		94A165BD275F2F8600FA355D /* History+SessionsList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+SessionsList.swift"; sourceTree = "<group>"; };
 		94A165BE275F2F8600FA355D /* History+About.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+About.swift"; sourceTree = "<group>"; };
+		94BCCE45276FE9AC009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
+		94BCCE47276FE9BE009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		94CF3EF9276427C300C2D8B0 /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
 		94CF3EFC276427F100C2D8B0 /* ChooseDevicesScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseDevicesScreen.swift; sourceTree = "<group>"; };
 		94CF3EFF2764282300C2D8B0 /* CTAButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CTAButton.swift; sourceTree = "<group>"; };
@@ -217,7 +245,7 @@
 		94E3A7F927603238007E2BAE /* IdentifyByLEDButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyByLEDButton.swift; sourceTree = "<group>"; };
 		94E3A80027608BE3007E2BAE /* Configure+Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Configure+Tile.swift"; sourceTree = "<group>"; };
 		94E3A80527608BF8007E2BAE /* ProgressScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressScreen.swift; sourceTree = "<group>"; };
-		94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorConfigContainer.swift; sourceTree = "<group>"; };
+		94E3A80827608ED7007E2BAE /* ModulesConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulesConfiguration.swift; sourceTree = "<group>"; };
 		94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureScreen.swift; sourceTree = "<group>"; };
 		94EBA3A0275A1298008C62E7 /* ActionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionScreen.swift; sourceTree = "<group>"; };
 		94EBA3A2275A14DE008C62E7 /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
@@ -229,6 +257,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				941DF258276C34E300C5978F /* MetaWearSync in Frameworks */,
+				94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */,
 				94CB2D33276F1091005C0A08 /* mbientSwiftUI in Frameworks */,
 				94934FD3275A09E700E388FF /* MetaWear in Frameworks */,
 			);
@@ -239,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				941DF25A276C34EE00C5978F /* MetaWearSync in Frameworks */,
+				94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */,
 				94CB2D31276F108A005C0A08 /* mbientSwiftUI in Frameworks */,
 				94934FD5275A09EE00E388FF /* MetaWear in Frameworks */,
 			);
@@ -269,9 +299,6 @@
 			isa = PBXGroup;
 			children = (
 				9409C5BF2761383E001FE850 /* ConfigureVM.swift */,
-				9409C5C127613890001FE850 /* SensorUserParameters.swift */,
-				94E3A80827608ED7007E2BAE /* SensorConfigContainer.swift */,
-				9409C5C827617F35001FE850 /* LegalSensorParameters.swift */,
 			);
 			path = VMs;
 			sourceTree = "<group>";
@@ -300,6 +327,18 @@
 			path = Screens;
 			sourceTree = "<group>";
 		};
+		941A08FF276FB789006D52E3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				9409C5C827617F35001FE850 /* LegalSensorParameters.swift */,
+				94E3A80827608ED7007E2BAE /* ModulesConfiguration.swift */,
+				9473B7B42770FAC4006F4994 /* MWKnownDevice+.swift */,
+				941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */,
+				9409C5C127613890001FE850 /* UserSensorConfiguration.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		9420E580275A090600A841D6 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -314,9 +353,47 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
+		9473B7B12770F73F006F4994 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				9473B7B22770F8B2006F4994 /* Containers */,
+				9473B7B72770FF93006F4994 /* Methods */,
+				94196C142770DF61000377A6 /* SensorPresetsLoader.swift */,
+				94528560275BDF8D004D815B /* UserDefaults+.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		9473B7B22770F8B2006F4994 /* Containers */ = {
+			isa = PBXGroup;
+			children = (
+				944C1760276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift */,
+			);
+			path = Containers;
+			sourceTree = "<group>";
+		};
+		9473B7B32770F8D5006F4994 /* Stores */ = {
+			isa = PBXGroup;
+			children = (
+				941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */,
+			);
+			path = Stores;
+			sourceTree = "<group>";
+		};
+		9473B7B72770FF93006F4994 /* Methods */ = {
+			isa = PBXGroup;
+			children = (
+				9473B7AB2770E5A3006F4994 /* MWLoading.swift */,
+				94196C11277089BE000377A6 /* MWCloudKeyValueDataLoader.swift */,
+			);
+			path = Methods;
+			sourceTree = "<group>";
+		};
 		94934FD1275A09E700E388FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				94BCCE47276FE9BE009832E1 /* CloudKit.framework */,
+				94BCCE45276FE9AC009832E1 /* CloudKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -356,6 +433,7 @@
 				9409C5CE2762969B001FE850 /* Configure+Grid.swift */,
 				9409C5CB2761F438001FE850 /* Configure+SensorIterator.swift */,
 				94E3A80027608BE3007E2BAE /* Configure+Tile.swift */,
+				9481D767276FD5CE00AB97FA /* Configure+Presets.swift */,
 				9409C5D12762971D001FE850 /* Configure+CTAs.swift */,
 			);
 			path = 3_Configure;
@@ -461,7 +539,9 @@
 				94E005CA275A07E9001B0DFD /* MetaBaseApp.swift */,
 				9452856C275BE1D5004D815B /* Root.swift */,
 				94CF3EF9276427C300C2D8B0 /* Routing.swift */,
-				94528560275BDF8D004D815B /* UserDefaults+.swift */,
+				941A08FF276FB789006D52E3 /* Model */,
+				9473B7B32770F8D5006F4994 /* Stores */,
+				9473B7B12770F73F006F4994 /* Persistence */,
 				9413CEB4275B13F900A36B5E /* Screens */,
 				94934FDC275A0C8800E388FF /* UI */,
 				94934FE5275A0D3C00E388FF /* Support */,
@@ -698,9 +778,10 @@
 				94CF3EFD276427F100C2D8B0 /* ChooseDevicesScreen.swift in Sources */,
 				9409C5D62762A367001FE850 /* ActionVM.swift in Sources */,
 				9409C5C627613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */,
+				9473B7B52770FAC4006F4994 /* MWKnownDevice+.swift in Sources */,
 				94CF3F122764286B00C2D8B0 /* LabeledItem.swift in Sources */,
 				9408E6DC2767FA290011B5F5 /* WarningPopover.swift in Sources */,
-				94E3A80927608ED7007E2BAE /* SensorConfigContainer.swift in Sources */,
+				94E3A80927608ED7007E2BAE /* ModulesConfiguration.swift in Sources */,
 				9452855E275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
 				94DFEC65275D45F000BB80DB /* UnknownItemVM.swift in Sources */,
 				9409C5E82763B764001FE850 /* ActionType.swift in Sources */,
@@ -708,9 +789,11 @@
 				94E3A80327608BE3007E2BAE /* Configure+Tile.swift in Sources */,
 				9409C5E52762E732001FE850 /* ActionHeader.swift in Sources */,
 				94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */,
+				9481D768276FD5CE00AB97FA /* Configure+Presets.swift in Sources */,
 				9409C5D92762D7DA001FE850 /* ActionState.swift in Sources */,
 				9452857A275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
 				94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */,
+				94196C12277089BE000377A6 /* MWCloudKeyValueDataLoader.swift in Sources */,
 				94528561275BDF8D004D815B /* UserDefaults+.swift in Sources */,
 				94528564275BE0D8004D815B /* MainWindow.swift in Sources */,
 				94935023275A11C600E388FF /* KnownItemVM.swift in Sources */,
@@ -721,16 +804,18 @@
 				94528555275BDDB9004D815B /* Choose+Grids.swift in Sources */,
 				94CF3F0A2764286B00C2D8B0 /* Header.swift in Sources */,
 				9409C5C02761383E001FE850 /* ConfigureVM.swift in Sources */,
+				944C1761276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */,
 				94E3A7F3275FF519007E2BAE /* AboutDeviceVM.swift in Sources */,
 				9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */,
 				9452856D275BE1D5004D815B /* Root.swift in Sources */,
 				94DFEC5E275D389700BB80DB /* Choose+KnownUnknownCells.swift in Sources */,
 				94CF3F0C2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
 				9452855B275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
+				9473B7AC2770E5A3006F4994 /* MWLoading.swift in Sources */,
 				94DFEC62275D459B00BB80DB /* ItemVM.swift in Sources */,
 				9409C5C927617F35001FE850 /* LegalSensorParameters.swift in Sources */,
 				9409C5DF2762E187001FE850 /* Action+ProgrammingState.swift in Sources */,
-				9409C5C227613890001FE850 /* SensorUserParameters.swift in Sources */,
+				9409C5C227613890001FE850 /* UserSensorConfiguration.swift in Sources */,
 				94E3A7F1275FF50C007E2BAE /* HistoryScreenVM.swift in Sources */,
 				94CF3F012764282300C2D8B0 /* CTAButton.swift in Sources */,
 				9445E58F276D493300B8E8F3 /* DropOutcome.swift in Sources */,
@@ -739,11 +824,14 @@
 				94CF3F0E2764286B00C2D8B0 /* ProgressBar.swift in Sources */,
 				94528552275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */,
 				94E005F2275A07E9001B0DFD /* MetaBaseApp.swift in Sources */,
+				941A08F6276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */,
+				941A08FD276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */,
 				94E3A7F5275FF557007E2BAE /* HistoryScreen.swift in Sources */,
 				94528558275BDE1E004D815B /* Choose+DeviceIterator.swift in Sources */,
 				9409C5D22762971D001FE850 /* Configure+CTAs.swift in Sources */,
 				9409C5CC2761F438001FE850 /* Configure+SensorIterator.swift in Sources */,
 				9493501A275A112200E388FF /* DiscoveryListVM.swift in Sources */,
+				94196C152770DF61000377A6 /* SensorPresetsLoader.swift in Sources */,
 				9409C5E22762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */,
 				94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */,
 				9408E6DF276829280011B5F5 /* BluetoothErrorButton.swift in Sources */,
@@ -760,19 +848,22 @@
 				94CF3EFE276427F100C2D8B0 /* ChooseDevicesScreen.swift in Sources */,
 				9409C5D72762A367001FE850 /* ActionVM.swift in Sources */,
 				9409C5C727613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */,
+				9473B7B62770FAC4006F4994 /* MWKnownDevice+.swift in Sources */,
 				94CF3F132764286B00C2D8B0 /* LabeledItem.swift in Sources */,
 				9408E6DD2767FA290011B5F5 /* WarningPopover.swift in Sources */,
-				9409C5C327613890001FE850 /* SensorUserParameters.swift in Sources */,
-				94E3A80A27608ED7007E2BAE /* SensorConfigContainer.swift in Sources */,
+				9409C5C327613890001FE850 /* UserSensorConfiguration.swift in Sources */,
+				94E3A80A27608ED7007E2BAE /* ModulesConfiguration.swift in Sources */,
 				94528567275BE128004D815B /* ConfigureScreen.swift in Sources */,
 				9409C5E92763B764001FE850 /* ActionType.swift in Sources */,
 				94DFEC66275D45F000BB80DB /* UnknownItemVM.swift in Sources */,
 				944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */,
 				9409C5E62762E732001FE850 /* ActionHeader.swift in Sources */,
 				94E3A80427608BE3007E2BAE /* Configure+Tile.swift in Sources */,
+				9481D769276FD5CE00AB97FA /* Configure+Presets.swift in Sources */,
 				9409C5DA2762D7DA001FE850 /* ActionState.swift in Sources */,
 				94E3A7F6275FF5CF007E2BAE /* HistoryScreen.swift in Sources */,
 				9493501B275A112200E388FF /* DiscoveryListVM.swift in Sources */,
+				94196C13277089BE000377A6 /* MWCloudKeyValueDataLoader.swift in Sources */,
 				94E3A7F8275FF5DD007E2BAE /* HistoryScreenVM.swift in Sources */,
 				9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
 				9452855C275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
@@ -783,12 +874,14 @@
 				94CF3F0B2764286B00C2D8B0 /* Header.swift in Sources */,
 				94528553275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */,
 				94528556275BDDB9004D815B /* Choose+Grids.swift in Sources */,
+				944C1762276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */,
 				94528568275BE12B004D815B /* ActionScreen.swift in Sources */,
 				94CF3F0D2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
 				94935024275A11C600E388FF /* KnownItemVM.swift in Sources */,
 				9452856E275BE1D5004D815B /* Root.swift in Sources */,
 				9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */,
 				94DFEC5F275D389700BB80DB /* Choose+KnownUnknownCells.swift in Sources */,
+				9473B7AD2770E5A3006F4994 /* MWLoading.swift in Sources */,
 				94E005F3275A07E9001B0DFD /* MetaBaseApp.swift in Sources */,
 				94EBA3A6275A160A008C62E7 /* Dimensions.swift in Sources */,
 				9409C5CA27617F35001FE850 /* LegalSensorParameters.swift in Sources */,
@@ -801,11 +894,14 @@
 				94CF3F0F2764286B00C2D8B0 /* ProgressBar.swift in Sources */,
 				94CF3F022764282300C2D8B0 /* CTAButton.swift in Sources */,
 				94528565275BE0D8004D815B /* MainWindow.swift in Sources */,
+				941A08F7276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */,
+				941A08FE276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */,
 				9452855F275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
 				94528562275BDF8D004D815B /* UserDefaults+.swift in Sources */,
 				9409C5D32762971D001FE850 /* Configure+CTAs.swift in Sources */,
 				9409C5CD2761F438001FE850 /* Configure+SensorIterator.swift in Sources */,
 				94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */,
+				94196C162770DF61000377A6 /* SensorPresetsLoader.swift in Sources */,
 				9409C5E32762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */,
 				9409C5C427613895001FE850 /* ConfigureVM.swift in Sources */,
 				9408E6E0276829280011B5F5 /* BluetoothErrorButton.swift in Sources */,

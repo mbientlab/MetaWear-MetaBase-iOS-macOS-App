@@ -28,9 +28,3 @@ public class StreamingCountersContainer: ObservableObject {
         }
     }
 }
-
-
-func Dictionary<V>(repeating: V, keys devices: [MWKnownDevice]) -> [MACAddress:V] {
-    Dictionary(uniqueKeysWithValues: devices.map(\.meta.mac).map { ($0, repeating) })
-}
-

@@ -7,20 +7,21 @@ import mbientSwiftUI
 
 public class UIFactory: ObservableObject {
 
-    public init(devices: MetaWearSyncStore,
-                scanner: MetaWearScanner,
-                routing: Routing) {
+    public init(_ devices: MetaWearSyncStore,
+                _ presets: PresetSensorParametersStore,
+                _ scanner: MetaWearScanner,
+                _ routing: Routing) {
+        self.presets = presets
         self.store = devices
         self.scanner = scanner
         self.routing = routing
     }
 
     private unowned let store: MetaWearSyncStore
+    private unowned let presets: PresetSensorParametersStore
     private unowned let scanner: MetaWearScanner
     private unowned let routing: Routing
-    private lazy var actionQueue = DispatchQueue(label: Bundle.main.bundleIdentifier! + ".action",
-                                                 qos: .userInitiated,
-                                                 attributes: .concurrent)
+    private lazy var actionQueue = _makeBackgroundQueue(named: "action")
 }
 
 public extension UIFactory {
@@ -65,7 +66,7 @@ public extension UIFactory {
     func makeConfigureVM() -> ConfigureVM {
         guard let item = routing.focus?.item else { fatalError("Set item before navigation") }
         let (title, devices) = getKnownDevices(for: item)
-        return .init(title: title, item: item, devices: devices, routing: routing)
+        return .init(title: title, item: item, devices: devices, presets: presets, routing: routing)
     }
 
     func makeActionVM() -> ActionVM {
@@ -97,5 +98,13 @@ private extension UIFactory {
                 return (device.meta.name, [device])
         }
         return (title: "Error", devices: [])
+    }
+
+    private func _makeBackgroundQueue(named: String) -> DispatchQueue {
+        DispatchQueue(
+            label: Bundle.main.bundleIdentifier! + ".\(named)",
+            qos: .userInitiated,
+            attributes: .concurrent
+        )
     }
 }

@@ -5,7 +5,7 @@ import MetaWear
 import MetaWearSync
 
 /// Generate sensor configuration based on user parameters
-public struct SensorConfigContainer: Equatable, Hashable {
+public struct ModulesConfiguration: Equatable, Hashable {
 
     public var accelerometer: MWAccelerometer? = nil
     public var altitude: MWBarometer.MWAltitude? = nil
@@ -21,7 +21,7 @@ public struct SensorConfigContainer: Equatable, Hashable {
     public var fusionLinear: MWSensorFusion.LinearAcceleration? = nil
     public var fusionQuaternion: MWSensorFusion.Quaternion? = nil
 
-    public init(_ config: SensorUserParameters, modules: [MWModules.ID:MWModules]) {
+    public init(_ config: UserSensorConfiguration, modules: [MWModules.ID:MWModules]) {
 
         if config.accelerometer {
             self.accelerometer = .init(rate: config.accelerometerRate,

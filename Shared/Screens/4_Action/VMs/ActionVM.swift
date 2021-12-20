@@ -6,10 +6,12 @@ import MetaWear
 import MetaWearSync
 
 public class ActionVM: ObservableObject, ActionHeaderVM {
-    public typealias QueueItem = (device: MetaWear?, meta: MetaWear.Metadata, config: SensorConfigContainer)
+    public typealias QueueItem = (device: MetaWear?,
+                                  meta: MetaWear.Metadata,
+                                  config: ModulesConfiguration)
 
     // Overview of action
-    public var representativeConfig:    SensorConfigContainer { configs.first ?? .init() }
+    public var representativeConfig:    ModulesConfiguration { configs.first ?? .init() }
     public let actionType:              ActionType
     public var showSuccessCTAs:         Bool { state.allSatisfy { $0.value == .completed } }
     @Published public var actionFocus:  MACAddress = ""
@@ -29,7 +31,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     private var actionQueue:            [QueueItem] = []
     private var actionFails:            [QueueItem] = []
     private var actions:                [MACAddress:AnyCancellable] = [:]
-    private let configs:                [SensorConfigContainer]
+    private let configs:                [ModulesConfiguration]
     private let streamCancel            = PassthroughSubject<Void,Never>()
     private unowned let workQueue:      DispatchQueue
     private var bleQueue:               DispatchQueue { store.bleQueue }
@@ -228,7 +230,7 @@ private extension ActionVM {
 private extension ActionVM {
 
     /// A Publisher that emits a value (void) only once when complete, but includes a Timeout operator.
-    func getActionPublisher(_ device: MetaWear, _ mac: MACAddress, _ config: SensorConfigContainer) -> MWPublisher<Void> {
+    func getActionPublisher(_ device: MetaWear, _ mac: MACAddress, _ config: ModulesConfiguration) -> MWPublisher<Void> {
         switch actionType {
             case .downloadLogs: return downloadLogs(for: device, mac)
             case .log: return recordMacro(for: device, config)
@@ -239,7 +241,7 @@ private extension ActionVM {
     // MARK: - Log Action
 
     /// Record the macro and update UI state upon completion
-    func recordMacro(for device: MetaWear, _ config: SensorConfigContainer) -> MWPublisher<Void> {
+    func recordMacro(for device: MetaWear, _ config: ModulesConfiguration) -> MWPublisher<Void> {
         device
             .publishWhenConnected()
             .first()
@@ -330,7 +332,7 @@ private extension ActionVM {
     /// Stream all needed sensors on one device. Times out only when unable to connect.
     func stream(for device: MetaWear,
                 mac: MACAddress,
-                config: SensorConfigContainer) -> MWPublisher<Void> {
+                config: ModulesConfiguration) -> MWPublisher<Void> {
 
         var streams = [MWPublisher<MWDataTable>]()
 
