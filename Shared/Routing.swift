@@ -11,7 +11,7 @@ public class Routing: ObservableObject {
     /// Programmatically-chosen screen
     @Published private(set) var destination: Destination = .choose
     /// Focused item + configs set prior to navigation, read once in VM init or by `UIFactory`
-    private(set) var focus: (item: Item, configs: [SensorConfigContainer])? = nil
+    private(set) var focus: (item: Item, configs: [ModulesConfiguration])? = nil
 
     /// Flag that the app has already loaded and "splash" find devices screen needn't be displayed again.
     private(set) var directlyShowDeviceList = false
@@ -68,7 +68,7 @@ public extension Routing {
     /// Programmatic navigation's focused item's configs.
     /// Must be previously focused.
     ///
-    func setConfigs(_ configs: [SensorConfigContainer]) {
+    func setConfigs(_ configs: [ModulesConfiguration]) {
         guard let item = focus?.item else { fatalError() }
         focus = (item, configs)
     }

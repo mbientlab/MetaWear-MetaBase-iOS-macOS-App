@@ -41,9 +41,9 @@ extension ConfigureScreen {
             }
         }
 
-        private var selection: Binding<SUPPreset> {
+        private var selection: Binding<PresetSensorConfiguration> {
             Binding(
-                get: { vm.selectedPreset ?? .init(name: "", parameters: .init()) },
+                get: { vm.selectedPreset ?? .init(name: "", config: .init()) },
                 set: { next in vm.select(preset: next) }
             )
         }

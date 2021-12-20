@@ -3,53 +3,53 @@
 import Foundation
 import Combine
 
-public class SensorUserParametersStore {
+public class PresetSensorParametersStore {
 
-    public let parameters: AnyPublisher<Dict<SUPPreset>,Never>
-    private let _parameters = CurrentValueSubject<Dict<SUPPreset>,Never>([:])
+    public let parameters: AnyPublisher<Dict<PresetSensorConfiguration>,Never>
+    private let _parameters = CurrentValueSubject<Dict<PresetSensorConfiguration>,Never>([:])
 
-    private unowned let loader: SensorUserParametersPersistence
+    private unowned let loader: MWLoader<[PresetSensorConfiguration]>
     private var loading: AnyCancellable? = nil
     private var saving: AnyCancellable? = nil
 
-    public init(loader: SensorUserParametersPersistence) {
+    public init(loader: MWLoader<[PresetSensorConfiguration]>) {
         self.loader = loader
-        self.parameters = _parameters.dropFirst().share().eraseToAnyPublisher()
+        self.parameters = _parameters.eraseToAnyPublisher()
         self.update(from: loader.loaded)
+        save(to: loader)
     }
-
 }
 
-public extension SensorUserParametersStore {
+public extension PresetSensorParametersStore {
 
-    func load() {
-        loader.load()
+    func load() throws {
+        try loader.load()
     }
 
-    func presetsMatching(legal: LegalSensorParameters) -> AnyPublisher<[SUPPreset],Never> {
+    func presetsMatching(legal: LegalSensorParameters) -> AnyPublisher<[PresetSensorConfiguration],Never> {
         _parameters
             .filter(matching: legal)
             .eraseToAnyPublisher()
     }
 
-    func addPreset(_ preset: SUPPreset) {
+    func addPreset(_ preset: PresetSensorConfiguration) {
         _parameters.value[preset.id] = preset
     }
 
-    func updatePreset(_ update: SUPPreset) {
+    func updatePreset(_ update: PresetSensorConfiguration) {
         guard _parameters.value.keys.contains(update.id) else { return }
         _parameters.value[update.id] = update
     }
 
-    func removePreset(id: SUPPreset.ID) {
+    func removePreset(id: PresetSensorConfiguration.ID) {
         _parameters.value.removeValue(forKey: id)
     }
 
 }
 
-private extension SensorUserParametersStore {
+private extension PresetSensorParametersStore {
 
-    func update(from loadable: AnyPublisher<[SUPPreset], Never>) {
+    func update(from loadable: AnyPublisher<[PresetSensorConfiguration], Never>) {
         loading = loadable
             .map { $0.dictionary() }
             .sink { [weak self] loaded in
@@ -57,11 +57,11 @@ private extension SensorUserParametersStore {
             }
     }
 
-    func save(to loader: SensorUserParametersPersistence) {
-       saving = parameters
-            .dropFirst()
+    func save(to loader: MWLoader<[PresetSensorConfiguration]>) {
+        saving = _parameters
+            .dropFirst(2)
             .mapValues()
-            .sink { loader.save($0) }
+            .sink { try? loader.save($0) }
     }
 
 }
@@ -75,10 +75,10 @@ extension Array where Element: Identifiable {
     }
 }
 
-extension Publisher where Output == Dict<SUPPreset> {
+extension Publisher where Output == Dict<PresetSensorConfiguration> {
 
     /// Outputs name-sorted array of matching presets
-    func filter(matching legal: LegalSensorParameters) -> AnyPublisher<[SUPPreset], Failure> {
+    func filter(matching legal: LegalSensorParameters) -> AnyPublisher<[PresetSensorConfiguration], Failure> {
         map { $0.filter(matching: legal) }
         .eraseToAnyPublisher()
     }

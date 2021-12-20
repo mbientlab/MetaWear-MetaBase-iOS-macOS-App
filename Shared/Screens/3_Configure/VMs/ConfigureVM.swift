@@ -10,11 +10,11 @@ import mbientSwiftUI
 public class ConfigureVM: ObservableObject, HeaderVM {
 
     @Published var shouldStream = true
-    @Published var config: SensorUserParameters
-    @Published var presets: [SUPPreset] = []
+    @Published var config: UserSensorConfiguration
+    @Published var presets: [PresetSensorConfiguration] = []
     public let options: LegalSensorParameters
     public var canStart: Bool { config.totalFreq.rateHz > 0 }
-    var selectedPreset: SUPPreset? { presets.first(where: { $0.parameters == config }) }
+    var selectedPreset: PresetSensorConfiguration? { presets.first(where: { $0.config == config }) }
 
     public let title: String
     public var deviceCount: Int { devices.endIndex }
@@ -23,14 +23,14 @@ public class ConfigureVM: ObservableObject, HeaderVM {
     private let devices: [MWKnownDevice]
     private let routingItem: Routing.Item
     private unowned let routing: Routing
-    private unowned let presetsStore: SensorUserParametersStore
+    private unowned let presetsStore: PresetSensorParametersStore
     private var presetsUpdates: AnyCancellable? = nil
 
-    public init(title: String, item: Routing.Item, devices: [MWKnownDevice], presets: SensorUserParametersStore, routing: Routing) {
+    public init(title: String, item: Routing.Item, devices: [MWKnownDevice], presets: PresetSensorParametersStore, routing: Routing) {
         self.title = title
         self.routingItem = item
         self.devices = devices
-        let configuration = SensorUserParameters()
+        let configuration = UserSensorConfiguration()
         self.config = configuration
         self.options = .init(devices)
         self.presetsStore = presets
@@ -53,8 +53,8 @@ extension ConfigureVM {
 
 public extension ConfigureVM {
 
-    func select(preset: SUPPreset) {
-        self.config = preset.parameters
+    func select(preset: PresetSensorConfiguration) {
+        self.config = preset.config
     }
 
     func saveCurrentConfiguration() {
@@ -67,13 +67,13 @@ public extension ConfigureVM {
             title: "Save Sensor Configuration",
             message: nil,
             primary: { [weak presetsStore] newName in
-                let preset = SUPPreset(name: newName, parameters: config)
+                let preset = PresetSensorConfiguration(name: newName, config: config)
                 presetsStore?.addPreset(preset)
             }, secondary: { _ in }
         )
     }
 
-    func rename(preset: SUPPreset) {
+    func rename(preset: PresetSensorConfiguration) {
         getNameInputModally(
             prefilledText: preset.name,
             primaryLabel: "Rename",
@@ -140,13 +140,13 @@ public extension ConfigureVM {
 
 private extension ConfigureVM {
 
-     func buildConfigContainers() -> [SensorConfigContainer] {
+    func buildConfigContainers() -> [ModulesConfiguration] {
         devices.map { device in
-            SensorConfigContainer(config, modules: device.meta.modules)
+            ModulesConfiguration(config, modules: device.meta.modules)
         }
     }
 
-    func update(presets: SensorUserParametersStore) {
+    func update(presets: PresetSensorParametersStore) {
         presetsUpdates = presets.parameters.filter(matching: options)
             .sink { [weak self] presets in
                 self?.presets = presets

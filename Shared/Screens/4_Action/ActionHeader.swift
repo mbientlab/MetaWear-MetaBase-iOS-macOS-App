@@ -4,7 +4,7 @@ import mbientSwiftUI
 
 public protocol ActionHeaderVM {
     var actionType: ActionType { get }
-    var representativeConfig: SensorConfigContainer { get }
+    var representativeConfig: ModulesConfiguration { get }
     func backToHistory()
 }
 

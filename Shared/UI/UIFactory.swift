@@ -8,7 +8,7 @@ import mbientSwiftUI
 public class UIFactory: ObservableObject {
 
     public init(_ devices: MetaWearSyncStore,
-                _ presets: SensorUserParametersStore,
+                _ presets: PresetSensorParametersStore,
                 _ scanner: MetaWearScanner,
                 _ routing: Routing) {
         self.presets = presets
@@ -18,12 +18,10 @@ public class UIFactory: ObservableObject {
     }
 
     private unowned let store: MetaWearSyncStore
-    private unowned let presets: SensorUserParametersStore
+    private unowned let presets: PresetSensorParametersStore
     private unowned let scanner: MetaWearScanner
     private unowned let routing: Routing
-    private lazy var actionQueue = DispatchQueue(label: Bundle.main.bundleIdentifier! + ".action",
-                                                 qos: .userInitiated,
-                                                 attributes: .concurrent)
+    private lazy var actionQueue = _makeBackgroundQueue(named: "action")
 }
 
 public extension UIFactory {
@@ -100,5 +98,13 @@ private extension UIFactory {
                 return (device.meta.name, [device])
         }
         return (title: "Error", devices: [])
+    }
+
+    private func _makeBackgroundQueue(named: String) -> DispatchQueue {
+        DispatchQueue(
+            label: Bundle.main.bundleIdentifier! + ".\(named)",
+            qos: .userInitiated,
+            attributes: .concurrent
+        )
     }
 }

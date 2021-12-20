@@ -3,8 +3,8 @@
 import Foundation
 import MetaWear
 
-/// Model User Configurable Parameters
-public struct SensorUserParameters: Hashable, Equatable {
+/// User-configurable parameters for some built-in sensor configurations
+public struct UserSensorConfiguration: Hashable, Equatable {
 
     public private(set) var accelerometer   = false
     public private(set) var altitude        = false
@@ -36,7 +36,7 @@ public struct SensorUserParameters: Hashable, Equatable {
 
 // MARK: - Frequency Calculation
 
-public extension SensorUserParameters {
+public extension UserSensorConfiguration {
 
     var totalFreq: MWFrequency {
         var freq = MWFrequency(hz: 0)
@@ -57,7 +57,7 @@ public extension SensorUserParameters {
 
 // MARK: - Mutation Rules
 
-public extension SensorUserParameters {
+public extension UserSensorConfiguration {
 
     mutating func enableAltitude() {
         altitude = true
@@ -116,7 +116,7 @@ public extension SensorUserParameters {
     }
 }
 
-public extension SensorUserParameters {
+public extension UserSensorConfiguration {
 
     /// Initializer does not validate potentially conflicting parameters.
     init(

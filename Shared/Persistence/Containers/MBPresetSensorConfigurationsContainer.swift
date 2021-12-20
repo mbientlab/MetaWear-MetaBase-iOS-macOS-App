@@ -5,45 +5,51 @@ import MetaWear
 import MetaWearSync
 import SwiftUI
 
-public struct MBSensorUserParametersSaveContainer: Codable {
+public struct MBPresetSensorConfigurationsContainer: Codable, MWContainer {
+    public typealias Loadable = [PresetSensorConfiguration]
     public var versionSentinel = 1
-    public let data: Data
-
-    public init(parameters: [SUPPreset], encoder: JSONEncoder = .init()) throws {
-        let dto = parameters.map(MBSUPPresetDTO1.init)
-        self.data = try encoder.encode(dto)
-    }
+    private let data: Data
 
     public init(data: Data, decoder: JSONDecoder) throws {
-        self = try decoder.decode(MBSensorUserParametersSaveContainer.self, from: data)
+        self = try decoder.decode(Self.self, from: data)
     }
 
-    public func load(_ decoder: JSONDecoder = .init()) throws -> [SUPPreset] {
+    public func load(_ decoder: JSONDecoder) throws -> Loadable {
         try decoder
-            .decode([MBSUPPresetDTO1].self, from: data)
+            .decode([MBPresetSensorConfigurationDTO1].self, from: data)
             .map { $0.load() }
+    }
+
+    public static func encode(_ parameters: Loadable, _ encoder: JSONEncoder) throws -> Data {
+        let container = try Self.init(parameters: parameters, encoder: encoder)
+        return try encoder.encode(container)
+    }
+
+    private init(parameters: Loadable, encoder: JSONEncoder) throws {
+        let dto = parameters.map(MBPresetSensorConfigurationDTO1.init)
+        self.data = try encoder.encode(dto)
     }
 }
 
 // MARK: - DTOs
 
-fileprivate struct MBSUPPresetDTO1: Codable {
+fileprivate struct MBPresetSensorConfigurationDTO1: Codable {
     let id: UUID
     let name: String
-    let parameters: MBSensorUserParametersDTO1
+    let parameters: MBUserSensorConfigurationDTO1
 
-    init(model: SUPPreset) {
+    init(model: PresetSensorConfiguration) {
         self.id = model.id
         self.name = model.name
-        self.parameters = .init(model: model.parameters)
+        self.parameters = .init(model: model.config)
     }
 
-    func load() -> SUPPreset {
-        .init(id: id, name: name, parameters: parameters.load())
+    func load() -> PresetSensorConfiguration {
+        .init(id: id, name: name, config: parameters.load())
     }
 }
 
-fileprivate struct MBSensorUserParametersDTO1: Codable {
+fileprivate struct MBUserSensorConfigurationDTO1: Codable {
 
     var accelerometer:   Bool
     var altitude:        Bool
@@ -68,7 +74,7 @@ fileprivate struct MBSensorUserParametersDTO1: Codable {
     var gyroscopeScale:    Int
     var sensorFusionType:   MBSensorFusionOutputTypeDTO1
 
-    init(model: SensorUserParameters) {
+    init(model: UserSensorConfiguration) {
         self.accelerometer = model.accelerometer
         self.altitude = model.altitude
         self.ambientLight = model.ambientLight
@@ -93,7 +99,7 @@ fileprivate struct MBSensorUserParametersDTO1: Codable {
         self.sensorFusionType = .init(model: model.sensorFusionType)
     }
 
-    func load() -> SensorUserParameters {
+    func load() -> UserSensorConfiguration {
         .init(accelerometer: accelerometer,
               altitude: altitude,
               ambientLight: ambientLight,
@@ -117,7 +123,7 @@ fileprivate struct MBSensorUserParametersDTO1: Codable {
     }
 }
 
-enum MBSensorFusionOutputTypeDTO1: String, Codable {
+fileprivate enum MBSensorFusionOutputTypeDTO1: String, Codable {
     case eulerAngles
     case gravity
     case linearAcceleration
