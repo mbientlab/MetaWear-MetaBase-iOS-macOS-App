@@ -9,22 +9,30 @@ import mbientSwiftUI
 /// Organize legal user intents
 public class ConfigureVM: ObservableObject, HeaderVM {
 
-    @Published var shouldStream = true
-    @Published var config: UserSensorConfiguration
-    @Published var presets: [PresetSensorConfiguration] = []
+    @Published  var shouldStream = true // View edits via binding
+    @Published var config: UserSensorConfiguration // View edits via binding
+    @Published private(set) var presets: [PresetSensorConfiguration] = []
     public let options: LegalSensorParameters
     public var canStart: Bool { config.totalFreq.rateHz > 0 }
     var selectedPreset: PresetSensorConfiguration? { presets.first(where: { $0.config == config }) }
+
+    @Published private(set) var batteryLifetime = "—"
+    @Published private(set) var logLifetime = "—"
+    private let timeFormatter: DateComponentsFormatter = .dayHourMinute()
 
     public let title: String
     public var deviceCount: Int { devices.endIndex }
     public let showBackButton = true
 
     private let devices: [MWKnownDevice]
+    private let models: [MetaWear.Model]
+    private let modules: [[MWModules]]
+
     private let routingItem: Routing.Item
     private unowned let routing: Routing
     private unowned let presetsStore: PresetSensorParametersStore
     private var presetsUpdates: AnyCancellable? = nil
+    private var lifetimeEstimates: AnyCancellable? = nil
 
     public init(title: String, item: Routing.Item, devices: [MWKnownDevice], presets: PresetSensorParametersStore, routing: Routing) {
         self.title = title
@@ -35,7 +43,10 @@ public class ConfigureVM: ObservableObject, HeaderVM {
         self.options = .init(devices)
         self.presetsStore = presets
         self.routing = routing
+        self.modules = devices.map(\.meta.modules.values).map { $0.map { $0 } }
+        self.models = devices.map(\.meta.model)
         update(presets: presets)
+        updateLifetimeEstimates()
     }
 }
 
@@ -152,4 +163,20 @@ private extension ConfigureVM {
                 self?.presets = presets
             }
     }
+
+    func updateLifetimeEstimates() {
+        lifetimeEstimates = $config.sink { [weak self] newConfig in
+            guard let self = self else { return }
+            let empty = "—"
+            guard newConfig.totalFreq != .zero else {
+                self.batteryLifetime = empty
+                self.logLifetime = empty
+                return
+            }
+            let lifetime = MWLifetimeCalculator(config: newConfig, models: self.models, modules: self.modules)
+            self.batteryLifetime = self.timeFormatter.string(from: lifetime.batteryLife) ?? empty
+            self.logLifetime = self.timeFormatter.string(from: lifetime.logLife)  ?? empty
+        }
+    }
+
 }
