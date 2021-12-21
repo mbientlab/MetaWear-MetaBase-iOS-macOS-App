@@ -17,13 +17,14 @@ public struct MWLifetimeCalculator {
 
         let logSize = smallestLogSize(in: models)
         let entriesGeneratedPerSecond = max(0.001, entriesGeneratedPerSecond(for: config))
-        self.logLife = Double(logSize) / entriesGeneratedPerSecond
+        let logLifeSeconds = Double(logSize) / entriesGeneratedPerSecond
+        self.logLife = roundDownToNearest(logLifeSeconds, minutes: 5)
 
         let (index, smallestBattery) = smallestBattery(in: models) 
         let powerConsumption = powerConsumptionMilliamperes(for: config, modules: modules[index])
         let batteryLifeHours = Double(smallestBattery) / (max(0.01, powerConsumption))
         let batteryLifeSeconds = batteryLifeHours * 60 * 60 // seconds in hour
-        self.batteryLife = roundDownToNearest15Minutes(batteryLifeSeconds)
+        self.batteryLife = roundDownToNearest(batteryLifeSeconds, minutes: 15)
     }
 
 }
@@ -95,8 +96,8 @@ public extension MWLifetimeCalculator {
     }
 
 
-    func roundDownToNearest15Minutes(_ seconds: Double) -> Double {
-        let interval: Double = 60 * 15
+    func roundDownToNearest(_ seconds: Double, minutes: Double) -> Double {
+        let interval: Double = 60 * minutes
         let rounded = (seconds / interval).rounded(.towardZero)
         return rounded * interval
     }
