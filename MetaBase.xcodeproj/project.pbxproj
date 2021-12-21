@@ -53,6 +53,7 @@
 		941DF25A276C34EE00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF259276C34EE00C5978F /* MetaWearSync */; };
 		941DF25C276C34FB00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF25B276C34FB00C5978F /* MetaWearSync */; };
 		941DF25E276C350400C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF25D276C350400C5978F /* MetaWearSync */; };
+		943F5180277199B700715191 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 943F517F277199B700715191 /* mbientSwiftUI */; };
 		944538BD2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
 		944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
 		9445E58F276D493300B8E8F3 /* DropOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9445E58E276D493300B8E8F3 /* DropOutcome.swift */; };
@@ -91,6 +92,12 @@
 		9493501B275A112200E388FF /* DiscoveryListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935019275A112200E388FF /* DiscoveryListVM.swift */; };
 		94935023275A11C600E388FF /* KnownItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935022275A11C600E388FF /* KnownItemVM.swift */; };
 		94935024275A11C600E388FF /* KnownItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935022275A11C600E388FF /* KnownItemVM.swift */; };
+		9493AE7527718A860027E059 /* LifetimeCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9493AE7427718A860027E059 /* LifetimeCalculatorTests.swift */; };
+		9493AE7C27718AED0027E059 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE7B27718AED0027E059 /* MetaWear */; };
+		9493AE7E27718AED0027E059 /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE7D27718AED0027E059 /* MetaWearCpp */; };
+		9493AE8027718AED0027E059 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE7F27718AED0027E059 /* MetaWearSync */; };
+		9493AE8227718AED0027E059 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE8127718AED0027E059 /* mbientSwiftUI */; };
+		9493AE8427718C4F0027E059 /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE8327718C4F0027E059 /* MetaWearCpp */; };
 		94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
 		94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
 		94A165C3275F2F8600FA355D /* History+About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+About.swift */; };
@@ -154,6 +161,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		9493AE7627718A860027E059 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94E005C5275A07E9001B0DFD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 94E005D6275A07E9001B0DFD;
+			remoteInfo = "MetaBase (macOS)";
+		};
 		94E005DF275A07E9001B0DFD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 94E005C5275A07E9001B0DFD /* Project object */;
@@ -210,6 +224,8 @@
 		94934FD7275A0A4200E388FF /* MetaBase--macOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MetaBase--macOS--Info.plist"; sourceTree = "<group>"; };
 		94935019275A112200E388FF /* DiscoveryListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryListVM.swift; sourceTree = "<group>"; };
 		94935022275A11C600E388FF /* KnownItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownItemVM.swift; sourceTree = "<group>"; };
+		9493AE7227718A860027E059 /* MetaBaseUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MetaBaseUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9493AE7427718A860027E059 /* LifetimeCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifetimeCalculatorTests.swift; sourceTree = "<group>"; };
 		94A165BB275E8E0C00FA355D /* MetaBase (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MetaBase (iOS).entitlements"; sourceTree = "<group>"; };
 		94A165BD275F2F8600FA355D /* History+SessionsList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+SessionsList.swift"; sourceTree = "<group>"; };
 		94A165BE275F2F8600FA355D /* History+About.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+About.swift"; sourceTree = "<group>"; };
@@ -252,6 +268,17 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9493AE6F27718A860027E059 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9493AE8027718AED0027E059 /* MetaWearSync in Frameworks */,
+				9493AE7E27718AED0027E059 /* MetaWearCpp in Frameworks */,
+				9493AE7C27718AED0027E059 /* MetaWear in Frameworks */,
+				9493AE8227718AED0027E059 /* mbientSwiftUI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94E005CE275A07E9001B0DFD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -289,6 +316,8 @@
 			files = (
 				945494F927656A840021E3D6 /* MetaWear in Frameworks */,
 				941DF25C276C34FB00C5978F /* MetaWearSync in Frameworks */,
+				9493AE8427718C4F0027E059 /* MetaWearCpp in Frameworks */,
+				943F5180277199B700715191 /* mbientSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,6 +525,14 @@
 			path = Buttons;
 			sourceTree = "<group>";
 		};
+		9493AE7327718A860027E059 /* MetaBaseUnitTests */ = {
+			isa = PBXGroup;
+			children = (
+				9493AE7427718A860027E059 /* LifetimeCalculatorTests.swift */,
+			);
+			path = MetaBaseUnitTests;
+			sourceTree = "<group>";
+		};
 		94DFEC60275D458D00BB80DB /* VMs */ = {
 			isa = PBXGroup;
 			children = (
@@ -520,6 +557,7 @@
 				94E005D8275A07E9001B0DFD /* macOS */,
 				94E005E1275A07E9001B0DFD /* Tests iOS */,
 				94E005ED275A07E9001B0DFD /* Tests macOS */,
+				9493AE7327718A860027E059 /* MetaBaseUnitTests */,
 				94E005D2275A07E9001B0DFD /* Products */,
 				94934FD1275A09E700E388FF /* Frameworks */,
 			);
@@ -548,6 +586,7 @@
 				94E005D7275A07E9001B0DFD /* MetaBase.app */,
 				94E005DE275A07E9001B0DFD /* Tests iOS.xctest */,
 				94E005EA275A07E9001B0DFD /* Tests macOS.xctest */,
+				9493AE7227718A860027E059 /* MetaBaseUnitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -590,6 +629,30 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		9493AE7127718A860027E059 /* MetaBaseUnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9493AE7A27718A860027E059 /* Build configuration list for PBXNativeTarget "MetaBaseUnitTests" */;
+			buildPhases = (
+				9493AE6E27718A860027E059 /* Sources */,
+				9493AE6F27718A860027E059 /* Frameworks */,
+				9493AE7027718A860027E059 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9493AE7727718A860027E059 /* PBXTargetDependency */,
+			);
+			name = MetaBaseUnitTests;
+			packageProductDependencies = (
+				9493AE7B27718AED0027E059 /* MetaWear */,
+				9493AE7D27718AED0027E059 /* MetaWearCpp */,
+				9493AE7F27718AED0027E059 /* MetaWearSync */,
+				9493AE8127718AED0027E059 /* mbientSwiftUI */,
+			);
+			productName = MetaBaseUnitTests;
+			productReference = 9493AE7227718A860027E059 /* MetaBaseUnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		94E005D0275A07E9001B0DFD /* MetaBase (iOS) */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 94E005FA275A07E9001B0DFD /* Build configuration list for PBXNativeTarget "MetaBase (iOS)" */;
@@ -673,6 +736,8 @@
 			packageProductDependencies = (
 				945494F827656A840021E3D6 /* MetaWear */,
 				941DF25B276C34FB00C5978F /* MetaWearSync */,
+				9493AE8327718C4F0027E059 /* MetaWearCpp */,
+				943F517F277199B700715191 /* mbientSwiftUI */,
 			);
 			productName = "Tests macOS";
 			productReference = 94E005EA275A07E9001B0DFD /* Tests macOS.xctest */;
@@ -688,6 +753,10 @@
 				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1310;
 				TargetAttributes = {
+					9493AE7127718A860027E059 = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 94E005D6275A07E9001B0DFD;
+					};
 					94E005D0275A07E9001B0DFD = {
 						CreatedOnToolsVersion = 13.2;
 					};
@@ -725,11 +794,19 @@
 				94E005D6275A07E9001B0DFD /* MetaBase (macOS) */,
 				94E005DD275A07E9001B0DFD /* Tests iOS */,
 				94E005E9275A07E9001B0DFD /* Tests macOS */,
+				9493AE7127718A860027E059 /* MetaBaseUnitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9493AE7027718A860027E059 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94E005CF275A07E9001B0DFD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -763,6 +840,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9493AE6E27718A860027E059 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9493AE7527718A860027E059 /* LifetimeCalculatorTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94E005CD275A07E9001B0DFD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -924,6 +1009,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		9493AE7727718A860027E059 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 94E005D6275A07E9001B0DFD /* MetaBase (macOS) */;
+			targetProxy = 9493AE7627718A860027E059 /* PBXContainerItemProxy */;
+		};
 		94E005E0275A07E9001B0DFD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 94E005D0275A07E9001B0DFD /* MetaBase (iOS) */;
@@ -937,6 +1027,44 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		9493AE7827718A860027E059 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S2273LZ6GL;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mbientlab.MetaBaseUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MetaBase.app/Contents/MacOS/MetaBase";
+			};
+			name = Debug;
+		};
+		9493AE7927718A860027E059 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S2273LZ6GL;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mbientlab.MetaBaseUnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MetaBase.app/Contents/MacOS/MetaBase";
+			};
+			name = Release;
+		};
 		94E005F8275A07E9001B0DFD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1151,6 +1279,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 14.0;
+				VALID_ARCHS = "arm64 arm64e i386 x86_64";
 				WATCHOS_DEPLOYMENT_TARGET = 7.5;
 			};
 			name = Debug;
@@ -1187,6 +1316,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 14.0;
+				VALID_ARCHS = "arm64 arm64e i386 x86_64";
 				WATCHOS_DEPLOYMENT_TARGET = 7.5;
 			};
 			name = Release;
@@ -1273,6 +1403,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9493AE7A27718A860027E059 /* Build configuration list for PBXNativeTarget "MetaBaseUnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9493AE7827718A860027E059 /* Debug */,
+				9493AE7927718A860027E059 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		94E005C8275A07E9001B0DFD /* Build configuration list for PBXProject "MetaBase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1360,6 +1499,11 @@
 			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
 			productName = MetaWearSync;
 		};
+		943F517F277199B700715191 /* mbientSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94CB2D2F276F108A005C0A08 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
+			productName = mbientSwiftUI;
+		};
 		945494F627656A800021E3D6 /* MetaWear */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaWear;
@@ -1375,6 +1519,31 @@
 		94934FD4275A09EE00E388FF /* MetaWear */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaWear;
+		};
+		9493AE7B27718AED0027E059 /* MetaWear */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWear;
+		};
+		9493AE7D27718AED0027E059 /* MetaWearCpp */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWearCpp;
+		};
+		9493AE7F27718AED0027E059 /* MetaWearSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWearSync;
+		};
+		9493AE8127718AED0027E059 /* mbientSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94CB2D2F276F108A005C0A08 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
+			productName = mbientSwiftUI;
+		};
+		9493AE8327718C4F0027E059 /* MetaWearCpp */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWearCpp;
 		};
 		94CB2D30276F108A005C0A08 /* mbientSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

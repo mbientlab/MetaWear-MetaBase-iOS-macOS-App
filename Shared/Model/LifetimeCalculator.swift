@@ -7,13 +7,15 @@ import MetaWear
 public struct MWLifetimeCalculator {
 
     /// Seconds
-    var logLife: Double = 0
+    public var logLife: Double = 0
     /// Seconds
-    var batteryLife: Double = 0
+    public var batteryLife: Double = 0
 
     public init(config: UserSensorConfiguration,
                 models: [MetaWear.Model],
                 modules: [[MWModules]]) {
+
+        guard config.totalFreq.rateHz > 0 else { return }
 
         let logSize = smallestLogSize(in: models)
         let entriesGeneratedPerSecond = max(0.001, entriesGeneratedPerSecond(for: config))
@@ -31,7 +33,7 @@ public struct MWLifetimeCalculator {
 
 // MARK: - Calculations
 
-public extension MWLifetimeCalculator {
+private extension MWLifetimeCalculator {
 
     func smallestBattery(in models: [MetaWear.Model]) -> (index: Int, size: Int) {
         var index = 0

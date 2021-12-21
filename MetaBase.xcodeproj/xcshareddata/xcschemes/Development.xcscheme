@@ -136,6 +136,16 @@
                ReferencedContainer = "container:MetaBase.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9493AE7127718A860027E059"
+               BuildableName = "MetaBaseUnitTests.xctest"
+               BlueprintName = "MetaBaseUnitTests"
+               ReferencedContainer = "container:MetaBase.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

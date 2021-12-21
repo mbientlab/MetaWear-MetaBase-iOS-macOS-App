@@ -20,6 +20,20 @@
                ReferencedContainer = "container:MetaBase.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9493AE7127718A860027E059"
+               BuildableName = "MetaBaseUnitTests.xctest"
+               BlueprintName = "MetaBaseUnitTests"
+               ReferencedContainer = "container:MetaBase.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -32,9 +46,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "94E005E9275A07E9001B0DFD"
-               BuildableName = "Tests macOS.xctest"
-               BlueprintName = "Tests macOS"
+               BlueprintIdentifier = "9493AE7127718A860027E059"
+               BuildableName = "MetaBaseUnitTests.xctest"
+               BlueprintName = "MetaBaseUnitTests"
                ReferencedContainer = "container:MetaBase.xcodeproj">
             </BuildableReference>
          </TestableReference>
