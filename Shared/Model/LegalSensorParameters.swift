@@ -50,7 +50,7 @@ public extension LegalSensorParameters {
 
     init(modules: Array<[MWModules.ID:MWModules]>) {
 
-        let commonFrequencies = MWFrequency.CommonCases.allCases
+        let commonFrequencies = MWFrequency.CommonCases.allCases_10Hz_OrSlower
 
         self.ambientLightRate = modules.allSatisfy({ $0.keys.contains(.illuminance) })  ? MWAmbientLight.MeasurementRate.allCases   : []
         self.humidityRate = modules.allSatisfy({ $0.keys.contains(.humidity) })         ? commonFrequencies                         : []
@@ -127,7 +127,34 @@ public extension LegalSensorParameters {
             }
             return true
         }()
-        self.temperatureRate = allHaveOnboardThermometer ? MWFrequency.CommonCases.allCases : []
+        self.temperatureRate = allHaveOnboardThermometer ? commonFrequencies : []
     }
 }
 
+public extension MWFrequency.CommonCases {
+
+    static let allCases_10Hz_OrSlower: [MWFrequency.CommonCases] = [
+        .hz1,
+        .hz10,
+        .every5sec,
+        .every10sec,
+        .every20sec,
+        .every30sec,
+        .every1min,
+        .every2min,
+        .every5min,
+        .every10min,
+        .every15min,
+        .every20min,
+        .every30min,
+        .every1hr,
+        .every2hr,
+        .every3hr,
+        .every4hr,
+        .every5hr,
+        .every6hr,
+        .every8hr,
+        .every12hr,
+        .every24hr,
+    ]
+}
