@@ -3,6 +3,7 @@
 import mbientSwiftUI
 import MetaWear
 import MetaWearSync
+import SwiftUI
 
 extension HistoryScreen {
 
@@ -87,7 +88,11 @@ extension HistoryScreen.AboutColumn {
         }
 
         @ViewBuilder private var info: some View {
-            HLabel("Pairing", item: vm.connectionRepresentable,     align: alignment)
+            HLabel("Pairing", align: alignment) {
+                Text(vm.connectionRepresentable)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .overlay(connectingSpinner, alignment: .trailing)
+            }
             HLabel("RSSI", item: vm.rssiRepresentable,              align: alignment)
             HLabel("Battery", item: vm.battery,                     align: alignment)
             HLabel("MAC", item: vm.meta.mac,                        align: alignment)
@@ -95,6 +100,13 @@ extension HistoryScreen.AboutColumn {
             HLabel("Model", item: vm.meta.model.name,               align: alignment)
             HLabel("Firmware", item: vm.info.firmwareRevision,      align: alignment)
             HLabel("Hardware", item: vm.info.hardwareRevision,      align: alignment)
+        }
+
+        @ViewBuilder private var connectingSpinner: some View {
+            if vm.connection == .connecting {
+                ProgressSpinner()
+                    .padding(.trailing, 10)
+            }
         }
     }
 }
