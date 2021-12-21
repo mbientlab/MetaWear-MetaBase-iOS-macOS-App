@@ -2,6 +2,7 @@
 
 import mbientSwiftUI
 import MetaWear
+import SwiftUI
 
 
 extension ConfigureScreen {
@@ -14,7 +15,12 @@ extension ConfigureScreen {
             HStack(alignment: .center, spacing: .screenInset) {
 
                 Spacer()
-                if vm.shouldStream { streamRate } else { logFillDuration }
+                if vm.shouldStream {
+                    streamRate
+                } else {
+                    logFillDuration
+                    batteryLife
+                }
                 Spacer()
 
                 toggle
@@ -59,8 +65,19 @@ extension ConfigureScreen {
         }
 
         private var logFillDuration: some View {
-            Text("Log fill time")
-                .font(.headline)
+            HStack {
+                SFSymbol.logs.image()
+                Text(vm.logLifetime)
+            }
+            .help("Estimated time to fill onboard memory (assuming empty start)")
+        }
+
+        private var batteryLife: some View {
+            HStack {
+                SFSymbol.battery.image()
+                Text(vm.batteryLifetime)
+            }
+            .help("Estimated battery life (assuming full charge and no Bluetooth)")
         }
     }
 }
