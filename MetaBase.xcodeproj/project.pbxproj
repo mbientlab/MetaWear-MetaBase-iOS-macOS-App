@@ -53,6 +53,10 @@
 		941DF25A276C34EE00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF259276C34EE00C5978F /* MetaWearSync */; };
 		941DF25C276C34FB00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF25B276C34FB00C5978F /* MetaWearSync */; };
 		941DF25E276C350400C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF25D276C350400C5978F /* MetaWearSync */; };
+		94336F07277523E500759C55 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94336F06277523E500759C55 /* CoreDataController.swift */; };
+		94336F08277523E500759C55 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94336F06277523E500759C55 /* CoreDataController.swift */; };
+		94336F0A2775244B00759C55 /* CoreDataSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94336F092775244B00759C55 /* CoreDataSessionRepository.swift */; };
+		94336F0B2775244B00759C55 /* CoreDataSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94336F092775244B00759C55 /* CoreDataSessionRepository.swift */; };
 		943F5180277199B700715191 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 943F517F277199B700715191 /* mbientSwiftUI */; };
 		944538BD2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
 		944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
@@ -98,6 +102,20 @@
 		9493AE8027718AED0027E059 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE7F27718AED0027E059 /* MetaWearSync */; };
 		9493AE8227718AED0027E059 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE8127718AED0027E059 /* mbientSwiftUI */; };
 		9493AE8427718C4F0027E059 /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE8327718C4F0027E059 /* MetaWearCpp */; };
+		949E5A6727729B7A00D45740 /* SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A6627729B7A00D45740 /* SessionRepository.swift */; };
+		949E5A6827729B7A00D45740 /* SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A6627729B7A00D45740 /* SessionRepository.swift */; };
+		949E5A6A2772ACA500D45740 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A692772ACA500D45740 /* Session.swift */; };
+		949E5A6B2772ACA500D45740 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A692772ACA500D45740 /* Session.swift */; };
+		949E5A6E2773243800D45740 /* Sessions.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A6C2773243800D45740 /* Sessions.xcdatamodeld */; };
+		949E5A6F2773243800D45740 /* Sessions.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A6C2773243800D45740 /* Sessions.xcdatamodeld */; };
+		949E5AA72773BCDA00D45740 /* DeviceMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AA12773BCDA00D45740 /* DeviceMO+CoreDataClass.swift */; };
+		949E5AA82773BCDA00D45740 /* DeviceMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AA12773BCDA00D45740 /* DeviceMO+CoreDataClass.swift */; };
+		949E5AAB2773BCDA00D45740 /* SessionMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AA32773BCDA00D45740 /* SessionMO+CoreDataClass.swift */; };
+		949E5AAC2773BCDA00D45740 /* SessionMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AA32773BCDA00D45740 /* SessionMO+CoreDataClass.swift */; };
+		949E5AAF2773BCDA00D45740 /* FileMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AA52773BCDA00D45740 /* FileMO+CoreDataClass.swift */; };
+		949E5AB02773BCDA00D45740 /* FileMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AA52773BCDA00D45740 /* FileMO+CoreDataClass.swift */; };
+		949E5AB42773BD7800D45740 /* ModelConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AB32773BD7800D45740 /* ModelConvertible.swift */; };
+		949E5AB52773BD7800D45740 /* ModelConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AB32773BD7800D45740 /* ModelConvertible.swift */; };
 		94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
 		94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
 		94A165C3275F2F8600FA355D /* History+About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+About.swift */; };
@@ -206,6 +224,8 @@
 		94196C142770DF61000377A6 /* SensorPresetsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorPresetsLoader.swift; sourceTree = "<group>"; };
 		941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorParametersStore.swift; sourceTree = "<group>"; };
 		941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorConfiguration.swift; sourceTree = "<group>"; };
+		94336F06277523E500759C55 /* CoreDataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataController.swift; sourceTree = "<group>"; };
+		94336F092775244B00759C55 /* CoreDataSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataSessionRepository.swift; sourceTree = "<group>"; };
 		944538BC2767DCE000841880 /* StreamingCountersContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingCountersContainer.swift; sourceTree = "<group>"; };
 		9445E58E276D493300B8E8F3 /* DropOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropOutcome.swift; sourceTree = "<group>"; };
 		944C1760276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBPresetSensorConfigurationsContainer.swift; sourceTree = "<group>"; };
@@ -226,6 +246,13 @@
 		94935022275A11C600E388FF /* KnownItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownItemVM.swift; sourceTree = "<group>"; };
 		9493AE7227718A860027E059 /* MetaBaseUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MetaBaseUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9493AE7427718A860027E059 /* LifetimeCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifetimeCalculatorTests.swift; sourceTree = "<group>"; };
+		949E5A6627729B7A00D45740 /* SessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRepository.swift; sourceTree = "<group>"; };
+		949E5A692772ACA500D45740 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		949E5A6D2773243800D45740 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		949E5AA12773BCDA00D45740 /* DeviceMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceMO+CoreDataClass.swift"; sourceTree = "<group>"; };
+		949E5AA32773BCDA00D45740 /* SessionMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionMO+CoreDataClass.swift"; sourceTree = "<group>"; };
+		949E5AA52773BCDA00D45740 /* FileMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileMO+CoreDataClass.swift"; sourceTree = "<group>"; };
+		949E5AB32773BD7800D45740 /* ModelConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelConvertible.swift; sourceTree = "<group>"; };
 		94A165BB275E8E0C00FA355D /* MetaBase (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MetaBase (iOS).entitlements"; sourceTree = "<group>"; };
 		94A165BD275F2F8600FA355D /* History+SessionsList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+SessionsList.swift"; sourceTree = "<group>"; };
 		94A165BE275F2F8600FA355D /* History+About.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+About.swift"; sourceTree = "<group>"; };
@@ -364,6 +391,7 @@
 				94A1E64627713FF100414FDF /* LifetimeCalculator.swift */,
 				94E3A80827608ED7007E2BAE /* ModulesConfiguration.swift */,
 				941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */,
+				949E5A692772ACA500D45740 /* Session.swift */,
 				9409C5C127613890001FE850 /* UserSensorConfiguration.swift */,
 			);
 			path = Model;
@@ -386,6 +414,7 @@
 		9473B7B12770F73F006F4994 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				949E5A882773B8CE00D45740 /* CoreData */,
 				9473B7B22770F8B2006F4994 /* Containers */,
 				94196C142770DF61000377A6 /* SensorPresetsLoader.swift */,
 				94528560275BDF8D004D815B /* UserDefaults+.swift */,
@@ -405,6 +434,7 @@
 			isa = PBXGroup;
 			children = (
 				941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */,
+				949E5A6627729B7A00D45740 /* SessionRepository.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -531,6 +561,20 @@
 				9493AE7427718A860027E059 /* LifetimeCalculatorTests.swift */,
 			);
 			path = MetaBaseUnitTests;
+			sourceTree = "<group>";
+		};
+		949E5A882773B8CE00D45740 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				94336F06277523E500759C55 /* CoreDataController.swift */,
+				94336F092775244B00759C55 /* CoreDataSessionRepository.swift */,
+				949E5AA12773BCDA00D45740 /* DeviceMO+CoreDataClass.swift */,
+				949E5AA52773BCDA00D45740 /* FileMO+CoreDataClass.swift */,
+				949E5AB32773BD7800D45740 /* ModelConvertible.swift */,
+				949E5AA32773BCDA00D45740 /* SessionMO+CoreDataClass.swift */,
+				949E5A6C2773243800D45740 /* Sessions.xcdatamodeld */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		94DFEC60275D458D00BB80DB /* VMs */ = {
@@ -863,15 +907,20 @@
 				94DFEC65275D45F000BB80DB /* UnknownItemVM.swift in Sources */,
 				9409C5E82763B764001FE850 /* ActionType.swift in Sources */,
 				944538BD2767DCE000841880 /* StreamingCountersContainer.swift in Sources */,
+				949E5AB42773BD7800D45740 /* ModelConvertible.swift in Sources */,
 				94A1E64727713FF100414FDF /* LifetimeCalculator.swift in Sources */,
 				94E3A80327608BE3007E2BAE /* Configure+Tile.swift in Sources */,
 				9409C5E52762E732001FE850 /* ActionHeader.swift in Sources */,
+				949E5AA72773BCDA00D45740 /* DeviceMO+CoreDataClass.swift in Sources */,
 				94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */,
 				9481D768276FD5CE00AB97FA /* Configure+Presets.swift in Sources */,
 				9409C5D92762D7DA001FE850 /* ActionState.swift in Sources */,
 				9452857A275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
+				949E5AAB2773BCDA00D45740 /* SessionMO+CoreDataClass.swift in Sources */,
+				94336F07277523E500759C55 /* CoreDataController.swift in Sources */,
 				94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */,
 				94528561275BDF8D004D815B /* UserDefaults+.swift in Sources */,
+				949E5A6A2772ACA500D45740 /* Session.swift in Sources */,
 				94528564275BE0D8004D815B /* MainWindow.swift in Sources */,
 				94935023275A11C600E388FF /* KnownItemVM.swift in Sources */,
 				94CF3EFA276427C300C2D8B0 /* Routing.swift in Sources */,
@@ -882,6 +931,7 @@
 				94CF3F0A2764286B00C2D8B0 /* Header.swift in Sources */,
 				9409C5C02761383E001FE850 /* ConfigureVM.swift in Sources */,
 				944C1761276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */,
+				949E5A6727729B7A00D45740 /* SessionRepository.swift in Sources */,
 				94E3A7F3275FF519007E2BAE /* AboutDeviceVM.swift in Sources */,
 				9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */,
 				9452856D275BE1D5004D815B /* Root.swift in Sources */,
@@ -901,14 +951,17 @@
 				94528552275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */,
 				94E005F2275A07E9001B0DFD /* MetaBaseApp.swift in Sources */,
 				941100FE2771623500DEDE9A /* Formatters.swift in Sources */,
+				949E5AAF2773BCDA00D45740 /* FileMO+CoreDataClass.swift in Sources */,
 				941A08F6276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */,
 				941A08FD276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */,
+				949E5A6E2773243800D45740 /* Sessions.xcdatamodeld in Sources */,
 				94E3A7F5275FF557007E2BAE /* HistoryScreen.swift in Sources */,
 				94528558275BDE1E004D815B /* Choose+DeviceIterator.swift in Sources */,
 				9409C5D22762971D001FE850 /* Configure+CTAs.swift in Sources */,
 				9409C5CC2761F438001FE850 /* Configure+SensorIterator.swift in Sources */,
 				9493501A275A112200E388FF /* DiscoveryListVM.swift in Sources */,
 				94196C152770DF61000377A6 /* SensorPresetsLoader.swift in Sources */,
+				94336F0A2775244B00759C55 /* CoreDataSessionRepository.swift in Sources */,
 				9409C5E22762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */,
 				94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */,
 				9408E6DF276829280011B5F5 /* BluetoothErrorButton.swift in Sources */,
@@ -933,15 +986,20 @@
 				94528567275BE128004D815B /* ConfigureScreen.swift in Sources */,
 				9409C5E92763B764001FE850 /* ActionType.swift in Sources */,
 				94DFEC66275D45F000BB80DB /* UnknownItemVM.swift in Sources */,
+				949E5AB52773BD7800D45740 /* ModelConvertible.swift in Sources */,
 				94A1E64827713FF100414FDF /* LifetimeCalculator.swift in Sources */,
 				944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */,
 				9409C5E62762E732001FE850 /* ActionHeader.swift in Sources */,
+				949E5AA82773BCDA00D45740 /* DeviceMO+CoreDataClass.swift in Sources */,
 				94E3A80427608BE3007E2BAE /* Configure+Tile.swift in Sources */,
 				9481D769276FD5CE00AB97FA /* Configure+Presets.swift in Sources */,
 				9409C5DA2762D7DA001FE850 /* ActionState.swift in Sources */,
 				94E3A7F6275FF5CF007E2BAE /* HistoryScreen.swift in Sources */,
+				949E5AAC2773BCDA00D45740 /* SessionMO+CoreDataClass.swift in Sources */,
+				94336F08277523E500759C55 /* CoreDataController.swift in Sources */,
 				9493501B275A112200E388FF /* DiscoveryListVM.swift in Sources */,
 				94E3A7F8275FF5DD007E2BAE /* HistoryScreenVM.swift in Sources */,
+				949E5A6B2772ACA500D45740 /* Session.swift in Sources */,
 				9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
 				9452855C275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
 				9409C5DD2762E17D001FE850 /* Action+Row.swift in Sources */,
@@ -952,6 +1010,7 @@
 				94528553275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */,
 				94528556275BDDB9004D815B /* Choose+Grids.swift in Sources */,
 				944C1762276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */,
+				949E5A6827729B7A00D45740 /* SessionRepository.swift in Sources */,
 				94528568275BE12B004D815B /* ActionScreen.swift in Sources */,
 				94CF3F0D2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
 				94935024275A11C600E388FF /* KnownItemVM.swift in Sources */,
@@ -971,14 +1030,17 @@
 				94CF3F022764282300C2D8B0 /* CTAButton.swift in Sources */,
 				94528565275BE0D8004D815B /* MainWindow.swift in Sources */,
 				941100FF2771623500DEDE9A /* Formatters.swift in Sources */,
+				949E5AB02773BCDA00D45740 /* FileMO+CoreDataClass.swift in Sources */,
 				941A08F7276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */,
 				941A08FE276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */,
+				949E5A6F2773243800D45740 /* Sessions.xcdatamodeld in Sources */,
 				9452855F275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
 				94528562275BDF8D004D815B /* UserDefaults+.swift in Sources */,
 				9409C5D32762971D001FE850 /* Configure+CTAs.swift in Sources */,
 				9409C5CD2761F438001FE850 /* Configure+SensorIterator.swift in Sources */,
 				94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */,
 				94196C162770DF61000377A6 /* SensorPresetsLoader.swift in Sources */,
+				94336F0B2775244B00759C55 /* CoreDataSessionRepository.swift in Sources */,
 				9409C5E32762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */,
 				9409C5C427613895001FE850 /* ConfigureVM.swift in Sources */,
 				9408E6E0276829280011B5F5 /* BluetoothErrorButton.swift in Sources */,
@@ -1275,6 +1337,7 @@
 				MARKETING_VERSION = 5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mbientlab.MetaBase;
 				PRODUCT_NAME = MetaBase;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1312,6 +1375,7 @@
 				MARKETING_VERSION = 5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mbientlab.MetaBase;
 				PRODUCT_NAME = MetaBase;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1556,6 +1620,19 @@
 			productName = mbientSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		949E5A6C2773243800D45740 /* Sessions.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				949E5A6D2773243800D45740 /* Model.xcdatamodel */,
+			);
+			currentVersion = 949E5A6D2773243800D45740 /* Model.xcdatamodel */;
+			path = Sessions.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 94E005C5275A07E9001B0DFD /* Project object */;
 }

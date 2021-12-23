@@ -75,7 +75,7 @@ struct MainWindow: View {
 
     private var destination: Binding<Routing.Destination?> {
         Binding(
-            get: { routing.destination },
+            fetch: { routing.destination },
             set: {
                 guard let next = $0 else { return }
                 routing.setDestination(next)
