@@ -17,25 +17,25 @@ public class CoreDataSessionRepository {
 
 // MARK: - API
 
-public extension CoreDataSessionRepository {
+extension CoreDataSessionRepository: SessionRepository {
 
-    func fetchAllSessions() -> AnyPublisher<[Session],Error> {
+    public func fetchAllSessions() -> AnyPublisher<[Session],Error> {
         fetchSessions(withPredicate: { nil })
     }
 
-    func fetchSessions(matchingGroupID: MetaWear.Group.ID) -> AnyPublisher<[Session],Error> {
+    public func fetchSessions(matchingGroupID: MetaWear.Group.ID) -> AnyPublisher<[Session],Error> {
         fetchSessions {
             NSPredicate(format: "group == %@", matchingGroupID as CVarArg)
         }
     }
 
-    func fetchSessions(matchingMAC: MACAddress) -> AnyPublisher<[Session],Error> {
+    public func fetchSessions(matchingMAC: MACAddress) -> AnyPublisher<[Session],Error> {
         fetchSessions {
             NSPredicate(format:"ANY devices.mac == %@", matchingMAC)
         }
     }
 
-    func fetchFiles(in session: Session) -> AnyPublisher<[File],Error> {
+    public func fetchFiles(in session: Session) -> AnyPublisher<[File],Error> {
         CoreData { weakSelf, context, promise in
             let request = FileMO.fetchRequest()
 
@@ -48,7 +48,7 @@ public extension CoreDataSessionRepository {
         }
     }
 
-    func deleteSession(_ session: Session) -> AnyPublisher<Bool,Error> {
+    public func deleteSession(_ session: Session) -> AnyPublisher<Bool,Error> {
         fetchSession(sessionID: session.id)
             .tryMap { sessionMO, context -> Bool in
                 context.delete(sessionMO)
@@ -58,7 +58,7 @@ public extension CoreDataSessionRepository {
             .eraseToAnyPublisher()
     }
 
-    func renameSession(_ session: Session, newName: String) -> AnyPublisher<Bool,Error> {
+    public func renameSession(_ session: Session, newName: String) -> AnyPublisher<Bool,Error> {
         fetchSession(sessionID: session.id)
             .tryMap { sessionMO, context -> Bool in
                 sessionMO.name = newName
@@ -68,7 +68,7 @@ public extension CoreDataSessionRepository {
             .eraseToAnyPublisher()
     }
 
-    func addSession(_ session: Session, files: [File]) -> AnyPublisher<Session,Error> {
+    public func addSession(_ session: Session, files: [File]) -> AnyPublisher<Session,Error> {
         fetchDevices(deviceIDs: Array(session.devices))
             .tryMap { deviceMOs, context -> Session in
                 let newSession = SessionMO(context: context)

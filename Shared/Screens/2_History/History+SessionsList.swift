@@ -1,31 +1,26 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import mbientSwiftUI
+import SwiftUI
 
 extension HistoryScreen {
 
     struct SessionsList: View {
+
+        @EnvironmentObject private var vm: HistoryScreenVM
 
         var body: some View {
             VStack {
                 Subhead(label: "Prior Sessions")
 
                 List {
-                    rows
+                    ForEach(vm.sessions) { session in
+                        Row(name: session.name,
+                            downloadAction: { vm.download(session: session) })
+                    }
                 }
                 .listStyle(.inset)
             }
-        }
-
-        private var rows: some View {
-            ForEach(0..<4) { row in
-                Row(name: "\(row)",
-                    downloadAction: row == 0 ? nil : { download(name: row) })
-            }
-        }
-
-        func download(name: Int) {
-
         }
     }
 }
@@ -39,7 +34,7 @@ extension HistoryScreen.SessionsList {
 
         var body: some View {
             HStack {
-                Text(name + " Mockup")
+                Text(name)
                     .font(.body)
                 Spacer()
                 downloadButton
