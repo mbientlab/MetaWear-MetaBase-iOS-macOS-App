@@ -1,20 +1,11 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import mbientSwiftUI
-import SwiftUI
 
 struct CTAButton: View {
 
-    let cta: String
-    let action: () -> Void
-    let bg: Color
-    let text: Color
-    let maxWidth: CGFloat?
-
-    @Environment(\.colorScheme) var scheme
-
     init(_ cta: String,
-         bg: Color = .accentColor,
+         bg: Color = .myHighlight,
          text: Color = .myBackground,
          maxWidth: CGFloat? = nil,
          action: @escaping () -> Void) {
@@ -25,28 +16,35 @@ struct CTAButton: View {
         self.maxWidth = maxWidth
     }
 
+    let cta: String
+    let action: () -> Void
+    let bg: Color
+    let text: Color
+    let maxWidth: CGFloat?
+
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.isEnabled) private var isEnabled
+    @State private var isHovered = false
+    @Namespace private var namespace
+
     var body: some View {
         Button(action: action) {
             Text(cta)
+                .font(.title2)
                 .fontWeight(scheme == .light ? .medium : .medium)
                 .lineLimit(1)
                 .fixedSize(horizontal: false, vertical: true)
+                .foregroundColor(isHovered ? .myHighlight : .myPrimary)
 
-                .padding(.horizontal, 15)
+                .padding(.horizontal, 25)
                 .padding(.vertical, 8)
-                .frame(minWidth: 140, maxWidth: maxWidth, alignment: .center)
-#if os(iOS)
-                .background(
-                    Capsule(style: .continuous)
-                        .fill(bg)
-                )
-#endif
+                .frame(minWidth: 150, maxWidth: maxWidth, alignment: .center)
         }
-#if os(iOS)
-        .buttonStyle(.borderless)
-#else
-        .buttonStyle(.bordered)
-#endif
+        .buttonStyle(UnderlinedButtonStyle(color: .myHighlight, isHovered: isHovered))
+        .animation(.spring(), value: isHovered)
+        .opacity(isEnabled ? 1 : 0.35)
+        .whenHovered { isHovered = $0 }
+
 #if os(macOS)
         .controlSize(.large)
 #endif
@@ -89,6 +87,6 @@ struct MinorCTAButton: View {
                         .fill(bg)
                 )
         }
-        .buttonStyle(.borderless)
+        .buttonStyle(HoverButtonStyle())
     }
 }

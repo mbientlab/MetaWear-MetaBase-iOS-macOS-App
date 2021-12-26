@@ -94,6 +94,10 @@ public extension AboutDeviceVM {
         device?.connect()
     }
 
+    func disconnect() {
+        device?.disconnect()
+    }
+
     func refreshAll() {
         refreshSub = device?.publishWhenConnected()
             .first()

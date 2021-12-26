@@ -13,21 +13,17 @@ extension ActionScreen {
 
         var body: some View {
             HStack {
+                CloudSaveStateIndicator(state: vm.cloudSaveState)
                 Spacer()
-                if vm.showSuccessCTAs || vm.actionType == .stream {
+
+                if vm.actionDidComplete || vm.actionType == .stream {
                     successCTAs
                 } else {
-                    cancel
+                    Button("Cancel") { vm.cancelAndUndo() }
                 }
             }
             .frame(maxWidth: .infinity)
-            .animation(.easeOut, value: vm.showSuccessCTAs)
-            .fileMover(isPresented: $vm.presentExportDialog, files: vm.csvTempURLs) { result in
-                switch result {
-                    case .failure(let error): print(error)
-                    case .success(let urls): print(urls)
-                }
-            }
+            .animation(.easeOut, value: vm.actionDidComplete)
             #if os(macOS)
             .controlSize(.large)
             #endif
@@ -35,30 +31,47 @@ extension ActionScreen {
 
         @ViewBuilder private var successCTAs: some View {
             switch vm.actionType {
-                case .log: download
-                case .downloadLogs: exportFiles
-                case .stream: stopStreaming
+                case .log: Button("Download") { vm.downloadLogs() }
+                case .downloadLogs: EmptyView()
+                case .stream: Button("Stop Streaming") { vm.stopStreaming() }
             }
+            exportFiles
         }
 
-        private var exportFiles: some View {
-            Button("Export CSVs") { vm.exportFiles() }
-        }
-
-        private var download: some View {
-            Button("Download") { vm.downloadLogs() }
-        }
-
-        private var cancel: some View {
-            Button("Cancel") { vm.cancelAndUndo() }
+        @ViewBuilder private var exportFiles: some View {
+            if vm.showExportFilesCTA {
+                Button("Export CSVs") { vm.exportFiles() }
+            }
         }
 
         private var others: some View {
             Button("Other Devices") { vm.backToChooseDevices() }
         }
+    }
+}
 
-        private var stopStreaming: some View {
-            Button("Stop & Export CSVs") { vm.stopStreaming() }
+struct CloudSaveStateIndicator: View {
+
+    let state: CloudSaveState
+    @State private var animateCloud = false
+
+    var body: some View {
+        ZStack {
+            switch state {
+                case .notStarted: EmptyView()
+                case .saving:
+                    Label(title: { Text("Saving to iCloud") }) {
+                        SFSymbol.icloud.image()
+                            .opacity(animateCloud ? 1 : 0.75)
+                    }
+                    .animation(.easeOut.repeatForever(autoreverses: true), value: animateCloud)
+                    .onAppear { animateCloud.toggle() }
+
+                case .saved:
+                    Label(title: { Text("Saved") }) { SFSymbol.icloud.image() }
+                case .error(let error): WarningPopover(message: error.localizedDescription)
+            }
         }
+        .animation(.easeOut, value: state)
     }
 }

@@ -16,7 +16,8 @@ struct ActionScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ActionHeader(vm: vm)
-
+                .keyboardShortcut(.cancelAction)
+            
             ScrollView {
 
                 ForEach(vm.deviceVMs) { vm in
@@ -32,6 +33,6 @@ struct ActionScreen: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .environmentObject(vm)
-        .onAppear(perform: vm.start)
+        .onAppear(perform: vm.onAppear)
     }
 }

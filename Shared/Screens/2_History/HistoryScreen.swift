@@ -1,18 +1,13 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-
-import Foundation
 import Combine
 import mbientSwiftUI
 import MetaWear
 import MetaWearSync
-#if os(iOS)
-import UIKit
-#endif
 
 struct HistoryScreen: View {
 
-    @EnvironmentObject private var routing: Routing
+    @EnvironmentObject private var factory: UIFactory
     @StateObject var vm: HistoryScreenVM
 
     init(_ factory: UIFactory) {
@@ -22,13 +17,14 @@ struct HistoryScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Header(vm: vm)
+                .keyboardShortcut(.cancelAction)
 
             HStack(alignment: .firstTextBaseline, spacing: .screenInset * 2) {
                 AboutColumn()
                     .frame(minWidth: 230)
 
                 VStack {
-                    SessionsList()
+                    SessionsList(factory)
                     ctas
                 }
                 .padding(.bottom, .screenInset)
@@ -54,6 +50,7 @@ struct HistoryScreen: View {
                 .accessibilityHidden(vm.showSessionStartAlert == false)
 
             CTAButton(vm.ctaLabel, action: vm.performCTA)
+                .keyboardShortcut(.defaultAction)
         }
         .frame(maxWidth: .infinity, alignment: .trailing)
     }

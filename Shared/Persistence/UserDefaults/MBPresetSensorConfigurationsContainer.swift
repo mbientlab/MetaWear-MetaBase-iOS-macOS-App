@@ -3,7 +3,7 @@
 import Foundation
 import MetaWear
 import MetaWearSync
-import SwiftUI
+import mbientSwiftUI
 
 /// To save a user's multiple configurations as remembered presets
 ///

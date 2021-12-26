@@ -14,9 +14,11 @@ struct ConfigureScreen: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Header(vm: vm)
-
-            Subhead(
-                label: vm.selectedPreset?.name ?? "New Session",
+                .keyboardShortcut(.cancelAction)
+            
+            EditableSubhead(
+                label: vm.sessionNameBinding,
+                placeholder: "Session Name",
                 trailing: { PresetsMenu() }
             ).padding(.horizontal, .screenInset)
 
@@ -26,12 +28,18 @@ struct ConfigureScreen: View {
                     .padding(.top, 15)
             }
 
-            CTAs()
-                .padding(.bottom, .screenInset)
-                .padding(.horizontal, .screenInset)
+            HStack {
+                Estimates()
+                    .frame(maxWidth: 450, alignment: .center)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                CTAs()
+            }
+            .padding(.bottom, .screenInset)
+            .padding(.horizontal, .screenInset)
         }
         .animation(.easeInOut, value: vm.selectedPreset)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .environmentObject(vm)
     }
 }
+

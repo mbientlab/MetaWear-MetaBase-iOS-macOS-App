@@ -13,15 +13,15 @@ struct Header: View {
     let vm: HeaderVM
 
     var body: some View {
-        HStack {
+        HStack(spacing: 15) {
             backButton
 
             HStack {
                 icons
                 title
             }
-            .offset(x: titleIconXOffset)
-            .frame(maxWidth: .infinity, alignment: .center)
+//            .offset(x: titleIconXOffset)
+            .frame(maxWidth: .infinity, alignment: .leading)
 
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -102,17 +102,17 @@ struct HeaderBackButton: View {
         } label: {
             ZStack {
                 CorneredRect(rounding: [.topRight, .bottomRight], by: 10)
-                    .fill(Color.myPrimary.opacity(backIsHovered ? 0.2 : 0))
+                    .fill(Color.myHighlight.opacity(backIsHovered ? 1 : 0))
 
                 SFSymbol.back.image()
                     .font(.title2)
-                    .foregroundColor(.myPrimary.opacity(backIsHovered ? 1 : 0.4))
+                    .foregroundColor(backIsHovered ? .myBackground : .myPrimary.opacity(0.4))
                     .padding(.vertical, 9)
                     .padding(.trailing, 12)
                     .padding(.leading, .screenInset / 2)
             }
         }
-        .buttonStyle(.borderless)
+        .buttonStyle(DepressButtonStyle(anchor: .leading))
         .fixedSize()
         .whenHovered { backIsHovered = $0 }
         .animation(.easeOut, value: backIsHovered)

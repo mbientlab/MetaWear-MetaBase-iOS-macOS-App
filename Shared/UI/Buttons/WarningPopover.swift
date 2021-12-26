@@ -5,12 +5,13 @@ import mbientSwiftUI
 struct WarningPopover: View {
 
     var message: String
+    var color: Color = .mySecondary
 
     @State private var isHovering = false
     var body: some View {
         SFSymbol.error.image()
             .font(.title3.bold())
-            .foregroundColor(isHovering ? .myFailure : .mySecondary)
+            .foregroundColor(isHovering ? .myFailure : color)
             .popover(isPresented: $isHovering) {
                 Text(message)
                     .lineLimit(nil)

@@ -19,14 +19,14 @@ struct ActionHeader: View {
         HStack(alignment: .top) {
             HeaderBackButton(overrideBackAction: vm.backToHistory)
 
-            VStack(alignment: .center, spacing: 15) {
+            VStack(alignment: .leading, spacing: 15) {
                 title
 
                 if vm.actionType == .log || vm.actionType == .stream {
                     ConfigTileComposer(vm: vm)
                 }
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             HeaderBackButton().disabled(true).allowsHitTesting(false).hidden() // Center the title area
         }

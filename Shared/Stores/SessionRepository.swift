@@ -11,9 +11,11 @@ public protocol SessionRepository: AnyObject {
     func fetchSessions(matchingGroupID: MetaWear.Group.ID) -> AnyPublisher<[Session],Error>
     func fetchSessions(matchingMAC: MACAddress) -> AnyPublisher<[Session],Error>
     func fetchFiles(in session: Session) -> AnyPublisher<[File],Error>
-    func deleteSession(_ session: Session) -> AnyPublisher<Bool,Error>
-    func renameSession(_ session: Session, newName: String) -> AnyPublisher<Bool,Error>
+    func deleteSession(_ session: Session) -> AnyPublisher<Session,Error>
+    func renameSession(_ session: Session, newName: String) -> AnyPublisher<String,Error>
     func addSession(_ session: Session, files: [File]) -> AnyPublisher<Session,Error>
+
+    var sessionsDidChange: AnyPublisher<Void,Never> { get }
 }
 
 /// Implementation in CoreDataSessionRepository

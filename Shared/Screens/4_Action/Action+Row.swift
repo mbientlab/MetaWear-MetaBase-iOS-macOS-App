@@ -36,14 +36,14 @@ extension ActionScreen {
             }
             .environment(\.signalLevel, vm.rssi)
             .environment(\.connectionState, vm.connection)
-            .contextMenu { if case ActionState.error = action.state[vm.meta.mac]! {
+            .contextMenu { if case ActionState.error = action.actionState[vm.meta.mac]! {
                 Button("Factory Reset") { vm.reset() }
             } }
             .onAppear(perform: vm.onAppear)
             .onDisappear(perform: vm.onDisappear)
             .padding()
             .background(background)
-            .animation(.easeOut, value: action.state[vm.meta.mac]!)
+            .animation(.easeOut, value: action.actionState[vm.meta.mac]!)
         }
 
         private var background: some View {

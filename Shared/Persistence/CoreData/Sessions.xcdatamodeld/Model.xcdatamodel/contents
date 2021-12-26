@@ -3,22 +3,12 @@
     <entity name="DeviceMO" representedClassName="DeviceMO" syncable="YES">
         <attribute name="mac" optional="YES" attributeType="String"/>
         <relationship name="session" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SessionMO" inverseName="devices" inverseEntity="SessionMO"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="mac"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <entity name="FileMO" representedClassName="FileMO" syncable="YES">
         <attribute name="csv" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String" spotlightIndexingEnabled="YES"/>
         <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SessionMO" inverseName="files" inverseEntity="SessionMO"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="id"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <entity name="SessionMO" representedClassName="SessionMO" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -27,11 +17,6 @@
         <attribute name="name" optional="YES" attributeType="String" spotlightIndexingEnabled="YES"/>
         <relationship name="devices" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DeviceMO" inverseName="session" inverseEntity="DeviceMO"/>
         <relationship name="files" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FileMO" inverseName="session" inverseEntity="FileMO" spotlightIndexingEnabled="YES"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="id"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <elements>
         <element name="DeviceMO" positionX="-146.4375" positionY="115.11328125" width="128" height="59"/>

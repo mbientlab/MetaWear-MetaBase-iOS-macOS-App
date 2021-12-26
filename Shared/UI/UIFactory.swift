@@ -60,33 +60,38 @@ public extension UIFactory {
     }
 
     func makeHistoryScreenVM() -> HistoryScreenVM {
-        guard let item = routing.focus?.item else { fatalError("Set item before navigation") }
-        let (title, metawears) = getKnownDevices(for: item)
+        guard let focus = routing.focus else { fatalError("Set focus before navigation") }
+        let (title, metawears) = getKnownDevices(for: focus.item)
         let vms = makeAboutVMs(for: metawears)
         return .init(title: title,
                      vms: vms,
                      store: devices,
-                     sessionRepo: sessions,
                      routing: routing,
                      scanner: scanner
         )
     }
 
+    func makePastSessionsVM() -> HistoricalSessionsVM {
+        .init(sessionRepo: sessions, exportQueue: actionQueue, routing: routing)
+    }
+
     func makeConfigureVM() -> ConfigureVM {
-        guard let item = routing.focus?.item else { fatalError("Set item before navigation") }
-        let (title, metawears) = getKnownDevices(for: item)
-        return .init(title: title, item: item, devices: metawears, presets: presets, routing: routing)
+        guard let focus = routing.focus else { fatalError("Set focus before navigation") }
+        let (title, metawears) = getKnownDevices(for: focus.item)
+        return .init(title: title, item: focus.item, devices: metawears, presets: presets, routing: routing)
     }
 
     func makeActionVM() -> ActionVM {
-        guard let item = routing.focus?.item else { fatalError("Set item before navigation") }
+        guard let focus = routing.focus else { fatalError("Set focus before navigation") }
         let action = ActionType(destination: routing.destination)
-        let (_, metawears) = getKnownDevices(for: item)
+        let (_, metawears) = getKnownDevices(for: focus.item)
         let vms = makeAboutVMs(for: metawears)
         return .init(action: action,
+                     name: focus.sessionNickname,
                      devices: metawears,
                      vms: vms,
                      store: devices,
+                     sessions: sessions,
                      routing: routing,
                      backgroundQueue: actionQueue
         )

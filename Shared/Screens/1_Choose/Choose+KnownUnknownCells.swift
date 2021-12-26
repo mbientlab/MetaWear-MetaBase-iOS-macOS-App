@@ -3,7 +3,6 @@
 import mbientSwiftUI
 import MetaWear
 import MetaWearSync
-import SwiftUI
 
 extension ChooseDevicesScreen {
 

@@ -2,17 +2,36 @@
 
 import Foundation
 import CoreData
+import Combine
 
 public protocol CoreDataBackgroundController: AnyObject {
     func makeBackgroundContext() -> NSManagedObjectContext
+    var viewContext: NSManagedObjectContext { get }
+    var containerDidChange: AnyPublisher<Void,Never> { get }
 }
 
 public class CloudKitCoreDataController: CoreDataBackgroundController {
 
+    public let containerDidChange: AnyPublisher<Void,Never>
+    public var viewContext: NSManagedObjectContext { container.viewContext }
+    private let containerDidChangeSubject = PassthroughSubject<Void,Never>()
     private let container: NSPersistentCloudKitContainer
 
     public init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "Session")
+        container = {
+            let cloud = NSPersistentCloudKitContainer(name: "Sessions")
+            let description = cloud.persistentStoreDescriptions.first
+            description?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+            return cloud
+        }()
+
+        self.containerDidChange = containerDidChangeSubject.share().eraseToAnyPublisher()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(containerChanged),
+            name: .NSPersistentStoreRemoteChange,
+            object: container.persistentStoreCoordinator
+        )
 
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
@@ -36,5 +55,10 @@ public class CloudKitCoreDataController: CoreDataBackgroundController {
     private func configure(context: NSManagedObjectContext) {
         context.automaticallyMergesChangesFromParent = true
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        context.undoManager?.groupsByEvent = true
+    }
+
+    @objc private func containerChanged() {
+        containerDidChangeSubject.send()
     }
 }

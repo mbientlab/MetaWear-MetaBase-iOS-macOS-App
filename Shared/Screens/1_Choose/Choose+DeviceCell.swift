@@ -4,7 +4,6 @@ import mbientSwiftUI
 import MetaWear
 import CoreBluetooth
 import MetaWearSync
-import SwiftUI
 
 extension ChooseDevicesScreen {
 
@@ -148,8 +147,8 @@ extension ChooseDevicesScreen.DeviceCell {
 
         var body: some View {
             Button { requestIdentify() } label: { label }
+            .buttonStyle(HoverButtonStyle())
             .foregroundColor(.myPrimary)
-            .buttonStyle(.borderless)
             .allowsHitTesting(allowIdentification)
             .disabled(allowIdentification == false)
             .opacity(allowIdentification ? 1 : 0)

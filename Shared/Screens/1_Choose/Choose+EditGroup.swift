@@ -23,7 +23,7 @@ extension ChooseDevicesScreen {
                 .animation(.easeOut.speed(2), value: isHovering)
             }
             .opacity(vm.listIsEmpty ? 0 : 1)
-            .buttonStyle(.borderless)
+            .buttonStyle(HoverButtonStyle())
             .animation(.easeOut, value: vm.listIsEmpty)
         }
     }

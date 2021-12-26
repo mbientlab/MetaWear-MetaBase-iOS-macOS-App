@@ -14,7 +14,7 @@ extension ActionScreen {
 
         var body: some View {
             ZStack {
-                switch action.state[vm.meta.mac]! {
+                switch action.actionState[vm.meta.mac]! {
                     case .notStarted: notStartedIndicator
                     case .working: workingIndicator
                     case .completed: completedIndicator
@@ -64,7 +64,7 @@ extension ActionScreen {
 
         var body: some View {
             ZStack {
-                switch action.state[vm.meta.mac]! {
+                switch action.actionState[vm.meta.mac]! {
                     case .notStarted: notStartedIndicator
                     case .working: workingIndicator
                     case .completed: completedIndicator
@@ -80,7 +80,7 @@ extension ActionScreen {
         }
 
         @ViewBuilder var workingIndicator: some View {
-            if action.actionType == .stream, case .working = action.state[vm.meta.mac] {
+            if action.actionType == .stream, case .working = action.actionState[vm.meta.mac] {
                 highRefreshWorkingIndicator
             } else {
                 Text(action.actionType.workingLabel)
@@ -129,7 +129,7 @@ extension ActionScreen {
 
         var refresh: some View {
             RefreshButton(help: "Retry", didTap: { action.retry(vm.meta) })
-                .buttonStyle(.borderless)
+                .buttonStyle(HoverButtonStyle())
         }
     }
 }

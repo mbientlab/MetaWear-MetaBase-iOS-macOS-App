@@ -47,7 +47,7 @@ extension NSTableView {
     open override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         backgroundColor = NSColor.clear
-        enclosingScrollView!.drawsBackground = false
+        enclosingScrollView?.drawsBackground = false
     }
 }
 
@@ -75,7 +75,7 @@ struct MainWindow: View {
 
     private var destination: Binding<Routing.Destination?> {
         Binding(
-            fetch: { routing.destination },
+            get: { routing.destination },
             set: {
                 guard let next = $0 else { return }
                 routing.setDestination(next)

@@ -8,10 +8,12 @@ import MetaWearSync
 
 public class CoreDataSessionRepository {
 
+    public let sessionsDidChange: AnyPublisher<Void,Never>
     private unowned let coreData: CoreDataBackgroundController
 
     public init(coreData: CoreDataBackgroundController) {
         self.coreData = coreData
+        self.sessionsDidChange = coreData.containerDidChange.eraseToAnyPublisher()
     }
 }
 
@@ -36,34 +38,35 @@ extension CoreDataSessionRepository: SessionRepository {
     }
 
     public func fetchFiles(in session: Session) -> AnyPublisher<[File],Error> {
-        CoreData { weakSelf, context, promise in
-            let request = FileMO.fetchRequest()
-
-            let predicate = NSPredicate(format: "id IN %@", Array(arrayLiteral: session.files))
-            request.predicate = predicate
-
-            let results = try context.fetch(request)
-            let mapped = try results.map { try $0.mapToAppModel() }
-            promise(.success(mapped))
-        }
-    }
-
-    public func deleteSession(_ session: Session) -> AnyPublisher<Bool,Error> {
         fetchSession(sessionID: session.id)
-            .tryMap { sessionMO, context -> Bool in
-                context.delete(sessionMO)
-                try context.save()
-                return true
+            .tryMap { sessionMO, context -> [File] in
+                var files = [File]()
+                for fault in (sessionMO.files ?? [])  {
+                    let fileMO = (fault as! FileMO)
+                    let file = try fileMO.mapToAppModel()
+                    files.append(file)
+                }
+                return files
             }
             .eraseToAnyPublisher()
     }
 
-    public func renameSession(_ session: Session, newName: String) -> AnyPublisher<Bool,Error> {
+    public func deleteSession(_ session: Session) -> AnyPublisher<Session,Error> {
         fetchSession(sessionID: session.id)
-            .tryMap { sessionMO, context -> Bool in
+            .tryMap { sessionMO, context -> Session in
+                context.delete(sessionMO)
+                try context.save()
+                return session
+            }
+            .eraseToAnyPublisher()
+    }
+
+    public func renameSession(_ session: Session, newName: String) -> AnyPublisher<String,Error> {
+        fetchSession(sessionID: session.id)
+            .tryMap { sessionMO, context in
                 sessionMO.name = newName
                 try context.save()
-                return true
+                return sessionMO.name ?? newName
             }
             .eraseToAnyPublisher()
     }
@@ -81,6 +84,7 @@ extension CoreDataSessionRepository: SessionRepository {
                     let newFile = FileMO(context: context)
                     newFile.id = file.id
                     newFile.name = file.name
+                    newFile.csv = file.csv
                     newFile.session = newSession
                     return newFile
                 }
@@ -103,6 +107,7 @@ extension CoreDataSessionRepository: SessionRepository {
                 try context.save()
                 return try newSession.mapToAppModel()
             }
+            .print()
             .eraseToAnyPublisher()
     }
 }
@@ -156,6 +161,23 @@ private extension CoreDataSessionRepository {
         }
     }
 
+    func fetchSessionOnMain(sessionID: Session.ID)
+    -> AnyPublisher<(session: SessionMO, context: NSManagedObjectContext),Error> {
+
+        CoreDataMain { weakSelf, context, promise in
+            let request = SessionMO.fetchRequest()
+
+            let predicate = NSPredicate(format: "id == %@", sessionID as CVarArg)
+            request.predicate = predicate
+
+            guard let result = try context.fetch(request).first else {
+                promise(.failure(CloudKitCoreDataError.notFound))
+                return
+            }
+            promise(.success((result, context)))
+        }
+    }
+
     func fetchSessions(withPredicate: @escaping () -> NSPredicate?) -> AnyPublisher<[Session],Error> {
         CoreData { weakSelf, context, promise in
             let request = SessionMO.fetchRequest()
@@ -181,6 +203,19 @@ private extension CoreDataSessionRepository {
         Deferred {
             Future { [weak self] future in
                 if let context = self?.coreData.makeBackgroundContext() {
+                    context.perform {
+                        do { try promise(self, context, future) }
+                        catch { future(.failure(error)) }
+                    }
+                }
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    func CoreDataMain<O>(promise: @escaping CoreDataPromise<O>) -> AnyPublisher<O,Error> {
+        Deferred {
+            Future { [weak self] future in
+                if let context = self?.coreData.viewContext {
                     context.perform {
                         do { try promise(self, context, future) }
                         catch { future(.failure(error)) }

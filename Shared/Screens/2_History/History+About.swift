@@ -3,7 +3,6 @@
 import mbientSwiftUI
 import MetaWear
 import MetaWearSync
-import SwiftUI
 
 extension HistoryScreen {
 
@@ -15,7 +14,7 @@ extension HistoryScreen {
             VStack {
                 Subhead(label: "About", trailing: {
                     RefreshButton(help: "Refresh", didTap: vm.refresh)
-                        .buttonStyle(BorderlessButtonStyle())
+                        .buttonStyle(HoverButtonStyle())
                 })
 
                 ScrollView(.vertical, showsIndicators: false) {

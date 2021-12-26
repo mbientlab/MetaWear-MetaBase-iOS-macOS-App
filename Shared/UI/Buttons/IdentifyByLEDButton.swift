@@ -10,13 +10,20 @@ struct IdentifyByLEDButton: View {
     var request: () -> Void
     @ObservedObject var emulator: MWLED.Flash.Pattern.Emulator
 
+    @State private var isHovering = false
+    private var foregroundColor: Color {
+        if emulator.ledIsOn { return .myBackground }
+        return isHovering ? .myHighlight : .myPrimary
+    }
+
     var body: some View {
         Button { request() } label: {
             SFSymbol.led.image()
                 .font(.headline)
-                .foregroundColor(emulator.ledIsOn ? .myBackground : .myPrimary)
+                .foregroundColor(foregroundColor)
                 .padding(4)
         }
+        .whenHovered { isHovering = $0 }
         .buttonStyle(.borderless)
         .background(flashingBackground)
         .help("Identify by LED and haptics (if available)")
@@ -41,7 +48,7 @@ struct IdentifyByLEDLargeButton: View {
             else { notRequestedState }
         }
         .frame(maxWidth: .infinity)
-        .buttonStyle(.borderless)
+        .buttonStyle(HoverButtonStyle())
         .help("Identify by LED and haptics (if available)")
         .animation(.linear(duration: 0.1), value: emulator.ledIsOn)
         .animation(.linear(duration: 0.1), value: isRequesting)
