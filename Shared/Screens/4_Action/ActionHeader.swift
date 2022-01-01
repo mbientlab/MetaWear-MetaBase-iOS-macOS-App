@@ -16,19 +16,17 @@ struct ActionHeader: View {
     @EnvironmentObject private var routing: Routing
 
     var body: some View {
-        HStack(alignment: .top) {
+        HStack(alignment: .top, spacing: 15) {
             HeaderBackButton(overrideBackAction: vm.backToHistory)
 
-            VStack(alignment: .leading, spacing: 15) {
-                title
+            title
+                .layoutPriority(2)
 
-                if vm.actionType == .log || vm.actionType == .stream {
-                    ConfigTileComposer(vm: vm)
-                }
+            if vm.actionType == .log || vm.actionType == .stream {
+                ConfigTileComposer(vm: vm)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .padding(.trailing, .screenInset)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            HeaderBackButton().disabled(true).allowsHitTesting(false).hidden() // Center the title area
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.bottom, .screenInset)
@@ -52,8 +50,8 @@ extension ActionHeader {
         private static let gridItem = GridItem(.fixed(25), spacing: 5, alignment: .center)
         private static var columns: [GridItem] = Array(repeating: gridItem, count: 4)
 
-        static let imageSize = CGFloat(14)
-        static let tileSize = CGFloat(25)
+        static let imageSize = CGFloat(18)
+        static let tileSize = CGFloat(30)
         static private let gridSpacing = CGFloat(10)
         private let item = GridItem(.adaptive(minimum: Self.tileSize, maximum: Self.tileSize),
                                     spacing: Self.gridSpacing,
@@ -68,6 +66,9 @@ extension ActionHeader {
                 }
                 if config.altitude != nil || config.pressure != nil {
                     ConfigTile(symbol: .barometer)
+                }
+                if config.ambientLight != nil {
+                    ConfigTile(symbol: .ambientLight)
                 }
                 if config.gyroscope != nil {
                     ConfigTile(symbol: .gyroscope)
@@ -102,6 +103,7 @@ extension ActionHeader {
                 .frame(width: ConfigTileComposer.tileSize, height: ConfigTileComposer.tileSize, alignment: .center)
                 .help(Text(symbol.accessibilityDescription))
                 .foregroundColor(isHovered ? .myPrimary : .mySecondary)
+                .scaleEffect(isHovered ? 1.02 : 1)
                 .background(RoundedRectangle(cornerRadius: 8).strokeBorder(lineWidth: 2).foregroundColor(.mySecondary.opacity(0.1)))
                 .whenHovered { isHovered = $0 }
                 .animation(.easeOut, value: isHovered)
