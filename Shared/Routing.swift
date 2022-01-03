@@ -72,6 +72,14 @@ public extension Routing {
         guard let item = focus?.item else { fatalError() }
         focus = (item, configs, sessionNickname)
     }
+
+    /// Set programmatic navigation's downloadable session from memory.
+    /// Must be previously focused.
+    ///
+    func setSessionName(_ nickname: String) {
+        guard let item = focus?.item else { fatalError() }
+        focus = (item, focus?.configs ?? [], nickname)
+    }
 }
 
 // MARK: - Model

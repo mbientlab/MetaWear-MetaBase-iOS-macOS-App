@@ -18,6 +18,18 @@ public struct Session: Identifiable, Hashable {
         let session = Self.init(id: .init(), date: date, name: name, group: group, devices: devices, files: Set(files.map(\.id)))
         return (session, files)
     }
+
+    public struct LoggingToken: Identifiable, Hashable {
+        public var id: Routing.Item
+        public var date: Date
+        public var name: String
+
+        public init(id: Routing.Item, date: Date, name: String) {
+            self.id = id
+            self.date = date
+            self.name = name
+        }
+    }
 }
 
 public struct File: Identifiable {

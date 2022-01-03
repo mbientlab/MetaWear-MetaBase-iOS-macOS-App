@@ -10,6 +10,7 @@ public class Root: ObservableObject {
     // State
     public let devices:  MetaWearSyncStore
     public let presets:  PresetSensorParametersStore
+    public let logging:  ActiveLoggingSessionsStore
     public let routing:  Routing
 
     // Services
@@ -18,7 +19,8 @@ public class Root: ObservableObject {
     private let coreData:       CoreDataBackgroundController
     private let userDefaults:   UserDefaultsContainer
     private let metawearLoader: MWLoader<MWKnownDevicesLoadable>
-    private let presetsLoader:  MWLoader<[PresetSensorConfiguration]>
+    private let presetsLoader:  MWLoader<SensorPresetsLoadable>
+    private let loggingLoader:  MWLoader<LoggingTokensLoadable>
 
     // VMs
     public let factory:     UIFactory
@@ -30,13 +32,15 @@ public class Root: ObservableObject {
 
         self.userDefaults = .init(cloud: .default, local: .standard)
         self.metawearLoader  = MetaWeariCloudSyncLoader(userDefaults.local, userDefaults.cloud)
-        self.presetsLoader   = SensorPresetsCloudLoader(userDefaults.local, userDefaults.cloud)
+        self.presetsLoader   = SensorPresetsCloudLoader(userDefaults)
+        self.loggingLoader   = LoggingTokensCloudLoader(userDefaults)
 
         let scanner = MetaWearScanner.sharedRestore
         let devices = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
         self.presets = PresetSensorParametersStore(loader: presetsLoader)
+        self.logging = ActiveLoggingSessionsStore(loader: loggingLoader)
         let routing = Routing()
-        let factory = UIFactory(devices, sessions, presets, scanner, routing)
+        let factory = UIFactory(devices, sessions, presets, logging, scanner, routing)
 
         self.devices = devices
         self.routing = routing
@@ -52,6 +56,7 @@ public extension Root {
         do {
             try devices.load()
             try presets.load()
+            try logging.load()
             let _ = userDefaults.cloud.synchronize()
 #if DEBUG
             debugs()
