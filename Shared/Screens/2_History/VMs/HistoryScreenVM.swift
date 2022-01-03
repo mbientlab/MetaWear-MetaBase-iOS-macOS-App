@@ -17,6 +17,8 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
     @Published public private(set) var showSessionStartAlert = false
     public let alert: String
     private var newSessionCanStartUpdates: AnyCancellable? = nil
+    private var performDisconnectOnDisappear = true
+    private var loggingUpdates: AnyCancellable? = nil
 
     private unowned let routing: Routing
     private unowned let scanner: MetaWearScanner
@@ -38,13 +40,19 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
 
         alert = vms.endIndex > 1 ? "Bring all MetaWears nearby" : "Bring MetaWear nearby"
         startValidatingSessionStartCTA()
+
+        loggingUpdates = logging.tokens
+            .map { $0[routing.focus!.item] }
+            .sink { [weak self] token in
+                self?.cta = .init(ongoingLoggingSession: token)
+            }
     }
 }
 
 public extension HistoryScreenVM {
 
     func performCTA() {
-
+        performDisconnectOnDisappear = false
         switch cta {
             case .newSession:
                 // No need to reset focus
@@ -65,7 +73,9 @@ public extension HistoryScreenVM {
     }
 
     func onDisappear() {
-        items.forEach { $0.disconnect() }
+        if performDisconnectOnDisappear {
+            items.forEach { $0.disconnect() }
+        }
     }
 
 }
@@ -88,7 +98,7 @@ public enum AvailableActivity {
 
     public var label: String {
         switch self {
-            case .isLogging: return "Download Logs"
+            case .isLogging: return "Download Log"
             case .newSession: return "New Session"
         }
     }

@@ -30,6 +30,7 @@ public struct ItemState {
     public var rssi: SignalLevel
     public var isLocallyKnown: Bool
     public var connection: CBPeripheralState
+    public var isLogging: Bool
 
     public var identifyTip: String
     public var isIdentifying: Bool

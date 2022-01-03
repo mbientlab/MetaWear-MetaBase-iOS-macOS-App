@@ -9,6 +9,7 @@ extension HistoryScreen {
     struct AboutColumn: View {
 
         @EnvironmentObject private var vm: HistoryScreenVM
+        @State private var showDetails = false
 
         var body: some View {
             VStack {
@@ -20,10 +21,11 @@ extension HistoryScreen {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 40) {
                         ForEach(vm.items) { vm in
-                            AboutBox(vm: vm)
+                            AboutBox(vm: vm, showDetails: $showDetails)
                         }
                     }
                     .padding(.bottom, 25)
+                    .animation(.spring(), value: showDetails)
                 }
             }
         }
@@ -35,6 +37,7 @@ extension HistoryScreen.AboutColumn {
     struct AboutBox: View {
 
         @ObservedObject var vm: AboutDeviceVM
+        @Binding var showDetails: Bool
         @State private var alignment = CGFloat(65)
 
         var body: some View {
@@ -94,11 +97,17 @@ extension HistoryScreen.AboutColumn {
             }
             HLabel("RSSI", item: vm.rssiRepresentable,              align: alignment)
             HLabel("Battery", item: vm.battery,                     align: alignment)
-            HLabel("MAC", item: vm.meta.mac,                        align: alignment)
-            HLabel("Serial", item: vm.meta.serial,                  align: alignment)
-            HLabel("Model", item: vm.meta.model.name,               align: alignment)
-            HLabel("Firmware", item: vm.info.firmwareRevision,      align: alignment)
-            HLabel("Hardware", item: vm.info.hardwareRevision,      align: alignment)
+            if showDetails {
+                HLabel("MAC", item: vm.meta.mac,                        align: alignment)
+                HLabel("Serial", item: vm.meta.serial,                  align: alignment)
+                HLabel("Model", item: vm.meta.model.name,               align: alignment)
+                HLabel("Firmware", item: vm.info.firmwareRevision,      align: alignment)
+                HLabel("Hardware", item: vm.info.hardwareRevision,      align: alignment)
+            } else {
+                Button("More...") { showDetails.toggle() }
+                    .buttonStyle(HoverButtonStyle(inactiveColor: .myTertiary))
+                    .font(.subheadline)
+            }
         }
 
         @ViewBuilder private var connectingSpinner: some View {

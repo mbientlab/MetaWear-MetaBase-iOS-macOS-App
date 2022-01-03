@@ -24,7 +24,8 @@ extension ChooseDevicesScreen {
                     models: state.models,
                     isGroup: state.isGroup,
                     ledEmulator: state.ledVM,
-                    isUnrecognized: state.isUnrecognized
+                    isUnrecognized: state.isUnrecognized,
+                    isLogging: state.isLogging
                 )
                     .onTapGesture { vm.connect() }
 
@@ -76,6 +77,7 @@ extension ChooseDevicesScreen.DeviceCell {
         var isGroup: Bool
         let ledEmulator: MWLED.Flash.Pattern.Emulator
         let isUnrecognized: Bool
+        var isLogging: Bool
 
         var body: some View {
             DropOutcomeIndicator()
@@ -94,12 +96,16 @@ extension ChooseDevicesScreen.DeviceCell {
                 .foregroundColor(.myPrimary)
 
             MetaWearImages(isGroup: isGroup, models: models, ledEmulator: ledEmulator)
-                .overlay(unknownPrompt)
+                .overlay(cta)
         }
 
-        @ViewBuilder private var unknownPrompt: some View {
+        @ViewBuilder private var cta: some View {
             if isUnrecognized {
                 OutcomeIndicator(outcome: "Add to List", show: isHovering)
+                    .compositingGroup()
+                    .shadow(radius: 10)
+            } else if isLogging {
+                OutcomeIndicator(outcome: "Logging", show: true)
                     .compositingGroup()
                     .shadow(radius: 10)
             }

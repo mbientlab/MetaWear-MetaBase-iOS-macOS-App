@@ -22,6 +22,9 @@ public class KnownItemVM: ObservableObject, ItemVM {
     @Published public private(set) var connection: CBPeripheralState
     public private(set) var rssi: SignalLevel
 
+    // Logging state
+    @Published public private(set) var isLogging = false
+
     // Flash LED action
     @Published private var isIdentifyingMACs = Set<MACAddress>()
     public var isIdentifying: Bool { isIdentifyingMACs.isEmpty == false }
@@ -36,13 +39,14 @@ public class KnownItemVM: ObservableObject, ItemVM {
     private unowned let routing: Routing
 
     // Subscriptions
-    private var rssiSub:         AnyCancellable? = nil
-    private var connectionSub:   AnyCancellable? = nil
-    private var updateSub:   AnyCancellable? = nil
+    private var rssiSub:          AnyCancellable? = nil
+    private var connectionSub:    AnyCancellable? = nil
+    private var updateSub:        AnyCancellable? = nil
+    private var loggingSub:       AnyCancellable? = nil
     private var identifyingSubs = Set<AnyCancellable>()
 
     /// Represent a MetaWear (either cloud-synced or locally known) as an item
-    public init(device: MWKnownDevice, store: MetaWearSyncStore, routing: Routing) {
+    public init(device: MWKnownDevice, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing) {
         self.connection = device.mw?.connectionState == .connected ? .connected : .disconnected
         self.store = store
         self.routing = routing
@@ -54,10 +58,16 @@ public class KnownItemVM: ObservableObject, ItemVM {
         updateSub = store.publisher(for: device.meta.mac)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.devices = [$0] }
+
+        loggingSub = logging.tokens
+            .map { $0[.known(device.meta.mac)] }
+            .sink { [weak self] token in
+                self?.isLogging = token != nil
+            }
     }
 
     /// Represent a group as a single item
-    public init(group: MetaWear.Group, store: MetaWearSyncStore, routing: Routing) {
+    public init(group: MetaWear.Group, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing) {
         self.store = store
         self.routing = routing
         let _devices = store.getDevicesInGroup(group)
@@ -70,6 +80,12 @@ public class KnownItemVM: ObservableObject, ItemVM {
             .sink { [weak self] groupUpdate, knownUpdate in
                 self?.devices = knownUpdate
                 self?.group = groupUpdate
+            }
+
+        loggingSub = logging.tokens
+            .map { $0[.group(group.id)] }
+            .sink { [weak self] token in
+                self?.isLogging = token != nil
             }
     }
 }
@@ -120,6 +136,7 @@ public extension KnownItemVM {
             rssi: rssi,
             isLocallyKnown: isLocallyKnown,
             connection: connection,
+            isLogging: isLogging,
             identifyTip: identifyTip,
             isIdentifying: isIdentifying,
             ledVM: ledVM

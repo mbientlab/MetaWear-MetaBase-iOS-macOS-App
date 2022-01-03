@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9408E2E52783A1B300D2D1BF /* MorePill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E2E42783A1B300D2D1BF /* MorePill.swift */; };
+		9408E2E62783A1B300D2D1BF /* MorePill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E2E42783A1B300D2D1BF /* MorePill.swift */; };
 		9408E6DC2767FA290011B5F5 /* WarningPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E6DB2767FA290011B5F5 /* WarningPopover.swift */; };
 		9408E6DD2767FA290011B5F5 /* WarningPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E6DB2767FA290011B5F5 /* WarningPopover.swift */; };
 		9408E6DF276829280011B5F5 /* BluetoothErrorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9408E6DE276829280011B5F5 /* BluetoothErrorButton.swift */; };
@@ -227,6 +229,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9408E2E42783A1B300D2D1BF /* MorePill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorePill.swift; sourceTree = "<group>"; };
 		9408E6DB2767FA290011B5F5 /* WarningPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningPopover.swift; sourceTree = "<group>"; };
 		9408E6DE276829280011B5F5 /* BluetoothErrorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothErrorButton.swift; sourceTree = "<group>"; };
 		9409C5BF2761383E001FE850 /* ConfigureVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureVM.swift; sourceTree = "<group>"; };
@@ -471,9 +474,9 @@
 		9473B7B32770F8D5006F4994 /* Stores */ = {
 			isa = PBXGroup;
 			children = (
+				9446F64C2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift */,
 				941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */,
 				949E5A6627729B7A00D45740 /* SessionRepository.swift */,
-				9446F64C2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -599,6 +602,7 @@
 				940E01A4277F9D1D002AD641 /* UnderlineRect.swift */,
 				9408E6DB2767FA290011B5F5 /* WarningPopover.swift */,
 				9446F6432782695200B535AD /* HighlightToggleStyle.swift */,
+				9408E2E42783A1B300D2D1BF /* MorePill.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -984,6 +988,7 @@
 				9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */,
 				9452856D275BE1D5004D815B /* Root.swift in Sources */,
 				94DFEC5E275D389700BB80DB /* Choose+KnownUnknownCells.swift in Sources */,
+				9408E2E52783A1B300D2D1BF /* MorePill.swift in Sources */,
 				94CF3F0C2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
 				940E01A2277F5A91002AD641 /* CrossPlatformStylizedMenu.swift in Sources */,
 				9452855B275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
@@ -1078,6 +1083,7 @@
 				94CF3F0D2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
 				94935024275A11C600E388FF /* KnownItemVM.swift in Sources */,
 				9452856E275BE1D5004D815B /* Root.swift in Sources */,
+				9408E2E62783A1B300D2D1BF /* MorePill.swift in Sources */,
 				9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */,
 				940E01A3277F5A91002AD641 /* CrossPlatformStylizedMenu.swift in Sources */,
 				94DFEC5F275D389700BB80DB /* Choose+KnownUnknownCells.swift in Sources */,

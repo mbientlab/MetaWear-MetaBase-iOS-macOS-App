@@ -7,8 +7,8 @@ import MetaWearSync
 
 public class ActiveLoggingSessionsStore {
 
-    public let sessionNames: AnyPublisher<Dict<Session.LoggingToken>,Never>
-    private let _sessionNames = CurrentValueSubject<Dict<Session.LoggingToken>,Never>([:])
+    public let tokens: AnyPublisher<Dict<Session.LoggingToken>,Never>
+    private let _tokens = CurrentValueSubject<Dict<Session.LoggingToken>,Never>([:])
 
     private unowned let loader: MWLoader<LoggingTokensLoadable>
     private var loading: AnyCancellable? = nil
@@ -16,7 +16,7 @@ public class ActiveLoggingSessionsStore {
 
     public init(loader: MWLoader<LoggingTokensLoadable>) {
         self.loader = loader
-        self.sessionNames = _sessionNames.eraseToAnyPublisher()
+        self.tokens = _tokens.eraseToAnyPublisher()
         self.update(from: loader.loaded)
         save(to: loader)
     }
@@ -29,15 +29,15 @@ public extension ActiveLoggingSessionsStore {
     }
 
     func session(for item: Routing.Item) -> Session.LoggingToken? {
-        _sessionNames.value[item]
+        _tokens.value[item]
     }
 
     func register(token: Session.LoggingToken) {
-        _sessionNames.value[token.id] = token
+        _tokens.value[token.id] = token
     }
 
     func remove(token: Session.LoggingToken.ID) {
-        _sessionNames.value.removeValue(forKey: token)
+        _tokens.value.removeValue(forKey: token)
     }
 }
 
@@ -47,12 +47,12 @@ private extension ActiveLoggingSessionsStore {
         loading = loadable
             .map { $0.tokens.dictionary() }
             .sink { [weak self] loaded in
-                self?._sessionNames.send(loaded)
+                self?._tokens.send(loaded)
             }
     }
 
     func save(to loader: MWLoader<LoggingTokensLoadable>) {
-        saving = _sessionNames
+        saving = _tokens
             .dropFirst(2) // This store's subject + persistence's first load
             .mapValues()
             .sink {

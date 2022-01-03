@@ -18,18 +18,22 @@ public class UnknownItemVM: ObservableObject, ItemVM {
     public private(set) var models: [(mac: String, model: MetaWear.Model)] = []
     public private(set) var isCloudSynced = false
     public private(set) var macs: [String] = []
+    @Published public private(set) var isLogging = false
     @Published public private(set) var rssi: SignalLevel
     @Published public private(set) var connection: CBPeripheralState
 
     private var rssiSub: AnyCancellable? = nil
     private var connectionSub: AnyCancellable? = nil
+    private var loggingStateSub: AnyCancellable? = nil
     private unowned let store: MetaWearSyncStore
     private unowned let routing: Routing
     private unowned let device: MetaWear
 
     public init(cbuuid: CBPeripheralIdentifier,
                 store: MetaWearSyncStore,
-                routing: Routing) {
+                logging: ActiveLoggingSessionsStore,
+                routing: Routing
+    ) {
         self.store = store
         self.routing = routing
         let _device = store.getDevice(byLocalCBUUID: cbuuid)
@@ -39,6 +43,16 @@ public class UnknownItemVM: ObservableObject, ItemVM {
         self.name = device.name
         self.rssi = .init(rssi: device.rssi)
         self.connection = _device.device?.connectionState ?? .disconnected
+
+        // Update logging state
+        if let mac = _device.metadata?.mac {
+            self.loggingStateSub = logging.tokens
+                .map { $0[.known(mac)] }
+                .sink { [weak self] token in
+                    self?.isLogging = token != nil
+                }
+
+        }
     }
 }
 
@@ -85,6 +99,7 @@ public extension UnknownItemVM {
             rssi: rssi,
             isLocallyKnown: false,
             connection: connection,
+            isLogging: isLogging,
             identifyTip: "",
             isIdentifying: false,
             ledVM: ledVM

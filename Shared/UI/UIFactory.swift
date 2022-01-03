@@ -45,21 +45,21 @@ public extension UIFactory {
             case .known(let mac):
                 guard let known = devices.getDeviceAndMetadata(mac)
                 else { fatalError() }
-                return .init(device: known, store: devices, routing: routing)
+                return .init(device: known, store: devices, logging: logging, routing: routing)
 
             case .group(let id):
                 guard let group = devices.getGroup(id: id)
                 else { fatalError() }
-                return .init(group: group, store: devices, routing: routing)
+                return .init(group: group, store: devices, logging: logging, routing: routing)
         }
     }
 
     func makeUnknownItemVM(_ id: CBPeripheralIdentifier) -> UnknownItemVM {
-        .init(cbuuid: id, store: devices, routing: routing)
+        .init(cbuuid: id, store: devices, logging: logging, routing: routing)
     }
 
     func makeAboutDeviceVM(device: MWKnownDevice) -> AboutDeviceVM {
-        .init(device: device, store: devices)
+        .init(device: device, store: devices, logging: logging, routing: routing)
     }
 
     func makeHistoryScreenVM() -> HistoryScreenVM {
@@ -88,10 +88,12 @@ public extension UIFactory {
     func makeActionVM() -> ActionVM {
         guard let focus = routing.focus else { fatalError("Set focus before navigation") }
         let action = ActionType(destination: routing.destination)
+        let date = logging.session(for: focus.item)?.date ?? Date()
         let (_, metawears) = getKnownDevices(for: focus.item)
         let vms = makeAboutVMs(for: metawears)
         return .init(action: action,
                      name: focus.sessionNickname,
+                     date: date,
                      devices: metawears,
                      vms: vms,
                      store: devices,
