@@ -79,35 +79,6 @@ extension ActionScreen {
 
         private var notStartedIndicator: some View { EmptyView() }
 
-        private var progressReport: some View {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(action.actionType.workingLabel)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(1)
-
-                if action.actionType == .stream,
-                   case .working = action.actionState[vm.meta.mac],
-                   action.streamCounters.counts[vm.meta.mac]?.info != "0" {
-
-                    if #available(iOS 15.0, macOS 12.0, *) {
-                        TimelineView(.periodic(from: Date(), by: 3)) { _ in stats }
-                    } else { stats }
-                }
-            }
-            .animation(.easeOut, value: action.streamCounters.counts[vm.meta.mac]?.info)
-        }
-
-        private var stats: some View {
-            let streamDatapointCount: String = {
-                if let count = action.streamCounters.counts[vm.meta.mac]?.info {
-                    return " " + count + " data points"
-                } else { return "" }
-            }()
-            return Text(streamDatapointCount)
-                .foregroundColor(invertTextColor ? .myBackground.opacity(0.7) : .mySecondary)
-                .font(.subheadline)
-        }
-
         private var completedIndicator: some View {
             Text(action.actionType.completedLabel)
                 .fixedSize(horizontal: false, vertical: true)
@@ -143,6 +114,60 @@ extension ActionScreen {
         private var refresh: some View {
             RefreshButton(help: "Retry", didTap: { action.retry(vm.meta) })
                 .buttonStyle(HoverButtonStyle())
+        }
+
+        // MARK: - Progress
+
+        private var progressReport: some View {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(action.actionType.workingLabel)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .lineLimit(1)
+
+                if action.actionType == .stream,
+                   case .working = action.actionState[vm.meta.mac],
+                   action.streamCounters.counts[vm.meta.mac]?.info != "0" {
+
+                    if #available(iOS 15.0, macOS 12.0, *) {
+                        TimelineView(.periodic(from: Date(), by: 2)) { _ in stats }
+                    } else { stats }
+
+                } else if action.actionType == .downloadLogs {
+
+                    if #available(iOS 15.0, macOS 12.0, *) {
+                        TimelineView(.periodic(from: Date(), by: 2)) { _ in downloadPercent }
+                    } else { downloadPercent }
+                }
+            }
+            .animation(.easeOut, value: action.streamCounters.counts[vm.meta.mac]?.info)
+        }
+
+        private var stats: some View {
+            let streamDatapointCount: String = {
+                if let count = action.streamCounters.counts[vm.meta.mac]?.info {
+                    return " " + count + " data points"
+                } else { return "" }
+            }()
+            return Text(streamDatapointCount)
+                .foregroundColor(invertTextColor ? .myBackground.opacity(0.7) : .mySecondary)
+                .font(.subheadline)
+        }
+
+        @ViewBuilder private var downloadPercent: some View {
+            if case let .working(percent) = action.actionState[vm.info.mac] {
+                let label = String(percent) + "%"
+
+                ProgressView(
+                    value: Double(percent),
+                    total: 100,
+                    label: { },
+                    currentValueLabel: { }
+                )
+                    .progressViewStyle(LinearProgressViewStyle(tint: .myBackground))
+                    .accessibilityValue(Text(label))
+                    .help(label)
+                    .frame(width: 100)
+            }
         }
     }
 }

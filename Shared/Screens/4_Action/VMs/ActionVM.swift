@@ -43,7 +43,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     @Published var cloudSaveState: CloudSaveState = .notStarted
     private let sessionID = UUID()
     private let name: String
-    private let date = Date()
+    private let date: Date
     private var files: [File] = []
     private var devicesExportReady:     Int = 0
     private var exporter: FilesExporter? = nil
@@ -68,6 +68,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
 
     public init(action: ActionType,
                 name: String,
+                date: Date,
                 devices: [MWKnownDevice],
                 vms: [AboutDeviceVM],
                 store: MetaWearSyncStore,
@@ -78,10 +79,13 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     ) {
         self.workQueue = backgroundQueue
         self.name = name
+        self.date = date
         self.sessions = sessions
         self.actionType = action
         self.devices = devices
-        self.configs = routing.focus?.configs ?? []
+        self.configs = action == .downloadLogs
+        ? Array(repeating: .init(), count: devices.endIndex)
+        : routing.focus?.configs ?? []
         self.routing = routing
         self.logging = logging
         self.store = store
@@ -123,7 +127,6 @@ public extension ActionVM {
 
     func stopStreaming() {
         streamCancel.send()
-        print("MB-> ", "STOP STREAMING")
     }
 
     func downloadLogs() {
@@ -198,11 +201,13 @@ private extension ActionVM {
         actions[current.meta.mac] = getActionPublisher(device, current.meta.mac, current.config)
             .receive(on: workQueue)
             .sink { [weak self] completion in
+                print("-> ACTION COMPLETE")
                 guard case let .failure(error) = completion else { return }
                 let timedOut = error.localizedDescription.contains("Timeout")
                 self?.fail(fromCurrent: current, timedOut ? .timeout : .error(error.localizedDescription))
                 semaphore.signal()
             } receiveValue: { [weak self] _ in
+                print("-> ACTION SUCCESS")
                 self?.succeed(fromCurrent: current.meta)
                 semaphore.signal()
             }
@@ -239,6 +244,7 @@ private extension ActionVM {
 
     /// Failure cases: Update UI state to show failure reason and advance to the next queue item
     func fail(fromCurrent: QueueItem, _ reason: ActionState) {
+        print("-> ", #function, fromCurrent.device?.name, reason.info)
         if Thread.isMainThread {
             actionFails.append(fromCurrent)
             actionState[fromCurrent.meta.mac] = reason
@@ -252,6 +258,7 @@ private extension ActionVM {
 
     /// Success cases: Advance to the next item, no need to update UI state
     func succeed(fromCurrent: MetaWear.Metadata) {
+        print("-> ", #function, fromCurrent.name)
         if Thread.isMainThread {
             actionState[fromCurrent.mac] = .completed
         } else {
@@ -264,6 +271,7 @@ private extension ActionVM {
     /// Call on private queue
     func moveToNextQueueItem() {
         self.nextQueueItem = self.actionQueue.popLast()
+        print("-> ", #function, nextQueueItem?.device?.name)
         DispatchQueue.main.async { [weak self] in
             self?.actionFocus = self?.nextQueueItem?.meta.mac ?? ""
         }
@@ -276,8 +284,10 @@ private extension ActionVM {
 
     /// Call after downloading or completing streaming for one device
     func saveData(tables: [MWDataTable], for mac: MACAddress) {
+        print("-> ", #function, mac, tables.map(\.rows.count))
         workQueue.async(flags: .barrier) { [weak self] in
             guard let self = self else { return }
+            print("-> ", "ASYNC")
 
             let files = tables.reduce(into: [File]()) { files, table in
                 let data = table.makeCSV().data(using: .utf8) ?? Data()
@@ -297,20 +307,23 @@ private extension ActionVM {
     /// Call on background queue to trigger, when all devices' data are ready, a database write + option for user to immediately export
     func updateDevicesExportReadyState() {
         devicesExportReady += 1
+        print("-> ", #function, devicesExportReady)
         guard devicesExportReady == devices.endIndex else { return }
         self.saveSessionToAppDatabase()
 
         do { self.exporter = try .init(id: sessionID, name: name, files: files) }
-        catch { NSLog(error.localizedDescription) }
+        catch { NSLog("-> " + error.localizedDescription) }
 
         DispatchQueue.main.async { [weak self] in
             self?.showExportFilesCTA = true
+            print("-> ", #function, "continued", self?.showExportFilesCTA)
         }
     }
 
     func saveSessionToAppDatabase() {
         DispatchQueue.main.async { [weak self] in
             self?.cloudSaveState = .saving
+            print("-> ", #function, self?.cloudSaveState)
         }
 
         let session = Session(id: sessionID,
@@ -328,6 +341,7 @@ private extension ActionVM {
                     case .failure(let error): self?.cloudSaveState = .error(error)
                     case .finished: self?.cloudSaveState = .saved
                 }
+                print("-> ", "cloud", self?.cloudSaveState)
             } receiveValue: { _ in }
     }
 }
@@ -374,21 +388,26 @@ private extension ActionVM {
         device
             .publishWhenConnected()
             .mapToMWError()
+            .print()
             .timeout(Self.timeoutDuration, scheduler: workQueue) { .operationFailed("Timeout") }
             .first()
             .downloadLogs()
+            .receive(on: workQueue)
             .handleEvents(receiveOutput: { [weak self] download in
+                print("-> ", download.percentComplete)
                 DispatchQueue.main.async { [weak self] in
                     let percent = Int(download.percentComplete * 100)
                     self?.actionState[mac] = .working(percent)
                 }
-                guard download.data.isEmpty == false else { return }
-                self?.saveData(tables: download.data, for: mac)
             })
             .drop(while: { $0.percentComplete < 1 })
+            .handleEvents(receiveOutput: { [weak self] download in
+                self?.saveData(tables: download.data, for: mac)
+            })
             .map { _ in () }
             .handleEvents(receiveOutput: { [weak self] _ in
                 guard let self = self else { return }
+                print("-> Remove logger")
                 self.logging.remove(token: self.routing.focus!.item)
             })
             .eraseToAnyPublisher()
