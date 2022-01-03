@@ -4,17 +4,23 @@ import mbientSwiftUI
 
 public struct CrossPlatformStylizedMenu<L: Listable>: View {
 
-    public init(selected: Binding<L>, options: [L], labelFont: Font? = nil, labelColor: Color) {
+    public init(selected: Binding<L>,
+                options: [L],
+                labelFont: Font? = nil,
+                labelColor: Color,
+                staticLabel: String? = nil) {
         _selected = selected
         self.options = options
         self.labelFont = labelFont
         self.labelColor = labelColor
+        self.staticLabel = staticLabel
     }
 
     @Binding public var selected: L
     public let options: [L]
     public var labelFont: Font? = nil
     public var labelColor: Color
+    public var staticLabel: String?
 
     public var body: some View {
         menu
@@ -26,12 +32,14 @@ public struct CrossPlatformStylizedMenu<L: Listable>: View {
                 Button(action: { selected = option }, label: { Text(option.label) })
             }
         } label: {
-            Text(selected.label)
+            Text(staticLabel ?? selected.label)
                 .foregroundColor(labelColor)
                 .font(labelFont)
                 .accessibilityLabel(selected.label)
         }
+#if os(macOS)
         .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: false))
+#endif
         .alignmentGuide(HorizontalAlignment.center) { $0[HorizontalAlignment.center] + 5 }
         .background(tickMark.alignmentGuide(.trailing) { $0[.leading] + 3 }, alignment: .trailing)
     }

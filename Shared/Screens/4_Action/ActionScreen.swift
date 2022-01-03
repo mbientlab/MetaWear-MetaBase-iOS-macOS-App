@@ -19,11 +19,13 @@ struct ActionScreen: View {
                 .keyboardShortcut(.cancelAction)
             
             ScrollView {
-
-                ForEach(vm.deviceVMs) { vm in
-                    Row(vm: vm)
+                VStack(alignment: .leading) {
+                    ForEach(vm.deviceVMs) { vm in
+                        Row(vm: vm)
+                    }
+                    .animation(.easeOut, value: vm.actionFocus)
                 }
-                .animation(.easeOut, value: vm.actionFocus)
+                .frame(maxWidth: .infinity, alignment: .center)
             }
             .padding(.horizontal, .screenInset)
 

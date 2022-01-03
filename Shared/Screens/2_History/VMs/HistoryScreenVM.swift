@@ -8,7 +8,7 @@ import MetaWearSync
 public class HistoryScreenVM: ObservableObject, HeaderVM {
 
     @Published public private(set) var items: [AboutDeviceVM] = []
-    @Published public private(set) var ctaLabel = "New Session"
+    @Published public private(set) var cta: AvailableActivity
 
     public let title: String
     public var deviceCount: Int { items.endIndex }
@@ -20,17 +20,21 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
 
     private unowned let routing: Routing
     private unowned let scanner: MetaWearScanner
+    private unowned let logging: ActiveLoggingSessionsStore
 
     public init(title: String,
                 vms: [AboutDeviceVM],
                 store: MetaWearSyncStore,
                 routing: Routing,
-                scanner: MetaWearScanner
+                scanner: MetaWearScanner,
+                logging: ActiveLoggingSessionsStore
     ) {
         self.routing = routing
         self.scanner = scanner
+        self.logging = logging
         self.title = title
         self.items = vms
+        self.cta = .init(ongoingLoggingSession: logging.session(for: routing.focus!.item))
 
         alert = vms.endIndex > 1 ? "Bring all MetaWears nearby" : "Bring MetaWear nearby"
         startValidatingSessionStartCTA()
@@ -40,8 +44,16 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
 public extension HistoryScreenVM {
 
     func performCTA() {
-        // No need to reset focus
-        routing.setDestination(.configure)
+
+        switch cta {
+            case .newSession:
+                // No need to reset focus
+                routing.setDestination(.configure)
+            case .isLogging:
+                let ongoingSessionName = logging.session(for: routing.focus!.item)?.name ?? "New Session"
+                routing.setSessionName(ongoingSessionName)
+                routing.setDestination(.downloadLogs)
+        }
     }
 
     func refresh() {
@@ -67,5 +79,22 @@ private extension HistoryScreenVM {
             .sink(receiveValue: { [weak self] shouldAlert in
                 self?.showSessionStartAlert = shouldAlert
             })
+    }
+}
+
+public enum AvailableActivity {
+    case isLogging
+    case newSession
+
+    public var label: String {
+        switch self {
+            case .isLogging: return "Download Logs"
+            case .newSession: return "New Session"
+        }
+    }
+
+    fileprivate init(ongoingLoggingSession: Session.LoggingToken?) {
+        if let _ = ongoingLoggingSession { self = .isLogging }
+        else { self = .newSession }
     }
 }

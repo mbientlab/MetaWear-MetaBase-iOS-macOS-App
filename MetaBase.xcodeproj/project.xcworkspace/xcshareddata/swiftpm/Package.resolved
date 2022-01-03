@@ -11,21 +11,12 @@
         }
       },
       {
-        "package": "mbientSwiftUI",
-        "repositoryURL": "https://importRyan@github.com/mbientlab/mbientSwiftUI.git",
-        "state": {
-          "branch": "main",
-          "revision": "643845ba72349b248118743afc5c4a51aa4393c0",
-          "version": null
-        }
-      },
-      {
         "package": "MetaWear",
         "repositoryURL": "https://github.com/mbientlab/MetaWear-SDK-Swift-Combine",
         "state": {
-          "branch": null,
-          "revision": "1e12f1e672d7f6ef595235f305e7588acb1fa237",
-          "version": "0.2.2"
+          "branch": "main",
+          "revision": "e46ecee60a1edded244b16e6716adb33e9a7b8d6",
+          "version": null
         }
       },
       {

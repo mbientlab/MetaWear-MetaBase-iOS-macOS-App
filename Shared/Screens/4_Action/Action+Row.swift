@@ -4,6 +4,7 @@ import mbientSwiftUI
 import Combine
 import MetaWear
 import MetaWearSync
+import SwiftUI
 
 extension ActionScreen {
 
@@ -11,28 +12,33 @@ extension ActionScreen {
 
         @EnvironmentObject private var action: ActionVM
         @ObservedObject var vm: AboutDeviceVM
+        @Environment(\.namespace) var namespace
 
         var body: some View {
-            HStack(spacing: 10) {
+            let connectionSpacing = CGFloat(35)
+            HStack(spacing: 15) {
 
                 SharedImages.metawearTop.image()
                     .resizable()
                     .scaledToFit()
                     .frame(width: 35, height: 35)
+                    .shadow(color: .black.opacity(0.2), radius: 4, x: 2, y: 2)
+                    .shadow(color: .black.opacity(0.4), radius: 1, x: 1, y: 1)
 
                 Text(vm.meta.name)
-                    .font(.title2)
+                    .font(.title2.weight(isActionFocus ? .medium : .regular))
+                    .padding(.trailing, connectionSpacing)
 
-                ConnectionIcon()
-                LargeSignalDots(color: .myPrimary, dotSize: 9, spacing: 3)
+                ConnectionIcon(color: foreground)
+                LargeSignalDots(color: foreground, dotSize: 9, spacing: 3)
 
-                HStack {
-                    ProgrammingState(vm: vm)
+                HStack(alignment: .center) {
+                    ProgrammingStateIcon(vm: vm, invertTextColor: isActionFocus)
                         .padding(.trailing, 10)
 
-                    ProgressSummary(vm: vm)
+                    ProgressSummaryLabel(vm: vm, invertTextColor: isActionFocus)
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.leading, connectionSpacing)
             }
             .environment(\.signalLevel, vm.rssi)
             .environment(\.connectionState, vm.connection)
@@ -42,13 +48,21 @@ extension ActionScreen {
             .onAppear(perform: vm.onAppear)
             .onDisappear(perform: vm.onDisappear)
             .padding()
+            .foregroundColor(foreground)
             .background(background)
             .animation(.easeOut, value: action.actionState[vm.meta.mac]!)
         }
 
-        private var background: some View {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color.myPrimary.opacity(action.actionFocus == vm.meta.mac ? 0.1 : 0))
+       @ViewBuilder private var background: some View {
+           if isActionFocus {
+               RoundedRectangle(cornerRadius: 8, style: .continuous)
+                   .fill(Color.myHighlight)
+                   .matchedGeometryEffect(id: "focus", in: namespace!)
+           }
         }
+
+        private var isActionFocus: Bool { action.actionFocus == vm.meta.mac }
+
+        private var foreground: Color { isActionFocus ? .myBackground : .myPrimary }
     }
 }

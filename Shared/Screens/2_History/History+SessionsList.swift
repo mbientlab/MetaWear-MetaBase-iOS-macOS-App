@@ -32,7 +32,9 @@ extension HistoryScreen {
                         )
                             .tag(session)
                     }
+                    Color.clear.frame(height: 25)
                 }
+                .mask(mask.offset(y: 1))
                 .onPreferenceChange(DateWK.self) { dateWidth = $0 }
                 .onPreferenceChange(TimeWK.self) { timeWidth = $0 }
                 .onDeleteCommand {
@@ -43,6 +45,18 @@ extension HistoryScreen {
                 .animation(.easeOut, value: vm.sessions.map(\.name))
             }
             .onAppear(perform: vm.onAppear)
+        }
+
+        var mask: some View {
+            VStack(spacing: 0) {
+                Color.white
+                HStack(alignment: .bottom, spacing: 0) {
+                    LinearGradient(gradient: .init(colors: [
+                        .white, .white.opacity(0)
+                    ]), startPoint: .top, endPoint: .bottom)
+                    Color.white.frame(width: 10)
+                }.frame(height: 25)
+            }
         }
     }
 }

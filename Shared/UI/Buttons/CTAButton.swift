@@ -5,21 +5,24 @@ import mbientSwiftUI
 struct CTAButton: View {
 
     init(_ cta: String,
-         bg: Color = .myHighlight,
-         text: Color = .myBackground,
+         _ symbol: SFSymbol? = nil,
+         hover: Color = .myHighlight,
+         base: Color = .myPrimary,
          maxWidth: CGFloat? = nil,
          action: @escaping () -> Void) {
+        self.symbol = symbol
         self.cta = cta
         self.action = action
-        self.bg = bg
-        self.text = text
+        self.hover = hover
+        self.base = base
         self.maxWidth = maxWidth
     }
 
     let cta: String
+    let symbol: SFSymbol?
     let action: () -> Void
-    let bg: Color
-    let text: Color
+    let hover: Color
+    let base: Color
     let maxWidth: CGFloat?
 
     @Environment(\.colorScheme) private var scheme
@@ -29,21 +32,26 @@ struct CTAButton: View {
 
     var body: some View {
         Button(action: action) {
-            Text(cta)
-                .font(.title2)
-                .fontWeight(scheme == .light ? .medium : .medium)
+            HStack(spacing: 10) {
+                if let symbol = symbol {
+                    symbol.image()
+                }
+
+                Text(cta)
+            }
+                .font(.title2.weight(scheme == .light ? .medium : .medium))
                 .lineLimit(1)
                 .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(isHovered ? .myHighlight : .myPrimary)
+                .foregroundColor(isHovered ? hover : base)
 
                 .padding(.horizontal, 25)
                 .padding(.vertical, 8)
                 .frame(minWidth: 150, maxWidth: maxWidth, alignment: .center)
+                .whenHovered { isHovered = $0 }
         }
-        .buttonStyle(UnderlinedButtonStyle(color: .myHighlight, isHovered: isHovered))
+        .buttonStyle(UnderlinedButtonStyle(color: hover, isHovered: isHovered))
         .animation(.spring(), value: isHovered)
         .opacity(isEnabled ? 1 : 0.35)
-        .whenHovered { isHovered = $0 }
 
 #if os(macOS)
         .controlSize(.large)

@@ -25,7 +25,7 @@ struct HistoryScreen: View {
 
                 VStack {
                     SessionsList(factory)
-                    ctas
+                    ctas.padding(.top, 10)
                 }
                 .padding(.bottom, .screenInset)
                 .layoutPriority(2)
@@ -49,7 +49,7 @@ struct HistoryScreen: View {
                 .animation(.easeIn, value: vm.showSessionStartAlert)
                 .accessibilityHidden(vm.showSessionStartAlert == false)
 
-            CTAButton(vm.ctaLabel, action: vm.performCTA)
+            CTAButton(vm.cta.label, .add , action: vm.performCTA)
                 .keyboardShortcut(.defaultAction)
         }
         .frame(maxWidth: .infinity, alignment: .trailing)

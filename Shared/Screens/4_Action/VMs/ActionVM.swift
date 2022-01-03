@@ -64,6 +64,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     private unowned let routing:        Routing
     private unowned let store:          MetaWearSyncStore
     private unowned let sessions:       SessionRepository
+    private unowned let logging:        ActiveLoggingSessionsStore
 
     public init(action: ActionType,
                 name: String,
@@ -72,6 +73,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
                 store: MetaWearSyncStore,
                 sessions: SessionRepository,
                 routing: Routing,
+                logging: ActiveLoggingSessionsStore,
                 backgroundQueue: DispatchQueue
     ) {
         self.workQueue = backgroundQueue
@@ -81,6 +83,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
         self.devices = devices
         self.configs = routing.focus?.configs ?? []
         self.routing = routing
+        self.logging = logging
         self.store = store
         self.deviceVMs = vms
         self.actionState = Dictionary(repeating: .notStarted, keys: devices)
@@ -353,6 +356,15 @@ private extension ActionVM {
             .macro(config)
             .timeout(Self.timeoutDuration, scheduler: workQueue) { .operationFailed("Timeout") }
             .map { _ in () }
+            .handleEvents(receiveOutput: { [weak self] _ in
+                guard let self = self else { return }
+                let token = Session.LoggingToken(
+                    id: self.routing.focus!.item,
+                    date: self.date,
+                    name: self.name
+                )
+                self.logging.register(token: token)
+            })
             .eraseToAnyPublisher()
     }
 
@@ -375,6 +387,10 @@ private extension ActionVM {
             })
             .drop(while: { $0.percentComplete < 1 })
             .map { _ in () }
+            .handleEvents(receiveOutput: { [weak self] _ in
+                guard let self = self else { return }
+                self.logging.remove(token: self.routing.focus!.item)
+            })
             .eraseToAnyPublisher()
     }
 

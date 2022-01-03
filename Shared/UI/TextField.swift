@@ -21,7 +21,7 @@ struct ResigningTextField: View {
         macTextField
 #elseif os(iOS)
         iOSTextField
-            .onAppear { text = placeholderText }
+            .onAppear { base = placeholderText }
 #endif
     }
 #if os(macOS)

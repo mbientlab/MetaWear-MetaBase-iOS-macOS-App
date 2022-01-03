@@ -67,7 +67,12 @@ extension ConfigureScreen {
         // MARK: - Options
 
         private var frequencyMenu: some View {
-            CrossPlatformStylizedMenu(selected: $frequency, options: frequencies, labelFont: .title3.weight(.semibold), labelColor: .myBackground)
+            CrossPlatformStylizedMenu(
+                selected: $frequency,
+                options: frequencies,
+                labelFont: .title3.weight(.semibold),
+                labelColor: .myBackground
+            )
                 .animation(nil)
                 .fixedSize()
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -76,7 +81,12 @@ extension ConfigureScreen {
 
         private var showOptions: Bool { isSelected }
         private var optionsMenu: some View {
-            CrossPlatformStylizedMenu(selected: $option, options: options, labelFont: .title3.weight(.semibold), labelColor: .myBackground)
+            CrossPlatformStylizedMenu(
+                selected: $option,
+                options: options,
+                labelFont: .title3.weight(.semibold),
+                labelColor: .myBackground
+            )
                 .animation(nil)
                 .fixedSize()
                 .frame(maxWidth: .infinity, alignment: .center)

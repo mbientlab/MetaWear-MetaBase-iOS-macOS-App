@@ -19,7 +19,7 @@ struct ConfigureScreen: View {
             EditableSubhead(
                 label: vm.sessionNameBinding,
                 placeholder: "Session Name",
-                trailing: { PresetsMenu() }
+                trailing: { PresetsMenu().padding(.trailing, .screenInset) }
             ).padding(.horizontal, .screenInset)
 
             ScrollView {

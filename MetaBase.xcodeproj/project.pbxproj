@@ -59,6 +59,10 @@
 		940E01B82780E4C7002AD641 /* UnderlineButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B62780E4C7002AD641 /* UnderlineButtonStyle.swift */; };
 		940E01BA2780E82C002AD641 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B92780E82C002AD641 /* Alert.swift */; };
 		940E01BB2780E82C002AD641 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B92780E82C002AD641 /* Alert.swift */; };
+		940E01BE278148EE002AD641 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 940E01BD278148EE002AD641 /* mbientSwiftUI */; };
+		940E01C0278148F3002AD641 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 940E01BF278148F3002AD641 /* mbientSwiftUI */; };
+		940E01C227814BFD002AD641 /* CloudSaveStateIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01C127814BFD002AD641 /* CloudSaveStateIndicator.swift */; };
+		940E01C327814BFD002AD641 /* CloudSaveStateIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01C127814BFD002AD641 /* CloudSaveStateIndicator.swift */; };
 		9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		94196C152770DF61000377A6 /* SensorPresetsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94196C142770DF61000377A6 /* SensorPresetsLoader.swift */; };
@@ -67,21 +71,24 @@
 		941A08F7276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */; };
 		941A08FD276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */; };
 		941A08FE276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */; };
-		941DF258276C34E300C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF257276C34E300C5978F /* MetaWearSync */; };
-		941DF25A276C34EE00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF259276C34EE00C5978F /* MetaWearSync */; };
-		941DF25C276C34FB00C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF25B276C34FB00C5978F /* MetaWearSync */; };
-		941DF25E276C350400C5978F /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 941DF25D276C350400C5978F /* MetaWearSync */; };
 		94336F07277523E500759C55 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94336F06277523E500759C55 /* CoreDataController.swift */; };
 		94336F08277523E500759C55 /* CoreDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94336F06277523E500759C55 /* CoreDataController.swift */; };
 		94336F0A2775244B00759C55 /* CoreDataSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94336F092775244B00759C55 /* CoreDataSessionRepository.swift */; };
 		94336F0B2775244B00759C55 /* CoreDataSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94336F092775244B00759C55 /* CoreDataSessionRepository.swift */; };
-		943F5180277199B700715191 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 943F517F277199B700715191 /* mbientSwiftUI */; };
 		9440E190277CDE2800D33484 /* HistoricalSessionsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9440E18F277CDE2800D33484 /* HistoricalSessionsVM.swift */; };
 		9440E191277CDE2800D33484 /* HistoricalSessionsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9440E18F277CDE2800D33484 /* HistoricalSessionsVM.swift */; };
 		944538BD2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
 		944538BE2767DCE000841880 /* StreamingCountersContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944538BC2767DCE000841880 /* StreamingCountersContainer.swift */; };
 		9445E58F276D493300B8E8F3 /* DropOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9445E58E276D493300B8E8F3 /* DropOutcome.swift */; };
 		9445E590276D493300B8E8F3 /* DropOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9445E58E276D493300B8E8F3 /* DropOutcome.swift */; };
+		9446F6442782695200B535AD /* HighlightToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9446F6432782695200B535AD /* HighlightToggleStyle.swift */; };
+		9446F6452782695200B535AD /* HighlightToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9446F6432782695200B535AD /* HighlightToggleStyle.swift */; };
+		9446F64727829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9446F64627829E3A00B535AD /* MBLoggingTokensContainer.swift */; };
+		9446F64827829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9446F64627829E3A00B535AD /* MBLoggingTokensContainer.swift */; };
+		9446F64A2782EBDF00B535AD /* LoggingTokensCloudLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9446F6492782EBDF00B535AD /* LoggingTokensCloudLoader.swift */; };
+		9446F64B2782EBDF00B535AD /* LoggingTokensCloudLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9446F6492782EBDF00B535AD /* LoggingTokensCloudLoader.swift */; };
+		9446F64D2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9446F64C2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift */; };
+		9446F64E2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9446F64C2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift */; };
 		944C1761276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944C1760276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift */; };
 		944C1762276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944C1760276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift */; };
 		94528552275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */; };
@@ -110,20 +117,19 @@
 		946F64D6277BCEB700AE293C /* FilesExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946F64D4277BCEB700AE293C /* FilesExporter.swift */; };
 		9473B7B52770FAC4006F4994 /* KnownDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473B7B42770FAC4006F4994 /* KnownDevice+.swift */; };
 		9473B7B62770FAC4006F4994 /* KnownDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473B7B42770FAC4006F4994 /* KnownDevice+.swift */; };
+		9476F3642783822E00042C33 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F3632783822E00042C33 /* MetaWear */; };
+		9476F3662783822E00042C33 /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F3652783822E00042C33 /* MetaWearCpp */; };
+		9476F36A2783822E00042C33 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F3692783822E00042C33 /* MetaWearSync */; };
+		9476F36C2783823900042C33 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F36B2783823900042C33 /* MetaWear */; };
+		9476F36E2783823900042C33 /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F36D2783823900042C33 /* MetaWearCpp */; };
+		9476F3722783823900042C33 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F3712783823900042C33 /* MetaWearSync */; };
 		9481D768276FD5CE00AB97FA /* Configure+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481D767276FD5CE00AB97FA /* Configure+Presets.swift */; };
 		9481D769276FD5CE00AB97FA /* Configure+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481D767276FD5CE00AB97FA /* Configure+Presets.swift */; };
-		94934FD3275A09E700E388FF /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94934FD2275A09E700E388FF /* MetaWear */; };
-		94934FD5275A09EE00E388FF /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94934FD4275A09EE00E388FF /* MetaWear */; };
 		9493501A275A112200E388FF /* DiscoveryListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935019275A112200E388FF /* DiscoveryListVM.swift */; };
 		9493501B275A112200E388FF /* DiscoveryListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935019275A112200E388FF /* DiscoveryListVM.swift */; };
 		94935023275A11C600E388FF /* KnownItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935022275A11C600E388FF /* KnownItemVM.swift */; };
 		94935024275A11C600E388FF /* KnownItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935022275A11C600E388FF /* KnownItemVM.swift */; };
 		9493AE7527718A860027E059 /* LifetimeCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9493AE7427718A860027E059 /* LifetimeCalculatorTests.swift */; };
-		9493AE7C27718AED0027E059 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE7B27718AED0027E059 /* MetaWear */; };
-		9493AE7E27718AED0027E059 /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE7D27718AED0027E059 /* MetaWearCpp */; };
-		9493AE8027718AED0027E059 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE7F27718AED0027E059 /* MetaWearSync */; };
-		9493AE8227718AED0027E059 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE8127718AED0027E059 /* mbientSwiftUI */; };
-		9493AE8427718C4F0027E059 /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9493AE8327718C4F0027E059 /* MetaWearCpp */; };
 		949E5A6727729B7A00D45740 /* SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A6627729B7A00D45740 /* SessionRepository.swift */; };
 		949E5A6827729B7A00D45740 /* SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A6627729B7A00D45740 /* SessionRepository.swift */; };
 		949E5A6A2772ACA500D45740 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A692772ACA500D45740 /* Session.swift */; };
@@ -146,8 +152,6 @@
 		94A1E64827713FF100414FDF /* LifetimeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1E64627713FF100414FDF /* LifetimeCalculator.swift */; };
 		94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE45276FE9AC009832E1 /* CloudKit.framework */; };
 		94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE47276FE9BE009832E1 /* CloudKit.framework */; };
-		94CB2D31276F108A005C0A08 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94CB2D30276F108A005C0A08 /* mbientSwiftUI */; };
-		94CB2D33276F1091005C0A08 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94CB2D32276F1091005C0A08 /* mbientSwiftUI */; };
 		94CF3EFA276427C300C2D8B0 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3EF9276427C300C2D8B0 /* Routing.swift */; };
 		94CF3EFB276427C300C2D8B0 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3EF9276427C300C2D8B0 /* Routing.swift */; };
 		94CF3EFD276427F100C2D8B0 /* ChooseDevicesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3EFC276427F100C2D8B0 /* ChooseDevicesScreen.swift */; };
@@ -249,6 +253,8 @@
 		940E01B32780E4A7002AD641 /* DepressButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepressButtonStyle.swift; sourceTree = "<group>"; };
 		940E01B62780E4C7002AD641 /* UnderlineButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineButtonStyle.swift; sourceTree = "<group>"; };
 		940E01B92780E82C002AD641 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		940E01BC278148B5002AD641 /* mbientSwiftUI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = mbientSwiftUI; path = ../../mbientSwiftUI/mbientSwiftUI; sourceTree = "<group>"; };
+		940E01C127814BFD002AD641 /* CloudSaveStateIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSaveStateIndicator.swift; sourceTree = "<group>"; };
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
 		94196C142770DF61000377A6 /* SensorPresetsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorPresetsLoader.swift; sourceTree = "<group>"; };
 		941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorParametersStore.swift; sourceTree = "<group>"; };
@@ -258,6 +264,10 @@
 		9440E18F277CDE2800D33484 /* HistoricalSessionsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalSessionsVM.swift; sourceTree = "<group>"; };
 		944538BC2767DCE000841880 /* StreamingCountersContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingCountersContainer.swift; sourceTree = "<group>"; };
 		9445E58E276D493300B8E8F3 /* DropOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropOutcome.swift; sourceTree = "<group>"; };
+		9446F6432782695200B535AD /* HighlightToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightToggleStyle.swift; sourceTree = "<group>"; };
+		9446F64627829E3A00B535AD /* MBLoggingTokensContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBLoggingTokensContainer.swift; sourceTree = "<group>"; };
+		9446F6492782EBDF00B535AD /* LoggingTokensCloudLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingTokensCloudLoader.swift; sourceTree = "<group>"; };
+		9446F64C2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveLoggingSessionsStore.swift; sourceTree = "<group>"; };
 		944C1760276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBPresetSensorConfigurationsContainer.swift; sourceTree = "<group>"; };
 		94528551275BDD81004D815B /* Choose+ScanningIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+ScanningIndicator.swift"; sourceTree = "<group>"; };
 		94528554275BDDB9004D815B /* Choose+Grids.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+Grids.swift"; sourceTree = "<group>"; };
@@ -329,10 +339,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9493AE8027718AED0027E059 /* MetaWearSync in Frameworks */,
-				9493AE7E27718AED0027E059 /* MetaWearCpp in Frameworks */,
-				9493AE7C27718AED0027E059 /* MetaWear in Frameworks */,
-				9493AE8227718AED0027E059 /* mbientSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,10 +346,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				941DF258276C34E300C5978F /* MetaWearSync in Frameworks */,
+				9476F3662783822E00042C33 /* MetaWearCpp in Frameworks */,
 				94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */,
-				94CB2D33276F1091005C0A08 /* mbientSwiftUI in Frameworks */,
-				94934FD3275A09E700E388FF /* MetaWear in Frameworks */,
+				9476F36A2783822E00042C33 /* MetaWearSync in Frameworks */,
+				9476F3642783822E00042C33 /* MetaWear in Frameworks */,
+				940E01BE278148EE002AD641 /* mbientSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,10 +358,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				941DF25A276C34EE00C5978F /* MetaWearSync in Frameworks */,
+				9476F36E2783823900042C33 /* MetaWearCpp in Frameworks */,
 				94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */,
-				94CB2D31276F108A005C0A08 /* mbientSwiftUI in Frameworks */,
-				94934FD5275A09EE00E388FF /* MetaWear in Frameworks */,
+				9476F3722783823900042C33 /* MetaWearSync in Frameworks */,
+				9476F36C2783823900042C33 /* MetaWear in Frameworks */,
+				940E01C0278148F3002AD641 /* mbientSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,7 +371,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				945494F727656A800021E3D6 /* MetaWear in Frameworks */,
-				941DF25E276C350400C5978F /* MetaWearSync in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,9 +379,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				945494F927656A840021E3D6 /* MetaWear in Frameworks */,
-				941DF25C276C34FB00C5978F /* MetaWearSync in Frameworks */,
-				9493AE8427718C4F0027E059 /* MetaWearCpp in Frameworks */,
-				943F5180277199B700715191 /* mbientSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +442,7 @@
 		9420E581275A097200A841D6 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				940E01BC278148B5002AD641 /* mbientSwiftUI */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -454,9 +459,11 @@
 		9473B7B22770F8B2006F4994 /* UserDefaults */ = {
 			isa = PBXGroup;
 			children = (
-				94528560275BDF8D004D815B /* UserDefaults+.swift */,
+				9446F6492782EBDF00B535AD /* LoggingTokensCloudLoader.swift */,
+				9446F64627829E3A00B535AD /* MBLoggingTokensContainer.swift */,
 				944C1760276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift */,
 				94196C142770DF61000377A6 /* SensorPresetsLoader.swift */,
+				94528560275BDF8D004D815B /* UserDefaults+.swift */,
 			);
 			path = UserDefaults;
 			sourceTree = "<group>";
@@ -466,6 +473,7 @@
 			children = (
 				941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */,
 				949E5A6627729B7A00D45740 /* SessionRepository.swift */,
+				9446F64C2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -568,12 +576,13 @@
 		94934FEE275A0DAC00E388FF /* Labels */ = {
 			isa = PBXGroup;
 			children = (
+				940E01C127814BFD002AD641 /* CloudSaveStateIndicator.swift */,
+				940E01AA2780DC7C002AD641 /* EditableSubhead.swift */,
 				94CF3F052764286B00C2D8B0 /* Header.swift */,
 				94CF3F092764286B00C2D8B0 /* LabeledItem.swift */,
 				94CF3F072764286B00C2D8B0 /* ProgressBar.swift */,
 				94CF3F062764286B00C2D8B0 /* SpotlightShimmerText.swift */,
 				94CF3F082764286B00C2D8B0 /* Subhead.swift */,
-				940E01AA2780DC7C002AD641 /* EditableSubhead.swift */,
 			);
 			path = Labels;
 			sourceTree = "<group>";
@@ -589,6 +598,7 @@
 				940E01B62780E4C7002AD641 /* UnderlineButtonStyle.swift */,
 				940E01A4277F9D1D002AD641 /* UnderlineRect.swift */,
 				9408E6DB2767FA290011B5F5 /* WarningPopover.swift */,
+				9446F6432782695200B535AD /* HighlightToggleStyle.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -728,10 +738,6 @@
 			);
 			name = MetaBaseUnitTests;
 			packageProductDependencies = (
-				9493AE7B27718AED0027E059 /* MetaWear */,
-				9493AE7D27718AED0027E059 /* MetaWearCpp */,
-				9493AE7F27718AED0027E059 /* MetaWearSync */,
-				9493AE8127718AED0027E059 /* mbientSwiftUI */,
 			);
 			productName = MetaBaseUnitTests;
 			productReference = 9493AE7227718A860027E059 /* MetaBaseUnitTests.xctest */;
@@ -751,9 +757,10 @@
 			);
 			name = "MetaBase (iOS)";
 			packageProductDependencies = (
-				94934FD2275A09E700E388FF /* MetaWear */,
-				941DF257276C34E300C5978F /* MetaWearSync */,
-				94CB2D32276F1091005C0A08 /* mbientSwiftUI */,
+				940E01BD278148EE002AD641 /* mbientSwiftUI */,
+				9476F3632783822E00042C33 /* MetaWear */,
+				9476F3652783822E00042C33 /* MetaWearCpp */,
+				9476F3692783822E00042C33 /* MetaWearSync */,
 			);
 			productName = "MetaBase (iOS)";
 			productReference = 94E005D1275A07E9001B0DFD /* MetaBase.app */;
@@ -773,9 +780,10 @@
 			);
 			name = "MetaBase (macOS)";
 			packageProductDependencies = (
-				94934FD4275A09EE00E388FF /* MetaWear */,
-				941DF259276C34EE00C5978F /* MetaWearSync */,
-				94CB2D30276F108A005C0A08 /* mbientSwiftUI */,
+				940E01BF278148F3002AD641 /* mbientSwiftUI */,
+				9476F36B2783823900042C33 /* MetaWear */,
+				9476F36D2783823900042C33 /* MetaWearCpp */,
+				9476F3712783823900042C33 /* MetaWearSync */,
 			);
 			productName = "MetaBase (macOS)";
 			productReference = 94E005D7275A07E9001B0DFD /* MetaBase.app */;
@@ -797,7 +805,6 @@
 			name = "Tests iOS";
 			packageProductDependencies = (
 				945494F627656A800021E3D6 /* MetaWear */,
-				941DF25D276C350400C5978F /* MetaWearSync */,
 			);
 			productName = "Tests iOS";
 			productReference = 94E005DE275A07E9001B0DFD /* Tests iOS.xctest */;
@@ -819,9 +826,6 @@
 			name = "Tests macOS";
 			packageProductDependencies = (
 				945494F827656A840021E3D6 /* MetaWear */,
-				941DF25B276C34FB00C5978F /* MetaWearSync */,
-				9493AE8327718C4F0027E059 /* MetaWearCpp */,
-				943F517F277199B700715191 /* mbientSwiftUI */,
 			);
 			productName = "Tests macOS";
 			productReference = 94E005EA275A07E9001B0DFD /* Tests macOS.xctest */;
@@ -867,8 +871,7 @@
 			);
 			mainGroup = 94E005C4275A07E9001B0DFD;
 			packageReferences = (
-				947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */,
-				94CB2D2F276F108A005C0A08 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */,
+				9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */,
 			);
 			productRefGroup = 94E005D2275A07E9001B0DFD /* Products */;
 			projectDirPath = "";
@@ -960,11 +963,13 @@
 				9409C5D92762D7DA001FE850 /* ActionState.swift in Sources */,
 				9452857A275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
 				949E5AAB2773BCDA00D45740 /* SessionMO+CoreDataClass.swift in Sources */,
+				9446F64D2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift in Sources */,
 				94336F07277523E500759C55 /* CoreDataController.swift in Sources */,
 				94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */,
 				94528561275BDF8D004D815B /* UserDefaults+.swift in Sources */,
 				949E5A6A2772ACA500D45740 /* Session.swift in Sources */,
 				94528564275BE0D8004D815B /* MainWindow.swift in Sources */,
+				9446F64727829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */,
 				94935023275A11C600E388FF /* KnownItemVM.swift in Sources */,
 				94CF3EFA276427C300C2D8B0 /* Routing.swift in Sources */,
 				9409C5DC2762E17D001FE850 /* Action+Row.swift in Sources */,
@@ -987,6 +992,7 @@
 				9409C5DF2762E187001FE850 /* Action+ProgrammingState.swift in Sources */,
 				9409C5C227613890001FE850 /* UserSensorConfiguration.swift in Sources */,
 				94E3A7F1275FF50C007E2BAE /* HistoryScreenVM.swift in Sources */,
+				9446F64A2782EBDF00B535AD /* LoggingTokensCloudLoader.swift in Sources */,
 				94CF3F012764282300C2D8B0 /* CTAButton.swift in Sources */,
 				9445E58F276D493300B8E8F3 /* DropOutcome.swift in Sources */,
 				94CF3F1C276428CA00C2D8B0 /* Transitions.swift in Sources */,
@@ -1011,6 +1017,8 @@
 				940E01B42780E4A7002AD641 /* DepressButtonStyle.swift in Sources */,
 				94196C152770DF61000377A6 /* SensorPresetsLoader.swift in Sources */,
 				94336F0A2775244B00759C55 /* CoreDataSessionRepository.swift in Sources */,
+				940E01C227814BFD002AD641 /* CloudSaveStateIndicator.swift in Sources */,
+				9446F6442782695200B535AD /* HighlightToggleStyle.swift in Sources */,
 				940E01A5277F9D1D002AD641 /* UnderlineRect.swift in Sources */,
 				9409C5E22762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */,
 				94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */,
@@ -1049,11 +1057,13 @@
 				9409C5DA2762D7DA001FE850 /* ActionState.swift in Sources */,
 				94E3A7F6275FF5CF007E2BAE /* HistoryScreen.swift in Sources */,
 				949E5AAC2773BCDA00D45740 /* SessionMO+CoreDataClass.swift in Sources */,
+				9446F64E2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift in Sources */,
 				94336F08277523E500759C55 /* CoreDataController.swift in Sources */,
 				9493501B275A112200E388FF /* DiscoveryListVM.swift in Sources */,
 				94E3A7F8275FF5DD007E2BAE /* HistoryScreenVM.swift in Sources */,
 				949E5A6B2772ACA500D45740 /* Session.swift in Sources */,
 				9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
+				9446F64827829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */,
 				9452855C275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
 				9409C5DD2762E17D001FE850 /* Action+Row.swift in Sources */,
 				94CF3EFB276427C300C2D8B0 /* Routing.swift in Sources */,
@@ -1076,6 +1086,7 @@
 				9409C5CA27617F35001FE850 /* LegalSensorParameters.swift in Sources */,
 				9409C5E02762E187001FE850 /* Action+ProgrammingState.swift in Sources */,
 				94E3A7F7275FF5DD007E2BAE /* AboutDeviceVM.swift in Sources */,
+				9446F64B2782EBDF00B535AD /* LoggingTokensCloudLoader.swift in Sources */,
 				9445E590276D493300B8E8F3 /* DropOutcome.swift in Sources */,
 				94CF3F1D276428CA00C2D8B0 /* Transitions.swift in Sources */,
 				94DFEC63275D459B00BB80DB /* ItemVM.swift in Sources */,
@@ -1100,6 +1111,8 @@
 				940E01B52780E4A7002AD641 /* DepressButtonStyle.swift in Sources */,
 				94196C162770DF61000377A6 /* SensorPresetsLoader.swift in Sources */,
 				94336F0B2775244B00759C55 /* CoreDataSessionRepository.swift in Sources */,
+				940E01C327814BFD002AD641 /* CloudSaveStateIndicator.swift in Sources */,
+				9446F6452782695200B535AD /* HighlightToggleStyle.swift in Sources */,
 				940E01A6277F9D1D002AD641 /* UnderlineRect.swift in Sources */,
 				9409C5E32762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */,
 				9409C5C427613895001FE850 /* ConfigureVM.swift in Sources */,
@@ -1584,17 +1597,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */ = {
+		9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mbientlab/MetaWear-SDK-Swift-Combine";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.1;
-			};
-		};
-		94CB2D2F276F108A005C0A08 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://importRyan@github.com/mbientlab/mbientSwiftUI.git";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -1603,29 +1608,12 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		941DF257276C34E300C5978F /* MetaWearSync */ = {
+		940E01BD278148EE002AD641 /* mbientSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWearSync;
+			productName = mbientSwiftUI;
 		};
-		941DF259276C34EE00C5978F /* MetaWearSync */ = {
+		940E01BF278148F3002AD641 /* mbientSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWearSync;
-		};
-		941DF25B276C34FB00C5978F /* MetaWearSync */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWearSync;
-		};
-		941DF25D276C350400C5978F /* MetaWearSync */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWearSync;
-		};
-		943F517F277199B700715191 /* mbientSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 94CB2D2F276F108A005C0A08 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
 			productName = mbientSwiftUI;
 		};
 		945494F627656A800021E3D6 /* MetaWear */ = {
@@ -1636,48 +1624,35 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaWear;
 		};
-		94934FD2275A09E700E388FF /* MetaWear */ = {
+		9476F3632783822E00042C33 /* MetaWear */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
 			productName = MetaWear;
 		};
-		94934FD4275A09EE00E388FF /* MetaWear */ = {
+		9476F3652783822E00042C33 /* MetaWearCpp */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MetaWear;
-		};
-		9493AE7B27718AED0027E059 /* MetaWear */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWear;
-		};
-		9493AE7D27718AED0027E059 /* MetaWearCpp */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
 			productName = MetaWearCpp;
 		};
-		9493AE7F27718AED0027E059 /* MetaWearSync */ = {
+		9476F3692783822E00042C33 /* MetaWearSync */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
 			productName = MetaWearSync;
 		};
-		9493AE8127718AED0027E059 /* mbientSwiftUI */ = {
+		9476F36B2783823900042C33 /* MetaWear */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 94CB2D2F276F108A005C0A08 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
-			productName = mbientSwiftUI;
+			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWear;
 		};
-		9493AE8327718C4F0027E059 /* MetaWearCpp */ = {
+		9476F36D2783823900042C33 /* MetaWearCpp */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 947C4D4E276C2D08005B36D8 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
 			productName = MetaWearCpp;
 		};
-		94CB2D30276F108A005C0A08 /* mbientSwiftUI */ = {
+		9476F3712783823900042C33 /* MetaWearSync */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 94CB2D2F276F108A005C0A08 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
-			productName = mbientSwiftUI;
-		};
-		94CB2D32276F1091005C0A08 /* mbientSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 94CB2D2F276F108A005C0A08 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
-			productName = mbientSwiftUI;
+			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWearSync;
 		};
 /* End XCSwiftPackageProductDependency section */
 

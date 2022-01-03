@@ -13,13 +13,16 @@ extension ActionScreen {
 
         var body: some View {
             HStack {
-                CloudSaveStateIndicator(state: vm.cloudSaveState)
                 Spacer()
+                CloudSaveStateIndicator(state: vm.cloudSaveState, showSuccess: false)
+                    .padding(.trailing, 75)
 
-                if vm.actionDidComplete || vm.actionType == .stream {
+                if vm.actionDidComplete {
                     successCTAs
+                } else if vm.actionType == .stream {
+                    CTAButton("Stop Streaming") { vm.stopStreaming() }
                 } else {
-                    Button("Cancel") { vm.cancelAndUndo() }
+                    CTAButton("Cancel", hover: .mySecondary, base: .mySecondary) { vm.cancelAndUndo() }
                 }
             }
             .frame(maxWidth: .infinity)
@@ -31,47 +34,16 @@ extension ActionScreen {
 
         @ViewBuilder private var successCTAs: some View {
             switch vm.actionType {
-                case .log: Button("Download") { vm.downloadLogs() }
-                case .downloadLogs: EmptyView()
-                case .stream: Button("Stop Streaming") { vm.stopStreaming() }
+                case .log: CTAButton("Download", .download) { vm.downloadLogs() }
+                case .downloadLogs: exportFiles
+                case .stream: exportFiles
             }
-            exportFiles
         }
 
         @ViewBuilder private var exportFiles: some View {
             if vm.showExportFilesCTA {
-                Button("Export CSVs") { vm.exportFiles() }
+                CTAButton("Export CSVs") { vm.exportFiles() }
             }
         }
-
-        private var others: some View {
-            Button("Other Devices") { vm.backToChooseDevices() }
-        }
-    }
-}
-
-struct CloudSaveStateIndicator: View {
-
-    let state: CloudSaveState
-    @State private var animateCloud = false
-
-    var body: some View {
-        ZStack {
-            switch state {
-                case .notStarted: EmptyView()
-                case .saving:
-                    Label(title: { Text("Saving to iCloud") }) {
-                        SFSymbol.icloud.image()
-                            .opacity(animateCloud ? 1 : 0.75)
-                    }
-                    .animation(.easeOut.repeatForever(autoreverses: true), value: animateCloud)
-                    .onAppear { animateCloud.toggle() }
-
-                case .saved:
-                    Label(title: { Text("Saved") }) { SFSymbol.icloud.image() }
-                case .error(let error): WarningPopover(message: error.localizedDescription)
-            }
-        }
-        .animation(.easeOut, value: state)
     }
 }

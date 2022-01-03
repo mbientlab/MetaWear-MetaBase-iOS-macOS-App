@@ -10,6 +10,7 @@ public class UIFactory: ObservableObject {
     public init(_ devices:  MetaWearSyncStore,
                 _ sessions: SessionRepository,
                 _ presets:  PresetSensorParametersStore,
+                _ logging:  ActiveLoggingSessionsStore,
                 _ scanner:  MetaWearScanner,
                 _ routing:  Routing) {
         self.presets = presets
@@ -17,11 +18,13 @@ public class UIFactory: ObservableObject {
         self.sessions = sessions
         self.scanner = scanner
         self.routing = routing
+        self.logging = logging
     }
 
     private unowned let devices:  MetaWearSyncStore
     private unowned let sessions: SessionRepository
     private unowned let presets:  PresetSensorParametersStore
+    private unowned let logging:  ActiveLoggingSessionsStore
     private unowned let scanner:  MetaWearScanner
     private unowned let routing:  Routing
     private lazy var actionQueue = _makeBackgroundQueue(named: "action")
@@ -67,7 +70,8 @@ public extension UIFactory {
                      vms: vms,
                      store: devices,
                      routing: routing,
-                     scanner: scanner
+                     scanner: scanner,
+                     logging: logging
         )
     }
 
@@ -93,6 +97,7 @@ public extension UIFactory {
                      store: devices,
                      sessions: sessions,
                      routing: routing,
+                     logging: logging,
                      backgroundQueue: actionQueue
         )
     }
