@@ -47,14 +47,10 @@ extension SessionMO: ModelConvertible {
 
     func mapToAppModel() throws -> Session {
 
-        guard let files = files,
-              let devices = devices,
-              let date = date,
+        guard let date = date,
               let name = name,
               let id = id
         else { throw CocoaError(.coderInvalidValue) }
-
-        print(files, devices)
 
         return Session(id: id,
                        date: date,

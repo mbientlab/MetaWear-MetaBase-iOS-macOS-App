@@ -107,7 +107,6 @@ extension CoreDataSessionRepository: SessionRepository {
                 try context.save()
                 return try newSession.mapToAppModel()
             }
-            .print()
             .eraseToAnyPublisher()
     }
 }
