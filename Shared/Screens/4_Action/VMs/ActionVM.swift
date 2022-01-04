@@ -147,8 +147,18 @@ public extension ActionVM {
 
     func cancelAndUndo() {
         actions.forEach { $0.value.cancel() }
+        workQueue.sync {
+            self.nextQueueItem = nil
+            self.actionQueue = []
+        }
+        actionFocus = ""
+        actionState = actionState.mapValues { state in
+            guard state.hasOutcome == false else { return state }
+            return .notStarted
+        }
         streamCancel.send()
         deviceVMs.forEach { $0.reset() }
+        
     }
 
     func backToHistory() {
