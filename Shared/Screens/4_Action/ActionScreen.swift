@@ -8,6 +8,7 @@ import MetaWearSync
 struct ActionScreen: View {
 
     @StateObject private var vm: ActionVM
+    @State private var nameWidth = CGFloat(80)
 
     init(_ factory: UIFactory) {
         _vm = .init(wrappedValue: factory.makeActionVM())
@@ -21,13 +22,14 @@ struct ActionScreen: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     ForEach(vm.deviceVMs) { vm in
-                        Row(vm: vm)
+                        Row(vm: vm, nameWidth: nameWidth)
                     }
                     .animation(.easeOut, value: vm.actionFocus)
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
             }
             .padding(.horizontal, .screenInset)
+            .onPreferenceChange(NameWK.self) { nameWidth = $0 }
 
             CTAs()
                 .padding(.bottom, .screenInset)

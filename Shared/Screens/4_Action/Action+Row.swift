@@ -11,8 +11,9 @@ extension ActionScreen {
     struct Row: View {
 
         @EnvironmentObject private var action: ActionVM
+        @Environment(\.namespace) private var namespace
         @ObservedObject var vm: AboutDeviceVM
-        @Environment(\.namespace) var namespace
+        var nameWidth: CGFloat
 
         var body: some View {
             let connectionSpacing = CGFloat(35)
@@ -28,6 +29,8 @@ extension ActionScreen {
                 Text(vm.meta.name)
                     .font(.title2.weight(isActionFocus ? .medium : .regular))
                     .padding(.trailing, connectionSpacing)
+                    .reportMaxWidth(to: NameWK.self)
+                    .frame(minWidth: nameWidth, alignment: .leading)
 
                 ConnectionIcon(color: foreground)
                 LargeSignalDots(color: foreground, dotSize: 9, spacing: 3)
@@ -65,4 +68,12 @@ extension ActionScreen {
 
         private var foreground: Color { isActionFocus ? .myBackground : .myPrimary }
     }
+}
+
+extension ActionScreen {
+
+    struct NameWK: MaxWidthKey {
+        public static var defaultValue: CGFloat = 80
+    }
+
 }
