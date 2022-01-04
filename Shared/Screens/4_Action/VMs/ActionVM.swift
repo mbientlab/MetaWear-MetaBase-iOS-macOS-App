@@ -158,7 +158,7 @@ public extension ActionVM {
         }
         streamCancel.send()
         deviceVMs.forEach { $0.reset() }
-        
+
     }
 
     func backToHistory() {
@@ -206,14 +206,12 @@ private extension ActionVM {
         actions[current.meta.mac] = getActionPublisher(device, current.meta.mac, current.config)
             .receive(on: workQueue)
             .sink { [weak self] completion in
-                print("-> ACTION COMPLETE")
                 guard case let .failure(error) = completion else { return }
                 let timedOut = error.localizedDescription.contains("Timeout")
                 self?.fail(fromCurrent: current, timedOut ? .timeout : .error(error.localizedDescription))
                 self?.moveToNextQueueItem()
 
             } receiveValue: { [weak self] _ in
-                print("-> ACTION SUCCESS")
                 self?.succeed(fromCurrent: current.meta)
                 self?.moveToNextQueueItem()
             }
@@ -248,7 +246,6 @@ private extension ActionVM {
 
     /// Failure cases: Update UI state to show failure reason and advance to the next queue item
     func fail(fromCurrent: QueueItem, _ reason: ActionState) {
-        print("-> ", #function, fromCurrent.device?.name, reason.info)
         if Thread.isMainThread {
             actionFails.append(fromCurrent)
             actionState[fromCurrent.meta.mac] = reason
@@ -262,7 +259,6 @@ private extension ActionVM {
 
     /// Success cases: Advance to the next item, no need to update UI state
     func succeed(fromCurrent: MetaWear.Metadata) {
-        print("-> ", #function, fromCurrent.name)
         if Thread.isMainThread {
             actionState[fromCurrent.mac] = .completed
         } else {
@@ -290,11 +286,11 @@ private extension ActionVM {
 
     /// Call after downloading or completing streaming for one device
     func saveData(tables: [MWDataTable], for mac: MACAddress) {
-        print("-> ", #function, mac, tables.map(\.rows.count))
         workQueue.async(flags: .barrier) { [weak self] in
             guard let self = self else { return }
 
             let files = tables.reduce(into: [File]()) { files, table in
+                guard table.rows.isEmpty == false else { return }
                 let data = table.makeCSV().data(using: .utf8) ?? Data()
                 let deviceName = self.devices.first(where: { $0.meta.mac == mac })?.meta.name ?? mac
                 let file = File(csv: data,
@@ -312,23 +308,21 @@ private extension ActionVM {
     /// Call on background queue to trigger, when all devices' data are ready, a database write + option for user to immediately export
     func updateDevicesExportReadyState() {
         devicesExportReady += 1
-        print("-> ", #function, devicesExportReady)
-        guard devicesExportReady == devices.endIndex else { return }
+        guard devicesExportReady == devices.endIndex, files.isEmpty == false else { return }
         self.saveSessionToAppDatabase()
 
         do { self.exporter = try .init(id: sessionID, name: name, files: files) }
-        catch { NSLog("-> " + error.localizedDescription) }
+        catch { NSLog("\(Self.self)" + error.localizedDescription) }
 
         DispatchQueue.main.async { [weak self] in
             self?.showExportFilesCTA = true
-            print("-> ", #function, "continued", self?.showExportFilesCTA)
         }
     }
 
     func saveSessionToAppDatabase() {
+        guard files.isEmpty == false else { return }
         DispatchQueue.main.async { [weak self] in
             self?.cloudSaveState = .saving
-            print("-> ", #function, self?.cloudSaveState)
         }
 
         let session = Session(id: sessionID,
@@ -346,7 +340,6 @@ private extension ActionVM {
                     case .failure(let error): self?.cloudSaveState = .error(error)
                     case .finished: self?.cloudSaveState = .saved
                 }
-                print("-> ", "cloud", self?.cloudSaveState)
             } receiveValue: { _ in }
     }
 
@@ -402,8 +395,7 @@ private extension ActionVM {
             .first()
             .downloadLogs()
             .receive(on: workQueue)
-            .handleEvents(receiveOutput: { [weak self] download in
-                print("-> ", download.percentComplete)
+            .handleEvents(receiveOutput: { [weak self] download in\
                 DispatchQueue.main.async { [weak self] in
                     let percent = Int(download.percentComplete * 100)
                     self?.actionState[mac] = .working(percent)
@@ -416,7 +408,6 @@ private extension ActionVM {
             .map { _ in () }
             .handleEvents(receiveOutput: { [weak self] _ in
                 guard let self = self else { return }
-                print("-> Remove logger")
                 self.logging.remove(token: self.routing.focus!.item)
             })
             .eraseToAnyPublisher()

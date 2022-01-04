@@ -310,7 +310,7 @@ extension KnownItemVM: MWDropTargetVM {
                     self.dropOutcome = ownMac == metadata.mac ? .noDrop : .newGroup // Is dropping on self?
 
                     // C - Reject other situations
-                } else { print("Unexpected drop"); self.dropOutcome = .noDrop }
+                } else { NSLog("\(Self.self)" + "Unexpected drop"); self.dropOutcome = .noDrop }
         }
     }
 

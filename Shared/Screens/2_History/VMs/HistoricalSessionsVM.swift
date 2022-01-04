@@ -177,7 +177,7 @@ private extension HistoricalSessionsVM {
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
-                    case .failure(let error): print(error)
+                    case .failure(let error): NSLog("\(Self.self)" + error.localizedDescription)
                     case .finished: return
                 }
             } receiveValue: { [weak self] sessions in
