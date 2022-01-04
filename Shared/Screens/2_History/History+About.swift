@@ -86,6 +86,7 @@ extension HistoryScreen.AboutColumn {
 
         private var headerShading: some View {
             RoundedRectangle(cornerRadius: 6)
+                .strokeBorder(lineWidth: 2.5)
                 .foregroundColor(.myGroupBackground)
         }
 
