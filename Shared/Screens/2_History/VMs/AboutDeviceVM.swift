@@ -47,14 +47,18 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     private var refreshSub:        AnyCancellable? = nil
     private var misc               = Set<AnyCancellable>()
     private unowned let store:     MetaWearSyncStore
+    private unowned let logging:   ActiveLoggingSessionsStore
+    private unowned let routing:   Routing
 
     // Debug
     var isStreaming                = false
     let cancel                     = PassthroughSubject<Void,Never>()
 
-    public init(device: MWKnownDevice, store: MetaWearSyncStore) {
+    public init(device: MWKnownDevice, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing) {
         self.connection = device.mw?.connectionState == .connected ? .connected : .disconnected
         self.store = store
+        self.routing = routing
+        self.logging = logging
         self.device = device.mw
         self.meta = device.meta
         let _rssi = device.mw?.rssi ?? Int(SignalLevel.noBarsRSSI)
@@ -94,6 +98,10 @@ public extension AboutDeviceVM {
         device?.connect()
     }
 
+    func disconnect() {
+        device?.disconnect()
+    }
+
     func refreshAll() {
         refreshSub = device?.publishWhenConnected()
             .first()
@@ -122,7 +130,9 @@ public extension AboutDeviceVM {
             .publishWhenConnected()
             .first()
             .command(.resetFactoryDefaults)
-            .sink(receiveCompletion: { _ in }, receiveValue: { _ in })
+            .sink(receiveCompletion: { _ in }, receiveValue: { [self] _ in
+                logging.remove(token: routing.focus!.item)
+            })
 
 
         refreshSub = device?.publishWhenDisconnected()

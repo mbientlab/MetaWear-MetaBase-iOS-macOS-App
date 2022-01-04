@@ -14,20 +14,19 @@ extension ActionScreen {
         var body: some View {
             HStack {
                 Spacer()
-                if vm.showSuccessCTAs || vm.actionType == .stream {
+                CloudSaveStateIndicator(state: vm.cloudSaveState, showSuccess: false)
+                    .padding(.trailing, 75)
+
+                if vm.actionDidComplete {
                     successCTAs
+                } else if vm.actionType == .stream {
+                    CTAButton("Stop Streaming") { vm.stopStreaming() }
                 } else {
-                    cancel
+                    CTAButton("Cancel", hover: .mySecondary, base: .mySecondary) { vm.cancelAndUndo() }
                 }
             }
             .frame(maxWidth: .infinity)
-            .animation(.easeOut, value: vm.showSuccessCTAs)
-            .fileMover(isPresented: $vm.presentExportDialog, files: vm.csvTempURLs) { result in
-                switch result {
-                    case .failure(let error): print(error)
-                    case .success(let urls): print(urls)
-                }
-            }
+            .animation(.easeOut, value: vm.actionDidComplete)
             #if os(macOS)
             .controlSize(.large)
             #endif
@@ -35,30 +34,16 @@ extension ActionScreen {
 
         @ViewBuilder private var successCTAs: some View {
             switch vm.actionType {
-                case .log: download
+                case .log: CTAButton("Download", .download) { vm.downloadLogs() }
                 case .downloadLogs: exportFiles
-                case .stream: stopStreaming
+                case .stream: exportFiles
             }
         }
 
-        private var exportFiles: some View {
-            Button("Export CSVs") { vm.exportFiles() }
-        }
-
-        private var download: some View {
-            Button("Download") { vm.downloadLogs() }
-        }
-
-        private var cancel: some View {
-            Button("Cancel") { vm.cancelAndUndo() }
-        }
-
-        private var others: some View {
-            Button("Other Devices") { vm.backToChooseDevices() }
-        }
-
-        private var stopStreaming: some View {
-            Button("Stop & Export CSVs") { vm.stopStreaming() }
+        @ViewBuilder private var exportFiles: some View {
+            if vm.showExportFilesCTA {
+                CTAButton("Export CSVs") { vm.exportFiles() }
+            }
         }
     }
 }

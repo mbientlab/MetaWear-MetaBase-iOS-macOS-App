@@ -3,10 +3,12 @@
 import Foundation
 import MetaWear
 import MetaWearSync
-import SwiftUI
+import mbientSwiftUI
 
+/// To save a user's multiple configurations as remembered presets
+///
 public struct MBPresetSensorConfigurationsContainer: Codable, MWVersioningContainer {
-    public typealias Loadable = [PresetSensorConfiguration]
+    public typealias Loadable = SensorPresetsLoadable
     public var versionSentinel = 1
     private var data: Data = .init()
 
@@ -17,18 +19,20 @@ public struct MBPresetSensorConfigurationsContainer: Codable, MWVersioningContai
 
     public func load(_ decoder: JSONDecoder) throws -> Loadable {
         guard self.data.isEmpty == false else { return .init() }
-        return try decoder
+        let presets = try decoder
             .decode([MBPresetSensorConfigurationDTO1].self, from: data)
             .map { $0.load() }
+        return .init(presets: presets)
     }
 
-    public static func encode(_ parameters: Loadable, _ encoder: JSONEncoder) throws -> Data {
-        let container = try Self.init(parameters: parameters, encoder: encoder)
+    public static func encode(_ loadable: Loadable, _ encoder: JSONEncoder) throws -> Data {
+        let container = try Self.init(loadable: loadable, encoder: encoder)
         return try encoder.encode(container)
     }
 
-    private init(parameters: Loadable, encoder: JSONEncoder) throws {
-        let dto = parameters.map(MBPresetSensorConfigurationDTO1.init)
+    private init(loadable: Loadable, encoder: JSONEncoder) throws {
+        let dto = loadable.presets
+            .map(MBPresetSensorConfigurationDTO1.init)
         self.data = try encoder.encode(dto)
     }
 }

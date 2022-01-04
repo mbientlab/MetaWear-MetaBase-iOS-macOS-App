@@ -2,9 +2,8 @@
 
 import mbientSwiftUI
 
-// Scanning toggle
-// Show errors if bluetooth is off
-
+/// Scanning toggle. Shows errors if bluetooth is off.
+/// 
 struct BluetoothErrorButton: View {
 
     @EnvironmentObject private var bluetooth: BluetoothStateVM

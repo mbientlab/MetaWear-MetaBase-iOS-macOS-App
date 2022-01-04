@@ -8,7 +8,8 @@ extension ConfigureScreen {
 
     struct PresetsMenu: View {
 
-        @EnvironmentObject var vm: ConfigureVM
+        @EnvironmentObject private var vm: ConfigureVM
+        @State private var isHovered = false
 
         var body: some View {
             menu
@@ -19,7 +20,7 @@ extension ConfigureScreen {
         }
 
         private var menu: some View {
-            Menu("Presets") {
+            Menu {
 
                 if let current = vm.selectedPreset {
                     Button("Rename...") { vm.rename(preset: current) }
@@ -38,7 +39,15 @@ extension ConfigureScreen {
                     }
                     .pickerStyle(.inline)
                 } else { Text("No compatible saved presets") }
+            } label: {
+                Text("Presets")
+                    .foregroundColor(isHovered ? .myHighlight : .myPrimary)
+                    .font(.title3.weight(.medium))
             }
+#if os(macOS)
+            .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+#endif
+            .whenHovered { isHovered = $0 }
         }
 
         private var selection: Binding<PresetSensorConfiguration> {

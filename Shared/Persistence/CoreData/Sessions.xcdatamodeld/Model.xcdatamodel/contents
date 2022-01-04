@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="DeviceMO" representedClassName="DeviceMO" syncable="YES">
+        <attribute name="mac" optional="YES" attributeType="String"/>
+        <relationship name="session" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SessionMO" inverseName="devices" inverseEntity="SessionMO"/>
+    </entity>
+    <entity name="FileMO" representedClassName="FileMO" syncable="YES">
+        <attribute name="csv" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SessionMO" inverseName="files" inverseEntity="SessionMO"/>
+    </entity>
+    <entity name="SessionMO" representedClassName="SessionMO" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="group" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String" spotlightIndexingEnabled="YES"/>
+        <relationship name="devices" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DeviceMO" inverseName="session" inverseEntity="DeviceMO"/>
+        <relationship name="files" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FileMO" inverseName="session" inverseEntity="FileMO" spotlightIndexingEnabled="YES"/>
+    </entity>
+    <elements>
+        <element name="DeviceMO" positionX="-146.4375" positionY="115.11328125" width="128" height="59"/>
+        <element name="FileMO" positionX="-439.72265625" positionY="-0.1796875" width="128" height="89"/>
+        <element name="SessionMO" positionX="-241.44921875" positionY="-129.171875" width="128" height="119"/>
+    </elements>
+</model>

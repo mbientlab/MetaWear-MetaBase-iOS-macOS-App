@@ -8,7 +8,7 @@ import MetaWearSync
 public class HistoryScreenVM: ObservableObject, HeaderVM {
 
     @Published public private(set) var items: [AboutDeviceVM] = []
-    @Published public private(set) var ctaLabel = "New Session"
+    @Published public private(set) var cta: AvailableActivity
 
     public let title: String
     public var deviceCount: Int { items.endIndex }
@@ -16,32 +16,52 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
 
     @Published public private(set) var showSessionStartAlert = false
     public let alert: String
-    private var sub: AnyCancellable? = nil
+    private var newSessionCanStartUpdates: AnyCancellable? = nil
+    private var performDisconnectOnDisappear = true
+    private var loggingUpdates: AnyCancellable? = nil
 
     private unowned let routing: Routing
     private unowned let scanner: MetaWearScanner
+    private unowned let logging: ActiveLoggingSessionsStore
 
-    public init(title: String, vms: [AboutDeviceVM], store: MetaWearSyncStore, routing: Routing, scanner: MetaWearScanner) {
+    public init(title: String,
+                vms: [AboutDeviceVM],
+                store: MetaWearSyncStore,
+                routing: Routing,
+                scanner: MetaWearScanner,
+                logging: ActiveLoggingSessionsStore
+    ) {
         self.routing = routing
         self.scanner = scanner
+        self.logging = logging
         self.title = title
         self.items = vms
+        self.cta = .init(ongoingLoggingSession: logging.session(for: routing.focus!.item))
 
         alert = vms.endIndex > 1 ? "Bring all MetaWears nearby" : "Bring MetaWear nearby"
-        sub = Timer.TimerPublisher(interval: 1, tolerance: 1, runLoop: .main, mode: .common)
-            .map { _ in vms.contains(where: { $0.isNearby == false }) }
-            .removeDuplicates()
-            .sink(receiveValue: { [weak self] shouldAlert in
-                self?.showSessionStartAlert = shouldAlert
-            })
+        startValidatingSessionStartCTA()
+
+        loggingUpdates = logging.tokens
+            .map { $0[routing.focus!.item] }
+            .sink { [weak self] token in
+                self?.cta = .init(ongoingLoggingSession: token)
+            }
     }
 }
 
 public extension HistoryScreenVM {
 
     func performCTA() {
-        // No need to reset focus
-        routing.setDestination(.configure)
+        performDisconnectOnDisappear = false
+        switch cta {
+            case .newSession:
+                // No need to reset focus
+                routing.setDestination(.configure)
+            case .isLogging:
+                let ongoingSessionName = logging.session(for: routing.focus!.item)?.name ?? "New Session"
+                routing.setSessionName(ongoingSessionName)
+                routing.setDestination(.downloadLogs)
+        }
     }
 
     func refresh() {
@@ -53,6 +73,38 @@ public extension HistoryScreenVM {
     }
 
     func onDisappear() {
-        
+        if performDisconnectOnDisappear {
+            items.forEach { $0.disconnect() }
+        }
+    }
+
+}
+
+private extension HistoryScreenVM {
+
+    func startValidatingSessionStartCTA() {
+        newSessionCanStartUpdates = Timer.TimerPublisher(interval: 1, tolerance: 1, runLoop: .main, mode: .common)
+            .compactMap { [weak self] _ in self?.items.contains(where: { $0.isNearby == false }) }
+            .removeDuplicates()
+            .sink(receiveValue: { [weak self] shouldAlert in
+                self?.showSessionStartAlert = shouldAlert
+            })
+    }
+}
+
+public enum AvailableActivity {
+    case isLogging
+    case newSession
+
+    public var label: String {
+        switch self {
+            case .isLogging: return "Download Log"
+            case .newSession: return "New Session"
+        }
+    }
+
+    fileprivate init(ongoingLoggingSession: Session.LoggingToken?) {
+        if let _ = ongoingLoggingSession { self = .isLogging }
+        else { self = .newSession }
     }
 }

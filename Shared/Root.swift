@@ -8,32 +8,39 @@ import mbientSwiftUI
 public class Root: ObservableObject {
 
     // State
-    public let devices: MetaWearSyncStore
-    public let presets: PresetSensorParametersStore
-    public let routing: Routing
+    public let devices:  MetaWearSyncStore
+    public let presets:  PresetSensorParametersStore
+    public let logging:  ActiveLoggingSessionsStore
+    public let routing:  Routing
 
     // Services
-    private let scanner: MetaWearScanner
-     let cloud: NSUbiquitousKeyValueStore
-    private let local: UserDefaults
+    private let scanner:        MetaWearScanner
+    private let sessions:       SessionRepository
+    private let coreData:       CoreDataBackgroundController
+    private let userDefaults:   UserDefaultsContainer
     private let metawearLoader: MWLoader<MWKnownDevicesLoadable>
-    private let presetsLoader:  MWLoader<[PresetSensorConfiguration]>
+    private let presetsLoader:  MWLoader<SensorPresetsLoadable>
+    private let loggingLoader:  MWLoader<LoggingTokensLoadable>
 
     // VMs
-    public let factory: UIFactory
+    public let factory:     UIFactory
     public let bluetoothVM: BluetoothStateVM
 
     public init() {
-        self.cloud = .default
-        self.local = .standard
-        self.metawearLoader  = MetaWeariCloudSyncLoader(local, cloud)
-        self.presetsLoader   = SensorPresetsCloudLoader(local, cloud)
+        self.coreData = CloudKitCoreDataController(inMemory: false)
+        self.sessions = CoreDataSessionRepository(coreData: coreData)
+
+        self.userDefaults = .init(cloud: .default, local: .standard)
+        self.metawearLoader  = MetaWeariCloudSyncLoader(userDefaults.local, userDefaults.cloud)
+        self.presetsLoader   = SensorPresetsCloudLoader(userDefaults)
+        self.loggingLoader   = LoggingTokensCloudLoader(userDefaults)
 
         let scanner = MetaWearScanner.sharedRestore
         let devices = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
         self.presets = PresetSensorParametersStore(loader: presetsLoader)
+        self.logging = ActiveLoggingSessionsStore(loader: loggingLoader)
         let routing = Routing()
-        let factory = UIFactory(devices, presets, scanner, routing)
+        let factory = UIFactory(devices, sessions, presets, logging, scanner, routing)
 
         self.devices = devices
         self.routing = routing
@@ -49,7 +56,8 @@ public extension Root {
         do {
             try devices.load()
             try presets.load()
-            let _ = cloud.synchronize()
+            try logging.load()
+            let _ = userDefaults.cloud.synchronize()
 #if DEBUG
             debugs()
 #endif
@@ -88,3 +96,13 @@ func wipeDefaults() {
     }
 }
 #endif
+
+class UserDefaultsContainer {
+    internal init(cloud: NSUbiquitousKeyValueStore, local: UserDefaults) {
+        self.cloud = cloud
+        self.local = local
+    }
+
+    let cloud: NSUbiquitousKeyValueStore
+    let local: UserDefaults
+}

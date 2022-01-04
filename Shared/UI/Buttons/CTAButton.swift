@@ -1,52 +1,58 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import mbientSwiftUI
-import SwiftUI
 
 struct CTAButton: View {
 
-    let cta: String
-    let action: () -> Void
-    let bg: Color
-    let text: Color
-    let maxWidth: CGFloat?
-
-    @Environment(\.colorScheme) var scheme
-
     init(_ cta: String,
-         bg: Color = .accentColor,
-         text: Color = .myBackground,
+         _ symbol: SFSymbol? = nil,
+         hover: Color = .myHighlight,
+         base: Color = .myPrimary,
          maxWidth: CGFloat? = nil,
          action: @escaping () -> Void) {
+        self.symbol = symbol
         self.cta = cta
         self.action = action
-        self.bg = bg
-        self.text = text
+        self.hover = hover
+        self.base = base
         self.maxWidth = maxWidth
     }
 
+    let cta: String
+    let symbol: SFSymbol?
+    let action: () -> Void
+    let hover: Color
+    let base: Color
+    let maxWidth: CGFloat?
+
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.isEnabled) private var isEnabled
+    @State private var isHovered = false
+    @Namespace private var namespace
+
     var body: some View {
         Button(action: action) {
-            Text(cta)
-                .fontWeight(scheme == .light ? .medium : .medium)
+            HStack(spacing: 10) {
+                if let symbol = symbol {
+                    symbol.image()
+                }
+
+                Text(cta)
+            }
+                .font(.title2.weight(scheme == .light ? .medium : .medium))
                 .lineLimit(1)
                 .fixedSize(horizontal: false, vertical: true)
+                .foregroundColor(isHovered ? hover : base)
 
-                .padding(.horizontal, 15)
+                .padding(.horizontal, 25)
                 .padding(.vertical, 8)
-                .frame(minWidth: 140, maxWidth: maxWidth, alignment: .center)
-#if os(iOS)
-                .background(
-                    Capsule(style: .continuous)
-                        .fill(bg)
-                )
-#endif
+                .frame(minWidth: 150, maxWidth: maxWidth, alignment: .center)
+                .whenHovered { isHovered = $0 }
         }
-#if os(iOS)
-        .buttonStyle(.borderless)
-#else
-        .buttonStyle(.bordered)
-#endif
+        .buttonStyle(UnderlinedButtonStyle(color: hover, isHovered: isHovered))
+        .animation(.spring(), value: isHovered)
+        .opacity(isEnabled ? 1 : 0.35)
+
 #if os(macOS)
         .controlSize(.large)
 #endif
@@ -89,6 +95,6 @@ struct MinorCTAButton: View {
                         .fill(bg)
                 )
         }
-        .buttonStyle(.borderless)
+        .buttonStyle(HoverButtonStyle())
     }
 }

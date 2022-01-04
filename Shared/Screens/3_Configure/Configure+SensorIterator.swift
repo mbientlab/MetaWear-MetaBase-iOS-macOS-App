@@ -66,8 +66,7 @@ extension ConfigureScreen {
                     frequencies: vm.options.fusionRate,
                     option: $vm.config.sensorFusionType,
                     options: vm.options.sensorFusion,
-                    optionsHelp: "Output Type",
-                    alwaysShowOptions: true
+                    optionsHelp: "Output Type"
                 )
             }
         }
