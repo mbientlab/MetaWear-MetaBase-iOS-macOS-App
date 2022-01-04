@@ -31,14 +31,6 @@ public enum ActionType {
         }
     }
 
-    var waitForSemaphore: Bool {
-        switch self {
-            case .stream:       return false
-            case .log:          return true
-            case .downloadLogs: return true
-        }
-    }
-
     init(destination: Routing.Destination) {
         switch destination {
             case .stream: self = .stream

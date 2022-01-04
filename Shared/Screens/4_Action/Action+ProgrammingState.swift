@@ -125,8 +125,8 @@ extension ActionScreen {
                     .lineLimit(1)
 
                 if action.actionType == .stream,
-                   case .working = action.actionState[vm.meta.mac],
-                   action.streamCounters.counts[vm.meta.mac]?.info != "0" {
+                   case let .working(dataPoints) = action.streamCounters.counts[vm.meta.mac],
+                    dataPoints > 0 {
 
                     if #available(iOS 15.0, macOS 12.0, *) {
                         TimelineView(.periodic(from: Date(), by: 2)) { _ in stats }

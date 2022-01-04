@@ -172,13 +172,9 @@ private extension ActionVM {
         workQueue.sync(flags: .barrier) {
             guard self.nextQueueItem == nil else { return }
             setupQueue()
-            moveToNextQueueItem()
         }
         workQueue.async { [weak self] in
-            while let current = self?.nextQueueItem {
-                self?.attemptAction(device: current) // Has optional semaphore
-                self?.moveToNextQueueItem()
-            }
+            self?.moveToNextQueueItem()
         }
     }
 
@@ -197,7 +193,6 @@ private extension ActionVM {
         }
 
         // 3 - Setup recording pipeline
-        let semaphore = DispatchSemaphore(value: 0)
         actions[current.meta.mac] = getActionPublisher(device, current.meta.mac, current.config)
             .receive(on: workQueue)
             .sink { [weak self] completion in
@@ -205,20 +200,19 @@ private extension ActionVM {
                 guard case let .failure(error) = completion else { return }
                 let timedOut = error.localizedDescription.contains("Timeout")
                 self?.fail(fromCurrent: current, timedOut ? .timeout : .error(error.localizedDescription))
-                semaphore.signal()
+                self?.moveToNextQueueItem()
+
             } receiveValue: { [weak self] _ in
                 print("-> ACTION SUCCESS")
                 self?.succeed(fromCurrent: current.meta)
-                semaphore.signal()
+                self?.moveToNextQueueItem()
             }
 
         // 4 - Kickoff through AboutDeviceVM in case design changes later
         if let vm = deviceVMs.first(where: { $0.meta == current.meta }) { vm.connect() }
 
-        // 5 - Wait for programming to complete (until timeout) if needed (not when streaming)
-        if actionType.waitForSemaphore {
-            semaphore.wait()
-            actions[current.meta.mac]?.cancel()
+        if actionType == .stream {
+            moveToNextQueueItem()
         }
     }
 
@@ -266,15 +260,17 @@ private extension ActionVM {
                 self?.actionState[fromCurrent.mac] = .completed
             }
         }
+        actions[fromCurrent.mac]?.cancel()
     }
 
     /// Call on private queue
     func moveToNextQueueItem() {
         self.nextQueueItem = self.actionQueue.popLast()
-        print("-> ", #function, nextQueueItem?.device?.name)
         DispatchQueue.main.async { [weak self] in
             self?.actionFocus = self?.nextQueueItem?.meta.mac ?? ""
         }
+        guard let next = self.nextQueueItem else { return }
+        self.attemptAction(device: next)
     }
 }
 
@@ -287,7 +283,6 @@ private extension ActionVM {
         print("-> ", #function, mac, tables.map(\.rows.count))
         workQueue.async(flags: .barrier) { [weak self] in
             guard let self = self else { return }
-            print("-> ", "ASYNC")
 
             let files = tables.reduce(into: [File]()) { files, table in
                 let data = table.makeCSV().data(using: .utf8) ?? Data()
@@ -329,7 +324,7 @@ private extension ActionVM {
         let session = Session(id: sessionID,
                               date: date,
                               name: name,
-                              group: nil,
+                              group: getGroup(),
                               devices: Set(deviceVMs.map(\.meta.mac)),
                               files: Set(files.map(\.id))
         )
@@ -343,6 +338,11 @@ private extension ActionVM {
                 }
                 print("-> ", "cloud", self?.cloudSaveState)
             } receiveValue: { _ in }
+    }
+
+    func getGroup() -> UUID? {
+        guard case let .group(id) = routing.focus?.item else { return nil }
+        return id
     }
 }
 
@@ -388,7 +388,6 @@ private extension ActionVM {
         device
             .publishWhenConnected()
             .mapToMWError()
-            .print()
             .timeout(Self.timeoutDuration, scheduler: workQueue) { .operationFailed("Timeout") }
             .first()
             .downloadLogs()

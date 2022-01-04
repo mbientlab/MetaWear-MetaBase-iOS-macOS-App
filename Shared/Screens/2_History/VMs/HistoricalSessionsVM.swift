@@ -150,11 +150,14 @@ private extension HistoricalSessionsVM {
     // MARK: - Sessions List
 
     func populateSessions() {
-        _fetchSessions().store(in: &sessionsListUpdates)
+        _fetchSessions()
+            .store(in: &sessionsListUpdates)
+
         sessionRepo.sessionsDidChange
             .sink { [weak self] _ in
                 guard let self = self else { return }
-                self._fetchSessions().store(in: &self.sessionsListUpdates)
+                self._fetchSessions()
+                    .store(in: &self.sessionsListUpdates)
             }
             .store(in: &sessionsListUpdates)
     }
