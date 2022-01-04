@@ -42,7 +42,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     @Published var isExporting = false
     @Published var cloudSaveState: CloudSaveState = .notStarted
     private let sessionID = UUID()
-    private let name: String
+    public let name: String
     private let date: Date
     private var files: [File] = []
     private var devicesExportReady:     Int = 0
