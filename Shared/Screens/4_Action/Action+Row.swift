@@ -14,6 +14,7 @@ extension ActionScreen {
         @Environment(\.namespace) private var namespace
         @ObservedObject var vm: AboutDeviceVM
         var nameWidth: CGFloat
+        @Environment(\.reverseOutColor) private var reverseOut
 
         var body: some View {
             let connectionSpacing = CGFloat(35)
@@ -66,7 +67,7 @@ extension ActionScreen {
 
         private var isActionFocus: Bool { action.actionFocus == vm.meta.mac }
 
-        private var foreground: Color { isActionFocus ? .myBackground : .myPrimary }
+        private var foreground: Color { isActionFocus ? reverseOut : .myPrimary }
     }
 }
 

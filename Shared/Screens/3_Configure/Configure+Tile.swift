@@ -7,6 +7,8 @@ extension ConfigureScreen {
 
     struct Tile<Frequency: Listable, Option: Listable>: View {
 
+        @Environment(\.reverseOutColor) private var reverseOut
+
         // State
         let module: String
         let symbol: SFSymbol
@@ -60,7 +62,7 @@ extension ConfigureScreen {
         }
 
         private var textColor: Color {
-            if isSelected { return .myBackground }
+            if isSelected { return reverseOut }
             else { return isHovered ? .myHighlight : .myPrimary }
         }
 
@@ -71,7 +73,7 @@ extension ConfigureScreen {
                 selected: $frequency,
                 options: frequencies,
                 labelFont: .title3.weight(.semibold),
-                labelColor: .myBackground
+                labelColor: reverseOut
             )
                 .animation(nil)
                 .fixedSize()
@@ -85,7 +87,7 @@ extension ConfigureScreen {
                 selected: $option,
                 options: options,
                 labelFont: .title3.weight(.semibold),
-                labelColor: .myBackground
+                labelColor: reverseOut
             )
                 .animation(nil)
                 .fixedSize()

@@ -130,10 +130,10 @@ private extension ChooseDevicesScreen.NoDevicesFound {
         }
 
         // MARK: - BG
-
+        @Environment(\.reverseOutColor) private var reverseOut
         private var hueGradient: some View {
             Circle()
-                .fill(Color.myBackground)
+                .fill(reverseOut)
                 .hueRotation(.degrees(-5))
                 .blur(radius: 100)
                 .offset(y: geo.size.height / 4)
