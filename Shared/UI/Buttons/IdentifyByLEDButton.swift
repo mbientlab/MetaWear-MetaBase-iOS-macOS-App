@@ -9,10 +9,11 @@ struct IdentifyByLEDButton: View {
     var flashScale: CGFloat = 1.3
     var request: () -> Void
     @ObservedObject var emulator: MWLED.Flash.Pattern.Emulator
+    @Environment(\.reverseOutColor) private var reverseOut
 
     @State private var isHovering = false
     private var foregroundColor: Color {
-        if emulator.ledIsOn { return .myBackground }
+        if emulator.ledIsOn { return reverseOut }
         return isHovering ? .myHighlight : .myPrimary
     }
 
@@ -41,6 +42,7 @@ struct IdentifyByLEDLargeButton: View {
     var request: () -> Void
     var isRequesting: Bool
     @ObservedObject var emulator: MWLED.Flash.Pattern.Emulator
+    @Environment(\.reverseOutColor) private var reverseOut
 
     var body: some View {
         Button { request() } label: {
@@ -61,7 +63,7 @@ struct IdentifyByLEDLargeButton: View {
     var requestingState: some View {
         SFSymbol.led.image()
             .font(.headline)
-            .foregroundColor(.myBackground)
+            .foregroundColor(reverseOut)
             .padding(4)
             .frame(maxWidth: .infinity)
             .background(flashingBackground)
