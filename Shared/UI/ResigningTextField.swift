@@ -6,17 +6,17 @@ import AppKit
 import mbientSwiftUI
 import Combine
 
-struct ResigningTextField: View {
+public struct ResigningTextField: View {
 
-    var placeholderText: String
-    var initialText: String
+    public var placeholderText: String
+    public var initialText: String
 
-    var config: TextFieldConfig
-    var onCommit: (String) -> Void
+    public var config: TextFieldConfig
+    public var onCommit: (String) -> Void
 
     @State private var text = ""
 
-    var body: some View {
+    public var body: some View {
 #if os(macOS)
         macTextField
 #elseif os(iOS)
@@ -43,32 +43,43 @@ struct ResigningTextField: View {
     }
 }
 
-struct TextFieldConfig {
-    var textColor: Color = .primary
-    var font: Font
-    let size: CGFloat
-    var weight: NSFont.Weight = .medium
-    var design: NSFontDescriptor.SystemDesign = .rounded
-    var lineBreakMode: NSLineBreakMode = .byTruncatingMiddle
-    var alignment: NSTextAlignment = .left
+public struct TextFieldConfig {
+    
+    public var textColor: Color = .primary
+    public var font: Font
+    public let size: CGFloat
+    public var weight: NSFont.Weight = .medium
+    public var design: NSFontDescriptor.SystemDesign = .rounded
+    public var lineBreakMode: NSLineBreakMode = .byTruncatingMiddle
+    public var alignment: NSTextAlignment = .left
 
-    static func largeDeviceStyle() -> Self {
+    public static func largeDeviceStyle() -> Self {
         self.init(font: .system(.title), size: 22)
+    }
+
+    public init(textColor: Color = .primary, font: Font, size: CGFloat, weight: NSFont.Weight = .medium, design: NSFontDescriptor.SystemDesign = .rounded, lineBreakMode: NSLineBreakMode = .byTruncatingMiddle, alignment: NSTextAlignment = .left) {
+        self.textColor = textColor
+        self.font = font
+        self.size = size
+        self.weight = weight
+        self.design = design
+        self.lineBreakMode = lineBreakMode
+        self.alignment = alignment
     }
 }
 
 // MARK: - Components
 
-struct SingleLineTextField: NSViewControllerRepresentable {
+public struct SingleLineTextField: NSViewControllerRepresentable {
 
-    var initialText: String
-    var placeholderText: String
-    var config: TextFieldConfig
+    public var initialText: String
+    public var placeholderText: String
+    public var config: TextFieldConfig
 
-    let onCommit: ((String) -> Void)
-    let onCancel: (() -> Void)
+    public let onCommit: ((String) -> Void)
+    public let onCancel: (() -> Void)
 
-    func makeNSViewController(context: Context) -> SingleLineTextFieldVC {
+    public func makeNSViewController(context: Context) -> SingleLineTextFieldVC {
         let vc = SingleLineTextFieldVC(
             initialText: initialText,
             placeholder: placeholderText,
@@ -83,7 +94,7 @@ struct SingleLineTextField: NSViewControllerRepresentable {
         return vc
     }
 
-    func updateNSViewController(_ vc: SingleLineTextFieldVC,
+    public func updateNSViewController(_ vc: SingleLineTextFieldVC,
                                 context: Context) {
         vc.field.string = initialText
         vc.field.textColor = NSColor(config.textColor)
@@ -101,7 +112,7 @@ struct SingleLineTextField: NSViewControllerRepresentable {
     }
 }
 
-final class SingleLineTextFieldVC: NSViewController {
+public final class SingleLineTextFieldVC: NSViewController {
 
     var initialText: String
     var onCommit: ((String) -> Void)? = nil
@@ -125,24 +136,24 @@ final class SingleLineTextFieldVC: NSViewController {
         field.setPlaceholder(placeholder, self.font, alignment)
     }
 
-    override func resignFirstResponder() -> Bool {
+    public override func resignFirstResponder() -> Bool {
         onCommit?(field.string)
         return super.resignFirstResponder()
     }
 
-    override func removeFromParent() {
+    public override func removeFromParent() {
         onCommit?(field.string)
         field.trackingAreas.forEach { [weak self] in self?.field.removeTrackingArea($0) }
         super.removeFromParent()
     }
 
-    override func loadView() {
+    public override func loadView() {
         view = field
         field.frame = view.frame
         configureTextField()
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         resignFirstResponderOnClickMonitor()
     }
@@ -200,13 +211,13 @@ final class SingleLineTextFieldVC: NSViewController {
 
 extension SingleLineTextFieldVC: NSTextViewDelegate {
 
-    override func cancelOperation(_ sender: Any?) {
+    public override func cancelOperation(_ sender: Any?) {
         onCommit?(field.string)
         onCancel?()
         view.window?.makeFirstResponder(nil)
     }
 
-    func textView(_ view: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+    public func textView(_ view: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
         if commandSelector == #selector(NSResponder.insertNewline(_:)) {
             onCommit?(view.string)
             view.window?.makeFirstResponder(nil)

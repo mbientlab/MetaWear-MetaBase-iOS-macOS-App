@@ -4,7 +4,6 @@ import mbientSwiftUI
 import Combine
 import MetaWear
 import MetaWearSync
-import SwiftUI
 
 extension ActionScreen {
 

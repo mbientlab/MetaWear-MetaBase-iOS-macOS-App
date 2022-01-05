@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-extension View {
+public extension View {
     func scrollAtAccessibilitySize(
         threshold: ContentSizeCategory? = nil,
         axis: Axis.Set = .vertical

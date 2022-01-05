@@ -1,7 +1,7 @@
 // Copyright 2022 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import Foundation
-import SwiftUI
+import mbientSwiftUI
 import Combine
 
 public class ImportSessionsVM: ObservableObject {
@@ -12,7 +12,7 @@ public class ImportSessionsVM: ObservableObject {
     @Published public private(set) var sessionsImported = 0
 
     public var sessionsImportedLabel: String {
-//        guard sessionsImported > 0 else { return "" }
+        guard sessionsImported > 0 else { return "" }
         return "Imported \(sessionsImported) sessions"
     }
     public var presentError: Binding<Bool> {

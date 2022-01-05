@@ -2,10 +2,11 @@
 
 import SwiftUI
 
-struct ProgressSpinnerCircleOutline: View {
+public struct ProgressSpinnerCircleOutline: View {
+    public init() { }
     @State private var animate = false
 
-    var body: some View {
+    public var body: some View {
         Circle()
             .trim(from: 0, to: 0.8)
             .stroke(lineWidth: 3)

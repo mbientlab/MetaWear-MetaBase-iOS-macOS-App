@@ -1,6 +1,6 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import mbientSwiftUI
+import SwiftUI
 
 public struct CrossPlatformStylizedMenu<L: Listable>: View {
 
