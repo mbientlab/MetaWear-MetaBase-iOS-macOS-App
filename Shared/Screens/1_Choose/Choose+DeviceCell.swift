@@ -4,6 +4,7 @@ import mbientSwiftUI
 import MetaWear
 import CoreBluetooth
 import MetaWearSync
+import SwiftUI
 
 extension ChooseDevicesScreen {
 
@@ -69,6 +70,7 @@ extension ChooseDevicesScreen.DeviceCell {
     ///
     struct MobileComponents: View {
 
+        @Environment(\.colorScheme) private var colorScheme
         @Environment(\.isDropTarget) private var isDropping
         @Environment(\.isHovered) private var isHovering
         @Environment(\.connectionState) private var connection
@@ -93,7 +95,7 @@ extension ChooseDevicesScreen.DeviceCell {
                 .font(.system(.title, design: .rounded))
                 .offset(y: isHovering ? -.verticalHoverDelta : 0)
                 .offset(y: isDropping ? -.verticalHoverDelta * 2 : 0)
-                .foregroundColor(.myPrimary)
+                .foregroundColor(colorScheme == .light ? .myPrimary.opacity(0.7) : .myPrimary)
 
             MetaWearImages(isGroup: isGroup, models: models, ledEmulator: ledEmulator)
                 .overlay(cta)
@@ -151,21 +153,13 @@ extension ChooseDevicesScreen.DeviceCell {
         let requestIdentify: () -> Void
         var allowIdentification: Bool
 
+        @State private var isHovered = false
         var body: some View {
-            Button { requestIdentify() } label: { label }
-            .buttonStyle(HoverButtonStyle())
-            .foregroundColor(.myPrimary)
+            CTAButton("Identify", style: .minor, action: requestIdentify)
+            .help(Text(identifyHelpText))
             .allowsHitTesting(allowIdentification)
             .disabled(allowIdentification == false)
             .opacity(allowIdentification ? 1 : 0)
-        }
-
-        private var label: some View {
-            Text("Identify")
-                .font(.headline)
-                .lineLimit(1)
-                .fixedSize()
-                .help(Text(identifyHelpText))
         }
     }
 

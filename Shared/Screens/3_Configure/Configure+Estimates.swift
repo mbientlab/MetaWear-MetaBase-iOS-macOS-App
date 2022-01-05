@@ -11,15 +11,13 @@ extension ConfigureScreen {
         var body: some View {
             HStack(alignment: .center, spacing: .screenInset) {
 
-                Spacer()
+                batteryLife
+
                 if vm.shouldStream {
-                    batteryLife
                     streamRate
                 } else {
                     logFillDuration
-                    batteryLife
                 }
-                Spacer()
             }
             .animation(.easeOut, value: vm.shouldStream)
             .animation(.easeOut, value: vm.config.totalFreq.rateHz)
@@ -38,25 +36,29 @@ extension ConfigureScreen {
                     .font(.headline)
                     .foregroundColor(vm.config.exceedsStreamableLimit ? .myFailure : .mySecondary)
             }
-            .frame(maxWidth: .infinity, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
 
         private var logFillDuration: some View {
             HStack {
                 SFSymbol.logs.image()
                 Text(vm.logLifetime)
+                    .lineLimit(1)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .help("Estimated time to fill onboard memory (assuming empty start)")
-            .frame(maxWidth: .infinity, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
 
         private var batteryLife: some View {
             HStack {
                 SFSymbol.battery.image()
                 Text(vm.batteryLifetime)
+                    .lineLimit(1)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .help("Estimated battery life (assuming full charge and no Bluetooth)")
-            .frame(maxWidth: .infinity, alignment: .center)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }

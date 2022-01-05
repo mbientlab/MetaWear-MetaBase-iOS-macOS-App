@@ -5,7 +5,8 @@ import mbientSwiftUI
 
 public extension CGFloat {
 
-    static let screenInset = CGFloat(30)
+    static let screenInset = CGFloat(55)
     static let deviceCellWidth = CGFloat(120)
     static let verticalHoverDelta = CGFloat(12)
+    static let headerMinHeight = CGFloat(110)
 }

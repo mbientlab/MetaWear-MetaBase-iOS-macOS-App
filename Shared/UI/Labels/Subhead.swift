@@ -21,8 +21,8 @@ struct Subhead<T: View>: View {
         VStack(alignment: .leading) {
             HStack {
                 Text(label)
-                    .font(.title2)
-                    .foregroundColor(.myPrimary)
+                    .font(.title2.weight(.semibold))
+                    .foregroundColor(.mySecondary)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(1)
                     .padding(.horizontal, 4)
@@ -30,11 +30,11 @@ struct Subhead<T: View>: View {
                 Spacer()
                 
                 trailing()
+                    .foregroundColor(.mySecondary)
             }
-
-            Divider()
-                .padding(.top, 4)
-                .padding(.bottom, 8)
         }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(RoundedRectangle(cornerRadius: 5).fill(Color.myGroupBackground2))
     }
 }

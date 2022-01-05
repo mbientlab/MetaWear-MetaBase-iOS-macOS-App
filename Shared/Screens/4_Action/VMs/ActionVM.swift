@@ -5,20 +5,6 @@ import Combine
 import MetaWear
 import MetaWearSync
 
-public enum CloudSaveState: Equatable {
-    case notStarted
-    case saving
-    case saved
-    case error(Error)
-
-    public static func == (lhs: CloudSaveState, rhs: CloudSaveState) -> Bool {
-        switch (lhs, rhs) {
-            case (.error, .error), (.saving, .saving), (.saved, .saved), (.notStarted, .notStarted): return true
-            default: return false
-        }
-    }
-}
-
 public class ActionVM: ObservableObject, ActionHeaderVM {
     public typealias QueueItem = (device: MetaWear?,
                                   meta: MetaWear.Metadata,
@@ -395,7 +381,7 @@ private extension ActionVM {
             .first()
             .downloadLogs()
             .receive(on: workQueue)
-            .handleEvents(receiveOutput: { [weak self] download in\
+            .handleEvents(receiveOutput: { [weak self] download in
                 DispatchQueue.main.async { [weak self] in
                     let percent = Int(download.percentComplete * 100)
                     self?.actionState[mac] = .working(percent)

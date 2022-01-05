@@ -4,6 +4,7 @@ import Combine
 import mbientSwiftUI
 import MetaWear
 import MetaWearSync
+import SwiftUI
 
 struct HistoryScreen: View {
 
@@ -19,13 +20,13 @@ struct HistoryScreen: View {
             Header(vm: vm)
                 .keyboardShortcut(.cancelAction)
 
-            HStack(alignment: .firstTextBaseline, spacing: .screenInset * 2) {
+            HStack(alignment: .firstTextBaseline, spacing: .screenInset * 1.25) {
                 AboutColumn()
                     .frame(minWidth: 230)
 
                 VStack {
                     SessionsList(factory)
-                    ctas.padding(.top, 10)
+                    ctas.padding(.top, .screenInset / 2)
                 }
                 .padding(.bottom, .screenInset)
                 .layoutPriority(2)
@@ -39,18 +40,26 @@ struct HistoryScreen: View {
         .onDisappear(perform: vm.onDisappear)
     }
 
-    var ctas: some View {
-        HStack(spacing: 15) {
+    @Environment(\.colorScheme) var colorScheme
+    private var ctas: some View {
+        HStack(spacing: 35) {
             Spacer()
 
             Text(vm.alert)
-                .font(.headline.weight(.semibold))
+                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(2)
+                .font(.title2.weight(.medium))
+                .foregroundColor(.myHighlight)
+                .brightness(colorScheme == .light ? -0.08 : 0)
                 .opacity(vm.showSessionStartAlert ? 1 : 0)
+                .offset(x: vm.showSessionStartAlert ? 0 : 9)
                 .animation(.easeIn, value: vm.showSessionStartAlert)
                 .accessibilityHidden(vm.showSessionStartAlert == false)
 
             CTAButton(vm.cta.label, .add , action: vm.performCTA)
                 .keyboardShortcut(.defaultAction)
+                .disabled(!vm.enableCTA)
+                .allowsHitTesting(vm.enableCTA)
         }
         .frame(maxWidth: .infinity, alignment: .trailing)
     }

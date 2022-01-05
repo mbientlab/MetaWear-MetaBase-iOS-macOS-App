@@ -11,70 +11,30 @@ public protocol HeaderVM {
 struct Header: View {
 
     let vm: HeaderVM
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
-        HStack(spacing: 15) {
-            backButton
+        HStack(alignment: .top, spacing: 15) {
 
-            HStack {
-                icons
-                title
-            }
-//            .offset(x: titleIconXOffset)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            if vm.showBackButton { HeaderBackButton() }
+            else { HeaderBackButton().hidden().disabled(true).allowsHitTesting(false) }
 
+            Text(vm.title)
+                .font(.largeTitle)
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
+                .foregroundColor(colorScheme == .light ? .myPrimary.opacity(0.7) : nil)
+
+            Spacer()
+
+            Icons(vm: vm)
+                .padding(.trailing, .screenInset)
+                .offset(y: -.headerMinHeight / 5)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.top, 10)
+        .frame(maxWidth: .infinity, minHeight: .headerMinHeight, alignment: .topLeading)
+        .backgroundToEdges(.myBackground)
         .padding(.bottom, .screenInset)
-    }
-
-    private var titleIconXOffset: CGFloat {
-        Self.deviceIconMaxSize * -CGFloat(vm.deviceCount) - (Self.deviceIconMaxSize / 2)
-    }
-    @State private var iconsDidAppear = false
-    private static let deviceIconMaxSize = CGFloat(30)
-    @ViewBuilder private var icons: some View {
-        if vm.deviceCount > 0 {
-            deviceImage
-                .rotationEffect(.degrees(-3))
-                .frame(width: Self.deviceIconMaxSize)
-                .background(secondDevice.offset(x: iconsDidAppear ? Self.deviceIconMaxSize / 3.3 : 0), alignment: .topTrailing)
-                .background(thirdDevice.offset(x: iconsDidAppear ? Self.deviceIconMaxSize / 2 : 0), alignment: .topTrailing)
-                .animation(.easeOut, value: iconsDidAppear)
-                .onAppear { DispatchQueue.main.after(0.5) { iconsDidAppear.toggle() } }
-                .padding(.trailing, 12 * CGFloat(vm.deviceCount))
-        }
-    }
-
-    @ViewBuilder private var secondDevice: some View {
-        if vm.deviceCount > 1 {
-            deviceImage.frame(width: Self.deviceIconMaxSize * 0.95)
-                .rotationEffect(iconsDidAppear ? .degrees(-12) : .degrees(0), anchor: .top)
-        }
-    }
-
-    @ViewBuilder private var thirdDevice: some View {
-        if vm.deviceCount > 2 {
-            deviceImage.frame(width: Self.deviceIconMaxSize * 0.85)
-                .rotationEffect(iconsDidAppear ? .degrees(-18) : .degrees(0), anchor: .top)
-        }
-    }
-
-    private var deviceImage: some View {
-        SharedImages.metawearTop.image()
-            .resizable()
-            .scaledToFit()
-    }
-
-    private var title: some View {
-        Text(vm.title)
-            .font(.largeTitle)
-            .lineLimit(nil)
-            .fixedSize(horizontal: false, vertical: true)
-    }
-
-    @ViewBuilder private var backButton: some View {
-        if vm.showBackButton { HeaderBackButton() } else { HeaderBackButton().hidden().disabled(true).allowsHitTesting(false) }
     }
 }
 
@@ -82,8 +42,10 @@ struct HeaderBackButton: View {
 
     @Environment(\.presentationMode) private var nav
     @EnvironmentObject private var routing: Routing
+    @Environment(\.reverseOutColor) private var reverseOut
+    @Environment(\.colorScheme) private var colorScheme
 
-    @State private var backIsHovered = false
+    @State private var isHovered = false
 
     var overrideBackAction: (() -> Void)? = nil
 
@@ -100,21 +62,80 @@ struct HeaderBackButton: View {
             #endif
 
         } label: {
-            ZStack {
-                CorneredRect(rounding: [.topRight, .bottomRight], by: 10)
-                    .fill(Color.myHighlight.opacity(backIsHovered ? 1 : 0))
+            SFSymbol.back.image()
+                .font(.title2)
+                .foregroundColor(isHovered ? .myHighlight : restingBackArrowColor)
+                .offset(x: isHovered ? -5 : 0)
+                .padding(.vertical, 9)
+                .padding(.horizontal, 12)
+                .contentShape(Rectangle())
+                .frame(minWidth: 65, maxWidth: nil, alignment: .center)
+        }
+        .buttonStyle(UnderlinedButtonStyle(color: .myHighlight,
+                                           isHovered: isHovered,
+                                           incognitoUnderline: true))
+        .brightness(colorScheme == .light && isHovered ? -0.08 : 0)
+        .whenHovered { isHovered = $0 }
+        .animation(.spring(), value: isHovered)
+        .padding(.leading, 10)
 
-                SFSymbol.back.image()
-                    .font(.title2)
-                    .foregroundColor(backIsHovered ? .myBackground : .myPrimary.opacity(0.4))
-                    .padding(.vertical, 9)
-                    .padding(.trailing, 12)
-                    .padding(.leading, .screenInset / 2)
+#if os(macOS)
+        .controlSize(.large)
+#endif
+    }
+
+    var restingBackArrowColor: Color {
+        colorScheme == .light ? .mySecondary : .myTertiary
+    }
+}
+
+extension Header {
+
+    struct Icons: View {
+
+        let vm: HeaderVM
+        @State private var iconsDidAppear = false
+        private static let deviceIconMaxSize = CGFloat(70)
+
+        var body: some View {
+            if vm.deviceCount > 0 {
+                deviceImage
+                    .rotationEffect(.degrees(-3))
+                    .frame(width: Self.deviceIconMaxSize)
+                    .background(secondDevice.offset(x: secondDeviceXOffset), alignment: .topTrailing)
+                    .background(thirdDevice.offset(x: thirdDeviceXOffset), alignment: .topTrailing)
+                    .animation(.easeOut, value: iconsDidAppear)
+                    .onAppear { DispatchQueue.main.after(0.35) { iconsDidAppear.toggle() } }
+                    .padding(.trailing, 12 * CGFloat(vm.deviceCount))
             }
         }
-        .buttonStyle(DepressButtonStyle(anchor: .leading))
-        .fixedSize()
-        .whenHovered { backIsHovered = $0 }
-        .animation(.easeOut, value: backIsHovered)
+
+        @ViewBuilder private var secondDevice: some View {
+            if vm.deviceCount > 1 {
+                deviceImage.frame(width: Self.deviceIconMaxSize * 0.95)
+                    .rotationEffect(iconsDidAppear ? .degrees(-12) : .degrees(0), anchor: .top)
+            }
+        }
+
+        @ViewBuilder private var thirdDevice: some View {
+            if vm.deviceCount > 2 {
+                deviceImage.frame(width: Self.deviceIconMaxSize * 0.85)
+                    .rotationEffect(iconsDidAppear ? .degrees(-18) : .degrees(0), anchor: .top)
+            }
+        }
+
+        private var deviceImage: some View {
+            SharedImages.metawearTop.image()
+                .resizable()
+                .scaledToFit()
+        }
+
+        private var secondDeviceXOffset: CGFloat {
+            iconsDidAppear ? Self.deviceIconMaxSize / 3.3 : 0
+        }
+
+        private var thirdDeviceXOffset: CGFloat {
+            iconsDidAppear ? Self.deviceIconMaxSize / 2 : 0
+        }
     }
 }

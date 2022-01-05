@@ -8,13 +8,14 @@ struct OutcomeIndicator: View {
 
     var outcome: String
     var show: Bool
+    @Environment(\.reverseOutColor) private var reverseOut
 
     var body: some View {
         Text(outcome)
             .lineLimit(0)
             .fixedSize()
             .font(.title.weight(.semibold))
-            .foregroundColor(.myBackground)
+            .foregroundColor(reverseOut)
             .animation(nil, value: outcome)
 
             .padding(.vertical, 5)

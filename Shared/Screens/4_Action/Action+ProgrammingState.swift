@@ -12,6 +12,7 @@ extension ActionScreen {
         @EnvironmentObject private var action: ActionVM
         @ObservedObject var vm: AboutDeviceVM
         var invertTextColor: Bool
+        @Environment(\.reverseOutColor) private var reverseOut
 
         var body: some View {
             ZStack {
@@ -29,14 +30,14 @@ extension ActionScreen {
         private var notStartedIndicator: some View {
             Circle()
                 .strokeBorder(lineWidth: 2)
-                .foregroundColor(invertTextColor ? .myBackground.opacity(0.5) : .myTertiary)
+                .foregroundColor(invertTextColor ? reverseOut.opacity(0.5) : .myTertiary)
         }
 
         private var workingIndicator: some View {
             ProgressView()
                 .progressViewStyle(.circular)
                 .scaledToFit()
-                .colorMultiply(invertTextColor ? .myBackground : .myPrimary)
+                .colorMultiply(invertTextColor ? reverseOut : .myPrimary)
             #if os(macOS)
                 .controlSize(.small)
             #endif
@@ -47,12 +48,12 @@ extension ActionScreen {
                 .resizable()
                 .scaledToFit()
                 .font(.title.weight(.semibold))
-                .foregroundColor(invertTextColor ? .myBackground : .mySuccess)
+                .foregroundColor(invertTextColor ? reverseOut : .mySuccess)
         }
 
         @ViewBuilder private var failureIndicator: some View {
             if case let .error(message) = action.actionState[vm.meta.mac]! {
-                WarningPopover(message: message, color: invertTextColor ? .myBackground : .myFailure)
+                WarningPopover(message: message, color: invertTextColor ? reverseOut : .myFailure)
                     .font(.title.weight(.semibold))
             }
         }
@@ -63,6 +64,7 @@ extension ActionScreen {
         @EnvironmentObject private var action: ActionVM
         @ObservedObject var vm: AboutDeviceVM
         var invertTextColor: Bool
+        @Environment(\.reverseOutColor) private var reverseOut
 
         var body: some View {
             ZStack {
@@ -84,7 +86,7 @@ extension ActionScreen {
                 .fixedSize(horizontal: false, vertical: true)
                 .lineLimit(1)
                 .padding(.vertical, 5)
-                .foregroundColor(invertTextColor ? .myBackground : .mySuccess)
+                .foregroundColor(invertTextColor ? reverseOut : .mySuccess)
         }
 
         private var failureIndicator: some View {
@@ -96,7 +98,7 @@ extension ActionScreen {
                 refresh
             }
                 .padding(.vertical, 3)
-                .foregroundColor(invertTextColor ? .myBackground : .myFailure)
+                .foregroundColor(invertTextColor ? reverseOut : .myFailure)
         }
 
         private var timeoutIndicator: some View {
@@ -108,7 +110,7 @@ extension ActionScreen {
                 refresh
             }
                 .padding(.vertical, 3)
-                .foregroundColor(invertTextColor ? .myBackground : .myHighlight)
+                .foregroundColor(invertTextColor ? reverseOut : .myHighlight)
         }
 
         private var refresh: some View {
@@ -149,7 +151,7 @@ extension ActionScreen {
                 } else { return "" }
             }()
             return Text(streamDatapointCount)
-                .foregroundColor(invertTextColor ? .myBackground.opacity(0.7) : .mySecondary)
+                .foregroundColor(invertTextColor ? reverseOut.opacity(0.7) : .mySecondary)
                 .font(.subheadline)
         }
 
@@ -163,7 +165,7 @@ extension ActionScreen {
                     label: { },
                     currentValueLabel: { }
                 )
-                    .progressViewStyle(LinearProgressViewStyle(tint: .myBackground))
+                    .progressViewStyle(LinearProgressViewStyle(tint: reverseOut))
                     .accessibilityValue(Text(label))
                     .help(label)
                     .frame(width: 100)

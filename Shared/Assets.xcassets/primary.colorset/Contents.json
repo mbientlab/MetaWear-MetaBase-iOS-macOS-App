@@ -2,8 +2,13 @@
   "colors" : [
     {
       "color" : {
-        "platform" : "universal",
-        "reference" : "labelColor"
+        "color-space" : "display-p3",
+        "components" : {
+          "alpha" : "0.923",
+          "blue" : "0.000",
+          "green" : "0.000",
+          "red" : "0.000"
+        }
       },
       "idiom" : "universal"
     },

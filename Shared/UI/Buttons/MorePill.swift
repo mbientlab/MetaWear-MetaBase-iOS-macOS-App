@@ -6,6 +6,7 @@ struct MorePill: View {
 
     var action: () -> Void
     @State private var isHovered = false
+    @Environment(\.reverseOutColor) private var reverseOut
 
     var body: some View {
         Button(action: action) {
@@ -21,7 +22,7 @@ struct MorePill: View {
                 HStack(spacing: circleSize / 3 * 2) {
                     ForEach(0..<3) { _ in
                         Circle().frame(width: circleSize, height: circleSize)
-                            .foregroundColor(isHovered ? .myBackground : .myTertiary.opacity(0.5))
+                            .foregroundColor(isHovered ? reverseOut : .myTertiary.opacity(0.5))
                     }
                 }
             }

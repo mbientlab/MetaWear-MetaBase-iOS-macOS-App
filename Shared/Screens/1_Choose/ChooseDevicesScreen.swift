@@ -26,6 +26,7 @@ struct ChooseDevicesScreen: View {
         .animation(.easeOut, value: vm.listIsEmpty)
         .animation(.easeOut, value: shouldShowList)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .backgroundToEdges(.myBackground)
         .onAppear(perform: vm.didAppear)
         .onDisappear(perform: vm.didDisappear)
         .environmentObject(vm)
