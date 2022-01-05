@@ -4,7 +4,6 @@ import mbientSwiftUI
 import MetaWear
 import CoreBluetooth
 import MetaWearSync
-import SwiftUI
 
 extension ChooseDevicesScreen {
 

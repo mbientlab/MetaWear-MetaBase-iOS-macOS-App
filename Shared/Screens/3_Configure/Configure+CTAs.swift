@@ -2,7 +2,6 @@
 
 import mbientSwiftUI
 import MetaWear
-import SwiftUI
 
 extension ConfigureScreen {
 

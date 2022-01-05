@@ -4,7 +4,6 @@ import Combine
 import mbientSwiftUI
 import MetaWear
 import MetaWearSync
-import SwiftUI
 
 struct HistoryScreen: View {
 
