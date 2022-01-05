@@ -419,7 +419,6 @@
 			children = (
 				9409C5D52762A367001FE850 /* ActionVM.swift */,
 				9409C5D82762D7DA001FE850 /* ActionState.swift */,
-				9409C5E72763B764001FE850 /* ActionType.swift */,
 				9473B7B42770FAC4006F4994 /* KnownDevice+.swift */,
 				944538BC2767DCE000841880 /* StreamingCountersContainer.swift */,
 			);
@@ -442,6 +441,7 @@
 		941A08FF276FB789006D52E3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9409C5E72763B764001FE850 /* ActionType.swift */,
 				94AEA07E27854E2200C8BE23 /* CloudSaveState.swift */,
 				940E01A72780D85F002AD641 /* Formatters.swift */,
 				9409C5C827617F35001FE850 /* LegalSensorParameters.swift */,
