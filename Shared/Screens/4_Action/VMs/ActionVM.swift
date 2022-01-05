@@ -5,6 +5,10 @@ import Combine
 import MetaWear
 import MetaWearSync
 
+/// Performs an action (e.g., stream, log, download logs) for an arbitrary number of devices in a sequential queue.
+///
+/// Archives data obtained as CSVs grouped in one "session" event, linked to a device grouping ID and individual device MAC addresses. Optionally exports CSVs immediately.
+///
 public class ActionVM: ObservableObject, ActionHeaderVM {
     public typealias QueueItem = (device: MetaWear?,
                                   meta: MetaWear.Metadata,
@@ -41,9 +45,10 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     private var actionFails:            [QueueItem] = []
     private var actions:                [MACAddress:AnyCancellable] = [:]
     private let configs:                [ModulesConfiguration]
-    private let streamCancel            = PassthroughSubject<Void,Never>()
-    private unowned let workQueue:      DispatchQueue
+    internal let streamCancel            = PassthroughSubject<Void,Never>()
     private var bleQueue:               DispatchQueue { store.bleQueue }
+    internal unowned let workQueue:      DispatchQueue
+    internal let timeoutDuration = DispatchQueue.SchedulerTimeType.Stride(30)
 
     // References
     private let devices:                [MWKnownDevice]
@@ -174,8 +179,6 @@ private extension ActionVM {
         }
     }
 
-    static let timeoutDuration = DispatchQueue.SchedulerTimeType.Stride(30)
-
     func attemptAction(device current: QueueItem) {
         // 1 - Update UI state
         DispatchQueue.main.sync { [weak self] in
@@ -189,7 +192,7 @@ private extension ActionVM {
         }
 
         // 3 - Setup recording pipeline
-        actions[current.meta.mac] = getActionPublisher(device, current.meta.mac, current.config)
+        actions[current.meta.mac] = actionType.getActionPublisher(device, current.meta.mac, current.config, self)
             .receive(on: workQueue)
             .sink { [weak self] completion in
                 guard case let .failure(error) = completion else { return }
@@ -268,7 +271,27 @@ private extension ActionVM {
 
 // MARK: - Save data from Stream or Download actions
 
-private extension ActionVM {
+
+extension ActionVM: ActionController {
+
+    func updateActionState(mac: MACAddress, state: ActionState) {
+        DispatchQueue.main.async { [weak self] in
+            self?.actionState[mac] = state
+        }
+    }
+
+    func registerLoggingToken() {
+        let token = Session.LoggingToken(
+            id: routing.focus!.item,
+            date: date,
+            name: name
+        )
+        logging.register(token: token)
+    }
+
+    func removeLoggingToken() {
+        logging.remove(token: self.routing.focus!.item)
+    }
 
     /// Call after downloading or completing streaming for one device
     func saveData(tables: [MWDataTable], for mac: MACAddress) {
@@ -290,9 +313,12 @@ private extension ActionVM {
             self.updateDevicesExportReadyState()
         }
     }
+}
+
+internal extension ActionVM {
 
     /// Call on background queue to trigger, when all devices' data are ready, a database write + option for user to immediately export
-    func updateDevicesExportReadyState() {
+    private func updateDevicesExportReadyState() {
         devicesExportReady += 1
         guard devicesExportReady == devices.endIndex, files.isEmpty == false else { return }
         self.saveSessionToAppDatabase()
@@ -305,7 +331,7 @@ private extension ActionVM {
         }
     }
 
-    func saveSessionToAppDatabase() {
+    private func saveSessionToAppDatabase() {
         guard files.isEmpty == false else { return }
         DispatchQueue.main.async { [weak self] in
             self?.cloudSaveState = .saving
@@ -329,160 +355,8 @@ private extension ActionVM {
             } receiveValue: { _ in }
     }
 
-    func getGroup() -> UUID? {
+    private func getGroup() -> UUID? {
         guard case let .group(id) = routing.focus?.item else { return nil }
         return id
-    }
-}
-
-// MARK: - Specific actions
-
-private extension ActionVM {
-
-    /// A Publisher that emits a value (void) only once when complete, but includes a Timeout operator.
-    func getActionPublisher(_ device: MetaWear, _ mac: MACAddress, _ config: ModulesConfiguration) -> MWPublisher<Void> {
-        switch actionType {
-            case .downloadLogs: return downloadLogs(for: device, mac)
-            case .log: return recordMacro(for: device, config)
-            case .stream: return stream(for: device, mac: mac, config: config)
-        }
-    }
-
-    // MARK: - Log Action
-
-    /// Record the macro and update UI state upon completion
-    func recordMacro(for device: MetaWear, _ config: ModulesConfiguration) -> MWPublisher<Void> {
-        device
-            .publishWhenConnected()
-            .first()
-            .mapToMWError() //
-            .macro(config)
-            .timeout(Self.timeoutDuration, scheduler: workQueue) { .operationFailed("Timeout") }
-            .map { _ in () }
-            .handleEvents(receiveOutput: { [weak self] _ in
-                guard let self = self else { return }
-                let token = Session.LoggingToken(
-                    id: self.routing.focus!.item,
-                    date: self.date,
-                    name: self.name
-                )
-                self.logging.register(token: token)
-            })
-            .eraseToAnyPublisher()
-    }
-
-    // MARK: - Download Action
-
-    func downloadLogs(for device: MetaWear, _ mac: MACAddress) -> MWPublisher<Void> {
-        device
-            .publishWhenConnected()
-            .mapToMWError()
-            .timeout(Self.timeoutDuration, scheduler: workQueue) { .operationFailed("Timeout") }
-            .first()
-            .downloadLogs()
-            .receive(on: workQueue)
-            .handleEvents(receiveOutput: { [weak self] download in
-                DispatchQueue.main.async { [weak self] in
-                    let percent = Int(download.percentComplete * 100)
-                    self?.actionState[mac] = .working(percent)
-                }
-            })
-            .drop(while: { $0.percentComplete < 1 })
-            .handleEvents(receiveOutput: { [weak self] download in
-                self?.saveData(tables: download.data, for: mac)
-            })
-            .map { _ in () }
-            .handleEvents(receiveOutput: { [weak self] _ in
-                guard let self = self else { return }
-                self.logging.remove(token: self.routing.focus!.item)
-            })
-            .eraseToAnyPublisher()
-    }
-
-    // MARK: - Stream Action
-
-    typealias StreamSetup = (didConnect: MWPublisher<MetaWear>, mac: MACAddress)
-
-    /// Stream all needed sensors on one device. Times out only when unable to connect.
-    func stream(for device: MetaWear,
-                mac: MACAddress,
-                config: ModulesConfiguration) -> MWPublisher<Void> {
-
-        var streams = [MWPublisher<MWDataTable>]()
-
-        let didConnect = device
-            .publishWhenConnected()
-            .mapToMWError()
-            .timeout(Self.timeoutDuration, scheduler: workQueue) { .operationFailed("Timeout") }
-            .handleEvents(receiveOutput: { [weak self] _ in
-                DispatchQueue.main.async { [weak self] in
-                    self?.actionState[mac] = .working(0)
-                }
-            })
-            .first()
-            .share()
-            .eraseToAnyPublisher()
-
-        let setup = (didConnect, mac)
-
-        optionallyStream(config.thermometer, &streams, setup)
-        optionallyStream(config.accelerometer, &streams, setup)
-        optionallyStream(config.magnetometer, &streams, setup)
-        optionallyStream(config.altitude, &streams, setup)
-        optionallyStream(config.ambientLight, &streams, setup)
-        optionallyStream(config.gyroscope, &streams, setup)
-        optionallyStream(config.humidity, &streams, setup)
-        optionallyStream(config.pressure, &streams, setup)
-        optionallyStream(config.fusionEuler, &streams, setup)
-        optionallyStream(config.fusionGravity, &streams, setup)
-        optionallyStream(config.fusionLinear, &streams, setup)
-        optionallyStream(config.fusionQuaternion, &streams, setup)
-
-        return Publishers.MergeMany(streams)
-            .receive(on: workQueue)
-            .collect()
-            .handleEvents(receiveOutput: { [weak self] tables in
-                self?.saveData(tables: tables, for: mac)
-            })
-            .map { _ in () }
-            .eraseToAnyPublisher()
-    }
-
-    func optionallyStream<S: MWStreamable>(
-        _ config: S?,
-        _ streams: inout [MWPublisher<MWDataTable>],
-        _ setup: StreamSetup
-    ) {
-        guard let config = config else { return }
-
-        let publisher = setup.didConnect
-            .stream(config)
-            .handleEvents(receiveOutput: { [weak self] _ in self?.streamCounters.counters[setup.mac]?.send() })
-            .prefix(untilOutputFrom: streamCancel.receive(on: bleQueue))
-            .collect()
-            .receive(on: workQueue)
-            .map { MWDataTable(streamed: $0, config) }
-            .eraseToAnyPublisher()
-
-        streams.append(publisher)
-    }
-
-    func optionallyStream<P: MWPollable>(_ config: P?,
-                                         _ streams: inout [MWPublisher<MWDataTable>],
-                                         _ setup: StreamSetup
-    ) {
-        guard let config = config else { return }
-
-        let publisher = setup.didConnect
-            .stream(config)
-            .handleEvents(receiveOutput: { [weak self] _ in
-                self?.streamCounters.counters[setup.mac]?.send() })
-            .prefix(untilOutputFrom: streamCancel.receive(on: bleQueue))
-            .collect()
-            .receive(on: workQueue)
-            .map { MWDataTable(streamed: $0, config) }
-            .eraseToAnyPublisher()
-
-        streams.append(publisher)
     }
 }
