@@ -18,11 +18,12 @@ public class Root: ObservableObject {
     private let sessions:       SessionRepository
     private let coreData:       CoreDataBackgroundController
     private let userDefaults:   UserDefaultsContainer
+    private let importer:       MetaBase4SessionDataImporter
     private let metawearLoader: MWLoader<MWKnownDevicesLoadable>
     private let presetsLoader:  MWLoader<SensorPresetsLoadable>
     private let loggingLoader:  MWLoader<LoggingTokensLoadable>
 
-    // VMs
+    // UI
     public let factory:     UIFactory
     public let bluetoothVM: BluetoothStateVM
 
@@ -39,13 +40,17 @@ public class Root: ObservableObject {
         let devices = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
         self.presets = PresetSensorParametersStore(loader: presetsLoader)
         self.logging = ActiveLoggingSessionsStore(loader: loggingLoader)
+        let importer = MetaBase4SessionDataImporter(sessions: sessions,
+                                        devices: devices,
+                                        defaults: userDefaults)
         let routing = Routing()
-        let factory = UIFactory(devices, sessions, presets, logging, scanner, routing)
+        let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing)
 
         self.devices = devices
         self.routing = routing
         self.scanner = scanner
         self.factory = factory
+        self.importer = importer
         self.bluetoothVM = factory.makeBluetoothStateWarningsVM()
     }
 }
@@ -96,13 +101,3 @@ func wipeDefaults() {
     }
 }
 #endif
-
-class UserDefaultsContainer {
-    internal init(cloud: NSUbiquitousKeyValueStore, local: UserDefaults) {
-        self.cloud = cloud
-        self.local = local
-    }
-
-    let cloud: NSUbiquitousKeyValueStore
-    let local: UserDefaults
-}
