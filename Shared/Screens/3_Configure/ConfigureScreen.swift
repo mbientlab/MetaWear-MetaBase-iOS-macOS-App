@@ -36,6 +36,7 @@ struct ConfigureScreen: View {
             }
             .padding(.bottom, .screenInset)
             .padding(.horizontal, .screenInset)
+            .layoutPriority(10)
         }
         .animation(.easeInOut, value: vm.selectedPreset)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
