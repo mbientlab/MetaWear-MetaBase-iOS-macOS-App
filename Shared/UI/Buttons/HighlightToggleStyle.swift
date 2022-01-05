@@ -9,10 +9,11 @@ struct HighlightToggleStyle: ToggleStyle {
     var offColor: Color = .myHighlight
     var onColor: Color = .myHighlight
     var font: Font = .title3
+    var padding: CGFloat = 6
     @Namespace private var toggle
 
     func makeBody(configuration: Configuration) -> some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 10 - padding) {
             Option(label: off, color: offColor, isOn: !configuration.isOn, set: { configuration.isOn = false })
             Option(label: on, color: onColor, isOn: configuration.isOn, set: { configuration.isOn = true })
         }
@@ -27,6 +28,7 @@ struct HighlightToggleStyle: ToggleStyle {
         var color: Color
         var isOn: Bool
         var set: () -> Void
+        var padding: CGFloat = 6
         @Environment(\.namespace) private var namespace
 
         var body: some View {
@@ -37,7 +39,7 @@ struct HighlightToggleStyle: ToggleStyle {
                     .lineLimit(1)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 8)
-
+                    .padding(padding)
             }
                 .buttonStyle(HoverButtonStyle(anchor: .bottom, inactiveColor: isOn ? .myHighlight : nil))
                 .background(background, alignment: .bottom)

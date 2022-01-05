@@ -9,13 +9,22 @@ struct CTAButton: View {
          hover: Color = .myHighlight,
          base: Color = .myPrimary,
          maxWidth: CGFloat? = nil,
-         action: @escaping () -> Void) {
+         padding: CGFloat = 6,
+         style: Style = .major,
+         action: @escaping () -> Void
+    ) {
         self.symbol = symbol
         self.cta = cta
         self.action = action
         self.hover = hover
         self.base = base
         self.maxWidth = maxWidth
+        self.padding = padding
+        self.font = style.font
+        self.incognito = style == .minor
+        self.hPadding = style == .minor ? 12 : 25
+        self.vPadding = 8
+        self.style = style
     }
 
     let cta: String
@@ -24,6 +33,12 @@ struct CTAButton: View {
     let hover: Color
     let base: Color
     let maxWidth: CGFloat?
+    let padding: CGFloat
+    let font: Font
+    let incognito: Bool
+    let hPadding: CGFloat
+    let vPadding: CGFloat
+    let style: Style
 
     @Environment(\.colorScheme) private var scheme
     @Environment(\.isEnabled) private var isEnabled
@@ -39,17 +54,20 @@ struct CTAButton: View {
 
                 Text(cta)
             }
-                .font(.title2.weight(scheme == .light ? .medium : .medium))
+                .font(font.weight(scheme == .light ? .medium : .medium))
                 .lineLimit(1)
                 .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(isHovered ? hover : base)
+                .foregroundColor(isHovered && style != .minor ? hover : base)
 
-                .padding(.horizontal, 25)
-                .padding(.vertical, 8)
+                .padding(.horizontal, hPadding)
+                .padding(.vertical, vPadding)
+                .padding(padding)
                 .frame(minWidth: 150, maxWidth: maxWidth, alignment: .center)
                 .whenHovered { isHovered = $0 }
         }
-        .buttonStyle(UnderlinedButtonStyle(color: hover, isHovered: isHovered))
+        .buttonStyle(UnderlinedButtonStyle(color: hover,
+                                           isHovered: isHovered,
+                                           incognitoUnderline: incognito))
         .animation(.spring(), value: isHovered)
         .opacity(isEnabled ? 1 : 0.35)
 
@@ -57,44 +75,16 @@ struct CTAButton: View {
         .controlSize(.large)
 #endif
     }
-}
 
-struct MinorCTAButton: View {
+    enum Style {
+        case major
+        case minor
 
-    let cta: String
-    let action: () -> Void
-    let bg: Color
-    let text: Color
-    let maxWidth: CGFloat?
-
-    init(_ cta: String,
-         bg: Color = .myGroupBackground,
-         text: Color = .myPrimary,
-         maxWidth: CGFloat? = nil,
-         action: @escaping () -> Void) {
-        self.cta = cta
-        self.action = action
-        self.bg = bg
-        self.text = text
-        self.maxWidth = maxWidth
-    }
-
-    var body: some View {
-        Button(action: action) {
-            Text(cta)
-                .font(.headline)
-                .foregroundColor(text)
-                .lineLimit(1)
-                .fixedSize(horizontal: false, vertical: true)
-
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .frame(minWidth: 90, maxWidth: maxWidth, alignment: .center)
-                .background(
-                    RoundedRectangle(cornerRadius: 5, style: .continuous)
-                        .fill(bg)
-                )
+        var font: Font {
+            switch self {
+                case .major: return .title2
+                case .minor: return .headline
+            }
         }
-        .buttonStyle(HoverButtonStyle())
     }
 }
