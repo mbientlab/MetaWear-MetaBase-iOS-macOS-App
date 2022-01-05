@@ -452,8 +452,8 @@
 		9413CEB4275B13F900A36B5E /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				942E393B278511C300629DFE /* 0_Onboarding */,
 				94528563275BE0D8004D815B /* MainWindow.swift */,
+				942E393B278511C300629DFE /* 0_Onboarding */,
 				94934FD8275A0BCB00E388FF /* 1_Choose */,
 				94934FD9275A0C0A00E388FF /* 2_History */,
 				94934FDA275A0C1400E388FF /* 3_Configure */,
@@ -513,6 +513,7 @@
 		9473B7B12770F73F006F4994 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				9477FACA2784A39E0019F9A8 /* Import */,
 				949E5A882773B8CE00D45740 /* CoreData */,
 				9473B7B22770F8B2006F4994 /* UserDefaults */,
 			);
@@ -736,7 +737,6 @@
 		94E005C9275A07E9001B0DFD /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				9477FACA2784A39E0019F9A8 /* Import */,
 				94E005CA275A07E9001B0DFD /* MetaBaseApp.swift */,
 				9452856C275BE1D5004D815B /* Root.swift */,
 				94CF3EF9276427C300C2D8B0 /* Routing.swift */,
