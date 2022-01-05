@@ -33,7 +33,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     @Published var cloudSaveState: CloudSaveState = .notStarted
     private let sessionID = UUID()
     public let name: String
-    private let date: Date
+    internal let startDate: Date
     private var files: [File] = []
     private var devicesExportReady:     Int = 0
     private var exporter: FilesExporter? = nil
@@ -70,7 +70,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     ) {
         self.workQueue = backgroundQueue
         self.name = name
-        self.date = date
+        self.startDate = date
         self.sessions = sessions
         self.actionType = action
         self.devices = devices
@@ -283,7 +283,7 @@ extension ActionVM: ActionController {
     func registerLoggingToken() {
         let token = Session.LoggingToken(
             id: routing.focus!.item,
-            date: date,
+            date: startDate,
             name: name
         )
         logging.register(token: token)
@@ -305,7 +305,7 @@ extension ActionVM: ActionController {
                 let file = File(csv: data,
                                 deviceName: deviceName,
                                 signal: table.source,
-                                date: self.date)
+                                date: self.startDate)
                 files.append(file)
             }
             self.files.append(contentsOf: files)
@@ -338,7 +338,7 @@ internal extension ActionVM {
         }
 
         let session = Session(id: sessionID,
-                              date: date,
+                              date: startDate,
                               name: name,
                               group: getGroup(),
                               devices: Set(deviceVMs.map(\.meta.mac)),

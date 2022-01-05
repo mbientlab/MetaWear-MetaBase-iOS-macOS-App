@@ -16,6 +16,7 @@ public enum ActionType {
 ///
 protocol ActionController: AnyObject {
 
+    var startDate:       Date { get }
     var timeoutDuration: DispatchQueue.SchedulerTimeType.Stride { get }
     var workQueue:       DispatchQueue { get }
     var streamCancel:    PassthroughSubject<Void,Never> { get }
@@ -59,7 +60,7 @@ extension ActionType {
             .mapToMWError()
             .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .first()
-            .downloadLogs()
+            .downloadLogs(startDate: controller.startDate)
             .receive(on: controller.workQueue)
             .handleEvents(receiveOutput: { [weak controller] download in
                 let percent = Int(download.percentComplete * 100)
@@ -181,6 +182,7 @@ fileprivate func optionallyStream<S: MWStreamable>(
     guard let config = config else { return }
     let controller = setup.controller
     let mac = setup.mac
+    let startDate = controller.startDate
 
     let publisher = setup.didConnect
         .stream(config)
@@ -190,7 +192,7 @@ fileprivate func optionallyStream<S: MWStreamable>(
         .prefix(untilOutputFrom: setup.controller.streamCancel.receive(on: setup.metawear.bleQueue))
         .collect()
         .receive(on: setup.controller.workQueue)
-        .map { MWDataTable(streamed: $0, config) }
+        .map { MWDataTable(streamed: $0, config, startDate: startDate) }
         .eraseToAnyPublisher()
 
     streams.append(publisher)
@@ -204,6 +206,7 @@ fileprivate func optionallyStream<P: MWPollable>(
     guard let config = config else { return }
     let controller = setup.controller
     let mac = setup.mac
+    let startDate = controller.startDate
 
     let publisher = setup.didConnect
         .stream(config)
@@ -213,7 +216,7 @@ fileprivate func optionallyStream<P: MWPollable>(
         .prefix(untilOutputFrom: setup.controller.streamCancel.receive(on: setup.metawear.bleQueue))
         .collect()
         .receive(on: setup.controller.workQueue)
-        .map { MWDataTable(streamed: $0, config) }
+        .map { MWDataTable(streamed: $0, config, startDate: startDate) }
         .eraseToAnyPublisher()
 
     streams.append(publisher)
