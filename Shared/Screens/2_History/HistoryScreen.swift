@@ -19,13 +19,13 @@ struct HistoryScreen: View {
             Header(vm: vm)
                 .keyboardShortcut(.cancelAction)
 
-            HStack(alignment: .firstTextBaseline, spacing: .screenInset * 2) {
+            HStack(alignment: .firstTextBaseline, spacing: .screenInset * 1.25) {
                 AboutColumn()
                     .frame(minWidth: 230)
 
                 VStack {
                     SessionsList(factory)
-                    ctas.padding(.top, 10)
+                    ctas.padding(.top, .screenInset / 2)
                 }
                 .padding(.bottom, .screenInset)
                 .layoutPriority(2)
@@ -40,7 +40,7 @@ struct HistoryScreen: View {
     }
 
     var ctas: some View {
-        HStack(spacing: 15) {
+        HStack(spacing: 35) {
             Spacer()
 
             Text(vm.alert)

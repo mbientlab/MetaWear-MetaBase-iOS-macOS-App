@@ -13,17 +13,16 @@ struct MainWindow: View {
     @EnvironmentObject private var factory: UIFactory
     @Namespace private var namespace
 
-    static let minWidth: CGFloat = 725 // ConfigureScreen showing 3 tiles w/ equal margins (635) + extra width
-    static let minHeight: CGFloat = 585 // ConfigureScreen showing 2 tile rows
+    static let minWidth: CGFloat = 1100 // ConfigureScreen showing 3 tiles w/ equal margins (635) + extra width (90)
+    static let minHeight: CGFloat = 675 // ConfigureScreen showing 2 tile rows (585)
 
     var body: some View {
+//        Onboarding(factory: factory)
         stackNavigation
             .frame(minWidth: Self.minWidth, minHeight: Self.minHeight)
-            .animation(.easeInOut, value: routing.destination)
+            .background(steadyHeaderBackground, alignment: .top)
+            .animation(.easeOut, value: routing.destination)
             .foregroundColor(.myPrimary)
-            .background(Color.myBackground.ignoresSafeArea())
-            .colorScheme(.dark) // Workaround for macOS as some Menu and built-in components do not properly accept reverse-out shading
-//            .preferredColorScheme(.dark) // Setting this would force system dialogs into dark mode
             .environment(\.namespace, namespace)
             .toolbar { BluetoothErrorButton.ToolbarIcon() }
     }
@@ -38,6 +37,14 @@ struct MainWindow: View {
                 case .stream:       ActionScreen(factory).transition(.add)
                 case .downloadLogs: ActionScreen(factory).transition(.add)
             }
+        }
+    }
+
+    @ViewBuilder private var steadyHeaderBackground: some View {
+        if routing.destination != .choose {
+            Color.myBackground
+                .edgesIgnoringSafeArea(.all)
+                .frame(height: .headerMinHeight)
         }
     }
 }

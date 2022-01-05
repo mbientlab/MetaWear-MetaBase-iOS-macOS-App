@@ -53,7 +53,7 @@ struct TextFieldConfig {
     var alignment: NSTextAlignment = .left
 
     static func largeDeviceStyle() -> Self {
-        self.init(font: .system(.title), size: 18)
+        self.init(font: .system(.title), size: 22)
     }
 }
 

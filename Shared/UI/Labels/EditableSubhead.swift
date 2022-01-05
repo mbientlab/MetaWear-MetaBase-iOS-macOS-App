@@ -29,7 +29,6 @@ struct EditableSubhead<T: View>: View {
                                    config: .largeDeviceStyle(),
                                    onCommit: { label.wrappedValue = $0 })
                     .padding(.horizontal, 4)
-                    .offset(y: 2)
 
                 Spacer()
 
