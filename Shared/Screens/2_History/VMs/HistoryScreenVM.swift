@@ -14,9 +14,11 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
     public var deviceCount: Int { items.endIndex }
     public let showBackButton = true
 
+    @Published public private(set) var enableCTA = false
     @Published public private(set) var showSessionStartAlert = false
     public let alert: String
-    private var newSessionCanStartUpdates: AnyCancellable? = nil
+    private var enableCTAUpdates: AnyCancellable? = nil
+    private var showStartAlertUpdates: AnyCancellable? = nil
     private var performDisconnectOnDisappear = true
     private var loggingUpdates: AnyCancellable? = nil
 
@@ -38,7 +40,7 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
         self.items = vms
         self.cta = .init(ongoingLoggingSession: logging.session(for: routing.focus!.item))
 
-        alert = vms.endIndex > 1 ? "Bring all MetaWears nearby" : "Bring MetaWear nearby"
+        alert = vms.endIndex > 1 ? "Bring all MetaWears nearby" : "Bring \(title) nearby"
         startValidatingSessionStartCTA()
 
         loggingUpdates = logging.tokens
@@ -83,11 +85,26 @@ public extension HistoryScreenVM {
 private extension HistoryScreenVM {
 
     func startValidatingSessionStartCTA() {
-        newSessionCanStartUpdates = Timer.TimerPublisher(interval: 1, tolerance: 1, runLoop: .main, mode: .common)
-            .compactMap { [weak self] _ in self?.items.contains(where: { $0.isNearby == false }) }
+        let timer = Timer.TimerPublisher(interval: 0.5, tolerance: 0.5, runLoop: .main, mode: .common)
+            .autoconnect()
+            .share()
+
+        enableCTAUpdates = timer
+            .compactMap { [weak self] _ in
+                self?.items.allSatisfy { $0.connection == .connected }
+            }
             .removeDuplicates()
-            .sink(receiveValue: { [weak self] shouldAlert in
-                self?.showSessionStartAlert = shouldAlert
+            .sink(receiveValue: { [weak self] canStart in
+                self?.enableCTA = canStart
+            })
+
+        showStartAlertUpdates = timer
+            .compactMap { [weak self] _ in
+                self?.items.allSatisfy { $0.isNearby }
+            }
+            .removeDuplicates()
+            .sink(receiveValue: { [weak self] canStart in
+                self?.showSessionStartAlert = !canStart
             })
     }
 }

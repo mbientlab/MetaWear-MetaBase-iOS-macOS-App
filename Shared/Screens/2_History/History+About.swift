@@ -14,8 +14,9 @@ extension HistoryScreen {
         var body: some View {
             VStack {
                 Subhead(label: "About", trailing: {
-                    RefreshButton(help: "Refresh", didTap: vm.refresh)
+                    RefreshButton(help: "Refresh All", didTap: vm.refresh)
                         .buttonStyle(HoverButtonStyle())
+                        .opacity(vm.showSessionStartAlert ? 0 : 1)
                 })
 
                 ScrollView(.vertical, showsIndicators: false) {
@@ -24,6 +25,7 @@ extension HistoryScreen {
                             AboutBox(vm: vm, showDetails: $showDetails)
                         }
                     }
+                    .padding(.top, 9)
                     .padding(.bottom, 25)
                     .animation(.spring(), value: showDetails)
                 }
@@ -45,6 +47,7 @@ extension HistoryScreen.AboutColumn {
 
                 header
                     .padding(.horizontal, 8)
+                    .padding(.leading, 5)
                     .background(headerShading)
                     .padding(.bottom, 5)
 
@@ -63,7 +66,7 @@ extension HistoryScreen.AboutColumn {
 
                 Text(vm.meta.name)
                     .font(.title3.weight(.medium))
-                    .foregroundColor(.myPrimary)
+                    .foregroundColor(.mySecondary)
                     .lineLimit(1)
                     .fixedSize(horizontal: false, vertical: true)
                     .layoutPriority(1)
