@@ -176,6 +176,8 @@
 		94AEA0922785940700C8BE23 /* PeekingMetaWearBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA0902785940700C8BE23 /* PeekingMetaWearBG.swift */; };
 		94AEA094278598AF00C8BE23 /* FlipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA093278598AF00C8BE23 /* FlipView.swift */; };
 		94AEA095278598AF00C8BE23 /* FlipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA093278598AF00C8BE23 /* FlipView.swift */; };
+		94AEA09727863C6000C8BE23 /* ProgressSpinnerCircleOutline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA09627863C6000C8BE23 /* ProgressSpinnerCircleOutline.swift */; };
+		94AEA09827863C6000C8BE23 /* ProgressSpinnerCircleOutline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA09627863C6000C8BE23 /* ProgressSpinnerCircleOutline.swift */; };
 		94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE45276FE9AC009832E1 /* CloudKit.framework */; };
 		94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE47276FE9BE009832E1 /* CloudKit.framework */; };
 		94CF3EFA276427C300C2D8B0 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3EF9276427C300C2D8B0 /* Routing.swift */; };
@@ -337,6 +339,7 @@
 		94AEA08D27858BB900C8BE23 /* AccessiblityScroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessiblityScroll.swift; sourceTree = "<group>"; };
 		94AEA0902785940700C8BE23 /* PeekingMetaWearBG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeekingMetaWearBG.swift; sourceTree = "<group>"; };
 		94AEA093278598AF00C8BE23 /* FlipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlipView.swift; sourceTree = "<group>"; };
+		94AEA09627863C6000C8BE23 /* ProgressSpinnerCircleOutline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSpinnerCircleOutline.swift; sourceTree = "<group>"; };
 		94BCCE45276FE9AC009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		94BCCE47276FE9BE009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		94CF3EF9276427C300C2D8B0 /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
@@ -494,7 +497,6 @@
 				942E393C278511CC00629DFE /* VMs */,
 				94AEA084278556E500C8BE23 /* ImportSessions.swift */,
 				94AEA08A278564AE00C8BE23 /* Onboarding.swift */,
-				94AEA08D27858BB900C8BE23 /* AccessiblityScroll.swift */,
 			);
 			path = 0_Onboarding;
 			sourceTree = "<group>";
@@ -619,7 +621,9 @@
 				9413CEAD275B10C100A36B5E /* UIFactory.swift */,
 				940E01B92780E82C002AD641 /* Alert.swift */,
 				940E019E277F442B002AD641 /* TextField.swift */,
+				94AEA08D27858BB900C8BE23 /* AccessiblityScroll.swift */,
 				940E01A1277F5A91002AD641 /* CrossPlatformStylizedMenu.swift */,
+				94AEA09627863C6000C8BE23 /* ProgressSpinnerCircleOutline.swift */,
 				94934FE4275A0D1D00E388FF /* Constants */,
 				94934FEF275A0DB100E388FF /* Buttons */,
 				94934FEE275A0DAC00E388FF /* Labels */,
@@ -1112,6 +1116,7 @@
 				9409C5E22762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */,
 				94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */,
 				9408E6DF276829280011B5F5 /* BluetoothErrorButton.swift in Sources */,
+				94AEA09727863C6000C8BE23 /* ProgressSpinnerCircleOutline.swift in Sources */,
 				94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */,
 				94A165C3275F2F8600FA355D /* History+About.swift in Sources */,
 				94CF3F102764286B00C2D8B0 /* Subhead.swift in Sources */,
@@ -1219,6 +1224,7 @@
 				9409C5E32762E3FB001FE850 /* ActionScreen+CTAs.swift in Sources */,
 				9409C5C427613895001FE850 /* ConfigureVM.swift in Sources */,
 				9408E6E0276829280011B5F5 /* BluetoothErrorButton.swift in Sources */,
+				94AEA09827863C6000C8BE23 /* ProgressSpinnerCircleOutline.swift in Sources */,
 				94A165C4275F2F8600FA355D /* History+About.swift in Sources */,
 				94528559275BDE1E004D815B /* Choose+DeviceIterator.swift in Sources */,
 				94CF3F112764286B00C2D8B0 /* Subhead.swift in Sources */,

@@ -3,7 +3,20 @@
     {
       "color" : {
         "platform" : "universal",
-        "reference" : "systemYellowColor"
+        "reference" : "systemCyanColor"
+      },
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "color" : {
+        "platform" : "universal",
+        "reference" : "systemCyanColor"
       },
       "idiom" : "universal"
     }
