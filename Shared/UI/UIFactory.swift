@@ -11,12 +11,14 @@ public class UIFactory: ObservableObject {
                 _ sessions: SessionRepository,
                 _ presets:  PresetSensorParametersStore,
                 _ logging:  ActiveLoggingSessionsStore,
+                _ importer: MetaBase4SessionDataImporter,
                 _ scanner:  MetaWearScanner,
                 _ routing:  Routing) {
         self.presets = presets
         self.devices = devices
         self.sessions = sessions
         self.scanner = scanner
+        self.importer = importer
         self.routing = routing
         self.logging = logging
     }
@@ -25,12 +27,17 @@ public class UIFactory: ObservableObject {
     private unowned let sessions: SessionRepository
     private unowned let presets:  PresetSensorParametersStore
     private unowned let logging:  ActiveLoggingSessionsStore
+    private unowned let importer: MetaBase4SessionDataImporter
     private unowned let scanner:  MetaWearScanner
     private unowned let routing:  Routing
     private lazy var actionQueue = _makeBackgroundQueue(named: "action")
 }
 
 public extension UIFactory {
+
+    func makeImportVM() -> ImportSessionsVM {
+        .init(importer: importer)
+    }
 
     func makeDiscoveredDeviceListVM() -> DiscoveryListVM {
         .init(scanner: scanner, store: devices)
