@@ -17,8 +17,6 @@
 		9409C5C227613890001FE850 /* UserSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C127613890001FE850 /* UserSensorConfiguration.swift */; };
 		9409C5C327613890001FE850 /* UserSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C127613890001FE850 /* UserSensorConfiguration.swift */; };
 		9409C5C427613895001FE850 /* ConfigureVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5BF2761383E001FE850 /* ConfigureVM.swift */; };
-		9409C5C627613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */; };
-		9409C5C727613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */; };
 		9409C5C927617F35001FE850 /* LegalSensorParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C827617F35001FE850 /* LegalSensorParameters.swift */; };
 		9409C5CA27617F35001FE850 /* LegalSensorParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5C827617F35001FE850 /* LegalSensorParameters.swift */; };
 		9409C5CC2761F438001FE850 /* Configure+SensorIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9409C5CB2761F438001FE850 /* Configure+SensorIterator.swift */; };
@@ -248,7 +246,6 @@
 		9408E6DE276829280011B5F5 /* BluetoothErrorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothErrorButton.swift; sourceTree = "<group>"; };
 		9409C5BF2761383E001FE850 /* ConfigureVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureVM.swift; sourceTree = "<group>"; };
 		9409C5C127613890001FE850 /* UserSensorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSensorConfiguration.swift; sourceTree = "<group>"; };
-		9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MetaWear+WriteSensorMacro.swift"; sourceTree = "<group>"; };
 		9409C5C827617F35001FE850 /* LegalSensorParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalSensorParameters.swift; sourceTree = "<group>"; };
 		9409C5CB2761F438001FE850 /* Configure+SensorIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+SensorIterator.swift"; sourceTree = "<group>"; };
 		9409C5CE2762969B001FE850 /* Configure+Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+Grid.swift"; sourceTree = "<group>"; };
@@ -422,9 +419,7 @@
 			children = (
 				9409C5D52762A367001FE850 /* ActionVM.swift */,
 				9409C5D82762D7DA001FE850 /* ActionState.swift */,
-				9409C5E72763B764001FE850 /* ActionType.swift */,
 				9473B7B42770FAC4006F4994 /* KnownDevice+.swift */,
-				9409C5C527613C7F001FE850 /* MetaWear+WriteSensorMacro.swift */,
 				944538BC2767DCE000841880 /* StreamingCountersContainer.swift */,
 			);
 			path = VMs;
@@ -446,6 +441,7 @@
 		941A08FF276FB789006D52E3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9409C5E72763B764001FE850 /* ActionType.swift */,
 				94AEA07E27854E2200C8BE23 /* CloudSaveState.swift */,
 				940E01A72780D85F002AD641 /* Formatters.swift */,
 				9409C5C827617F35001FE850 /* LegalSensorParameters.swift */,
@@ -997,7 +993,6 @@
 			files = (
 				94CF3EFD276427F100C2D8B0 /* ChooseDevicesScreen.swift in Sources */,
 				9409C5D62762A367001FE850 /* ActionVM.swift in Sources */,
-				9409C5C627613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */,
 				9473B7B52770FAC4006F4994 /* KnownDevice+.swift in Sources */,
 				94CF3F122764286B00C2D8B0 /* LabeledItem.swift in Sources */,
 				9408E6DC2767FA290011B5F5 /* WarningPopover.swift in Sources */,
@@ -1099,7 +1094,6 @@
 			files = (
 				94CF3EFE276427F100C2D8B0 /* ChooseDevicesScreen.swift in Sources */,
 				9409C5D72762A367001FE850 /* ActionVM.swift in Sources */,
-				9409C5C727613C7F001FE850 /* MetaWear+WriteSensorMacro.swift in Sources */,
 				9473B7B62770FAC4006F4994 /* KnownDevice+.swift in Sources */,
 				94CF3F132764286B00C2D8B0 /* LabeledItem.swift in Sources */,
 				9408E6DD2767FA290011B5F5 /* WarningPopover.swift in Sources */,
