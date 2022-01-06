@@ -129,7 +129,7 @@ extension Onboarding {
         let shape = RoundedRectangle(cornerRadius: 12)
 
         var body: some View {
-            if #available(macOS 12.0, *) {
+            if #available(macOS 12.0, iOS 15.0, *) {
                 ZStack {
                     fill.opacity(isLight ? 0 : 0.8)
                     stroke

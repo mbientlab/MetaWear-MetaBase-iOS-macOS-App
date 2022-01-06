@@ -37,10 +37,12 @@ extension HistoryScreen {
                 .mask(mask.offset(y: 1))
                 .onPreferenceChange(DateWK.self) { dateWidth = $0 }
                 .onPreferenceChange(TimeWK.self) { timeWidth = $0 }
+#if os(macOS)
                 .onDeleteCommand {
                     guard let selection = selection else { return }
                     vm.delete(session: selection)
                 }
+#endif
                 .listStyle(.inset)
                 .animation(.easeOut, value: vm.sessions.map(\.name))
             }
