@@ -1,15 +1,9 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import mbientSwiftUI
+import SwiftUI
 
 struct ChooseDevicesScreen: View {
-
-    init(_ routing: Routing, _ factory: UIFactory) {
-        _vm = .init(wrappedValue: factory.makeDiscoveredDeviceListVM())
-
-        // If already navigated around, rebuilds screen to skip the splash screen
-        _shouldShowList = .init(initialValue: routing.directlyShowDeviceList)
-    }
 
     @EnvironmentObject private var bluetooth: BluetoothStateVM
     @EnvironmentObject private var routing: Routing
@@ -17,6 +11,13 @@ struct ChooseDevicesScreen: View {
 
     /// Locally managed flag to change "splash" and "list" screens, accounting for animation time needed for a transition.
     @State private var shouldShowList: Bool
+
+    init(_ routing: Routing, _ factory: UIFactory) {
+        _vm = .init(wrappedValue: factory.makeDiscoveredDeviceListVM())
+
+        // If already navigated around, rebuilds screen to skip the splash screen
+        _shouldShowList = .init(initialValue: routing.directlyShowDeviceList)
+    }
 
     var body: some View {
         VStack {
@@ -30,6 +31,9 @@ struct ChooseDevicesScreen: View {
         .onAppear(perform: vm.didAppear)
         .onDisappear(perform: vm.didDisappear)
         .environmentObject(vm)
+#if os(iOS)
+        .navigationBarBackButtonHidden(true)
+#endif
     }
 
     @ViewBuilder private var grid: some View {

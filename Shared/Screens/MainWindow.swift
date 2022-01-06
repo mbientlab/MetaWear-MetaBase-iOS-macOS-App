@@ -74,7 +74,7 @@ struct MainWindow: View {
             ChooseDevicesScreen(routing, factory)
                 .background(navigation.accessibilityHidden(true))
         }
-        .navigationViewStyle(.automatic)
+        .navigationViewStyle(.stack)
         .frame(minWidth: 600)
         .background(Color.myBackground.ignoresSafeArea())
         .environment(\.namespace, namespace)

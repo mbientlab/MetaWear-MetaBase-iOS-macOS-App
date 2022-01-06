@@ -2,14 +2,19 @@
 
 import mbientSwiftUI
 import MetaWear
+import SwiftUI
 
 extension ChooseDevicesScreen {
 
     struct NoDevicesFound: View {
         static var transitionInterval = Double(1)
         let shouldShowList: Binding<Bool>
+
         var body: some View {
-            GeometryReader { Content(geo: $0, shouldDisappear: shouldShowList) }
+            GeometryReader {
+                Content(frame: $0.frame(in: .local), shouldDisappear: shouldShowList)
+            }
+            .trackOrientation()
         }
     }
 }
@@ -18,7 +23,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
 
     struct Content: View {
 
-        let geo: GeometryProxy
+        let frame: CGRect
         let shouldDisappear: Binding<Bool>
         @Environment(\.namespace) private var namespace
 
@@ -32,15 +37,17 @@ private extension ChooseDevicesScreen.NoDevicesFound {
         @State private var animate = false
 
         var body: some View {
-            VStack(alignment: .center) {
-                if didAppear { atomAnimation }
-                if didAppear { instruction }
-                if didAppear { heroImage }
+            VStack(alignment: .center, spacing: idiom.is_iOS ? 80 : 0) {
+                if didAppear {
+                    atomAnimation
+                    instruction
+                    heroImage
+                }
             }
             .frame(
                 maxWidth: .infinity,
                 maxHeight: .infinity,
-                alignment: .bottom
+                alignment: idiom.is_Mac ? .bottom : .center
             )
             .background(hueGradient)
             .animation(.easeInOut(duration: transitionInterval), value: didAppear)
@@ -77,9 +84,11 @@ private extension ChooseDevicesScreen.NoDevicesFound {
 
             return AtomAnimation(
                 animate: animate,
-                size: min(180, max(90, geo.size.width * 0.15))
+                size: min(180, max(90, frame.size.width * 0.15))
             )
+            #if os(macOS)
                 .matchedGeometryEffect(id: "scanning", in: namespace!)
+            #endif
                 .padding(.bottom, 75)
                 .transition(.asymmetric(insertion: insertion, removal: removal))
         }
@@ -98,13 +107,12 @@ private extension ChooseDevicesScreen.NoDevicesFound {
             return SpotlightShimmerText(
                 foreground: text,
                 animate: animate,
-                travel: geo.size.width
+                travel: frame.size.width
             )
                 .transition(.asymmetric(insertion: insertion, removal: removal))
         }
 
         // MARK: - Hero
-
         private var heroImage: some View {
             let removal = AnyTransition
                 .move(edge: .bottom)
@@ -121,7 +129,8 @@ private extension ChooseDevicesScreen.NoDevicesFound {
                 .resizable()
                 .scaledToFit()
                 .alignmentGuide(VerticalAlignment.center) { _ in
-                    geo.frame(in: .global).minY
+                    if idiom == .macOS { return frame.minY }
+                    return frame.minY - 50
                 }
                 .frame(maxWidth: .infinity, maxHeight: 250)
                 .fixedSize(horizontal: false, vertical: true)
@@ -136,8 +145,11 @@ private extension ChooseDevicesScreen.NoDevicesFound {
                 .fill(reverseOut)
                 .hueRotation(.degrees(-5))
                 .blur(radius: 100)
-                .offset(y: geo.size.height / 4)
+                .offset(y: frame.size.height / 4)
                 .transition(.opacity)
+            #if os(iOS)
+                .edgesIgnoringSafeArea(.all)
+            #endif
         }
     }
 }
