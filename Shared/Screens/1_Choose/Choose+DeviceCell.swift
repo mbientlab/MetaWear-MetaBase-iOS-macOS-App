@@ -45,7 +45,7 @@ extension ChooseDevicesScreen {
                 )
                     .opacity(isHovered ? 1 : 0)
             }
-            .frame(width: .deviceCellWidth)
+            .frame(minWidth: .deviceCellWidth)
             .whenHovered { isHovered = $0 }
 
             .environment(\.isHovered, isHovered)
