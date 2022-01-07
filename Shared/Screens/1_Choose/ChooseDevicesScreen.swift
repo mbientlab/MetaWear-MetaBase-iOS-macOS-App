@@ -9,6 +9,7 @@ struct ChooseDevicesScreen: View {
     @EnvironmentObject private var bluetooth: BluetoothStateVM
     @EnvironmentObject private var routing: Routing
     @StateObject private var vm: DiscoveryListVM
+    @Environment(\.colorScheme) private var colorScheme
 
     /// Locally managed flag to change "splash" and "list" screens, accounting for animation time needed for a transition.
     @State private var shouldShowList: Bool
@@ -28,13 +29,29 @@ struct ChooseDevicesScreen: View {
         .animation(.easeOut, value: vm.listIsEmpty)
         .animation(.easeOut, value: shouldShowList)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+#if os(iOS)
+        .background(shine.alignmentGuide(.top) { $0[VerticalAlignment.center] }, alignment: .top)
+        .background(vignette.edgesIgnoringSafeArea(.all), alignment: .topLeading)
+        .background(SoftSpotlight(color: .white.opacity(0.9), radius: 500))
+#endif
         .backgroundToEdges(.myBackground)
         .onAppear(perform: vm.didAppear)
         .environmentObject(vm)
 #if os(iOS)
         .trackOrientation()
-        .navigationBarBackButtonHidden(true)
 #endif
+    }
+
+    @ViewBuilder private var shine: some View {
+        if shouldShowList, idiom == .iPhone, shouldShowList, colorScheme == .light {
+            SoftSpotlight(color: .white.opacity(0.9), radius: 180)
+        }
+    }
+
+    private var vignette: some View {
+        DigitalVignette(background: .myVignette,
+                        blendMode: colorScheme == .dark ? .lighten : .plusDarker)
+            .opacity(shouldShowList ? 1 : 0)
     }
 }
 
@@ -54,17 +71,19 @@ extension ChooseDevicesScreen {
             WideOneRowGrid()
         }
 #else
-        @Environment(\.verticalSizeClass) private var vertClass
         @Environment(\.isPortrait) private var isPortrait
+        private let scanTag = "router_scan"
+        private var useWideGrid: Bool { idiom == .iPad && !isPortrait }
 
         var body: some View {
-            if idiom == .iPad && !isPortrait {
+            if useWideGrid {
                 ScanningIndicator()
-                    .matchedGeometryEffect(id: "router_scan", in: namespace!)
+                    .matchedGeometryEffect(id: scanTag, in: namespace!)
                 WideOneRowGrid()
             } else {
                 ScanningIndicator()
-                    .matchedGeometryEffect(id: "router_scan", in: namespace!)
+                    .matchedGeometryEffect(id: scanTag, in: namespace!)
+                    .padding(.vertical, 60)
                 NarrowVerticallySectionedGrid()
             }
         }

@@ -129,6 +129,14 @@ public extension HistoricalSessionsVM {
         modifiedItems: [Any]?,
         error: Error?
     ) {
+        _didDismissPopover(error: error)
+    }
+    #else
+    func didDismissExportPopover(error: Error?) {
+        _didDismissPopover(error: error)
+    }
+    #endif
+    private func _didDismissPopover(error: Error?) {
         guard let sessionID = self.exportID else { return }
         backgroundQueue.async { [weak self] in
             self?.exportFocus = nil
@@ -141,7 +149,6 @@ public extension HistoricalSessionsVM {
             self?.exportID = nil
         }
     }
-    #endif
 }
 
 private extension HistoricalSessionsVM {
@@ -163,11 +170,15 @@ private extension HistoricalSessionsVM {
             DispatchQueue.main.async { [weak self] in
                 switch result {
                     case .failure(let error):
+                        #if os(iOS)
                         self?.didDismissExportPopover(
                             selectedActivity: nil,
                             didPerformSelection: false,
                             modifiedItems: nil,
                             error: error)
+                        #elseif os(macOS)
+                        self?.didDismissExportPopover(error: error)
+                        #endif
 
                     case .success(let exportable):
                         self?.export = exportable

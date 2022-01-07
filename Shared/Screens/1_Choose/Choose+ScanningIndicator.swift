@@ -33,7 +33,7 @@ extension ChooseDevicesScreen {
 
         private var animation: some View {
             VStack(alignment: .center, spacing: 15) {
-                AtomAnimation(animate: animate, size: 25)
+                AtomAnimation(animate: animate, size: 25, color: .myPrimary)
                     .onAppear { if vm.isScanning { animate.toggle() } }
                     .matchedGeometryEffect(id: "scanning", in: namespace!)
                     .contentShape(Rectangle())
@@ -48,10 +48,11 @@ extension ChooseDevicesScreen {
 
         private var hoverLabel: some View {
             Text(vm.isScanning ? "Discovering nearby MetaWears" : "Tap to restart Bluetooth discovery")
-                .font(.headline)
+                .font(idiom == .iPhone ? .caption.weight(.medium) : .headline)
                 .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(.mySecondary)
-                .opacity(iconIsHovered ? 1 : 0)
+                .foregroundColor(idiom == .iPhone ? .myPrimaryTinted : .mySecondary)
+                .opacity(iconIsHovered || idiom == .iPhone ? 1 : 0)
+                .opacity(idiom == .iPhone ? 0.65 : 1)
         }
     }
 }

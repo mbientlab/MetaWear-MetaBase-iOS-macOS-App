@@ -20,10 +20,10 @@ struct Header: View {
             else { HeaderBackButton().hidden().disabled(true).allowsHitTesting(false) }
 
             Text(vm.title)
-                .font(.largeTitle)
+                .font(idiom == .iPhone ? .title.weight(.medium) : .largeTitle)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(colorScheme == .light ? .myPrimary.opacity(0.7) : .myPrimary)
+                .foregroundColor(colorScheme == .light ? .myPrimaryTinted : .myPrimary)
 
             Spacer()
 
@@ -100,6 +100,10 @@ extension Header {
                     .frame(width: Self.deviceIconMaxSize)
                     .background(secondDevice.offset(x: secondDeviceXOffset), alignment: .topTrailing)
                     .background(thirdDevice.offset(x: thirdDeviceXOffset), alignment: .topTrailing)
+                #if os(iOS)
+                    .compositingGroup()
+                    .shadow(color: Color.black.opacity(0.15), radius: 4, x: 3, y: 3)
+                #endif
                     .animation(.easeOut, value: iconsDidAppear)
                     .onAppear { DispatchQueue.main.after(0.35) { iconsDidAppear.toggle() } }
                     .padding(.trailing, 12 * CGFloat(vm.deviceCount))

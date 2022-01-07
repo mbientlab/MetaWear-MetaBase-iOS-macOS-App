@@ -7,7 +7,7 @@ import mbientSwiftUI
 extension ChooseDevicesScreen {
 
     /// Layout and style the screen
-    /// 
+    ///
     struct WideOneRowGrid: View {
 
         @EnvironmentObject private var vm: DiscoveryListVM
@@ -31,10 +31,22 @@ extension ChooseDevicesScreen {
 
         private var grid: some View {
             LazyHGrid(rows: rows, alignment: .center, spacing: cellSpacing) {
-                DeviceIterator(divider: divider)
+                sections
                     .frame(height: Self.macItemHeight, alignment: .bottom)
             }
         }
+
+        @ViewBuilder private var sections: some View {
+            DeviceIterator.KnownGroups()
+#if os(iOS)
+            if showDividerA { divider }
+#endif
+            DeviceIterator.KnownUngrouped()
+            if showDividerB { divider }
+            DeviceIterator.UnknownNearby()
+        }
+
+        // MARK: - Dividers
 
         private var divider: some View {
             Rectangle()
@@ -42,12 +54,22 @@ extension ChooseDevicesScreen {
                 .foregroundColor(.myGroupBackground)
         }
 
+        private var showDividerA: Bool {
+            vm.groups.isEmpty == false
+            && (vm.ungrouped.isEmpty == false || vm.unknown.isEmpty == false)
+        }
+
+        private var showDividerB: Bool {
+            vm.ungrouped.isEmpty == false
+            && vm.unknown.isEmpty == false
+        }
+
         // MARK: - Layout Dimensions
-        #if os(macOS)
+#if os(macOS)
         @State private var windowWidth = MainWindow.minWidth
-        #else
+#else
         @State private var windowWidth = UIScreen.main.bounds.width
-        #endif
+#endif
         private var cellSpacing: CGFloat = .screenInset * 2
         private static let macItemHeight: CGFloat = 320
         private let rows = [GridItem(.fixed(Self.macItemHeight), spacing: 0, alignment: .bottom)]
@@ -88,76 +110,3 @@ extension ChooseDevicesScreen.WideOneRowGrid {
     }
 }
 
-
-// MARK: - iOS Narrow Grid
-#if os(iOS)
-extension ChooseDevicesScreen {
-
-    /// Layout and style the screen
-    ///
-    struct NarrowVerticallySectionedGrid: View {
-
-        @EnvironmentObject private var vm: DiscoveryListVM
-
-        var body: some View {
-            ScrollViewReader { scroller in
-                ScrollView(.vertical, showsIndicators: true) {
-                    grid
-                        .animation(.easeInOut, value: vm.groups)
-                        .animation(.easeInOut, value: vm.ungrouped)
-                        .animation(.easeInOut, value: vm.unknown)
-                }
-            }
-            .frame(maxHeight: .infinity, alignment: .bottom)
-            .background(measureWidth)
-
-        }
-
-        private var grid: some View {
-            LazyVGrid(columns: rows, alignment: .center, spacing: cellSpacing) {
-                DeviceIterator(divider: divider)
-                    .frame(height: Self.macItemHeight, alignment: .bottom)
-            }
-        }
-
-        private var divider: some View {
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.myGroupBackground)
-        }
-
-        // MARK: - Layout Dimensions
-        @State private var windowWidth: CGFloat = UIScreen.main.bounds.width
-        private var cellSpacing: CGFloat = .screenInset * 2
-        private static let macItemHeight: CGFloat = 320
-        private let rows = [GridItem(.fixed(Self.macItemHeight), spacing: 0, alignment: .bottom)]
-
-        private var measureWidth: some View {
-            GeometryReader { geo  in
-                Color.clear
-                    .onAppear { windowWidth = geo.size.width }
-                    .onChange(of: geo.size.width) { windowWidth = $0 }
-            }
-        }
-    }
-}
-
-
-extension ChooseDevicesScreen.NarrowVerticallySectionedGrid {
-
-    private var contentWidth: CGFloat  {
-        let cells = CGFloat(vm.deviceCount)
-        let sections = CGFloat(countSections())
-        let interItemSpacing = cellSpacing * (cells - 1)
-        let interSectionSpacing = (cellSpacing + 1) * (max(0, sections - 1))
-        let cellsContentWidth = .deviceCellWidth * cells
-        return interItemSpacing + interSectionSpacing + cellsContentWidth
-    }
-
-    private func countSections() -> Int {
-        (vm.groups.isEmpty ? 0 : 1)
-        + (vm.ungrouped.isEmpty ? 0 : 1)
-        + (vm.unknown.isEmpty ? 0 : 1)
-    }
-}
-#endif
