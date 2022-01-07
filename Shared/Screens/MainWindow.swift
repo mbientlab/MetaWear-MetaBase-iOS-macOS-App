@@ -2,11 +2,7 @@
 
 import mbientSwiftUI
 
-// MARK: - MacOS
-
-#if os(macOS)
-
-/// The app's single window. On macOS, SwiftUI does not have a navigation stack. A substitution is provided.
+/// The app's single window. A manual navigation stack is used instead of NavigationView across both iOS and macOS.
 struct MainWindow: View {
 
     @EnvironmentObject private var routing: Routing
@@ -19,7 +15,9 @@ struct MainWindow: View {
     var body: some View {
 //        Onboarding(factory: factory)
         stackNavigation
+        #if os(macOS)
             .frame(minWidth: Self.minWidth, minHeight: Self.minHeight)
+        #endif
             .background(steadyHeaderBackground, alignment: .top)
             .animation(.easeOut, value: routing.destination)
             .foregroundColor(.myPrimary)

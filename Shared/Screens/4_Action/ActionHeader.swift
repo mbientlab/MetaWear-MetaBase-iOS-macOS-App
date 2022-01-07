@@ -35,6 +35,7 @@ struct ActionHeader: View {
         }
         .padding(.top, 10)
         .frame(maxWidth: .infinity, minHeight: .headerMinHeight, alignment: .topLeading)
+        .padding(.top, .headerTopPadding)
         .backgroundToEdges(.myBackground)
         .padding(.bottom, .screenInset)
     }
