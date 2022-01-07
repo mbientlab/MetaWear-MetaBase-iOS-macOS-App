@@ -23,7 +23,7 @@ struct Header: View {
                 .font(.largeTitle)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(colorScheme == .light ? .myPrimary.opacity(0.7) : nil)
+                .foregroundColor(colorScheme == .light ? .myPrimary.opacity(0.7) : .myPrimary)
 
             Spacer()
 
@@ -91,7 +91,7 @@ extension Header {
 
         let vm: HeaderVM
         @State private var iconsDidAppear = false
-        private static let deviceIconMaxSize = CGFloat(70)
+        private static let deviceIconMaxSize = idiom == .iPad ? CGFloat(90) : CGFloat(70)
 
         var body: some View {
             if vm.deviceCount > 0 {

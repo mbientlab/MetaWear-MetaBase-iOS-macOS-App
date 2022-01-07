@@ -11,10 +11,11 @@ struct IdentifyByLEDButton: View {
     @ObservedObject var emulator: MWLED.Flash.Pattern.Emulator
     @Environment(\.reverseOutColor) private var reverseOut
 
+
     @State private var isHovering = false
     private var foregroundColor: Color {
         if emulator.ledIsOn { return reverseOut }
-        return isHovering ? .myHighlight : .myPrimary
+        return isHovering ? .myHighlight : .mySecondary
     }
 
     var body: some View {
