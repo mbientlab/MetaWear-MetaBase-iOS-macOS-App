@@ -40,7 +40,6 @@ struct Header: View {
 
 struct HeaderBackButton: View {
 
-    @Environment(\.presentationMode) private var nav
     @EnvironmentObject private var routing: Routing
     @Environment(\.reverseOutColor) private var reverseOut
     @Environment(\.colorScheme) private var colorScheme
@@ -55,11 +54,7 @@ struct HeaderBackButton: View {
                 back()
                 return
             }
-            #if os(iOS)
-            nav.wrappedValue.dismiss()
-            #else
             routing.goBack()
-            #endif
 
         } label: {
             SFSymbol.back.image()
