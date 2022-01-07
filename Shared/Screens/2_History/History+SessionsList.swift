@@ -21,15 +21,9 @@ extension HistoryScreen {
 
                 List(selection: $selection) {
                     ForEach(vm.sessions) { session in
-                        Row(
-                            session: session,
-                            downloadAction: vm.download(session:),
-                            renameAction: vm.rename(session:),
-                            deleteAction: vm.delete(session:),
-                            isDownloading: vm.isDownloading[session.id] ?? false,
+                        Row(session: session,
                             dateWidth: dateWidth,
-                            timeWidth: timeWidth
-                        )
+                            timeWidth: timeWidth)
                             .tag(session)
                     }
                     Color.clear.frame(height: 25)
@@ -46,6 +40,7 @@ extension HistoryScreen {
                 .listStyle(.inset)
                 .animation(.easeOut, value: vm.sessions.map(\.name))
             }
+            .environmentObject(vm)
             .onAppear(perform: vm.onAppear)
         }
 
@@ -67,11 +62,10 @@ extension HistoryScreen.SessionsList {
 
     struct Row: View {
 
+        @EnvironmentObject private var vm: HistoricalSessionsVM
+        private var isDownloading: Bool { vm.isDownloading[session.id] ?? false }
+
         let session: Session
-        let downloadAction: (Session) -> Void
-        let renameAction: (Session) -> Void
-        let deleteAction: (Session) -> Void
-        var isDownloading: Bool
         var dateWidth: CGFloat
         var timeWidth: CGFloat
 
@@ -83,7 +77,7 @@ extension HistoryScreen.SessionsList {
                 Text(session.name)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
-
+                
                 Spacer()
 
                 Text(dateString)
@@ -102,17 +96,23 @@ extension HistoryScreen.SessionsList {
                     .frame(minWidth: timeWidth, alignment: .leading)
 
                 downloadButton
+#if os(iOS)
+                    .background(export)
+#endif
             }
             .onAppear { dateString = mediumDateFormatter.string(from: session.date) }
             .onAppear { timeString = shortTimeFormatter.string(from: session.date) }
             .padding(3)
             .font(.title3)
             .contextMenu {
-                Button("Rename") { renameAction(session) }
-                Button("Delete") { deleteAction(session) }
+                Button("Rename") { vm.rename(session: session) }
+                Button("Delete") { vm.delete(session: session) }
                 Divider()
-                Button("Download") { downloadAction(session) }
+                Button("Download") { vm.download(session: session) }
             }
+            #if os(iOS) // Some incompatibility in macOS that precludes view's display.
+            .listRowBackground(exportHighlight)
+            #endif
         }
 
         @ViewBuilder private var downloadButton: some View {
@@ -120,15 +120,28 @@ extension HistoryScreen.SessionsList {
                 ProgressSpinner()
 
             }  else {
-                Button { downloadAction(session) } label: {
+                Button { vm.download(session: session) } label: {
                     SFSymbol.download.image()
                         .font(.title3.weight(.medium))
                 }
                 .buttonStyle(HoverButtonStyle())
             }
         }
+#if os(iOS)
+        @ViewBuilder var export: some View {
 
+            if vm.exportID == session.id {
+                UIActivityPopover(items: [vm.export!], didDismiss: vm.didDismissExportPopover)
+            }
+        }
+#endif
 
+        @ViewBuilder var exportHighlight: some View {
+            if vm.exportID == session.id {
+                RoundedRectangle(cornerRadius: 5)
+                    .foregroundColor(.myGroupBackground)
+            }
+        }
     }
 }
 

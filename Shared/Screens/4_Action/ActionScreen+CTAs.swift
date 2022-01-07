@@ -27,9 +27,9 @@ extension ActionScreen {
             }
             .frame(maxWidth: .infinity)
             .animation(.easeOut, value: vm.actionDidComplete)
-            #if os(macOS)
+#if os(macOS)
             .controlSize(.large)
-            #endif
+#endif
         }
 
         @ViewBuilder private var successCTAs: some View {
@@ -43,7 +43,18 @@ extension ActionScreen {
         @ViewBuilder private var exportFiles: some View {
             if vm.showExportFilesCTA {
                 CTAButton("Export CSVs") { vm.exportFiles() }
+#if os(iOS)
+                .background(export)
+#endif
             }
         }
+
+#if os(iOS)
+        @ViewBuilder var export: some View {
+            if let export = vm.export {
+                UIActivityPopover(items: [export], didDismiss: vm.didDismissExportPopover)
+            }
+        }
+#endif
     }
 }

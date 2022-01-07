@@ -10,10 +10,12 @@ import mbientSwiftUI
 
 class FilesExporter {
 
+    public let id: UUID
     public let name: String
     private let tempDirectoryURL: URL
 
     init(id: UUID = .init(), name: String, files: [File]) throws {
+        self.id = id
         self.name = name.withoutSlashes()
         self.tempDirectoryURL = FileManager.default
             .temporaryDirectory
@@ -29,7 +31,12 @@ class FilesExporter {
 extension FilesExporter  {
 
 #if os(macOS)
-    func runExportInteraction(onQueue: DispatchQueue, didComplete: @escaping () -> Void) {
+    /// On macOS, handles presenting an NSOpenPanel from the key window, providing the user-selected URL after files are copied to the chosen location. If the user dismisses/cancels the save, the url returned will be nil.
+    ///
+    func runExportInteraction(
+        onQueue: DispatchQueue,
+        didExport: @escaping (Result<URL?,Error>) -> Void
+    ) {
         DispatchQueue.main.async { [weak self]  in
             guard let self = self else { return }
             guard let window = NSApp.keyWindow else { return }
@@ -44,39 +51,36 @@ extension FilesExporter  {
 
             panel.beginSheetModal(for: window) { [weak self] response in
                 guard response == .OK, let url = panel.url else {
-                    didComplete()
+                    didExport(.success(nil))
                     return
                 }
                 onQueue.async { [weak self] in
-                    self?.export(to: url, didComplete: didComplete)
+                    self?.export(to: url, didComplete: didExport)
                 }
             }
         }
     }
 #elseif os(iOS)
-    func runExportInteraction(onQueue: DispatchQueue, didComplete: @escaping () -> Void) {
+    /// On iOS, provides a URL that can be used for a Files exporter or UIActivityViewController.
+    ///
+    /// To properly situate that controller for iPad modal presentation, the precipitating view should handle the presentation to ensure the location is accurate at the arbitrary future presentation time (e.g., view may have scrolled or this export's presentation is delayed in a queue).
+    ///
+    func runExportInteraction(
+        onQueue: DispatchQueue,
+        shareableItem: @escaping (Result<URL,Error>) -> Void
+    ) {
         onQueue.async { [weak self] in
             guard let self = self else { return }
             let tempCopyURL = self.tempDirectoryURL
                 .deletingLastPathComponent()
                 .appendingPathComponent(self.name, isDirectory: true)
 
-            try? FileManager.default.removeItem(at: tempCopyURL)
-            try? FileManager.default.copyItem(at: self.tempDirectoryURL, to: tempCopyURL)
+            do {
+                try? FileManager.default.removeItem(at: tempCopyURL)
+                try FileManager.default.copyItem(at: self.tempDirectoryURL, to: tempCopyURL)
+                shareableItem(.success(tempCopyURL))
 
-            let activity = UIActivityViewController(activityItems: [tempCopyURL], applicationActivities: nil)
-
-            DispatchQueue.main.async {
-                guard let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
-                      let keyController = scene.windows.first?.rootViewController
-                else { didComplete(); return }
-
-                if idiom == .iPad {
-                    activity.popoverPresentationController?.sourceView = keyController.view
-                    activity.popoverPresentationController?.sourceRect = CGRect(origin: keyController.view.frame.origin, size: .zero)
-                }
-                keyController.present(activity, animated: true, completion: didComplete)
-            }
+            } catch { shareableItem(.failure(error)) }
         }
     }
 #endif
@@ -104,13 +108,13 @@ private extension FilesExporter {
         }
     }
 
-    func export(to userURL: URL, didComplete: @escaping () -> Void) {
+    func export(to userURL: URL, didComplete: @escaping (Result<URL?,Error>) -> Void) {
         do {
             var destination = userURL.appendingPathComponent(name, isDirectory: true)
             ensureDirectoryNameIsUnique(&destination)
             try FileManager.default.copyItem(at: tempDirectoryURL, to: destination)
-        } catch { NSLog("\(Self.self) \(#function) \(error.localizedDescription)") }
-        didComplete()
+            didComplete(.success(destination))
+        } catch { didComplete(.failure(error)) }
     }
 
     func ensureDirectoryNameIsUnique(_ url: inout URL) {
@@ -131,3 +135,4 @@ extension String {
             .replacingOccurrences(of: "/", with: ":")
     }
 }
+
