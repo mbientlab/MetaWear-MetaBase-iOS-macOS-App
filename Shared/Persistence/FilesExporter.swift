@@ -6,6 +6,7 @@ import AppKit
 #elseif canImport(UIKit)
 import UIKit
 #endif
+import mbientSwiftUI
 
 class FilesExporter {
 
@@ -63,17 +64,22 @@ extension FilesExporter  {
             try? FileManager.default.removeItem(at: tempCopyURL)
             try? FileManager.default.copyItem(at: self.tempDirectoryURL, to: tempCopyURL)
 
-            let vc = UIActivityViewController(activityItems: [tempCopyURL], applicationActivities: nil)
-            vc.modalPresentationStyle = .pageSheet
-            
+            let activity = UIActivityViewController(activityItems: [tempCopyURL], applicationActivities: nil)
+
             DispatchQueue.main.async {
-                let controller = UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController
-                controller?.present(vc, animated: true, completion: didComplete)
+                guard let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+                      let keyController = scene.windows.first?.rootViewController
+                else { didComplete(); return }
+
+                if idiom == .iPad {
+                    activity.popoverPresentationController?.sourceView = keyController.view
+                    activity.popoverPresentationController?.sourceRect = CGRect(origin: keyController.view.frame.origin, size: .zero)
+                }
+                keyController.present(activity, animated: true, completion: didComplete)
             }
         }
     }
 #endif
-
 }
 
 private extension FilesExporter {
