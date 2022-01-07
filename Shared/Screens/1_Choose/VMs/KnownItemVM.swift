@@ -162,11 +162,6 @@ public extension KnownItemVM {
         trackState()
     }
 
-    func onDisappear() {
-        rssiSub?.cancel()
-        connectionSub?.cancel()
-    }
-
     func connect() {
         if let group = group {
             routing.setNewFocus(item: .group(group.id))

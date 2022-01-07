@@ -49,6 +49,7 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     private unowned let store:     MetaWearSyncStore
     private unowned let logging:   ActiveLoggingSessionsStore
     private unowned let routing:   Routing
+    private var didAppear = false
 
     // Debug
     var isStreaming                = false
@@ -75,7 +76,7 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
                                              hardwareRevision: "—",
                                              mac: device.meta.mac)
     }
-
+    
     /// Set a unique LED identification pattern when in a group of devices.
     public func configure(for index: Int) {
         led.pattern = MWLED.Flash.Pattern.Presets.init(rawValue: index % 10)!.pattern
@@ -86,15 +87,10 @@ public extension AboutDeviceVM {
 
     /// Starts tracking state and refreshes battery and device information
     func onAppear() {
+        guard didAppear == false else { return }
+        didAppear = true
         trackState()
         refreshAll()
-    }
-
-    func onDisappear() {
-        rssiSub?.cancel()
-        connectionSub?.cancel()
-        infoSub?.cancel()
-        batterySub?.cancel()
     }
 
     func connect() {
@@ -108,12 +104,15 @@ public extension AboutDeviceVM {
 
     func refreshAll() {
         refreshSub = device?.publishWhenConnected()
+            .delay(for: 0.25, tolerance: 0, scheduler: device?.bleQueue ?? DispatchQueue.main)
             .first()
             .sink(receiveValue: { [weak self] _ in
                 self?.refreshBattery()
                 self?.refreshDeviceInformation()
             })
-        connect()
+        if (device?.connectionState ?? .connecting) < .connecting {
+            connect()
+        }
     }
 
     func identifyByLED() {

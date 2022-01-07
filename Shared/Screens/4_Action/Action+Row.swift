@@ -49,7 +49,6 @@ extension ActionScreen {
                 Button("Factory Reset") { vm.reset() }
             } }
             .onAppear(perform: vm.onAppear)
-            .onDisappear(perform: vm.onDisappear)
             .padding()
             .foregroundColor(foreground)
             .background(background)

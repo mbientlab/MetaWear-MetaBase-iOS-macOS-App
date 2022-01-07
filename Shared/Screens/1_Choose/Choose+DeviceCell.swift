@@ -58,7 +58,6 @@ extension ChooseDevicesScreen {
             .animation(.spring(), value: state.isIdentifying)
 
             .onAppear(perform: vm.onAppear)
-            .onDisappear(perform: vm.onDisappear)
         }
     }
 }

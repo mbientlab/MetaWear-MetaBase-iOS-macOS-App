@@ -57,7 +57,6 @@ extension HistoryScreen.AboutColumn {
             }
             .onPreferenceChange(SubtitleWK.self) { alignment = max($0, alignment) }
             .onAppear(perform: vm.onAppear)
-            .onDisappear(perform: vm.onDisappear)
         }
 
         private var header: some View {

@@ -47,8 +47,8 @@
 		940E01AC2780DC7C002AD641 /* EditableSubhead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01AA2780DC7C002AD641 /* EditableSubhead.swift */; };
 		940E01AE2780DEB9002AD641 /* Configure+Estimates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01AD2780DEB9002AD641 /* Configure+Estimates.swift */; };
 		940E01AF2780DEB9002AD641 /* Configure+Estimates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01AD2780DEB9002AD641 /* Configure+Estimates.swift */; };
-		940E01B12780E487002AD641 /* HoverButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B02780E487002AD641 /* HoverButton.swift */; };
-		940E01B22780E487002AD641 /* HoverButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B02780E487002AD641 /* HoverButton.swift */; };
+		940E01B12780E487002AD641 /* HoverButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B02780E487002AD641 /* HoverButtonStyle.swift */; };
+		940E01B22780E487002AD641 /* HoverButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B02780E487002AD641 /* HoverButtonStyle.swift */; };
 		940E01B42780E4A7002AD641 /* DepressButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B32780E4A7002AD641 /* DepressButtonStyle.swift */; };
 		940E01B52780E4A7002AD641 /* DepressButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B32780E4A7002AD641 /* DepressButtonStyle.swift */; };
 		940E01B72780E4C7002AD641 /* UnderlineButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B62780E4C7002AD641 /* UnderlineButtonStyle.swift */; };
@@ -261,7 +261,7 @@
 		940E01A72780D85F002AD641 /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
 		940E01AA2780DC7C002AD641 /* EditableSubhead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableSubhead.swift; sourceTree = "<group>"; };
 		940E01AD2780DEB9002AD641 /* Configure+Estimates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Configure+Estimates.swift"; sourceTree = "<group>"; };
-		940E01B02780E487002AD641 /* HoverButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverButton.swift; sourceTree = "<group>"; };
+		940E01B02780E487002AD641 /* HoverButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverButtonStyle.swift; sourceTree = "<group>"; };
 		940E01B32780E4A7002AD641 /* DepressButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepressButtonStyle.swift; sourceTree = "<group>"; };
 		940E01B62780E4C7002AD641 /* UnderlineButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineButtonStyle.swift; sourceTree = "<group>"; };
 		940E01BC278148B5002AD641 /* mbientSwiftUI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = mbientSwiftUI; path = ../../mbientSwiftUI/mbientSwiftUI; sourceTree = "<group>"; };
@@ -669,7 +669,7 @@
 				94CF3EFF2764282300C2D8B0 /* CTAButton.swift */,
 				940E01B32780E4A7002AD641 /* DepressButtonStyle.swift */,
 				9446F6432782695200B535AD /* HighlightToggleStyle.swift */,
-				940E01B02780E487002AD641 /* HoverButton.swift */,
+				940E01B02780E487002AD641 /* HoverButtonStyle.swift */,
 				94E3A7F927603238007E2BAE /* IdentifyByLEDButton.swift */,
 				9408E2E42783A1B300D2D1BF /* MorePill.swift */,
 				940E01B62780E4C7002AD641 /* UnderlineButtonStyle.swift */,
@@ -1063,7 +1063,7 @@
 				949E5A6E2773243800D45740 /* Sessions.xcdatamodeld in Sources */,
 				940E01AE2780DEB9002AD641 /* Configure+Estimates.swift in Sources */,
 				94E3A7F5275FF557007E2BAE /* HistoryScreen.swift in Sources */,
-				940E01B12780E487002AD641 /* HoverButton.swift in Sources */,
+				940E01B12780E487002AD641 /* HoverButtonStyle.swift in Sources */,
 				94AEA08227854E5F00C8BE23 /* UniqueDeviceIdentifier.swift in Sources */,
 				946F64D5277BCEB700AE293C /* FilesExporter.swift in Sources */,
 				9440E190277CDE2800D33484 /* HistoricalSessionsVM.swift in Sources */,
@@ -1164,7 +1164,7 @@
 				949E5A6F2773243800D45740 /* Sessions.xcdatamodeld in Sources */,
 				940E01AF2780DEB9002AD641 /* Configure+Estimates.swift in Sources */,
 				9452855F275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
-				940E01B22780E487002AD641 /* HoverButton.swift in Sources */,
+				940E01B22780E487002AD641 /* HoverButtonStyle.swift in Sources */,
 				94AEA08327854E5F00C8BE23 /* UniqueDeviceIdentifier.swift in Sources */,
 				946F64D6277BCEB700AE293C /* FilesExporter.swift in Sources */,
 				9440E191277CDE2800D33484 /* HistoricalSessionsVM.swift in Sources */,
@@ -1396,7 +1396,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1431,7 +1431,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

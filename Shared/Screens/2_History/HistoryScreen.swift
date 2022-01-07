@@ -36,7 +36,6 @@ struct HistoryScreen: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .environmentObject(vm)
         .onAppear(perform: vm.onAppear)
-        .onDisappear(perform: vm.onDisappear)
     }
 
     @Environment(\.colorScheme) var colorScheme

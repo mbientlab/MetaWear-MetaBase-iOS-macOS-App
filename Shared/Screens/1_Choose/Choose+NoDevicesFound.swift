@@ -14,7 +14,6 @@ extension ChooseDevicesScreen {
             GeometryReader {
                 Content(frame: $0.frame(in: .local), shouldDisappear: shouldShowList)
             }
-            .trackOrientation()
         }
     }
 }

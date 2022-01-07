@@ -85,10 +85,6 @@ public extension UnknownItemVM {
             }
     }
 
-    func onDisappear() {
-        rssiSub?.cancel()
-    }
-
     func identify() {
         // Not offered
     }

@@ -23,7 +23,6 @@ extension ChooseDevicesScreen {
                     Button("Remember") { vm.connect() }
                 }
                 .onAppear(perform: vm.onAppear)
-                .onDisappear(perform: vm.onDisappear)
         }
     }
 
