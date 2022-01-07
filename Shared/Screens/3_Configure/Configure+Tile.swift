@@ -39,6 +39,9 @@ extension ConfigureScreen {
             .padding()
             .frame(width: Grid.tileWidth, height: Grid.tileHeight, alignment: .top)
             .background(button)
+            #if os(iOS)
+            .hoverEffect(.lift)
+            #endif
             .animation(.easeOut(duration: 0.2), value: isSelected)
             .animation(.easeOut(duration: 0.2), value: isHovered)
         }
@@ -81,7 +84,9 @@ extension ConfigureScreen {
                 .fixedSize()
 #endif
                 .frame(maxWidth: .infinity, alignment: .center)
+#if os(iOS)
                 .background(preventUnwantedTouchesOn_iOS)
+#endif
                 .padding(.bottom, idiom == .macOS ? 0 : 7)
                 .help(Text("Sampling Frequency"))
         }
@@ -109,6 +114,8 @@ extension ConfigureScreen {
 
         private var preventUnwantedTouchesOn_iOS: some View {
             Button { } label: { Color.clear }
+            .accessibilityHidden(true)
+            .buttonStyle(.borderless)
         }
 
         // MARK: - Button
@@ -120,9 +127,9 @@ extension ConfigureScreen {
                     shape
                         .trim(from: 0, to: isSelected ? 1 : 0)
                         .foregroundColor((isSelected ? Color.myHighlight : .clear).opacity(backgroundOpacity))
-                    #if os(iOS)
+#if os(iOS)
                         .brightness(colorScheme == .dark ? -0.13 : -0.05)
-                    #endif
+#endif
                         .animation(.spring(), value: isSelected)
                     shape
                         .strokeBorder(lineWidth: 2)
