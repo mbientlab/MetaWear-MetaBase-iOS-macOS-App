@@ -38,6 +38,9 @@ public class UnknownItemVM: ObservableObject, ItemVM {
         self.routing = routing
         let _device = store.getDevice(byLocalCBUUID: cbuuid)
         guard let device = _device.device else { fatalError() }
+#if DEBUG
+        device.logDelegate = MWConsoleLogger.shared
+#endif
         self.isCloudSynced = store.deviceIsCloudSynced(mac: device.info.mac)
         self.device = device
         self.name = device.name

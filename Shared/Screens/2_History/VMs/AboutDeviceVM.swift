@@ -55,6 +55,10 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     let cancel                     = PassthroughSubject<Void,Never>()
 
     public init(device: MWKnownDevice, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing) {
+#if DEBUG
+        device.mw?.logDelegate = MWConsoleLogger.shared
+#endif
+
         self.connection = device.mw?.connectionState == .connected ? .connected : .disconnected
         self.store = store
         self.routing = routing
