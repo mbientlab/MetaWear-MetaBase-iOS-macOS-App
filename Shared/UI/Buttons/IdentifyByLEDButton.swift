@@ -25,7 +25,7 @@ struct IdentifyByLEDButton: View {
                 .padding(4)
         }
         .whenHovered { isHovering = $0 }
-        .buttonStyle(.borderless)
+        .buttonStyle(DepressButtonStyle())
         .background(flashingBackground)
         .help("Identify by LED and haptics (if available)")
         .animation(.linear(duration: 0.1), value: emulator.ledIsOn)

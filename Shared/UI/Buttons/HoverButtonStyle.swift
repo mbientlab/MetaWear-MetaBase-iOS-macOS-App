@@ -20,7 +20,7 @@ struct HoverButtonStyle: ButtonStyle {
         var body: some View {
             config.label
                 .scaleEffect(config.isPressed ? 0.96 : 1, anchor: anchor)
-                .foregroundColor(isHovered ? .myHighlight : inactiveColor)
+                .foregroundColor(isHovered || config.isPressed ? .myHighlight : inactiveColor)
                 .whenHovered { isHovered = $0 }
                 .animation(.spring(), value: config.isPressed)
                 .animation(.easeOut.speed(3), value: isHovered)

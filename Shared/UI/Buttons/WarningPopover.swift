@@ -20,5 +20,8 @@ struct WarningPopover: View {
                     .padding()
             }
             .whenHovered { isHovering = $0 }
+        #if os(iOS)
+            .onLongPressGesture(minimumDuration: 0.1, maximumDistance: 50, perform: { }, onPressingChanged: { isHovering = $0 })
+        #endif
     }
 }
