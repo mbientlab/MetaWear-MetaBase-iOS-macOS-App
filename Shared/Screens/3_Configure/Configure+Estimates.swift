@@ -24,19 +24,16 @@ extension ConfigureScreen {
         }
 
         private var streamRate: some View {
-            
             HStack {
                 if vm.config.exceedsStreamableLimit {
-                    WarningPopover(message: "Bluetooth Low Energy can only stream at 100–120 Hz",
-                                   color: .myFailure)
+                    WarningPopover(message: "Bluetooth Low Energy can only stream at 100–120 Hz", color: .myFailure)
                 } else {
                     SFSymbol.signal.image()
                 }
                 Text(vm.frequencyLabel)
-                    .font(.headline)
-                    .foregroundColor(vm.config.exceedsStreamableLimit ? .myFailure : .mySecondary)
+                    .foregroundColor(vm.config.exceedsStreamableLimit ? .myFailure : nil)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 40)
         }
 
         private var logFillDuration: some View {

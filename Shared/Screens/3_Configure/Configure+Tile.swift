@@ -8,6 +8,7 @@ extension ConfigureScreen {
     struct Tile<Frequency: Listable, Option: Listable>: View {
 
         @Environment(\.reverseOutColor) private var reverseOut
+        @Environment(\.colorScheme) private var colorScheme
 
         // State
         let module: String
@@ -58,7 +59,7 @@ extension ConfigureScreen {
 
             }
             .foregroundColor(textColor)
-            .padding(.top, 10)
+            .padding(.top, idiom == .macOS ? 10 : 20)
         }
 
         private var textColor: Color {
@@ -76,8 +77,12 @@ extension ConfigureScreen {
                 labelColor: reverseOut
             )
                 .animation(nil)
+#if os(macOS)
                 .fixedSize()
+#endif
                 .frame(maxWidth: .infinity, alignment: .center)
+                .background(preventUnwantedTouchesOn_iOS)
+                .padding(.bottom, idiom == .macOS ? 0 : 7)
                 .help(Text("Sampling Frequency"))
         }
 
@@ -90,13 +95,20 @@ extension ConfigureScreen {
                 labelColor: reverseOut
             )
                 .animation(nil)
+#if os(macOS)
                 .fixedSize()
+#endif
                 .frame(maxWidth: .infinity, alignment: .center)
                 .help(Text(optionsHelp))
-
+                .padding(.top, idiom == .macOS ? 0 : 5)
+                .background(preventUnwantedTouchesOn_iOS)
                 .opacity(showOptions ? 1 : 0)
                 .disabled(showOptions == false)
                 .allowsHitTesting(showOptions)
+        }
+
+        private var preventUnwantedTouchesOn_iOS: some View {
+            Button { } label: { Color.clear }
         }
 
         // MARK: - Button
@@ -108,10 +120,14 @@ extension ConfigureScreen {
                     shape
                         .trim(from: 0, to: isSelected ? 1 : 0)
                         .foregroundColor((isSelected ? Color.myHighlight : .clear).opacity(backgroundOpacity))
+                    #if os(iOS)
+                        .brightness(colorScheme == .dark ? -0.13 : -0.05)
+                    #endif
                         .animation(.spring(), value: isSelected)
                     shape
                         .strokeBorder(lineWidth: 2)
-                        .foregroundColor(isHovered || isSelected ? .myHighlight : .myPrimary.opacity(0.2))
+                        .foregroundColor(isHovered ? .myHighlight : .myPrimary.opacity(0.2))
+                        .opacity(isSelected ? 0 : 1)
 
                     moduleLabel.padding()
                 }

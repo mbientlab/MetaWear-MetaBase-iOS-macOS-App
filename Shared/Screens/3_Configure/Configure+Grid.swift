@@ -10,10 +10,16 @@ extension ConfigureScreen {
 
         @EnvironmentObject private var vm: ConfigureVM
 
+        #if os(macOS)
         static let tileWidth = CGFloat(180)
         static let tileHeight = CGFloat(170)
-
         static private let gridSpacing = CGFloat(12)
+        #else
+        static let tileWidth = CGFloat(220)
+        static let tileHeight = CGFloat(210)
+        static private let gridSpacing = CGFloat(25)
+        #endif
+
         static private let gridItemSize = Self.tileWidth
         private let item = GridItem(.adaptive(minimum: gridItemSize, maximum: gridItemSize),
                                     spacing: Self.gridSpacing,
@@ -24,6 +30,9 @@ extension ConfigureScreen {
                 SensorIterator()
             }
             .animation(.interactiveSpring())
+            #if os(iOS)
+            .padding(.trailing, .screenInset)
+            #endif
         }
     }
 }
