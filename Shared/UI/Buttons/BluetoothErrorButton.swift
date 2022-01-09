@@ -16,7 +16,7 @@ struct BluetoothErrorButton: View {
                     Text(bluetooth.isHovered ? bluetooth.ctaLabelHovered : bluetooth.ctaLabel)
                         .fixedSize(horizontal: true, vertical: false)
                 }
-                .font(.body.weight(.medium))
+                .adaptiveFont(.body.withWeight(.medium))
             }
             .foregroundColor(.myFailure)
             .whenHovered { bluetooth.isHovered = $0 }

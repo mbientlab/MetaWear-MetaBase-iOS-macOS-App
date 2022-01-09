@@ -85,7 +85,7 @@ extension ImportSessions {
                         .hidden()
                 }
             }
-            .font(.title)
+            .adaptiveFont(.primaryActionText)
             .lineSpacing(9)
             .multilineTextAlignment(.center)
         }

@@ -97,7 +97,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
         private var instruction: some View {
             var text: some View {
                 Text("Finding nearby MetaWear")
-                    .font(.largeTitle)
+                    .adaptiveFont(.onboardingLargeTitle)
             }
 
             let removal = AnyTransition.opacity

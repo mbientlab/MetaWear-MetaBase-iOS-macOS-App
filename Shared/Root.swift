@@ -40,9 +40,11 @@ public class Root: ObservableObject {
         let devices = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
         self.presets = PresetSensorParametersStore(loader: presetsLoader)
         self.logging = ActiveLoggingSessionsStore(loader: loggingLoader)
-        let importer = MetaBase4SessionDataImporter(sessions: sessions,
-                                        devices: devices,
-                                        defaults: userDefaults)
+        let importer = MetaBase4SessionDataImporter(
+            sessions: sessions,
+            devices: devices,
+            defaults: userDefaults
+        )
         let routing = Routing()
         let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing)
 

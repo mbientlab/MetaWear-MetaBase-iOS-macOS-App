@@ -10,12 +10,12 @@ struct LabeledItem<Item:View>: View {
     var body: some View {
         HStack {
             Text(label)
-                .font(.subheadline)
+                .adaptiveFont(.hLabelSubheadline)
             
             Spacer()
 
             item
-                .font(.body.bold().monospacedDigit())
+                .adaptiveFont(.hLabelBody)
         }
     }
 }

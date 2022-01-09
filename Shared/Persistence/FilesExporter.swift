@@ -21,11 +21,11 @@ class FilesExporter {
             .temporaryDirectory
             .appendingPathComponent(Bundle.main.bundleIdentifier!, isDirectory: true)
             .appendingPathComponent(id.uuidString, isDirectory: true)
-        try? clearTempDirectory()
+        clearTempDirectory()
         try writeToTempDirectory(files: files)
     }
 
-    deinit { try? clearTempDirectory() }
+    deinit { clearTempDirectory() }
 }
 
 extension FilesExporter  {
@@ -88,8 +88,8 @@ extension FilesExporter  {
 
 private extension FilesExporter {
 
-    func clearTempDirectory() throws {
-        try FileManager.default.removeItem(at: tempDirectoryURL)
+    func clearTempDirectory() {
+        try? FileManager.default.removeItem(at: tempDirectoryURL)
     }
 
     func writeToTempDirectory(files: [File]) throws {

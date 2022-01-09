@@ -21,7 +21,7 @@ struct IdentifyByLEDButton: View {
     var body: some View {
         Button { request() } label: {
             SFSymbol.led.image()
-                .font(.headline)
+                .adaptiveFont(.ctaMinor)
                 .foregroundColor(foregroundColor)
                 .padding(4)
         }
@@ -58,12 +58,12 @@ struct IdentifyByLEDLargeButton: View {
     }
 
     var notRequestedState: some View {
-        Text("Identify").font(.headline)
+        Text("Identify").adaptiveFont(.ctaMinor)
     }
 
     var requestingState: some View {
         SFSymbol.led.image()
-            .font(.headline)
+            .adaptiveFont(.ctaMinor)
             .foregroundColor(reverseOut)
             .padding(4)
             .frame(maxWidth: .infinity)

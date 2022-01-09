@@ -10,7 +10,7 @@ struct WarningPopover: View {
     @State private var isHovering = false
     var body: some View {
         SFSymbol.error.image()
-            .font(.title3.bold())
+            .adaptiveFont(.subsectionTitle)
             .foregroundColor(isHovering ? .myFailure : color)
             .popover(isPresented: $isHovering) {
                 Text(message)

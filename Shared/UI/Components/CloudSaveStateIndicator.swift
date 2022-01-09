@@ -18,20 +18,20 @@ struct CloudSaveStateIndicator: View {
                 case .error(let error): WarningPopover(message: error.localizedDescription)
             }
         }
-        .font(.headline)
+        .adaptiveFont(.ctaAlert)
         .animation(.easeOut, value: state)
     }
 
     private var saving: some View {
         VStack {
             SFSymbol.icloud.image()
-                .font(.title2.weight(.bold))
+                .adaptiveFont(.ctaAlert)
                 .padding(.bottom, 5)
                 .matchedGeometryEffect(id: "icloud", in: namespace)
                 .opacity(animateCloud ? 1 : 0.75)
 
             Text("Saving to iCloud...")
-                .font(.callout)
+                .adaptiveFont(.actionStateDetail)
         }
         .animation(.easeOut.repeatForever(autoreverses: true), value: animateCloud)
         .onAppear { animateCloud.toggle() }
@@ -39,7 +39,7 @@ struct CloudSaveStateIndicator: View {
 
     private var saved: some View {
         SFSymbol.icloudSaved.image()
-            .font(.title2.weight(.bold))
+            .adaptiveFont(.ctaAlert)
             .matchedGeometryEffect(id: "icloud", in: namespace)
             .help("Saved to iCloud")
             .opacity(showSuccess ? 1 : 0)

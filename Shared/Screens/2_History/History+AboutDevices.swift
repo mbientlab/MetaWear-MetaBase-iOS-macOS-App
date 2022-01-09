@@ -49,7 +49,7 @@ extension HistoryScreen.DevicesList {
 
                 info
                     .padding(.leading, 10)
-                    .font(.body)
+                    .adaptiveFont(.systemBody)
             }
             .onPreferenceChange(SubtitleWK.self) { alignment = max($0, alignment) }
             .onAppear(perform: vm.onAppear)
@@ -60,7 +60,7 @@ extension HistoryScreen.DevicesList {
             return HStack(spacing: 10) {
 
                 Text(vm.meta.name)
-                    .font(.title3.weight(.medium))
+                    .adaptiveFont(.subsectionTitle)
                     .foregroundColor(.mySecondary)
                     .lineLimit(1)
                     .fixedSize(horizontal: false, vertical: true)
@@ -105,7 +105,7 @@ extension HistoryScreen.DevicesList {
             } else {
                 Button("More...") { showDetails.toggle() }
                 .buttonStyle(HoverButtonStyle(inactiveColor: .myTertiary))
-                .font(.subheadline)
+                .adaptiveFont(.hLabelSubheadline)
             }
         }
 

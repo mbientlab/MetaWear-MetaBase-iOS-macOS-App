@@ -8,16 +8,25 @@ struct HighlightToggleStyle: ToggleStyle {
     var on: String
     var offColor: Color = .myHighlight
     var onColor: Color = .myHighlight
-    var font: Font = .title3
+    var font: Font.Config = .ctaMajor.adjustingSize(steps: -1)
     var padding: CGFloat = 6
     @Namespace private var toggle
 
     func makeBody(configuration: Configuration) -> some View {
         HStack(spacing: 10 - padding) {
-            Option(label: off, color: offColor, isOn: !configuration.isOn, set: { configuration.isOn = false })
-            Option(label: on, color: onColor, isOn: configuration.isOn, set: { configuration.isOn = true })
+            Option(label: off,
+                   color: offColor,
+                   isOn: !configuration.isOn,
+                   set: { configuration.isOn = false },
+                   font: font
+            )
+            Option(label: on,
+                   color: onColor,
+                   isOn: configuration.isOn,
+                   set: { configuration.isOn = true },
+                   font: font
+            )
         }
-        .font(font)
         .environment(\.namespace, toggle)
         .animation(.spring().speed(2), value: configuration.isOn)
     }
@@ -28,13 +37,14 @@ struct HighlightToggleStyle: ToggleStyle {
         var color: Color
         var isOn: Bool
         var set: () -> Void
+        var font: Font.Config
         var padding: CGFloat = 6
         @Environment(\.namespace) private var namespace
 
         var body: some View {
             Button(action: set) {
                 Text(label)
-                    .fontWeight(isOn ? .semibold : .medium)
+                    .adaptiveFont(font.bumpWeight(isOn))
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(1)
                     .padding(.horizontal, 10)

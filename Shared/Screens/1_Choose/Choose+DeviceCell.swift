@@ -126,9 +126,6 @@ extension ChooseDevicesScreen.DeviceCell {
         let ledEmulator: MWLED.Flash.Pattern.Emulator
         let isUnrecognized: Bool
         var isLogging: Bool
-        let nameFont: Font = idiom == .iPhone
-        ? .system(.title3, design: .rounded).weight(.medium)
-        : .system(.title2, design: .rounded).weight(.medium)
 
         var body: some View {
             DropOutcomeIndicator()
@@ -141,7 +138,7 @@ extension ChooseDevicesScreen.DeviceCell {
                 .offset(y: isDropping ? -.verticalHoverDelta * 2 : 0)
 
             Text(name)
-                .font(nameFont)
+                .adaptiveFont(.deviceCellTitle)
                 .offset(y: isHovering ? -.verticalHoverDelta : 0)
                 .offset(y: isDropping ? -.verticalHoverDelta * 2 : 0)
                 .foregroundColor(colorScheme == .light ? .myPrimary.opacity(0.7) : .myPrimary)
@@ -189,7 +186,7 @@ extension ChooseDevicesScreen.DeviceCell {
 
         private var icloudSynced: some View {
             SFSymbol.icloud.image()
-                .font(.headline)
+                .adaptiveFont(.deviceCellIcons)
                 .help(helpText)
                 .accessibilityLabel(Text(SFSymbol.icloud.accessibilityDescription))
                 .opacity(showCloudSync ? 0.75 : 0)

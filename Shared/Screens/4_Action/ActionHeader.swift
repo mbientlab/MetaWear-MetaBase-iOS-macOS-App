@@ -22,12 +22,12 @@ struct ActionHeader: View {
 
             VStack(alignment: .leading, spacing: 12) {
                 Text(vm.actionType.title)
-                    .font(.largeTitle)
+                    .adaptiveFont(.screenHeader)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
 
                 Text(vm.name)
-                    .font(.title2)
+                    .adaptiveFont(.screenHeaderDetail)
                     .foregroundColor(.mySecondary)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)

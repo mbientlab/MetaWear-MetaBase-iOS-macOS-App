@@ -14,8 +14,11 @@ extension ChooseDevicesScreen {
 
         var body: some View {
             if bluetooth.showError {
-                // With only one button on the toolbar, now using a shared toolbar
-                // BluetoothErrorButton()
+                // With only one button on the macOS toolbar, now using a shared toolbar
+                #if os(iOS)
+                 BluetoothErrorButton()
+                #endif
+
                 // #if os(macOS)
                 // .controlSize(.large)
                 // #endif
@@ -43,15 +46,15 @@ extension ChooseDevicesScreen {
             .whenHovered { iconIsHovered = $0 }
             .frame(maxWidth: .infinity, alignment: .center)
             .animation(.easeOut, value: iconIsHovered)
-            .offset(y: -40)
+            .offset(y: idiom == .iPad ? 40 : -40)
         }
 
         private var hoverLabel: some View {
             Text(vm.isScanning ? "Discovering nearby MetaWears" : "Tap to restart Bluetooth discovery")
-                .font(idiom == .iPhone ? .caption.weight(.medium) : .headline)
+                .adaptiveFont(.scanningPrompt)
                 .fixedSize(horizontal: false, vertical: true)
                 .foregroundColor(idiom == .iPhone ? .myPrimaryTinted : .mySecondary)
-                .opacity(iconIsHovered || idiom == .iPhone ? 1 : 0)
+                .opacity(iconIsHovered || idiom.is_iOS ? 1 : 0)
                 .opacity(idiom == .iPhone ? 0.65 : 1)
         }
     }

@@ -42,7 +42,7 @@ extension ConfigureScreen {
             } label: {
                 Text("Presets")
                     .foregroundColor(isHovered ? .myHighlight : .mySecondary)
-                    .font(.title)
+                    .font(.adaptiveFace(notScaled: .configurePresentsMenu))
             }
 #if os(macOS)
             .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))

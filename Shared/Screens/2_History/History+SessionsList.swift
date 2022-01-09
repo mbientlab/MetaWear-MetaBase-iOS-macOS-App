@@ -61,11 +61,17 @@ extension HistoryScreen {
         }
     }
 
-    static let listEdgeInsets = EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 10)
+    #if os(iOS)
+    static let listEdgeInsets = idiom == .iPhone
+    ? EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 10)
+    : EdgeInsets(top: 7, leading: 7, bottom: 7, trailing: 7)
+    #elseif os(macOS)
+    static let listEdgeInsets = EdgeInsets(top: 7, leading: 3, bottom: 7, trailing: 3)
+    #endif
 
     struct SessionListStaticSubhead: View {
         var body: some View {
-            Subhead(label: "Prior Sessions")
+            ScreenSubsection(label: "Prior Sessions")
         }
     }
 }
@@ -105,7 +111,7 @@ extension HistoryScreen.SessionsList {
                 Text(session.name)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
-                    .font(idiom.is_Mac ? .title3 : .body)
+                    .adaptiveFont(.sessionListName)
 
                 Spacer()
 
@@ -129,7 +135,7 @@ extension HistoryScreen.SessionsList {
             }
             .onAppear { dateString = mediumDateFormatter.string(from: session.date) }
             .onAppear { timeString = shortTimeFormatter.string(from: session.date) }
-            .font(idiom.is_Mac ? .title3 : .subheadline)
+            .adaptiveFont(.sessionListDate)
             .contextMenu {
                 Button("Rename") { vm.rename(session: session) }
                 Button("Delete") { vm.delete(session: session) }
@@ -142,18 +148,17 @@ extension HistoryScreen.SessionsList {
         }
 
         @ViewBuilder private var downloadButton: some View {
-            if isDownloading {
-                ProgressSpinner()
-
-            }  else {
+            ZStack {
                 Button { vm.download(session: session) } label: {
                     SFSymbol.download.image()
-                        .font(idiom.is_iOS
-                              ? .headline.weight(.medium)
-                              : .title3.weight(.medium)
-                        )
+                        .adaptiveFont(.sessionListIcon)
                 }
                 .buttonStyle(HoverButtonStyle())
+                .allowsHitTesting(!isDownloading)
+                .disabled(isDownloading)
+                .opacity(isDownloading ? 0 : 1)
+
+                if isDownloading { ProgressSpinner() }
             }
         }
 #if os(iOS)

@@ -68,7 +68,7 @@ extension ChooseDevicesScreen.NarrowVerticallySectionedGrid {
 
         var body: some View {
             Text(title)
-                .font(.system(.title2, design: .rounded).weight(.medium))
+                .adaptiveFont(.collectionSectionTitle)
                 .padding(.leading, .screenInset)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundColor(.myPrimaryTinted)

@@ -40,7 +40,7 @@ struct Onboarding: View {
 
     private var title: some View {
         Text(vm.title)
-            .font(.largeTitle.weight(.medium))
+            .adaptiveFont(.onboardingLargeTitle)
             .padding(.bottom, isAccessibilitySize ? 20 : 0)
     }
 
@@ -96,7 +96,7 @@ extension Onboarding {
                     symbol
 
                     Text(item.headline)
-                        .font(.title)
+                        .adaptiveFont(.onboardingHeadline)
                 }
                 .foregroundColor(item.color)
 
@@ -104,7 +104,7 @@ extension Onboarding {
                     symbol.hidden()
 
                     Text(item.description)
-                        .font(.title2)
+                        .adaptiveFont(.onboardingDescription)
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundColor(.mySecondary)
@@ -115,7 +115,7 @@ extension Onboarding {
 
         private var symbol: some View {
             item.symbol.image()
-                .font(.title.weight(.semibold))
+                .adaptiveFont(.onboardingHeadline.withWeight(.semibold))
         }
     }
 

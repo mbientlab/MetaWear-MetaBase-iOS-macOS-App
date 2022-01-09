@@ -27,7 +27,7 @@ extension ActionScreen {
                     .shadow(color: .black.opacity(0.4), radius: 1, x: 1, y: 1)
 
                 Text(vm.meta.name)
-                    .font(.title2.weight(isActionFocus ? .medium : .regular))
+                    .adaptiveFont(.actionDeviceTitle.bumpWeight(isActionFocus))
                     .padding(.trailing, connectionSpacing)
                     .reportMaxWidth(to: NameWK.self)
                     .frame(minWidth: nameWidth, alignment: .leading)

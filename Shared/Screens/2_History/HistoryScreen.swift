@@ -31,10 +31,10 @@ struct HistoryScreen: View {
 
     /// macOS + iPad
     private var wideLayout: some View {
-        HStack(alignment: .firstTextBaseline, spacing: .screenInset * 1.25) {
+        HStack(alignment: .firstTextBaseline, spacing: .screenInset * (idiom.is_Mac ? 1 : 1.25) ) {
 
             VStack(alignment: .leading) {
-                Subhead(label: "About", trailing: {
+                ScreenSubsection(label: "About", trailing: {
                     RefreshButton(help: "Refresh All", didTap: vm.refresh)
                         .buttonStyle(HoverButtonStyle())
                         .opacity(vm.showSessionStartAlert ? 0 : 1)
@@ -44,25 +44,25 @@ struct HistoryScreen: View {
             }
             .frame(minWidth: 230)
 
-            VStack {
+            VStack(alignment: .leading) {
                 SessionListStaticSubhead()
                 SessionsList(
                     factory,
                     scrollingTopContent: { EmptyView() }
                 )
+
+                CTAs(layoutVertically: idiom == .iPhone)
+                    .padding(.top, .screenInset / 2)
+                    .padding(.bottom, .screenInset)
+                    .layoutPriority(2)
             }
             .layoutPriority(1)
-
-            CTAs(layoutVertically: idiom == .iPhone)
-                .padding(.top, .screenInset / 2)
-                .padding(.bottom, .screenInset)
-                .layoutPriority(2)
         }
         .padding(.horizontal, .screenInset)
         .padding(.top, 5)
     }
 
-    /// iOS
+#if os(iOS)
     @State private var showiOSAboutSheet = false
     private var narrowLayout: some View {
         VStack(alignment: .leading) {
@@ -76,6 +76,7 @@ struct HistoryScreen: View {
                     SessionListStaticSubhead()
                         .padding(HistoryScreen.listEdgeInsets.horizontalInverted())
                         .listRowSeparator(.hidden)
+
                 }
             )
 
@@ -89,9 +90,10 @@ struct HistoryScreen: View {
         .onAppear { vm.items.forEach { $0.onAppear() } }
     }
 
+
     private var iOSAboutDevicesButton: some View {
         Button { showiOSAboutSheet.toggle() } label: {
-            Subhead(label: vm.items.endIndex > 1 ? "Devices" : "Device", trailing: {
+            ScreenSubsection(label: vm.items.endIndex > 1 ? "Devices" : "Device", trailing: {
                 SFSymbol.nextChevron.image().foregroundColor(.myTertiary)
             })
         }
@@ -102,5 +104,5 @@ struct HistoryScreen: View {
                 .modifier(CloseSheet())
         }
     }
-
+#endif
 }

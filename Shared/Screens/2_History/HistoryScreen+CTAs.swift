@@ -32,7 +32,7 @@ extension HistoryScreen {
                 if vm.showSessionStartAlert {
                     HStack {
                         SFSymbol.error.image()
-                            .font(.title3.bold())
+                            .adaptiveFont(.ctaMajor.adjustingSize(steps: -1).withWeight(.bold))
                             .foregroundColor(.myHighlight)
 
                         alert
@@ -52,7 +52,7 @@ extension HistoryScreen {
             Text(vm.alert + iPhoneSuggestion)
                 .fixedSize(horizontal: false, vertical: true)
                 .lineLimit(2)
-                .font(idiom == .iPhone ? .headline : .title2.weight(.medium))
+                .adaptiveFont(.ctaAlert)
                 .foregroundColor(.myHighlight)
                 .brightness(colorScheme == .light ? -0.08 : 0)
                 .opacity(vm.showSessionStartAlert ? 1 : 0)

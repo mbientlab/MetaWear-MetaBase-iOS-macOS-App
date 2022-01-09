@@ -20,7 +20,7 @@ struct Header: View {
             else { HeaderBackButton().hidden().disabled(true).allowsHitTesting(false) }
 
             Text(vm.title)
-                .font(idiom == .iPhone ? .title.weight(.medium) : .largeTitle)
+                .adaptiveFont(.screenHeader)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
                 .foregroundColor(colorScheme == .light ? .myPrimaryTinted : .myPrimary)
@@ -59,7 +59,7 @@ struct HeaderBackButton: View {
 
         } label: {
             SFSymbol.back.image()
-                .font(.title2)
+                .adaptiveFont(.screenHeaderBackIcon)
                 .foregroundColor(isHovered ? .myHighlight : restingBackArrowColor)
                 .offset(x: isHovered ? -5 : 0)
                 .padding(.vertical, 9)

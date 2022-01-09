@@ -183,6 +183,9 @@ private extension HistoricalSessionsVM {
                     case .success(let exportable):
                         self?.export = exportable
                         self?.exportID = sessionID
+#if os(macOS)
+                        self?.didDismissExportPopover(error: nil)
+#endif
                 }
             }
         }

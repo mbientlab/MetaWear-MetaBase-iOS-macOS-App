@@ -53,12 +53,12 @@ extension ConfigureScreen {
                 symbol.image()
                     .scaledToFit()
                     .frame(width: 40, height: 25)
-                    .font(.title.weight(.semibold))
+                    .adaptiveFont(.configureTileTitle.adjustingSize(points: 5).withWeight(.bold))
 
                 Text(module)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(2)
-                    .font(.title3.weight(isSelected ? .semibold : .medium))
+                    .adaptiveFont(.configureTileTitle.adjustingWeight(steps: isSelected ? 1 : 0))
 
             }
             .foregroundColor(textColor)
@@ -76,7 +76,7 @@ extension ConfigureScreen {
             CrossPlatformStylizedMenu(
                 selected: $frequency,
                 options: frequencies,
-                labelFont: .title3.weight(.semibold),
+                labelFont: .configureTileMenu,
                 labelColor: reverseOut
             )
                 .animation(nil)
@@ -96,7 +96,7 @@ extension ConfigureScreen {
             CrossPlatformStylizedMenu(
                 selected: $option,
                 options: options,
-                labelFont: .title3.weight(.semibold),
+                labelFont: .configureTileMenu,
                 labelColor: reverseOut
             )
                 .animation(nil)

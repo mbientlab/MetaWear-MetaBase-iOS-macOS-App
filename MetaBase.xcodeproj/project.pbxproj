@@ -116,16 +116,14 @@
 		945494F927656A840021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F827656A840021E3D6 /* MetaWear */; };
 		9464CA81278B61F500BE70C6 /* HistoryScreen+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9464CA80278B61F500BE70C6 /* HistoryScreen+CTAs.swift */; };
 		9464CA82278B61F500BE70C6 /* HistoryScreen+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9464CA80278B61F500BE70C6 /* HistoryScreen+CTAs.swift */; };
+		9464CA88278D029E00BE70C6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 9464CA87278D029E00BE70C6 /* MetaWear */; };
+		9464CA8A278D029E00BE70C6 /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9464CA89278D029E00BE70C6 /* MetaWearCpp */; };
+		9464CA8C278D029E00BE70C6 /* MetaWearFirmware in Frameworks */ = {isa = PBXBuildFile; productRef = 9464CA8B278D029E00BE70C6 /* MetaWearFirmware */; };
+		9464CA8E278D029E00BE70C6 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 9464CA8D278D029E00BE70C6 /* MetaWearSync */; };
 		946F64D5277BCEB700AE293C /* FilesExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946F64D4277BCEB700AE293C /* FilesExporter.swift */; };
 		946F64D6277BCEB700AE293C /* FilesExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946F64D4277BCEB700AE293C /* FilesExporter.swift */; };
 		9473B7B52770FAC4006F4994 /* KnownDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473B7B42770FAC4006F4994 /* KnownDevice+.swift */; };
 		9473B7B62770FAC4006F4994 /* KnownDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473B7B42770FAC4006F4994 /* KnownDevice+.swift */; };
-		9476F3642783822E00042C33 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F3632783822E00042C33 /* MetaWear */; };
-		9476F3662783822E00042C33 /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F3652783822E00042C33 /* MetaWearCpp */; };
-		9476F36A2783822E00042C33 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F3692783822E00042C33 /* MetaWearSync */; };
-		9476F36C2783823900042C33 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F36B2783823900042C33 /* MetaWear */; };
-		9476F36E2783823900042C33 /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F36D2783823900042C33 /* MetaWearCpp */; };
-		9476F3722783823900042C33 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 9476F3712783823900042C33 /* MetaWearSync */; };
 		9477FACC2784A3AC0019F9A8 /* MetaBase4SessionDataImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9477FACB2784A3AC0019F9A8 /* MetaBase4SessionDataImporter.swift */; };
 		9481D768276FD5CE00AB97FA /* Configure+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481D767276FD5CE00AB97FA /* Configure+Presets.swift */; };
 		9481D769276FD5CE00AB97FA /* Configure+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481D767276FD5CE00AB97FA /* Configure+Presets.swift */; };
@@ -180,8 +178,8 @@
 		94CF3F0D2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F062764286B00C2D8B0 /* SpotlightShimmerText.swift */; };
 		94CF3F0E2764286B00C2D8B0 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F072764286B00C2D8B0 /* ProgressBar.swift */; };
 		94CF3F0F2764286B00C2D8B0 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F072764286B00C2D8B0 /* ProgressBar.swift */; };
-		94CF3F102764286B00C2D8B0 /* Subhead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F082764286B00C2D8B0 /* Subhead.swift */; };
-		94CF3F112764286B00C2D8B0 /* Subhead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F082764286B00C2D8B0 /* Subhead.swift */; };
+		94CF3F102764286B00C2D8B0 /* ScreenSubsection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F082764286B00C2D8B0 /* ScreenSubsection.swift */; };
+		94CF3F112764286B00C2D8B0 /* ScreenSubsection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F082764286B00C2D8B0 /* ScreenSubsection.swift */; };
 		94CF3F122764286B00C2D8B0 /* LabeledItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F092764286B00C2D8B0 /* LabeledItem.swift */; };
 		94CF3F132764286B00C2D8B0 /* LabeledItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F092764286B00C2D8B0 /* LabeledItem.swift */; };
 		94CF3F1C276428CA00C2D8B0 /* Transitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F1A276428CA00C2D8B0 /* Transitions.swift */; };
@@ -332,7 +330,7 @@
 		94CF3F052764286B00C2D8B0 /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
 		94CF3F062764286B00C2D8B0 /* SpotlightShimmerText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotlightShimmerText.swift; sourceTree = "<group>"; };
 		94CF3F072764286B00C2D8B0 /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
-		94CF3F082764286B00C2D8B0 /* Subhead.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subhead.swift; sourceTree = "<group>"; };
+		94CF3F082764286B00C2D8B0 /* ScreenSubsection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenSubsection.swift; sourceTree = "<group>"; };
 		94CF3F092764286B00C2D8B0 /* LabeledItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabeledItem.swift; sourceTree = "<group>"; };
 		94CF3F1A276428CA00C2D8B0 /* Transitions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transitions.swift; sourceTree = "<group>"; };
 		94DFEC5D275D389700BB80DB /* Choose+KnownUnknownCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Choose+KnownUnknownCells.swift"; sourceTree = "<group>"; };
@@ -373,10 +371,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9476F3662783822E00042C33 /* MetaWearCpp in Frameworks */,
+				9464CA8A278D029E00BE70C6 /* MetaWearCpp in Frameworks */,
 				94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */,
-				9476F36A2783822E00042C33 /* MetaWearSync in Frameworks */,
-				9476F3642783822E00042C33 /* MetaWear in Frameworks */,
+				9464CA8C278D029E00BE70C6 /* MetaWearFirmware in Frameworks */,
+				9464CA8E278D029E00BE70C6 /* MetaWearSync in Frameworks */,
+				9464CA88278D029E00BE70C6 /* MetaWear in Frameworks */,
 				940E01BE278148EE002AD641 /* mbientSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -385,10 +384,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9476F36E2783823900042C33 /* MetaWearCpp in Frameworks */,
 				94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */,
-				9476F3722783823900042C33 /* MetaWearSync in Frameworks */,
-				9476F36C2783823900042C33 /* MetaWear in Frameworks */,
 				940E01C0278148F3002AD641 /* mbientSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -642,7 +638,7 @@
 				94AEA0902785940700C8BE23 /* PeekingMetaWearBG.swift */,
 				94CF3F072764286B00C2D8B0 /* ProgressBar.swift */,
 				94CF3F062764286B00C2D8B0 /* SpotlightShimmerText.swift */,
-				94CF3F082764286B00C2D8B0 /* Subhead.swift */,
+				94CF3F082764286B00C2D8B0 /* ScreenSubsection.swift */,
 				940E01A4277F9D1D002AD641 /* UnderlineRect.swift */,
 			);
 			path = Components;
@@ -818,9 +814,10 @@
 			name = "MetaBase (iOS)";
 			packageProductDependencies = (
 				940E01BD278148EE002AD641 /* mbientSwiftUI */,
-				9476F3632783822E00042C33 /* MetaWear */,
-				9476F3652783822E00042C33 /* MetaWearCpp */,
-				9476F3692783822E00042C33 /* MetaWearSync */,
+				9464CA87278D029E00BE70C6 /* MetaWear */,
+				9464CA89278D029E00BE70C6 /* MetaWearCpp */,
+				9464CA8B278D029E00BE70C6 /* MetaWearFirmware */,
+				9464CA8D278D029E00BE70C6 /* MetaWearSync */,
 			);
 			productName = "MetaBase (iOS)";
 			productReference = 94E005D1275A07E9001B0DFD /* MetaBase.app */;
@@ -841,9 +838,6 @@
 			name = "MetaBase (macOS)";
 			packageProductDependencies = (
 				940E01BF278148F3002AD641 /* mbientSwiftUI */,
-				9476F36B2783823900042C33 /* MetaWear */,
-				9476F36D2783823900042C33 /* MetaWearCpp */,
-				9476F3712783823900042C33 /* MetaWearSync */,
 			);
 			productName = "MetaBase (macOS)";
 			productReference = 94E005D7275A07E9001B0DFD /* MetaBase.app */;
@@ -931,7 +925,7 @@
 			);
 			mainGroup = 94E005C4275A07E9001B0DFD;
 			packageReferences = (
-				9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */,
+				9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */,
 			);
 			productRefGroup = 94E005D2275A07E9001B0DFD /* Products */;
 			projectDirPath = "";
@@ -1094,7 +1088,7 @@
 				9408E6DF276829280011B5F5 /* BluetoothErrorButton.swift in Sources */,
 				94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */,
 				94A165C3275F2F8600FA355D /* History+AboutDevices.swift in Sources */,
-				94CF3F102764286B00C2D8B0 /* Subhead.swift in Sources */,
+				94CF3F102764286B00C2D8B0 /* ScreenSubsection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1197,7 +1191,7 @@
 				9408E6E0276829280011B5F5 /* BluetoothErrorButton.swift in Sources */,
 				94A165C4275F2F8600FA355D /* History+AboutDevices.swift in Sources */,
 				94528559275BDE1E004D815B /* Choose+DeviceIterator.swift in Sources */,
-				94CF3F112764286B00C2D8B0 /* Subhead.swift in Sources */,
+				94CF3F112764286B00C2D8B0 /* ScreenSubsection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1675,12 +1669,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */ = {
+		9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mbientlab/MetaWear-SDK-Swift-Combine";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.5;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1702,34 +1696,24 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaWear;
 		};
-		9476F3632783822E00042C33 /* MetaWear */ = {
+		9464CA87278D029E00BE70C6 /* MetaWear */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
 			productName = MetaWear;
 		};
-		9476F3652783822E00042C33 /* MetaWearCpp */ = {
+		9464CA89278D029E00BE70C6 /* MetaWearCpp */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
 			productName = MetaWearCpp;
 		};
-		9476F3692783822E00042C33 /* MetaWearSync */ = {
+		9464CA8B278D029E00BE70C6 /* MetaWearFirmware */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWearSync;
+			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWearFirmware;
 		};
-		9476F36B2783823900042C33 /* MetaWear */ = {
+		9464CA8D278D029E00BE70C6 /* MetaWearSync */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWear;
-		};
-		9476F36D2783823900042C33 /* MetaWearCpp */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWearCpp;
-		};
-		9476F3712783823900042C33 /* MetaWearSync */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9476F3622783822E00042C33 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
 			productName = MetaWearSync;
 		};
 /* End XCSwiftPackageProductDependency section */

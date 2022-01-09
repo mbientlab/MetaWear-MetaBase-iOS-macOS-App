@@ -14,11 +14,11 @@ extension ChooseDevicesScreen {
                 HStack {
                     Text("Device Groups")
                         .opacity(isHovering ? 1 : 0)
+                        .adaptiveFont(.ctaMinor)
 
                     SFSymbol.group.image()
-                        .font(.title2)
+                        .adaptiveFont(.ctaMajor)
                 }
-                .font(.headline)
                 .whenHovered { isHovering = $0 }
                 .animation(.easeOut.speed(2), value: isHovering)
             }

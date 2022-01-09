@@ -47,14 +47,14 @@ extension ActionScreen {
             SFSymbol.checkFilled.image()
                 .resizable()
                 .scaledToFit()
-                .font(.title.weight(.semibold))
+                .adaptiveFont(.actionIcon)
                 .foregroundColor(invertTextColor ? reverseOut : .mySuccess)
         }
 
         @ViewBuilder private var failureIndicator: some View {
             if case let .error(message) = action.actionState[vm.meta.mac]! {
                 WarningPopover(message: message, color: invertTextColor ? reverseOut : .myFailure)
-                    .font(.title.weight(.semibold))
+                    .adaptiveFont(.actionIcon)
             }
         }
     }
@@ -76,7 +76,7 @@ extension ActionScreen {
                     case .error: failureIndicator
                 }
             }
-            .font(.title3.weight(.medium))
+            .adaptiveFont(.actionStateLabel)
         }
 
         private var notStartedIndicator: some View { EmptyView() }
@@ -92,7 +92,6 @@ extension ActionScreen {
         private var failureIndicator: some View {
             HStack {
                 Text("Error")
-                    .fontWeight(.semibold)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(1)
                 refresh
@@ -104,7 +103,6 @@ extension ActionScreen {
         private var timeoutIndicator: some View {
             HStack(spacing: 20) {
                 Text("Not Found")
-                    .fontWeight(.semibold)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(1)
                 refresh
@@ -152,7 +150,7 @@ extension ActionScreen {
             }()
             return Text(streamDatapointCount)
                 .foregroundColor(invertTextColor ? reverseOut.opacity(0.7) : .mySecondary)
-                .font(.subheadline)
+                .adaptiveFont(.actionStateDetail)
         }
 
         @ViewBuilder private var downloadPercent: some View {
