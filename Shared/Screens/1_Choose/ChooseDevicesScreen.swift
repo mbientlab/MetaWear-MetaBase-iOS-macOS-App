@@ -30,9 +30,9 @@ struct ChooseDevicesScreen: View {
         .animation(.easeOut, value: shouldShowList)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 #if os(iOS)
-        .background(shine.alignmentGuide(.top) { $0[VerticalAlignment.center] }, alignment: .top)
+        .background(atomIconShine.alignmentGuide(.top) { $0[VerticalAlignment.center] }, alignment: .top)
         .background(vignette.edgesIgnoringSafeArea(.all), alignment: .topLeading)
-        .background(SoftSpotlight(color: .white.opacity(0.9), radius: 500))
+        .background(screenShine)
 #endif
         .backgroundToEdges(.myBackground)
         .onAppear(perform: vm.didAppear)
@@ -42,16 +42,22 @@ struct ChooseDevicesScreen: View {
 #endif
     }
 
-    @ViewBuilder private var shine: some View {
-        if shouldShowList, idiom == .iPhone, shouldShowList, colorScheme == .light {
-            SoftSpotlight(color: .white.opacity(0.9), radius: 180)
-        }
-    }
-
     private var vignette: some View {
         DigitalVignette(background: .myVignette,
                         blendMode: colorScheme == .dark ? .lighten : .plusDarker)
             .opacity(shouldShowList ? 1 : 0)
+    }
+
+    @ViewBuilder private var screenShine: some View {
+        if colorScheme == .light {
+            SoftSpotlight(color: .white.opacity(0.9), radius: 500)
+        }
+    }
+
+    @ViewBuilder private var atomIconShine: some View {
+        if shouldShowList, idiom == .iPhone, shouldShowList, colorScheme == .light {
+            SoftSpotlight(color: .white.opacity(0.9), radius: 180)
+        }
     }
 }
 

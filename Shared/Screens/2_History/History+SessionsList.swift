@@ -4,47 +4,51 @@ import mbientSwiftUI
 
 extension HistoryScreen {
 
-    struct SessionsList: View {
+    struct SessionsList<ScrollingTopContent: View>: View {
 
-        init(_ factory: UIFactory) {
+        init(_ factory: UIFactory,
+             @ViewBuilder scrollingTopContent: @escaping () -> ScrollingTopContent) {
             _vm = .init(wrappedValue: factory.makePastSessionsVM())
+            self.scrollingTopContent = scrollingTopContent
         }
-
-        @StateObject var vm: HistoricalSessionsVM
+        private var scrollingTopContent: () -> ScrollingTopContent
+        @StateObject private var vm: HistoricalSessionsVM
         @State private var selection: Session? = nil
         @State private var dateWidth = CGFloat(50)
         @State private var timeWidth = CGFloat(50)
 
         var body: some View {
-            VStack {
-                Subhead(label: "Prior Sessions")
+            List(selection: $selection) {
+                scrollingTopContent()
 
-                List(selection: $selection) {
-                    ForEach(vm.sessions) { session in
-                        Row(session: session,
-                            dateWidth: dateWidth,
-                            timeWidth: timeWidth)
-                            .tag(session)
-                    }
-                    Color.clear.frame(height: 25)
+                ForEach(vm.sessions) { session in
+                    Row(session: session,
+                        dateWidth: dateWidth,
+                        timeWidth: timeWidth)
+                        .tag(session)
+                        .listRowInsets(HistoryScreen.listEdgeInsets)
                 }
-                .mask(mask.offset(y: 1))
-                .onPreferenceChange(DateWK.self) { dateWidth = $0 }
-                .onPreferenceChange(TimeWK.self) { timeWidth = $0 }
-#if os(macOS)
-                .onDeleteCommand {
-                    guard let selection = selection else { return }
-                    vm.delete(session: selection)
-                }
-#endif
-                .listStyle(.inset)
-                .animation(.easeOut, value: vm.sessions.map(\.name))
+
+
+                Color.clear.frame(height: 25)
             }
+            .mask(mask.offset(y: 1))
+            .onPreferenceChange(DateWK.self) { if $0 > dateWidth { dateWidth = $0 } }
+            .onPreferenceChange(TimeWK.self) { if $0 > timeWidth { timeWidth = $0 } }
+#if os(macOS)
+            .onDeleteCommand {
+                guard let selection = selection else { return }
+                vm.delete(session: selection)
+            }
+#endif
+            .listStyle(.inset)
+            .animation(.easeOut, value: vm.sessions.map(\.name))
+
             .environmentObject(vm)
             .onAppear(perform: vm.onAppear)
         }
 
-        var mask: some View {
+        private var mask: some View {
             VStack(spacing: 0) {
                 Color.white
                 HStack(alignment: .bottom, spacing: 0) {
@@ -54,6 +58,14 @@ extension HistoryScreen {
                     Color.white.frame(width: 10)
                 }.frame(height: 25)
             }
+        }
+    }
+
+    static let listEdgeInsets = EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 10)
+
+    struct SessionListStaticSubhead: View {
+        var body: some View {
+            Subhead(label: "Prior Sessions")
         }
     }
 }
@@ -73,23 +85,38 @@ extension HistoryScreen.SessionsList {
         @State private var timeString = ""
 
         var body: some View {
+            if #available(macOS 12.0, iOS 14.0, *) {
+                content
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button("Rename") { vm.rename(session: session) }
+                        .tint(.orange)
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button("Delete") { vm.delete(session: session) }
+                        .tint(.red)
+                    }
+            } else {
+                content
+            }
+        }
+
+        var content: some View {
             HStack {
                 Text(session.name)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
-                
+                    .font(idiom.is_Mac ? .title3 : .body)
+
                 Spacer()
 
                 Text(dateString)
-                    .font(.title3)
                     .foregroundColor(.mySecondary)
-                    .padding(.trailing, 15)
+                    .padding(.trailing, idiom.is_Mac ? 15 : 8)
                     .reportMaxWidth(to: DateWK.self)
                     .frame(minWidth: dateWidth, alignment: .leading)
 
 
                 Text(timeString)
-                    .font(.title3)
                     .foregroundColor(.mySecondary)
                     .padding(.trailing, 15)
                     .reportMaxWidth(to: TimeWK.self)
@@ -102,8 +129,7 @@ extension HistoryScreen.SessionsList {
             }
             .onAppear { dateString = mediumDateFormatter.string(from: session.date) }
             .onAppear { timeString = shortTimeFormatter.string(from: session.date) }
-            .padding(3)
-            .font(.title3)
+            .font(idiom.is_Mac ? .title3 : .subheadline)
             .contextMenu {
                 Button("Rename") { vm.rename(session: session) }
                 Button("Delete") { vm.delete(session: session) }
@@ -122,7 +148,10 @@ extension HistoryScreen.SessionsList {
             }  else {
                 Button { vm.download(session: session) } label: {
                     SFSymbol.download.image()
-                        .font(.title3.weight(.medium))
+                        .font(idiom.is_iOS
+                              ? .headline.weight(.medium)
+                              : .title3.weight(.medium)
+                        )
                 }
                 .buttonStyle(HoverButtonStyle())
             }
@@ -138,8 +167,7 @@ extension HistoryScreen.SessionsList {
 
         @ViewBuilder var exportHighlight: some View {
             if vm.exportID == session.id {
-                RoundedRectangle(cornerRadius: 5)
-                    .foregroundColor(.myGroupBackground)
+                Color.myGroupBackground
             }
         }
     }

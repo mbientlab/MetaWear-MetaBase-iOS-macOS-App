@@ -40,7 +40,15 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
         self.title = title
         self.items = vms
         self.cta = .init(ongoingLoggingSession: logging.session(for: routing.focus!.item))
-        alert = vms.endIndex > 1 ? "Bring all MetaWears nearby" : "Bring \(title) nearby"
+        self.alert = Self.makeAlertMessage(soloTitle: vms.endIndex > 1 ? nil : title)
+    }
+
+    static func makeAlertMessage(soloTitle: String?) -> String {
+        if let soloTitle = soloTitle {
+            return "Bring \(soloTitle) nearby"
+        } else {
+            return "Bring all MetaWears nearby"
+        }
     }
 
     deinit {
@@ -79,6 +87,7 @@ public extension HistoryScreenVM {
         let focus = routing.focus!.item
         loggingUpdates = logging.tokens
             .map { $0[focus] }
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] token in
                 self?.cta = .init(ongoingLoggingSession: token)
             }

@@ -1,6 +1,6 @@
 // Copyright 2022 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import Foundation
+import mbientSwiftUI
 
 let shortDateTimeFormatter: DateFormatter = {
     let date = DateFormatter()
@@ -11,7 +11,8 @@ let shortDateTimeFormatter: DateFormatter = {
 
 let mediumDateFormatter: DateFormatter = {
     let date = DateFormatter()
-    date.dateStyle = .medium
+    date.dateStyle = idiom == .iPhone ? .short : .medium
+    date.doesRelativeDateFormatting = true
     date.timeStyle = .none
     return date
 }()

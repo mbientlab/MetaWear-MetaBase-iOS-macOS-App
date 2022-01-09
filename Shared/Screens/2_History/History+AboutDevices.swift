@@ -6,35 +6,31 @@ import MetaWearSync
 
 extension HistoryScreen {
 
-    struct AboutColumn: View {
+    struct DevicesList: View {
+
+        init(initiallyShowDetails: Bool = false) {
+            _showDetails = .init(initialValue: initiallyShowDetails)
+        }
 
         @EnvironmentObject private var vm: HistoryScreenVM
-        @State private var showDetails = false
+        @State private var showDetails: Bool
 
         var body: some View {
-            VStack {
-                Subhead(label: "About", trailing: {
-                    RefreshButton(help: "Refresh All", didTap: vm.refresh)
-                        .buttonStyle(HoverButtonStyle())
-                        .opacity(vm.showSessionStartAlert ? 0 : 1)
-                })
-
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(alignment: .leading, spacing: 40) {
-                        ForEach(vm.items) { vm in
-                            AboutBox(vm: vm, showDetails: $showDetails)
-                        }
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 40) {
+                    ForEach(vm.items) { vm in
+                        AboutBox(vm: vm, showDetails: $showDetails)
                     }
-                    .padding(.top, 9)
-                    .padding(.bottom, 25)
-                    .animation(.spring(), value: showDetails)
                 }
+                .padding(.top, 9)
+                .padding(.bottom, 25)
+                .animation(.spring(), value: showDetails)
             }
         }
     }
 }
 
-extension HistoryScreen.AboutColumn {
+extension HistoryScreen.DevicesList {
 
     struct AboutBox: View {
 
@@ -70,7 +66,7 @@ extension HistoryScreen.AboutColumn {
                     .fixedSize(horizontal: false, vertical: true)
                     .layoutPriority(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, verticalPadding)
+                    .padding(.vertical, verticalPadding)
 
                 IdentifyByLEDButton(flashScale: 2, request: vm.identifyByLED, emulator: vm.led)
 
@@ -108,8 +104,8 @@ extension HistoryScreen.AboutColumn {
                 HLabel("Hardware", item: vm.info.hardwareRevision,      align: alignment)
             } else {
                 Button("More...") { showDetails.toggle() }
-                    .buttonStyle(HoverButtonStyle(inactiveColor: .myTertiary))
-                    .font(.subheadline)
+                .buttonStyle(HoverButtonStyle(inactiveColor: .myTertiary))
+                .font(.subheadline)
             }
         }
 
