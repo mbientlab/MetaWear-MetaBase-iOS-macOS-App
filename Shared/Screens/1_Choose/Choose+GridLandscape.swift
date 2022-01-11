@@ -52,6 +52,7 @@ extension ChooseDevicesScreen {
             Rectangle()
                 .frame(width: 1)
                 .foregroundColor(.myGroupBackground)
+                .offset(y: -.verticalHoverDelta - .screenInset / 2)
         }
 
         private var showDividerA: Bool {
