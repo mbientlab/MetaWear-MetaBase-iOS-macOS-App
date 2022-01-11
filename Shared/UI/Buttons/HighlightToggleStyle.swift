@@ -8,7 +8,7 @@ struct HighlightToggleStyle: ToggleStyle {
     var on: String
     var offColor: Color = .myHighlight
     var onColor: Color = .myHighlight
-    var font: Font.Config = .ctaMajor.adjustingSize(steps: -1)
+    var font: Font.Config = .ctaMajor.adjustingSize(steps: idiom == .iPhone ? -2 : -1)
     var padding: CGFloat = 6
     @Namespace private var toggle
 
