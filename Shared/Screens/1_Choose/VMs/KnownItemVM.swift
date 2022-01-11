@@ -172,28 +172,32 @@ public extension KnownItemVM {
     }
 
     func identify() {
-        devices.forEach { known in
-            guard let device = known.mw else { return }
-            isIdentifyingMACs.insert(known.meta.mac)
-            device.publishWhenConnected()
-                .command(.ledFlash(ledVM.pattern))
-                .first()
-                .receive(on: DispatchQueue.main)
-                .sink(receiveCompletion: { [weak self] completion in
-                    switch completion {
-                        case .failure:
-                            self?.isIdentifyingMACs.remove(known.meta.mac)
-                        case .finished:
-                            DispatchQueue.main.after(self?.ledVM.pattern.totalDuration ?? 1 + 0.25) {
-                                self?.isIdentifyingMACs.remove(known.meta.mac)
-                            }
-                    }
-                }, receiveValue: { [weak self] _ in
-                    self?.ledVM.emulate()
-                })
-                .store(in: &identifyingSubs)
-        }
+        devices.forEach(_identify(device:))
         devices.forEach { $0.mw?.connect() }
+    }
+
+    private func _identify(device: MWKnownDevice) {
+        guard let metawear = device.mw else { return }
+        isIdentifyingMACs.insert(device.meta.mac)
+
+        metawear.publishWhenConnected()
+            .command(.ledFlash(ledVM.pattern))
+            .first()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                    case .failure:
+                        self?.isIdentifyingMACs.remove(device.meta.mac)
+                    case .finished:
+                        let delay = self?.ledVM.pattern.totalDuration ?? 1 + 0.25
+                        DispatchQueue.main.after(delay) {
+                            self?.isIdentifyingMACs.remove(device.meta.mac)
+                        }
+                }
+            }, receiveValue: { [weak self] _ in
+                self?.ledVM.emulate()
+            })
+            .store(in: &identifyingSubs)
     }
 }
 
@@ -209,7 +213,10 @@ public extension KnownItemVM {
         devices.map(\.meta).forEach { store.forget(globally: $0) }
     }
 
-    // Forms a new group or merges items into self (as a gorup)
+    /// Forms a new group or merges items into self (as a group).
+    /// If reforming a previous grouping of devices, MetaWearSyncStore
+    /// will recover the UUID and name of that old group.
+    ///
     func group(withItems: [MetaWear.Metadata]) {
         guard withItems.isEmpty == false else { return }
         if var group = group {
@@ -224,7 +231,7 @@ public extension KnownItemVM {
         }
     }
 
-    // Merges the group into self (whether self is a group or solo device)
+    /// Merges the group into self (whether self is a group or solo device)
     func group(withGroup: MetaWear.Group) {
         if var group = group {
             group.deviceMACs.formUnion(withGroup.deviceMACs)
@@ -347,35 +354,6 @@ extension KnownItemVM: MWDropTargetVM {
         }
     }
 
-}
-
-public extension Array where Element == DraggableMetaWear.Item {
-
-    /// Extracts remembered devices, preserving order
-    func rememberedDevices(excluding: Set<MACAddress> = []) -> [(metadata: MetaWear.Metadata, localID: CBPeripheralIdentifier?)] {
-        reduce(into: [(metadata: MetaWear.Metadata, localID: CBPeripheralIdentifier?)](), { result, item in
-            guard case .remembered(meta: let meta, localID: let id) = item,
-                  excluding.contains(meta.mac) == false
-            else { return }
-            result.append((meta, id))
-        })
-    }
-
-    /// Extracts groups, preserving order
-    func groups() -> [MetaWear.Group] {
-        reduce(into: [MetaWear.Group](), { result, item in
-            guard case .group(let group) = item else { return }
-            result.append(group)
-        })
-    }
-
-    /// Extracts unknown devices, preserving order
-    func unknownDevices() -> [CBPeripheralIdentifier] {
-        reduce(into: [CBPeripheralIdentifier](), { result, item in
-            guard case .unknown(let id) = item else { return }
-            result.append(id)
-        })
-    }
 }
 
 // MARK: - Rename Delegate

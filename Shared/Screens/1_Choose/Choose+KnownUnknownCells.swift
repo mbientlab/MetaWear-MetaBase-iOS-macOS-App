@@ -104,7 +104,10 @@ extension ChooseDevicesScreen.KnownDeviceCell {
         }
 
         @ViewBuilder private var mergeGroupsSubmenu: some View {
-            let nonSelfGroups = vm.isGroup ? list.groups.filter { $0.id.uuidString != vm.id } : list.groups
+            let nonSelfGroups = vm.isGroup
+            ? list.groups.filter { $0.id.uuidString != vm.matchedGeometryID }
+            : list.groups
+
             if nonSelfGroups.isEmpty == false {
                 Menu(vm.isGroup ? "Merge with group..." : "Add to group...") {
                     ForEach(nonSelfGroups) { group in
