@@ -18,7 +18,7 @@ extension ChooseDevicesScreen {
                     grid
                         .padding(.leading, centeringPadding)
                         .offset(y: -.verticalHoverDelta)
-                        .animation(.easeOut.speed(2), value: centeringPadding)
+                        .animation(.easeOut, value: centeringPadding)
                         .animation(.easeOut, value: vm.groups)
                         .animation(.easeOut, value: vm.ungrouped)
                         .animation(.easeOut, value: vm.unknown)

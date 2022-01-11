@@ -32,7 +32,7 @@ public class KnownItemVM: ObservableObject, ItemVM {
 
     // Drag/drop
     @Published private(set) public var dropOutcome: DraggableMetaWear.DropOutcome = .noDrop
-    public let dropQueue: DispatchQueue = .global(qos: .background)
+    public let dropQueue: DispatchQueue
 
     // Dependencies
     private unowned let store:   MetaWearSyncStore
@@ -46,11 +46,11 @@ public class KnownItemVM: ObservableObject, ItemVM {
     private var identifyingSubs = Set<AnyCancellable>()
 
     /// Represent a MetaWear (either cloud-synced or locally known) as an item
-    public init(device: MWKnownDevice, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing) {
+    public init(device: MWKnownDevice, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing, queue: DispatchQueue) {
 #if DEBUG
         device.mw?.logDelegate = MWConsoleLogger.shared
 #endif
-
+        self.dropQueue = queue
         self.connection = device.mw?.connectionState == .connected ? .connected : .disconnected
         self.store = store
         self.routing = routing
@@ -71,7 +71,8 @@ public class KnownItemVM: ObservableObject, ItemVM {
     }
 
     /// Represent a group as a single item
-    public init(group: MetaWear.Group, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing) {
+    public init(group: MetaWear.Group, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing, queue: DispatchQueue) {
+        self.dropQueue = queue
         self.store = store
         self.routing = routing
         let _devices = store.getDevicesInGroup(group)
