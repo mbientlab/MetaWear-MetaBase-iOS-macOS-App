@@ -287,12 +287,21 @@ private extension MetaBase4SessionDataImporter {
     /// Get the current list of grouped devices. Sets a flag to allow the session import process to start once this list is loaded. (Without this list, the correct device group IDs wouldn't be available to assign to the import sessions.)
     ///
     func loadGroups() {
-        groupsSub = devices.groups
+        groupsSub = devices.groups.combineLatest(devices.groupsRecoverable)
+            .first()
             .receive(on: queue)
-            .map { groups in
+            .map { groups, recoverableGroups -> [Set<MACAddress>:UUID] in
+
+                /// Create a dict of past groups that can be matched against MAC
+                /// addresses. Any overlap with current groups will be
+                /// overwritten in the next step.
+                let recovered = recoverableGroups.reduce(into: [Set<MACAddress>:UUID](), { dict, group in
+                    dict[group.deviceMACs] = group.id
+                })
+
                 /// Create dict of current groups that can be matched against
                 /// the prior SDK's session grouping method (Set of MAC addresses).
-                groups.reduce(into: [Set<MACAddress>:UUID](), { dict, group in
+                return groups.reduce(into: recovered, { dict, group in
                     dict[group.deviceMACs] = group.id
                 })
             }
