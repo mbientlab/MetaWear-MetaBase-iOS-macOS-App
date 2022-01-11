@@ -3,6 +3,7 @@
 import mbientSwiftUI
 import MetaWear
 import MetaWearSync
+import SwiftUI
 
 extension HistoryScreen {
 
@@ -17,7 +18,7 @@ extension HistoryScreen {
 
         var body: some View {
             ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 40) {
+                VStack(alignment: .leading, spacing: 20) {
                     ForEach(vm.items) { vm in
                         AboutBox(vm: vm, showDetails: $showDetails)
                     }
@@ -42,17 +43,30 @@ extension HistoryScreen.DevicesList {
             VStack(alignment: .leading, spacing: 10) {
 
                 header
-                    .padding(.horizontal, 8)
-                    .padding(.leading, 5)
-                    .background(headerShading)
-                    .padding(.bottom, 5)
+
+                Divider()
+                    .padding(.top, -10)
+                    .padding(.bottom, -4)
 
                 info
                     .padding(.leading, 10)
                     .adaptiveFont(.systemBody)
             }
+            .padding(.bottom, 10)
+            .background(background)
             .onPreferenceChange(SubtitleWK.self) { alignment = max($0, alignment) }
             .onAppear(perform: vm.onAppear)
+        }
+
+        private var background: some View {
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundColor(.myGroupBackground3)
+
+                RoundedRectangle(cornerRadius: 8)
+                    .strokeBorder(lineWidth: 1, antialiased: true)
+                    .foregroundColor(.myGroupBackground3)
+            }
         }
 
         private var header: some View {
@@ -79,13 +93,11 @@ extension HistoryScreen.DevicesList {
                 }
                 .padding(.vertical, verticalPadding)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 6)) // LED Button
-        }
-
-        private var headerShading: some View {
-            RoundedRectangle(cornerRadius: 6)
-                .strokeBorder(lineWidth: 2.5)
-                .foregroundColor(.myGroupBackground)
+            .padding(.horizontal, 8)
+            .padding(.leading, 5)
+            .padding(.bottom, -1)
+            .background(Color.myGroupBackground2.opacity(0.5))
+            .clipShape(CorneredRect(rounding: [.topLeft, .topRight], by: 6)) // LED Button
         }
 
         @ViewBuilder private var info: some View {
