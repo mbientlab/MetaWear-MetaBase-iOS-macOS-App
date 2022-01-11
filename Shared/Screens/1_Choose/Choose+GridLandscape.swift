@@ -18,10 +18,10 @@ extension ChooseDevicesScreen {
                     grid
                         .padding(.leading, centeringPadding)
                         .offset(y: -.verticalHoverDelta)
-                        .animation(.interactiveSpring(), value: centeringPadding)
-                        .animation(.easeInOut, value: vm.groups)
-                        .animation(.easeInOut, value: vm.ungrouped)
-                        .animation(.easeInOut, value: vm.unknown)
+                        .animation(.easeOut.speed(2), value: centeringPadding)
+                        .animation(.easeOut, value: vm.groups)
+                        .animation(.easeOut, value: vm.ungrouped)
+                        .animation(.easeOut, value: vm.unknown)
                 }
             }
             .frame(maxHeight: .infinity, alignment: .bottom)
@@ -30,10 +30,11 @@ extension ChooseDevicesScreen {
         }
 
         private var grid: some View {
-            LazyHGrid(rows: rows, alignment: .center, spacing: cellSpacing) {
+            HStack(alignment: .center, spacing: cellSpacing) {
                 sections
                     .frame(height: Self.macItemHeight, alignment: .bottom)
             }
+            .frame(maxHeight: .infinity, alignment: .center)
         }
 
         @ViewBuilder private var sections: some View {

@@ -6,8 +6,7 @@ import MetaWear
 import MetaWearSync
 import CoreBluetooth
 
-public protocol ItemVM: Identifiable {
-    var id: String { get }
+public protocol ItemVM {
     var matchedGeometryID: String { get }
     var state: ItemState { get }
 
@@ -15,10 +14,6 @@ public protocol ItemVM: Identifiable {
     func connect()
 
     func onAppear()
-}
-
-public extension ItemVM {
-    var id: String { matchedGeometryID }
 }
 
 public struct ItemState {

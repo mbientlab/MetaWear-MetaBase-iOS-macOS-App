@@ -16,7 +16,6 @@ extension ChooseDevicesScreen {
             var body: some View {
                 ForEach(vm.groups) { group in
                     KnownDeviceCell(.group(group.id), factory: factory)
-                        .matchedGeometryEffect(id: group.id, in: list!)
                 }
             }
         }
@@ -28,7 +27,6 @@ extension ChooseDevicesScreen {
             var body: some View {
                 ForEach(vm.ungrouped) { metadata in
                     KnownDeviceCell(.known(metadata.id), factory: factory)
-                        .matchedGeometryEffect(id: metadata.mac, in: list!)
                 }
             }
         }
@@ -40,7 +38,6 @@ extension ChooseDevicesScreen {
             var body: some View {
                 ForEach(vm.unknown) { deviceID in
                     UnknownDeviceCell(unknown: deviceID, factory: factory)
-                        .matchedGeometryEffect(id: deviceID.uuidString, in: list!)
                 }
             }
 

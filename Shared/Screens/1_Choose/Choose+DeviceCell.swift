@@ -4,6 +4,7 @@ import mbientSwiftUI
 import MetaWear
 import CoreBluetooth
 import MetaWearSync
+import SwiftUI
 
 extension ChooseDevicesScreen {
 
@@ -224,6 +225,7 @@ extension ChooseDevicesScreen.DeviceCell {
         @Environment(\.isDropTarget) private var isDropping
         @Environment(\.isHovered) private var isHovering
         @Environment(\.dragProvider) private var dragProvider
+        @Environment(\.namespace) private var namespace
 
         private var imageWidth: CGFloat { 140 }
 
@@ -243,7 +245,9 @@ extension ChooseDevicesScreen.DeviceCell {
                         width: imageWidth,
                         height: imageHeight,
                         ledEmulator: ledEmulator
-                    ).environment(\.metaWearModel, models.first?.model ?? .unknown)
+                    )
+                        .environment(\.metaWearModel, models.first?.model ?? .unknown)
+                        .matchedGeometryEffect(id: models.first!.mac, in: namespace!)
                 }
             }
             .frame(width: imageWidth, height: imageHeight, alignment: .center)
@@ -279,6 +283,7 @@ extension ChooseDevicesScreen.DeviceCell {
                     height: imageHeight * groupItemScale,
                     ledEmulator: ledEmulator
                 )
+                    .matchedGeometryEffect(id: id, in: namespace!)
                     .environment(\.metaWearModel, model)
                     .arrangeGroupedMetaWearImages(at: index, overlap: imageWidth * overlap, xCentering: centering)
             }
