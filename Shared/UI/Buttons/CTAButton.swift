@@ -20,7 +20,6 @@ struct CTAButton: View {
         self.base = base
         self.maxWidth = maxWidth
         self.padding = padding
-        self.font = style.font
         self.incognito = style == .minor
         self.hPadding = style == .minor ? 12 : 25
         self.vPadding = 8
@@ -34,7 +33,6 @@ struct CTAButton: View {
     let base: Color
     let maxWidth: CGFloat?
     let padding: CGFloat
-    let font: Font
     let incognito: Bool
     let hPadding: CGFloat
     let vPadding: CGFloat
@@ -54,7 +52,7 @@ struct CTAButton: View {
 
                 Text(cta)
             }
-                .font(font.weight(scheme == .light ? .medium : .medium))
+            .adaptiveFont(style.font)
                 .lineLimit(1)
                 .fixedSize(horizontal: false, vertical: true)
                 .foregroundColor(isHovered && style != .minor ? hover : base)
@@ -80,10 +78,10 @@ struct CTAButton: View {
         case major
         case minor
 
-        var font: Font {
+        var font: Font.Config {
             switch self {
-                case .major: return .title2
-                case .minor: return .headline
+                case .major: return .ctaMajor
+                case .minor: return .ctaMinor
             }
         }
     }

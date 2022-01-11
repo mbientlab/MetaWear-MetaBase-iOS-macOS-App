@@ -11,21 +11,22 @@ struct IdentifyByLEDButton: View {
     @ObservedObject var emulator: MWLED.Flash.Pattern.Emulator
     @Environment(\.reverseOutColor) private var reverseOut
 
+
     @State private var isHovering = false
     private var foregroundColor: Color {
         if emulator.ledIsOn { return reverseOut }
-        return isHovering ? .myHighlight : .myPrimary
+        return isHovering ? .myHighlight : .mySecondary
     }
 
     var body: some View {
         Button { request() } label: {
             SFSymbol.led.image()
-                .font(.headline)
+                .adaptiveFont(.ctaMinor)
                 .foregroundColor(foregroundColor)
                 .padding(4)
         }
         .whenHovered { isHovering = $0 }
-        .buttonStyle(.borderless)
+        .buttonStyle(DepressButtonStyle())
         .background(flashingBackground)
         .help("Identify by LED and haptics (if available)")
         .animation(.linear(duration: 0.1), value: emulator.ledIsOn)
@@ -57,12 +58,12 @@ struct IdentifyByLEDLargeButton: View {
     }
 
     var notRequestedState: some View {
-        Text("Identify").font(.headline)
+        Text("Identify").adaptiveFont(.ctaMinor)
     }
 
     var requestingState: some View {
         SFSymbol.led.image()
-            .font(.headline)
+            .adaptiveFont(.ctaMinor)
             .foregroundColor(reverseOut)
             .padding(4)
             .frame(maxWidth: .infinity)

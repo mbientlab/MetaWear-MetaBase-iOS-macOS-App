@@ -2,7 +2,7 @@
 
 import mbientSwiftUI
 
-struct Subhead<T: View>: View {
+struct ScreenSubsection<T: View>: View {
 
     internal init(label: String, trailing: @escaping () -> T) {
         self.label = label
@@ -21,7 +21,7 @@ struct Subhead<T: View>: View {
         VStack(alignment: .leading) {
             HStack {
                 Text(label)
-                    .font(.title2.weight(.semibold))
+                    .adaptiveFont(.screenSubsectionTitle)
                     .foregroundColor(.mySecondary)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(1)
@@ -35,6 +35,6 @@ struct Subhead<T: View>: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .background(RoundedRectangle(cornerRadius: 5).fill(Color.myGroupBackground2))
+        .background(RoundedRectangle(cornerRadius: 5).fill(Color.myGroupBackground))
     }
 }

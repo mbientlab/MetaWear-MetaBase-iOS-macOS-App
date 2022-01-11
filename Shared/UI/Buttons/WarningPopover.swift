@@ -10,7 +10,7 @@ struct WarningPopover: View {
     @State private var isHovering = false
     var body: some View {
         SFSymbol.error.image()
-            .font(.title3.bold())
+            .adaptiveFont(.subsectionTitle)
             .foregroundColor(isHovering ? .myFailure : color)
             .popover(isPresented: $isHovering) {
                 Text(message)
@@ -20,5 +20,8 @@ struct WarningPopover: View {
                     .padding()
             }
             .whenHovered { isHovering = $0 }
+        #if os(iOS)
+            .onLongPressGesture(minimumDuration: 0.1, maximumDistance: 50, perform: { }, onPressingChanged: { isHovering = $0 })
+        #endif
     }
 }

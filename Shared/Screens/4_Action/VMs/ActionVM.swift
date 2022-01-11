@@ -28,6 +28,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     public let streamCounters:               StreamingCountersContainer
 
     // Data export state
+    @Published private(set) var export: Any? = nil
     @Published var showExportFilesCTA  = false
     @Published var isExporting = false
     @Published var cloudSaveState: CloudSaveState = .notStarted
@@ -127,12 +128,45 @@ public extension ActionVM {
 
     func exportFiles() {
         isExporting = true
-        exporter?.runExportInteraction(onQueue: workQueue) {
+#if os(macOS)
+        exporter?.runExportInteraction(onQueue: workQueue) { _ in
             DispatchQueue.main.async { [weak self] in
                 self?.isExporting = false
             }
         }
+#else
+        // Present UI and copy files
+        exporter?.runExportInteraction(onQueue: workQueue) { [weak self] result in
+            DispatchQueue.main.async { [weak self] in
+                switch result {
+                    case .failure(let error):
+                        self?.didDismissExportPopover(
+                            selectedActivity: nil,
+                            didPerformSelection: false,
+                            modifiedItems: nil,
+                            error: error)
+
+                    case .success(let exportable):
+                        self?.export = exportable
+                }
+            }
+        }
+#endif
     }
+
+#if os(iOS)
+    func didDismissExportPopover(
+        selectedActivity: UIActivity.ActivityType?,
+        didPerformSelection: Bool,
+        modifiedItems: [Any]?,
+        error: Error?
+    ) {
+        DispatchQueue.main.async { [weak self] in
+            self?.export = nil
+            self?.isExporting = false
+        }
+    }
+#endif
 
     // MARK: - Navigation
 

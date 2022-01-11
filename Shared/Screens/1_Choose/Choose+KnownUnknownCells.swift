@@ -20,10 +20,13 @@ extension ChooseDevicesScreen {
             DeviceCell(state: vm.state, vm: vm)
                 .frame(width: .deviceCellWidth)
                 .contextMenu {
+                    if vm.state.showCloudSync {
+                        Text("Identity Synced via iCloud")
+                        Divider()
+                    }
                     Button("Remember") { vm.connect() }
                 }
                 .onAppear(perform: vm.onAppear)
-                .onDisappear(perform: vm.onDisappear)
         }
     }
 
@@ -57,6 +60,10 @@ extension ChooseDevicesScreen.KnownDeviceCell {
         @EnvironmentObject private var list: DiscoveryListVM
 
         var body: some View {
+            if vm.state.showCloudSync {
+                Text("Identity Synced via iCloud")
+                Divider()
+            }
             Button("Rename", action: vm.rename)
             Button("Identify", action: vm.identify)
             Divider()

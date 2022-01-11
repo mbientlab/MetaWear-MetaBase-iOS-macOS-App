@@ -12,6 +12,8 @@ public class HistoricalSessionsVM: ObservableObject {
     private var sessionsListUpdates = Set<AnyCancellable>()
 
     // Exports
+    @Published private(set) var exportID: Session.ID? = nil
+    @Published private(set) var export: Any? = nil
     @Published private(set) var isDownloading: [Session.ID:Bool] = [:]
     private var exports: [Session.ID:FilesExporter] = [:]
     private var exportQueue: [Session.ID] = []
@@ -37,44 +39,6 @@ public extension HistoricalSessionsVM {
 
     func onAppear() {
         populateSessions()
-    }
-
-    /// Enqueues a  download request and presents a move files dialog when the download completes (and any preceding requests have already been handled by the user, one at a  time).
-    func download(session: Session) {
-        isDownloading[session.id] = true
-
-        if exports.keys.contains(session.id),
-           exportQueue.contains(session.id) == false {
-            backgroundQueue.async { [weak self] in
-                self?.exportQueue.append(session.id)
-                self?.showNextExportDialog()
-            }
-            return
-        }
-
-        sessionRepo.fetchFiles(in: session)
-            .receive(on: backgroundQueue)
-            .tryMap { files -> FilesExporter in
-                try FilesExporter(
-                    id: session.id,
-                    name: session.name,
-                    files: files
-                )
-            }
-            .sink { completion in
-                switch completion {
-                    case .failure(let error): NSLog(error.localizedDescription)
-                        DispatchQueue.main.sync { [weak self] in
-                            self?.isDownloading[session.id] = false
-                        }
-                    case .finished: return
-                }
-            } receiveValue: { [weak self] export in
-                self?.exports[session.id] = export
-                self?.exportQueue.append(session.id)
-                self?.showNextExportDialog()
-            }
-            .store(in: &subs)
     }
 
     func rename(session: Session) {
@@ -119,6 +83,72 @@ public extension HistoricalSessionsVM {
         }, secondary: { })
 
     }
+
+    /// Enqueues a  download request and presents a move files dialog when the download completes (and any preceding requests have already been handled by the user, one at a  time).
+    func download(session: Session) {
+        isDownloading[session.id] = true
+
+        if exports.keys.contains(session.id),
+           exportQueue.contains(session.id) == false {
+            backgroundQueue.async { [weak self] in
+                self?.exportQueue.append(session.id)
+                self?.showNextExportPopover()
+            }
+            return
+        }
+
+        sessionRepo.fetchFiles(in: session)
+            .receive(on: backgroundQueue)
+            .tryMap { files -> FilesExporter in
+                try FilesExporter(
+                    id: session.id,
+                    name: session.name,
+                    files: files
+                )
+            }
+            .sink { completion in
+                switch completion {
+                    case .failure(let error): NSLog(error.localizedDescription)
+                        DispatchQueue.main.sync { [weak self] in
+                            self?.isDownloading[session.id] = false
+                        }
+                    case .finished: return
+                }
+            } receiveValue: { [weak self] export in
+                self?.exports[session.id] = export
+                self?.exportQueue.append(session.id)
+                self?.showNextExportPopover()
+            }
+            .store(in: &subs)
+    }
+
+    #if os(iOS)
+    func didDismissExportPopover(
+        selectedActivity: UIActivity.ActivityType?,
+        didPerformSelection: Bool,
+        modifiedItems: [Any]?,
+        error: Error?
+    ) {
+        _didDismissPopover(error: error)
+    }
+    #else
+    func didDismissExportPopover(error: Error?) {
+        _didDismissPopover(error: error)
+    }
+    #endif
+    private func _didDismissPopover(error: Error?) {
+        guard let sessionID = self.exportID else { return }
+        backgroundQueue.async { [weak self] in
+            self?.exportFocus = nil
+            self?.showNextExportPopover()
+        }
+        // Clean up and advance to next queue
+        DispatchQueue.main.async { [weak self] in
+            self?.isDownloading[sessionID] = false
+            self?.export = nil
+            self?.exportID = nil
+        }
+    }
 }
 
 private extension HistoricalSessionsVM {
@@ -127,7 +157,7 @@ private extension HistoricalSessionsVM {
     ///  to copy files from a session to the designated location...
     ///  one at a time.
     ///
-    func showNextExportDialog() {
+    func showNextExportPopover() {
         // Dequeue a set of already downloaded files
         guard exportFocus == nil,
               let sessionID = exportQueue.popLast(),
@@ -136,14 +166,28 @@ private extension HistoricalSessionsVM {
         exportFocus = export
 
         // Present UI and copy files
-        export.runExportInteraction(onQueue: backgroundQueue) { [weak self] in
-
-            // Clean up and advance to next queue
+        export.runExportInteraction(onQueue: backgroundQueue) { [weak self] result in
             DispatchQueue.main.async { [weak self] in
-                self?.isDownloading[sessionID] = false
+                switch result {
+                    case .failure(let error):
+                        #if os(iOS)
+                        self?.didDismissExportPopover(
+                            selectedActivity: nil,
+                            didPerformSelection: false,
+                            modifiedItems: nil,
+                            error: error)
+                        #elseif os(macOS)
+                        self?.didDismissExportPopover(error: error)
+                        #endif
+
+                    case .success(let exportable):
+                        self?.export = exportable
+                        self?.exportID = sessionID
+#if os(macOS)
+                        self?.didDismissExportPopover(error: nil)
+#endif
+                }
             }
-            self?.exportFocus = nil
-            self?.showNextExportDialog()
         }
     }
 

@@ -2,14 +2,13 @@
 
 import mbientSwiftUI
 
-// MARK: - MacOS
+// MARK: - MacOS / iPad Wide Grid
 
-#if os(macOS)
 extension ChooseDevicesScreen {
 
     /// Layout and style the screen
-    /// 
-    struct MacOSGrid: View {
+    ///
+    struct WideOneRowGrid: View {
 
         @EnvironmentObject private var vm: DiscoveryListVM
 
@@ -32,10 +31,22 @@ extension ChooseDevicesScreen {
 
         private var grid: some View {
             LazyHGrid(rows: rows, alignment: .center, spacing: cellSpacing) {
-                DeviceIterator(divider: divider)
+                sections
                     .frame(height: Self.macItemHeight, alignment: .bottom)
             }
         }
+
+        @ViewBuilder private var sections: some View {
+            DeviceIterator.KnownGroups()
+#if os(iOS)
+            if showDividerA { divider }
+#endif
+            DeviceIterator.KnownUngrouped()
+            if showDividerB { divider }
+            DeviceIterator.UnknownNearby()
+        }
+
+        // MARK: - Dividers
 
         private var divider: some View {
             Rectangle()
@@ -43,8 +54,22 @@ extension ChooseDevicesScreen {
                 .foregroundColor(.myGroupBackground)
         }
 
+        private var showDividerA: Bool {
+            vm.groups.isEmpty == false
+            && (vm.ungrouped.isEmpty == false || vm.unknown.isEmpty == false)
+        }
+
+        private var showDividerB: Bool {
+            vm.ungrouped.isEmpty == false
+            && vm.unknown.isEmpty == false
+        }
+
         // MARK: - Layout Dimensions
-        @State private var windowWidth: CGFloat = MainWindow.minWidth
+#if os(macOS)
+        @State private var windowWidth = MainWindow.minWidth
+#else
+        @State private var windowWidth = UIScreen.main.bounds.width
+#endif
         private var cellSpacing: CGFloat = .screenInset * 2
         private static let macItemHeight: CGFloat = 320
         private let rows = [GridItem(.fixed(Self.macItemHeight), spacing: 0, alignment: .bottom)]
@@ -59,7 +84,7 @@ extension ChooseDevicesScreen {
     }
 }
 
-extension ChooseDevicesScreen.MacOSGrid {
+extension ChooseDevicesScreen.WideOneRowGrid {
 
     private var centeringPadding: CGFloat {
         let usedSpace = contentWidth + .screenInset
@@ -85,4 +110,3 @@ extension ChooseDevicesScreen.MacOSGrid {
     }
 }
 
-#endif

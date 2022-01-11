@@ -8,6 +8,7 @@ extension ConfigureScreen {
     struct Tile<Frequency: Listable, Option: Listable>: View {
 
         @Environment(\.reverseOutColor) private var reverseOut
+        @Environment(\.colorScheme) private var colorScheme
 
         // State
         let module: String
@@ -38,6 +39,9 @@ extension ConfigureScreen {
             .padding()
             .frame(width: Grid.tileWidth, height: Grid.tileHeight, alignment: .top)
             .background(button)
+            #if os(iOS)
+            .hoverEffect(.lift)
+            #endif
             .animation(.easeOut(duration: 0.2), value: isSelected)
             .animation(.easeOut(duration: 0.2), value: isHovered)
         }
@@ -49,16 +53,16 @@ extension ConfigureScreen {
                 symbol.image()
                     .scaledToFit()
                     .frame(width: 40, height: 25)
-                    .font(.title.weight(.semibold))
+                    .adaptiveFont(.configureTileTitle.adjustingSize(points: 5).withWeight(.bold))
 
                 Text(module)
                     .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(2)
-                    .font(.title3.weight(isSelected ? .semibold : .medium))
+                    .adaptiveFont(.configureTileTitle.adjustingWeight(steps: isSelected ? 1 : 0))
 
             }
             .foregroundColor(textColor)
-            .padding(.top, 10)
+            .padding(.top, idiom == .macOS ? 10 : 20)
         }
 
         private var textColor: Color {
@@ -72,12 +76,18 @@ extension ConfigureScreen {
             CrossPlatformStylizedMenu(
                 selected: $frequency,
                 options: frequencies,
-                labelFont: .title3.weight(.semibold),
+                labelFont: .configureTileMenu,
                 labelColor: reverseOut
             )
                 .animation(nil)
+#if os(macOS)
                 .fixedSize()
+#endif
                 .frame(maxWidth: .infinity, alignment: .center)
+#if os(iOS)
+                .background(preventUnwantedTouchesOn_iOS)
+#endif
+                .padding(.bottom, idiom == .macOS ? 0 : 7)
                 .help(Text("Sampling Frequency"))
         }
 
@@ -86,17 +96,26 @@ extension ConfigureScreen {
             CrossPlatformStylizedMenu(
                 selected: $option,
                 options: options,
-                labelFont: .title3.weight(.semibold),
+                labelFont: .configureTileMenu,
                 labelColor: reverseOut
             )
                 .animation(nil)
+#if os(macOS)
                 .fixedSize()
+#endif
                 .frame(maxWidth: .infinity, alignment: .center)
                 .help(Text(optionsHelp))
-
+                .padding(.top, idiom == .macOS ? 0 : 5)
+                .background(preventUnwantedTouchesOn_iOS)
                 .opacity(showOptions ? 1 : 0)
                 .disabled(showOptions == false)
                 .allowsHitTesting(showOptions)
+        }
+
+        private var preventUnwantedTouchesOn_iOS: some View {
+            Button { } label: { Color.clear }
+            .accessibilityHidden(true)
+            .buttonStyle(.borderless)
         }
 
         // MARK: - Button
@@ -108,10 +127,14 @@ extension ConfigureScreen {
                     shape
                         .trim(from: 0, to: isSelected ? 1 : 0)
                         .foregroundColor((isSelected ? Color.myHighlight : .clear).opacity(backgroundOpacity))
+#if os(iOS)
+                        .brightness(colorScheme == .dark ? -0.13 : -0.05)
+#endif
                         .animation(.spring(), value: isSelected)
                     shape
                         .strokeBorder(lineWidth: 2)
-                        .foregroundColor(isHovered || isSelected ? .myHighlight : .myPrimary.opacity(0.2))
+                        .foregroundColor(isHovered ? .myHighlight : .myPrimary.opacity(0.2))
+                        .opacity(isSelected ? 0 : 1)
 
                     moduleLabel.padding()
                 }

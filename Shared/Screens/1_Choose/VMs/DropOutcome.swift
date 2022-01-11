@@ -14,7 +14,7 @@ struct OutcomeIndicator: View {
         Text(outcome)
             .lineLimit(0)
             .fixedSize()
-            .font(.title.weight(.semibold))
+            .adaptiveFont(.dropActionHeadline)
             .foregroundColor(reverseOut)
             .animation(nil, value: outcome)
 

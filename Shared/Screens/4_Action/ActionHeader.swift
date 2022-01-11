@@ -22,12 +22,12 @@ struct ActionHeader: View {
 
             VStack(alignment: .leading, spacing: 12) {
                 Text(vm.actionType.title)
-                    .font(.largeTitle)
+                    .adaptiveFont(.screenHeader)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
 
                 Text(vm.name)
-                    .font(.title2)
+                    .adaptiveFont(.screenHeaderDetail)
                     .foregroundColor(.mySecondary)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
@@ -35,6 +35,7 @@ struct ActionHeader: View {
         }
         .padding(.top, 10)
         .frame(maxWidth: .infinity, minHeight: .headerMinHeight, alignment: .topLeading)
+        .padding(.top, .headerTopPadding)
         .backgroundToEdges(.myBackground)
         .padding(.bottom, .screenInset)
     }

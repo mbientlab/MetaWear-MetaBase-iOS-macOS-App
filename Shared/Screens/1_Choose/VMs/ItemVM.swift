@@ -15,7 +15,6 @@ public protocol ItemVM: Identifiable {
     func connect()
 
     func onAppear()
-    func onDisappear()
 }
 
 public extension ItemVM {

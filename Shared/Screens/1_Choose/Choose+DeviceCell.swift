@@ -15,7 +15,18 @@ extension ChooseDevicesScreen {
         let vm: VM
 
         @State private var isHovered = false
-        let spacing = CGFloat(20)
+        private var spacing: CGFloat { isCompact ? 15 : 20 }
+
+        #if os(iOS)
+        @Environment(\.isPortrait) private var isPortrait
+        var isCompact: Bool {
+            if idiom == .macOS { return false }
+            if idiom == .iPad { return isPortrait }
+            return true
+        }
+        #elseif os(macOS)
+        let isCompact = false
+        #endif
 
         var body: some View {
             VStack(spacing: spacing) {
@@ -34,18 +45,24 @@ extension ChooseDevicesScreen {
                     showCloudSync: state.showCloudSync
                 )
 
-                LargeSignalDots(color: .myPrimary)
+                LargeSignalDots(color: isCompact ? .myPrimaryTinted : .myPrimary)
                     .opacity(isHovered ? 1 : 0.75)
-                    .padding(.top, 20)
+                    .opacity(isCompact ? 0.85 : 1)
+                    .padding(.top, idiom == .iPhone ? 0 : spacing)
 
-                IdentifyTextButton(
-                    identifyHelpText: state.identifyTip,
-                    requestIdentify: vm.identify,
-                    allowIdentification: state.isLocallyKnown
-                )
-                    .opacity(isHovered ? 1 : 0)
+                if idiom == .macOS {
+                    IdentifyTextButton(
+                        identifyHelpText: state.identifyTip,
+                        requestIdentify: vm.identify,
+                        allowIdentification: state.isLocallyKnown
+                    )
+                        .opacity(isHovered ? 1 : 0)
+                }
             }
-            .frame(width: .deviceCellWidth)
+            .frame(minWidth: .deviceCellWidth)
+            .padding(isCompact ? 17 : 0)
+            .padding(.bottom, isCompact ? 24 : 0)
+            .background(shadedBG)
             .whenHovered { isHovered = $0 }
 
             .environment(\.isHovered, isHovered)
@@ -56,9 +73,39 @@ extension ChooseDevicesScreen {
             .animation(.spring(), value: isHovered)
             .animation(.easeOut, value: state.connection)
             .animation(.spring(), value: state.isIdentifying)
+            .animation(.easeOut, value: isCompact)
 
             .onAppear(perform: vm.onAppear)
-            .onDisappear(perform: vm.onDisappear)
+        }
+
+        @Environment(\.colorScheme) private var colorScheme
+        @ViewBuilder private var shadedBG: some View {
+            if isCompact {
+                VStack(spacing: spacing) {
+                    DropOutcomeIndicator().hidden()
+                    ZStack {
+                        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
+                        shape
+                            .foregroundColor(.myPrimaryTinted)
+                            .opacity(0.2)
+                            .shadow(color: Color.black.opacity(0.15), radius: 4, x: 3, y: 3)
+
+                        if colorScheme == .light {
+                            shape
+                                .strokeBorder(lineWidth: 1, antialiased: true)
+                                .foregroundColor(.myPrimaryTinted)
+                                .opacity(0.25)
+
+                            shape
+                                .strokeBorder(lineWidth: 6, antialiased: true)
+                                .foregroundColor(.myPrimaryTinted)
+                                .blur(radius: 8)
+                                .clipShape(shape)
+                                .opacity(0.15)
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -91,12 +138,16 @@ extension ChooseDevicesScreen.DeviceCell {
                 .offset(y: isDropping ? -.verticalHoverDelta * 2 : 0)
 
             Text(name)
-                .font(.system(.title, design: .rounded))
+                .adaptiveFont(.deviceCellTitle)
                 .offset(y: isHovering ? -.verticalHoverDelta : 0)
                 .offset(y: isDropping ? -.verticalHoverDelta * 2 : 0)
                 .foregroundColor(colorScheme == .light ? .myPrimary.opacity(0.7) : .myPrimary)
 
             MetaWearImages(isGroup: isGroup, models: models, ledEmulator: ledEmulator)
+                .compositingGroup()
+            #if os(iOS)
+                .shadow(color: Color.black.opacity(0.15), radius: 4, x: 3, y: 3)
+            #endif
                 .overlay(cta)
         }
 
@@ -135,12 +186,14 @@ extension ChooseDevicesScreen.DeviceCell {
 
         private var icloudSynced: some View {
             SFSymbol.icloud.image()
-                .font(.headline)
-                .help(Text("Synced via iCloud"))
+                .adaptiveFont(.deviceCellIcons)
+                .help(helpText)
                 .accessibilityLabel(Text(SFSymbol.icloud.accessibilityDescription))
                 .opacity(showCloudSync ? 0.75 : 0)
                 .accessibilityHidden(showCloudSync == false)
         }
+
+        private var helpText: Text { Text("Identity Synced via iCloud") }
     }
 
     /// Trigger LED and haptic-based identification

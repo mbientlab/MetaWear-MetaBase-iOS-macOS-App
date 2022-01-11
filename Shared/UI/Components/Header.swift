@@ -20,10 +20,10 @@ struct Header: View {
             else { HeaderBackButton().hidden().disabled(true).allowsHitTesting(false) }
 
             Text(vm.title)
-                .font(.largeTitle)
+                .adaptiveFont(.screenHeader)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(colorScheme == .light ? .myPrimary.opacity(0.7) : nil)
+                .foregroundColor(colorScheme == .light ? .myPrimaryTinted : .myPrimary)
 
             Spacer()
 
@@ -33,6 +33,7 @@ struct Header: View {
         }
         .padding(.top, 10)
         .frame(maxWidth: .infinity, minHeight: .headerMinHeight, alignment: .topLeading)
+        .padding(.top, .headerTopPadding)
         .backgroundToEdges(.myBackground)
         .padding(.bottom, .screenInset)
     }
@@ -40,7 +41,6 @@ struct Header: View {
 
 struct HeaderBackButton: View {
 
-    @Environment(\.presentationMode) private var nav
     @EnvironmentObject private var routing: Routing
     @Environment(\.reverseOutColor) private var reverseOut
     @Environment(\.colorScheme) private var colorScheme
@@ -55,15 +55,11 @@ struct HeaderBackButton: View {
                 back()
                 return
             }
-            #if os(iOS)
-            nav.wrappedValue.dismiss()
-            #else
             routing.goBack()
-            #endif
 
         } label: {
             SFSymbol.back.image()
-                .font(.title2)
+                .adaptiveFont(.screenHeaderBackIcon)
                 .foregroundColor(isHovered ? .myHighlight : restingBackArrowColor)
                 .offset(x: isHovered ? -5 : 0)
                 .padding(.vertical, 9)
@@ -95,7 +91,7 @@ extension Header {
 
         let vm: HeaderVM
         @State private var iconsDidAppear = false
-        private static let deviceIconMaxSize = CGFloat(70)
+        private static let deviceIconMaxSize = idiom == .iPad ? CGFloat(90) : CGFloat(70)
 
         var body: some View {
             if vm.deviceCount > 0 {
@@ -104,6 +100,10 @@ extension Header {
                     .frame(width: Self.deviceIconMaxSize)
                     .background(secondDevice.offset(x: secondDeviceXOffset), alignment: .topTrailing)
                     .background(thirdDevice.offset(x: thirdDeviceXOffset), alignment: .topTrailing)
+                #if os(iOS)
+                    .compositingGroup()
+                    .shadow(color: Color.black.opacity(0.15), radius: 4, x: 3, y: 3)
+                #endif
                     .animation(.easeOut, value: iconsDidAppear)
                     .onAppear { DispatchQueue.main.after(0.35) { iconsDidAppear.toggle() } }
                     .padding(.trailing, 12 * CGFloat(vm.deviceCount))

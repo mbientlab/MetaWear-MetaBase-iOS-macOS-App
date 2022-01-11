@@ -13,13 +13,32 @@ public class DiscoveryListVM: ObservableObject {
     @Published private(set) public var isScanning = false
 
     private unowned let scanner: MetaWearScanner
+    private unowned let store: MetaWearSyncStore
     private var subs = Set<AnyCancellable>()
+    private var didSetup = false
 
-    public init(scanner: MetaWearScanner = .sharedRestore, store: MetaWearSyncStore) {
+    public init(scanner: MetaWearScanner = .sharedRestore,
+                store: MetaWearSyncStore) {
         self.scanner = scanner
+        self.store = store
+    }
 
+    deinit { scanner.stopScan() }
+}
+
+public extension DiscoveryListVM {
+
+    var listIsEmpty: Bool { groups.isEmpty && ungrouped.isEmpty && unknown.isEmpty }
+
+    var deviceCount: Int { groups.endIndex + ungrouped.endIndex + unknown.endIndex }
+
+    func didAppear() {
+        scanner.startScan(higherPerformanceMode: true)
+        guard didSetup == false else { return }
+        didSetup = true
         scanner.isScanningPublisher
             .receive(on: DispatchQueue.main)
+            .removeDuplicates()
             .sink { [weak self] state in self?.isScanning = state }
             .store(in: &subs)
 
@@ -34,21 +53,6 @@ public class DiscoveryListVM: ObservableObject {
         store.unknownDevices
             .sink { [weak self] in self?.unknown = $0.sorted(by: <) }
             .store(in: &subs)
-    }
-}
-
-public extension DiscoveryListVM {
-
-    var listIsEmpty: Bool { groups.isEmpty && ungrouped.isEmpty && unknown.isEmpty }
-
-    var deviceCount: Int { groups.endIndex + ungrouped.endIndex + unknown.endIndex }
-
-    func didAppear() {
-        scanner.startScan(higherPerformanceMode: true)
-    }
-
-    func didDisappear() {
-        scanner.stopScan()
     }
 
     func toggleScanning() {

@@ -4,6 +4,7 @@ import mbientSwiftUI
 import Combine
 import MetaWear
 import MetaWearSync
+import SwiftUI
 
 extension ActionScreen {
 
@@ -16,9 +17,52 @@ extension ActionScreen {
         @Environment(\.reverseOutColor) private var reverseOut
 
         var body: some View {
-            let connectionSpacing = CGFloat(35)
-            HStack(spacing: 15) {
+            content
+                .environment(\.signalLevel, vm.rssi)
+                .environment(\.connectionState, vm.connection)
+                .contextMenu {
+                    if case ActionState.error = action.actionState[vm.meta.mac]! {
+                        Button("Factory Reset") { vm.reset() }
+                    }}
+                .onAppear(perform: vm.onAppear)
+                .padding()
+                .padding(.vertical, 8)
+                .foregroundColor(foreground)
+                .background(background)
+                .animation(.easeOut, value: action.actionState[vm.meta.mac]!)
+        }
 
+        @ViewBuilder var content: some View {
+            if idiom == .iPhone {
+                VStack(alignment: .leading, spacing: 20) {
+                    AccessibilityHStack(vstackAlign: .center,
+                                        vSpacing: spacing,
+                                        hstackAlign: .center,
+                                        hSpacing: spacing) {
+                        deviceLabel
+                        connectionState
+                    }
+
+                    Divider()
+
+                    actionState
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+            } else {
+                HStack(spacing: spacing) {
+                    deviceLabel
+                    connectionState
+                    actionState
+                        .padding(.leading, connectionSpacing)
+                }
+            }
+        }
+
+        private let spacing = CGFloat(15)
+        private let connectionSpacing = CGFloat(35)
+
+        private var deviceLabel: some View {
+            HStack(spacing: spacing) {
                 SharedImages.metawearTop.image()
                     .resizable()
                     .scaledToFit()
@@ -27,41 +71,38 @@ extension ActionScreen {
                     .shadow(color: .black.opacity(0.4), radius: 1, x: 1, y: 1)
 
                 Text(vm.meta.name)
-                    .font(.title2.weight(isActionFocus ? .medium : .regular))
+                    .adaptiveFont(.actionDeviceTitle.bumpWeight(isActionFocus))
                     .padding(.trailing, connectionSpacing)
                     .reportMaxWidth(to: NameWK.self)
                     .frame(minWidth: nameWidth, alignment: .leading)
-
-                ConnectionIcon(color: foreground)
-                LargeSignalDots(color: foreground, dotSize: 9, spacing: 3)
-
-                HStack(alignment: .center) {
-                    ProgrammingStateIcon(vm: vm, invertTextColor: isActionFocus)
-                        .padding(.trailing, 10)
-
-                    ProgressSummaryLabel(vm: vm, invertTextColor: isActionFocus)
-                }
-                .padding(.leading, connectionSpacing)
             }
-            .environment(\.signalLevel, vm.rssi)
-            .environment(\.connectionState, vm.connection)
-            .contextMenu { if case ActionState.error = action.actionState[vm.meta.mac]! {
-                Button("Factory Reset") { vm.reset() }
-            } }
-            .onAppear(perform: vm.onAppear)
-            .onDisappear(perform: vm.onDisappear)
-            .padding()
-            .foregroundColor(foreground)
-            .background(background)
-            .animation(.easeOut, value: action.actionState[vm.meta.mac]!)
         }
 
-       @ViewBuilder private var background: some View {
-           if isActionFocus {
-               RoundedRectangle(cornerRadius: 8, style: .continuous)
-                   .fill(Color.myHighlight)
-                   .matchedGeometryEffect(id: "focus", in: namespace!)
-           }
+        private var connectionState: some View {
+            HStack(spacing: spacing) {
+                ConnectionIcon(color: foreground)
+                LargeSignalDots(color: foreground, dotSize: 9, spacing: 3)
+            }
+        }
+
+        private var actionState: some View {
+            HStack(alignment: .center) {
+                ProgrammingStateIcon(vm: vm, invertTextColor: isActionFocus)
+                    .padding(.trailing, 10)
+
+                ProgressSummaryLabel(vm: vm, invertTextColor: isActionFocus)
+            }
+        }
+
+        @ViewBuilder private var background: some View {
+            if isActionFocus {
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .fill(Color.myHighlight)
+                    .matchedGeometryEffect(id: "focus", in: namespace!)
+            } else {
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .fill(Color.myGroupBackground2)
+            }
         }
 
         private var isActionFocus: Bool { action.actionFocus == vm.meta.mac }

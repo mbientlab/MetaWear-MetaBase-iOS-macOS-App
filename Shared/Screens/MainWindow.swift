@@ -2,11 +2,7 @@
 
 import mbientSwiftUI
 
-// MARK: - MacOS
-
-#if os(macOS)
-
-/// The app's single window. On macOS, SwiftUI does not have a navigation stack. A substitution is provided.
+/// The app's single window. A manual navigation stack is used instead of NavigationView across both iOS and macOS.
 struct MainWindow: View {
 
     @EnvironmentObject private var routing: Routing
@@ -19,7 +15,9 @@ struct MainWindow: View {
     var body: some View {
 //        Onboarding(factory: factory)
         stackNavigation
+        #if os(macOS)
             .frame(minWidth: Self.minWidth, minHeight: Self.minHeight)
+        #endif
             .background(steadyHeaderBackground, alignment: .top)
             .animation(.easeOut, value: routing.destination)
             .foregroundColor(.myPrimary)
@@ -44,11 +42,12 @@ struct MainWindow: View {
         if routing.destination != .choose {
             Color.myBackground
                 .edgesIgnoringSafeArea(.all)
-                .frame(height: .headerMinHeight)
+                .frame(height: .headerMinHeight + .headerTopPadding)
         }
     }
 }
 
+#if os(macOS)
 /// In macOS, all Lists (aka NSTableViews) are forced to have a clear background. This does not change alternating list background colors.
 extension NSTableView {
     open override func viewDidMoveToWindow() {
@@ -57,75 +56,4 @@ extension NSTableView {
         enclosingScrollView?.drawsBackground = false
     }
 }
-
-// MARK: - iOS
-
-#elseif os(iOS)
-
-/// The app's only window scene.
-struct MainWindow: View {
-
-    @EnvironmentObject private var routing: Routing
-    @EnvironmentObject private var factory: UIFactory
-    @Namespace private var namespace
-
-    var body: some View {
-        NavigationView {
-            ChooseDevicesScreen(routing, factory)
-                .background(navigation.accessibilityHidden(true))
-        }
-        .navigationViewStyle(.automatic)
-        .frame(minWidth: 600)
-        .background(Color.myBackground.ignoresSafeArea())
-        .environment(\.namespace, namespace)
-    }
-
-    private var destination: Binding<Routing.Destination?> {
-        Binding(
-            get: { routing.destination },
-            set: {
-                guard let next = $0 else { return }
-                routing.setDestination(next)
-            })
-    }
-
-    @ViewBuilder private var navigation: some View {
-        NavigationLink(
-            destination: ChooseDevicesScreen(routing, factory),
-            tag: Routing.Destination.choose,
-            selection: destination
-        ) { EmptyView() }
-
-        NavigationLink(
-            destination: HistoryScreen(factory),
-            tag: Routing.Destination.history,
-            selection: destination
-        ) { EmptyView() }
-
-        NavigationLink(
-            destination: ConfigureScreen(factory),
-            tag: Routing.Destination.configure,
-            selection: destination
-        ) { EmptyView() }
-
-        NavigationLink(
-            destination: ActionScreen(factory),
-            tag: Routing.Destination.stream,
-            selection: destination
-        ) { EmptyView() }
-
-        NavigationLink(
-            destination: ActionScreen(factory),
-            tag: Routing.Destination.log,
-            selection: destination
-        ) { EmptyView() }
-
-        NavigationLink(
-            destination: ActionScreen(factory),
-            tag: Routing.Destination.downloadLogs,
-            selection: destination
-        ) { EmptyView() }
-    }
-}
-
 #endif

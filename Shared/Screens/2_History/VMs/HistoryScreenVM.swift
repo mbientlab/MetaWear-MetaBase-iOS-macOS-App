@@ -21,6 +21,7 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
     private var showStartAlertUpdates: AnyCancellable? = nil
     private var performDisconnectOnDisappear = true
     private var loggingUpdates: AnyCancellable? = nil
+    private var didAppear = false
 
     private unowned let routing: Routing
     private unowned let scanner: MetaWearScanner
@@ -39,15 +40,21 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
         self.title = title
         self.items = vms
         self.cta = .init(ongoingLoggingSession: logging.session(for: routing.focus!.item))
+        self.alert = Self.makeAlertMessage(soloTitle: vms.endIndex > 1 ? nil : title)
+    }
 
-        alert = vms.endIndex > 1 ? "Bring all MetaWears nearby" : "Bring \(title) nearby"
-        startValidatingSessionStartCTA()
+    static func makeAlertMessage(soloTitle: String?) -> String {
+        if let soloTitle = soloTitle {
+            return "Bring \(soloTitle) nearby"
+        } else {
+            return "Bring all MetaWears nearby"
+        }
+    }
 
-        loggingUpdates = logging.tokens
-            .map { $0[routing.focus!.item] }
-            .sink { [weak self] token in
-                self?.cta = .init(ongoingLoggingSession: token)
-            }
+    deinit {
+        if performDisconnectOnDisappear {
+            items.forEach { $0.disconnect() }
+        }
     }
 }
 
@@ -71,13 +78,19 @@ public extension HistoryScreenVM {
     }
 
     func onAppear() {
+        guard didAppear == false else { return }
+        didAppear = true
         items.forEach { $0.connect() }
-    }
 
-    func onDisappear() {
-        if performDisconnectOnDisappear {
-            items.forEach { $0.disconnect() }
-        }
+        startValidatingSessionStartCTA()
+
+        let focus = routing.focus!.item
+        loggingUpdates = logging.tokens
+            .map { $0[focus] }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] token in
+                self?.cta = .init(ongoingLoggingSession: token)
+            }
     }
 
 }

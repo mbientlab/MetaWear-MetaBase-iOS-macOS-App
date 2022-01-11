@@ -2,51 +2,48 @@
 
 import mbientSwiftUI
 
+// MARK: - Sectioned
+
 extension ChooseDevicesScreen {
 
-    /// Populate the screen's list contents
-    struct DeviceIterator<SectionDivider: View>: View {
+    struct DeviceIterator {
+        private init() { }
 
-        var divider: SectionDivider
-
-        @EnvironmentObject private var vm: DiscoveryListVM
-        @EnvironmentObject private var routing: Routing
-        @EnvironmentObject private var factory: UIFactory
-        @Environment(\.namespace) var list
-
-        var body: some View {
-            ForEach(vm.groups) { group in
-                KnownDeviceCell(.group(group.id), factory: factory)
-                    .matchedGeometryEffect(id: group.id, in: list!)
-            }
-
-            #if os(iOS)
-            if showDividerA { divider }
-            #endif
-
-            ForEach(vm.ungrouped) { metadata in
-                KnownDeviceCell(.known(metadata.id), factory: factory)
-                    .matchedGeometryEffect(id: metadata.mac, in: list!)
-            }
-
-            if showDividerB { divider }
-
-            ForEach(vm.unknown) { deviceID in
-                UnknownDeviceCell(unknown: deviceID, factory: factory)
-                    .matchedGeometryEffect(id: deviceID.uuidString, in: list!)
+        struct KnownGroups: View {
+            @EnvironmentObject private var vm: DiscoveryListVM
+            @EnvironmentObject private var factory: UIFactory
+            @Environment(\.namespace) private var list
+            var body: some View {
+                ForEach(vm.groups) { group in
+                    KnownDeviceCell(.group(group.id), factory: factory)
+                        .matchedGeometryEffect(id: group.id, in: list!)
+                }
             }
         }
-    }
 
-}
+        struct KnownUngrouped: View {
+            @EnvironmentObject private var vm: DiscoveryListVM
+            @EnvironmentObject private var factory: UIFactory
+            @Environment(\.namespace) private var list
+            var body: some View {
+                ForEach(vm.ungrouped) { metadata in
+                    KnownDeviceCell(.known(metadata.id), factory: factory)
+                        .matchedGeometryEffect(id: metadata.mac, in: list!)
+                }
+            }
+        }
 
-private extension ChooseDevicesScreen.DeviceIterator {
+        struct UnknownNearby: View {
+            @EnvironmentObject private var vm: DiscoveryListVM
+            @EnvironmentObject private var factory: UIFactory
+            @Environment(\.namespace) private var list
+            var body: some View {
+                ForEach(vm.unknown) { deviceID in
+                    UnknownDeviceCell(unknown: deviceID, factory: factory)
+                        .matchedGeometryEffect(id: deviceID.uuidString, in: list!)
+                }
+            }
 
-    var showDividerA: Bool {
-        vm.groups.isEmpty == false && (vm.ungrouped.isEmpty == false || vm.unknown.isEmpty == false)
-    }
-
-    var showDividerB: Bool {
-        vm.ungrouped.isEmpty == false && vm.unknown.isEmpty == false
+        }
     }
 }
