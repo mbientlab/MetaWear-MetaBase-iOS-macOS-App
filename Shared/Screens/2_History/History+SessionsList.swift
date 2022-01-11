@@ -29,6 +29,18 @@ extension HistoryScreen {
                         .listRowInsets(HistoryScreen.listEdgeInsets)
                 }
 
+                if vm.sessions.isEmpty {
+                    Text("No prior sensor recordings found.")
+                        .adaptiveFont(.actionStateDetail)
+                        .foregroundColor(.mySecondary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    #if os(iOS)
+                        .listRowSeparator(.hidden)
+                    #endif
+                }
 
                 Color.clear.frame(height: 25)
             }

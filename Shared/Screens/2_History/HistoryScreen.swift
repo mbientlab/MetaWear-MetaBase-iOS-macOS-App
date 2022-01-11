@@ -102,6 +102,7 @@ struct HistoryScreen: View {
         .sheet(isPresented: $showiOSAboutSheet) {
             DevicesList(initiallyShowDetails: true)
                 .modifier(CloseSheet())
+                .edgesIgnoringSafeArea(.bottom)
         }
     }
 #endif
