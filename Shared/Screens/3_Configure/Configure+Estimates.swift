@@ -7,8 +7,8 @@ extension ConfigureScreen {
     struct Estimates: View {
 
         @EnvironmentObject private var vm: ConfigureVM
-        @Environment(\.dynamicTypeSize) private var dynamicType
-        private var edge: Alignment { idiom == .iPhone && dynamicType.isAccessibilitySize ? .trailing : .leading }
+        @Environment(\.sizeCategory) private var dynamicType
+        private var edge: Alignment { idiom == .iPhone && dynamicType.isAccessibilityCategory ? .trailing : .leading }
 
         var body: some View {
             content

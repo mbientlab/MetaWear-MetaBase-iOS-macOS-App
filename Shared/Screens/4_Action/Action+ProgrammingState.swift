@@ -118,28 +118,40 @@ extension ActionScreen {
 
         // MARK: - Progress
 
-        private var progressReport: some View {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(action.actionType.workingLabel)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(1)
-
-                if action.actionType == .stream,
-                   case let .working(dataPoints) = action.streamCounters.counts[vm.meta.mac],
-                    dataPoints > 0 {
-
-                    if #available(iOS 15.0, macOS 12.0, *) {
-                        TimelineView(.periodic(from: Date(), by: 2)) { _ in stats }
-                    } else { stats }
-
-                } else if action.actionType == .downloadLogs {
-
-                    if #available(iOS 15.0, macOS 12.0, *) {
-                        TimelineView(.periodic(from: Date(), by: 2)) { _ in downloadPercent }
-                    } else { downloadPercent }
+        @ViewBuilder private var progressReport: some View {
+            if idiom == .iPhone {
+                AccessibilityHStack(vstackAlign: .leading,
+                                    vSpacing: 10,
+                                    hstackAlign: .firstTextBaseline,
+                                    hSpacing: 15) {
+                    progressReportContent
                 }
+            } else {
+                VStack(alignment: .leading, spacing: 4) {
+                    progressReportContent
+                }.animation(.easeOut, value: action.streamCounters.counts[vm.meta.mac]?.info)
             }
-            .animation(.easeOut, value: action.streamCounters.counts[vm.meta.mac]?.info)
+        }
+
+        @ViewBuilder private var progressReportContent: some View {
+            Text(action.actionType.workingLabel)
+                .fixedSize(horizontal: false, vertical: true)
+                .lineLimit(1)
+
+            if action.actionType == .stream,
+               case let .working(dataPoints) = action.streamCounters.counts[vm.meta.mac],
+                dataPoints > 0 {
+
+                if #available(iOS 15.0, macOS 12.0, *) {
+                    TimelineView(.periodic(from: Date(), by: 2)) { _ in stats }
+                } else { stats }
+
+            } else if action.actionType == .downloadLogs {
+
+                if #available(iOS 15.0, macOS 12.0, *) {
+                    TimelineView(.periodic(from: Date(), by: 2)) { _ in downloadPercent }
+                } else { downloadPercent }
+            }
         }
 
         private var stats: some View {

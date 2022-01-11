@@ -6,7 +6,7 @@ import MetaWear
 struct ConfigureScreen: View {
 
     @StateObject private var vm: ConfigureVM
-    @Environment(\.dynamicTypeSize) private var dynamicType
+    @Environment(\.sizeCategory) private var dynamicType
 
     init(_ factory: UIFactory) {
         _vm = .init(wrappedValue: factory.makeConfigureVM())
@@ -57,7 +57,7 @@ struct ConfigureScreen: View {
 
     private var verticalCTARows: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if dynamicType.isAccessibilitySize { Estimates() }
+            if dynamicType.isAccessibilityCategory { Estimates() }
             else {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
                     Estimates()

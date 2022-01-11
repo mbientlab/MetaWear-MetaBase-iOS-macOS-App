@@ -71,11 +71,11 @@ extension HistoryScreen.DevicesList {
                 IdentifyByLEDButton(flashScale: 2, request: vm.identifyByLED, emulator: vm.led)
 
                 MiniMenuButton {
-                    Button("Update Firmware") { }
-                    Button("Run Diagnostic") { }
+                    Button("Update Firmware") { }.disabled(true)
+                    Button("Run Diagnostic") { }.disabled(true)
                     Divider()
                     Button("Factory Reset") { vm.reset() }
-                    Text("Advanced")
+                    Text("Advanced").disabled(true)
                 }
                 .padding(.vertical, verticalPadding)
             }
