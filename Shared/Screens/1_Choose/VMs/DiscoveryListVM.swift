@@ -36,22 +36,19 @@ public extension DiscoveryListVM {
         scanner.startScan(higherPerformanceMode: true)
         guard didSetup == false else { return }
         didSetup = true
+
         scanner.isScanningPublisher
             .receive(on: DispatchQueue.main)
             .removeDuplicates()
             .sink { [weak self] state in self?.isScanning = state }
             .store(in: &subs)
 
-        store.groups
-            .sink { [weak self] in self?.groups = $0.sorted(by: <) }
-            .store(in: &subs)
-
-        store.ungroupedDevices
-            .sink { [weak self] in self?.ungrouped = $0.sorted(by: <) }
-            .store(in: &subs)
-
-        store.unknownDevices
-            .sink { [weak self] in self?.unknown = $0.sorted(by: <) }
+        Publishers.CombineLatest3(store.groups, store.ungroupedDevices, store.unknownDevices)
+            .sink { [weak self] groups, ungrouped, unknown in
+                self?.groups = groups.sorted(by: <)
+                self?.ungrouped = ungrouped.sorted(by: <)
+                self?.unknown = unknown.sorted(by: <)
+            }
             .store(in: &subs)
     }
 
