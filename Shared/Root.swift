@@ -102,4 +102,11 @@ func wipeDefaults() {
         NSUbiquitousKeyValueStore.default.removeObject(forKey: $0)
     }
 }
+
+func wipeOnboarding() {
+    [UserDefaults.MetaWear.Keys.didOnboardAppVersion, UserDefaults.MetaWear.Keys.didGetNearbyDeviceInstructionForVersion].forEach  { key in
+        UserDefaults.standard.removeObject(forKey: key)
+        NSUbiquitousKeyValueStore.default.removeObject(forKey: key)
+    }
+}
 #endif

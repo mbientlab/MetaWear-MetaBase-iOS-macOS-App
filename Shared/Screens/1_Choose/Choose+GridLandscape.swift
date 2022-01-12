@@ -68,7 +68,7 @@ extension ChooseDevicesScreen {
 
         // MARK: - Layout Dimensions
 #if os(macOS)
-        @State private var windowWidth = MainWindow.minWidth
+        @State private var windowWidth = MainScene.minWidth
 #else
         @State private var windowWidth = UIScreen.main.bounds.width
 #endif

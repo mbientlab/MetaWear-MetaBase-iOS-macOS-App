@@ -5,35 +5,38 @@ import mbientSwiftUI
 /// The app's single window. A manual navigation stack is used instead of NavigationView across both iOS and macOS.
 struct MainWindow: View {
 
+    @AppStorage(wrappedValue: 0.0, UserDefaults.MetaWear.Keys.didOnboardAppVersion) private var didOnboard
     @EnvironmentObject private var routing: Routing
     @EnvironmentObject private var factory: UIFactory
-    @Namespace private var namespace
-
-    static let minWidth: CGFloat = 1100 // ConfigureScreen showing 3 tiles w/ equal margins (635) + extra width (90)
-    static let minHeight: CGFloat = 675 // ConfigureScreen showing 2 tile rows (585)
 
     var body: some View {
-//        Onboarding(factory: factory)
         stackNavigation
-        #if os(macOS)
-            .frame(minWidth: Self.minWidth, minHeight: Self.minHeight)
-        #endif
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .background(steadyHeaderBackground, alignment: .top)
             .animation(.easeOut, value: routing.destination)
             .foregroundColor(.myPrimary)
-            .environment(\.namespace, namespace)
             .toolbar { BluetoothErrorButton.ToolbarIcon() }
+
+    }
+
+    private var showOnboardingSheet: Binding<Bool> {
+        .init(get: { didOnboard < CurrentMetaBaseVersion },
+              set: { show in if !show { didOnboard = CurrentMetaBaseVersion } })
     }
 
     private var stackNavigation: some View {
         ZStack {
-            switch routing.destination {
-                case .choose:       ChooseDevicesScreen(routing, factory).transition(.add)
-                case .history:      HistoryScreen(factory).transition(.add)
-                case .configure:    ConfigureScreen(factory).transition(.add)
-                case .log:          ActionScreen(factory).transition(.add)
-                case .stream:       ActionScreen(factory).transition(.add)
-                case .downloadLogs: ActionScreen(factory).transition(.add)
+            if didOnboard >= CurrentMetaBaseVersion {
+                switch routing.destination {
+                    case .choose:       ChooseDevicesScreen(routing, factory).transition(.add)
+                    case .history:      HistoryScreen(factory).transition(.add)
+                    case .configure:    ConfigureScreen(factory).transition(.add)
+                    case .log:          ActionScreen(factory).transition(.add)
+                    case .stream:       ActionScreen(factory).transition(.add)
+                    case .downloadLogs: ActionScreen(factory).transition(.add)
+                }
+            } else {
+                Onboarding(factory: factory)
             }
         }
     }
@@ -46,14 +49,3 @@ struct MainWindow: View {
         }
     }
 }
-
-#if os(macOS)
-/// In macOS, all Lists (aka NSTableViews) are forced to have a clear background. This does not change alternating list background colors.
-extension NSTableView {
-    open override func viewDidMoveToWindow() {
-        super.viewDidMoveToWindow()
-        backgroundColor = NSColor.clear
-        enclosingScrollView?.drawsBackground = false
-    }
-}
-#endif

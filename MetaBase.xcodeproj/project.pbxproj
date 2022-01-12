@@ -151,6 +151,10 @@
 		949E9935278ECCBC00D594C2 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 949E9934278ECCBC00D594C2 /* mbientSwiftUI */; };
 		949E9937278F51DB00D594C2 /* ExternalEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9936278F51DB00D594C2 /* ExternalEvent.swift */; };
 		949E9938278F51DB00D594C2 /* ExternalEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9936278F51DB00D594C2 /* ExternalEvent.swift */; };
+		949E993A278F570900D594C2 /* Menus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9939278F570900D594C2 /* Menus.swift */; };
+		949E993B278F570900D594C2 /* Menus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9939278F570900D594C2 /* Menus.swift */; };
+		949E993D278F5E3D00D594C2 /* Scenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E993C278F5E3D00D594C2 /* Scenes.swift */; };
+		949E993E278F5E3D00D594C2 /* Scenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E993C278F5E3D00D594C2 /* Scenes.swift */; };
 		94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
 		94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
 		94A165C3275F2F8600FA355D /* History+AboutDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+AboutDevices.swift */; };
@@ -317,6 +321,8 @@
 		949E5AA52773BCDA00D45740 /* FileMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileMO+CoreDataClass.swift"; sourceTree = "<group>"; };
 		949E5AB32773BD7800D45740 /* ModelConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelConvertible.swift; sourceTree = "<group>"; };
 		949E9936278F51DB00D594C2 /* ExternalEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalEvent.swift; sourceTree = "<group>"; };
+		949E9939278F570900D594C2 /* Menus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menus.swift; sourceTree = "<group>"; };
+		949E993C278F5E3D00D594C2 /* Scenes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scenes.swift; sourceTree = "<group>"; };
 		94A165BB275E8E0C00FA355D /* MetaBase (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MetaBase (iOS).entitlements"; sourceTree = "<group>"; };
 		94A165BD275F2F8600FA355D /* History+SessionsList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+SessionsList.swift"; sourceTree = "<group>"; };
 		94A165BE275F2F8600FA355D /* History+AboutDevices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+AboutDevices.swift"; sourceTree = "<group>"; };
@@ -724,8 +730,10 @@
 			isa = PBXGroup;
 			children = (
 				94E005CA275A07E9001B0DFD /* MetaBaseApp.swift */,
+				949E993C278F5E3D00D594C2 /* Scenes.swift */,
 				9452856C275BE1D5004D815B /* Root.swift */,
 				94CF3EF9276427C300C2D8B0 /* Routing.swift */,
+				949E9939278F570900D594C2 /* Menus.swift */,
 				941A08FF276FB789006D52E3 /* Model */,
 				9473B7B32770F8D5006F4994 /* Stores */,
 				9473B7B12770F73F006F4994 /* Persistence */,
@@ -1007,6 +1015,7 @@
 			files = (
 				94CF3EFD276427F100C2D8B0 /* ChooseDevicesScreen.swift in Sources */,
 				9409C5D62762A367001FE850 /* ActionVM.swift in Sources */,
+				949E993D278F5E3D00D594C2 /* Scenes.swift in Sources */,
 				9473B7B52770FAC4006F4994 /* KnownDevice+.swift in Sources */,
 				94CF3F122764286B00C2D8B0 /* LabeledItem.swift in Sources */,
 				9408E6DC2767FA290011B5F5 /* WarningPopover.swift in Sources */,
@@ -1043,6 +1052,7 @@
 				94E3A7FA27603238007E2BAE /* IdentifyByLEDButton.swift in Sources */,
 				94528555275BDDB9004D815B /* Choose+GridLandscape.swift in Sources */,
 				94CF3F0A2764286B00C2D8B0 /* Header.swift in Sources */,
+				949E993A278F570900D594C2 /* Menus.swift in Sources */,
 				9409C5C02761383E001FE850 /* ConfigureVM.swift in Sources */,
 				944C1761276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */,
 				949E5A6727729B7A00D45740 /* SessionRepository.swift in Sources */,
@@ -1111,6 +1121,7 @@
 			files = (
 				94CF3EFE276427F100C2D8B0 /* ChooseDevicesScreen.swift in Sources */,
 				9409C5D72762A367001FE850 /* ActionVM.swift in Sources */,
+				949E993E278F5E3D00D594C2 /* Scenes.swift in Sources */,
 				9473B7B62770FAC4006F4994 /* KnownDevice+.swift in Sources */,
 				94CF3F132764286B00C2D8B0 /* LabeledItem.swift in Sources */,
 				9408E6DD2767FA290011B5F5 /* WarningPopover.swift in Sources */,
@@ -1147,6 +1158,7 @@
 				94E3A7FB276032BD007E2BAE /* IdentifyByLEDButton.swift in Sources */,
 				94CF3F0B2764286B00C2D8B0 /* Header.swift in Sources */,
 				94528553275BDD81004D815B /* Choose+ScanningIndicator.swift in Sources */,
+				949E993B278F570900D594C2 /* Menus.swift in Sources */,
 				94528556275BDDB9004D815B /* Choose+GridLandscape.swift in Sources */,
 				944C1762276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */,
 				949E5A6827729B7A00D45740 /* SessionRepository.swift in Sources */,
