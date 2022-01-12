@@ -52,12 +52,12 @@ public extension UIFactory {
             case .known(let mac):
                 guard let known = devices.getDeviceAndMetadata(mac)
                 else { fatalError() }
-                return .init(device: known, store: devices, logging: logging, routing: routing)
+                return .init(device: known, store: devices, logging: logging, routing: routing, queue: actionQueue)
 
             case .group(let id):
                 guard let group = devices.getGroup(id: id)
                 else { fatalError() }
-                return .init(group: group, store: devices, logging: logging, routing: routing)
+                return .init(group: group, store: devices, logging: logging, routing: routing, queue: actionQueue)
         }
     }
 

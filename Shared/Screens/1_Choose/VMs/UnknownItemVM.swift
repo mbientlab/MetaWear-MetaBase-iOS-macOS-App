@@ -15,7 +15,7 @@ public class UnknownItemVM: ObservableObject, ItemVM {
 
     public var matchedGeometryID: String { device.peripheral.identifier.uuidString }
     public private(set) var name: String
-    public private(set) var models: [(mac: String, model: MetaWear.Model)] = []
+    public let models: [(mac: String, model: MetaWear.Model)]
     public private(set) var isCloudSynced = false
     public private(set) var macs: [String] = []
     @Published public private(set) var isLogging = false
@@ -38,6 +38,7 @@ public class UnknownItemVM: ObservableObject, ItemVM {
         self.routing = routing
         let _device = store.getDevice(byLocalCBUUID: cbuuid)
         guard let device = _device.device else { fatalError() }
+        self.models = [(mac: device.peripheral.identifier.uuidString, model: device.info.model)]
 #if DEBUG
         device.logDelegate = MWConsoleLogger.shared
 #endif

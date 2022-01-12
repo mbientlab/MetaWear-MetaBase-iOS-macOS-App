@@ -1395,6 +1395,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MetaBase--iOS--Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Connect and program your MetaWear Bluetooth Low Energy sesnsors.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Connect and program your MetaWear Bluetooth Low Energy sesnsors.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1430,6 +1431,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "MetaBase--iOS--Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Connect and program your MetaWear Bluetooth Low Energy sesnsors.";
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Connect and program your MetaWear Bluetooth Low Energy sesnsors.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1673,8 +1675,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mbientlab/MetaWear-SDK-Swift-Combine";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.5;
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
