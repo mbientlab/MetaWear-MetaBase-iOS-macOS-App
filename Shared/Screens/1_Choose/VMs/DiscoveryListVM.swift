@@ -43,11 +43,21 @@ public extension DiscoveryListVM {
             .sink { [weak self] state in self?.isScanning = state }
             .store(in: &subs)
 
-        Publishers.CombineLatest3(store.groups, store.ungroupedDevices, store.unknownDevices)
-            .sink { [weak self] groups, ungrouped, unknown in
+        Publishers.CombineLatest(store.groups, store.ungroupedDevices)
+            .receive(on: DispatchQueue.main)
+        // A bit of a hack to consolidate Group/Ungroup updates
+            .debounce(for: 0.02, scheduler: DispatchQueue.main)
+            .sink { [weak self] groups, ungrouped in
+                let groupedMACs = groups.reduce(into: Set<MACAddress>()) { $0.formUnion($1.deviceMACs) }
+                let uniqueUngrouped = ungrouped.filter { !groupedMACs.contains($0.mac) }
                 self?.groups = groups.sorted(by: <)
-                self?.ungrouped = ungrouped.sorted(by: <)
-                self?.unknown = unknown.sorted(by: <)
+                self?.ungrouped = uniqueUngrouped.sorted(by: <)
+            }
+            .store(in: &subs)
+
+        store.unknownDevices
+            .sink { [weak self] update in
+                self?.unknown = update.sorted(by: <)
             }
             .store(in: &subs)
     }
