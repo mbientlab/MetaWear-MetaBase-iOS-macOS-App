@@ -4,12 +4,15 @@
 import Foundation
 import MetaWear
 
-let CurrentMetaBaseVersion = 5.0
+let CurrentMetaBaseVersion = (Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? Double) ?? 5.0
 
 public extension UserDefaults.MetaWear.Keys {
 
     /// Contains: Double
-    static let hasUsedMetaBaseVersion = key("hasUsedMetabaseVersion")
+    static let didGetNearbyDeviceInstructionForVersion = key("didGetNearbyTipVersion")
+
+    /// Contains: Double
+    static let didOnboardAppVersion = key("didOnboardAppVersion")
 
     /// Contains: Versioned data
     static let sensorPresets = key("sensorPresets")

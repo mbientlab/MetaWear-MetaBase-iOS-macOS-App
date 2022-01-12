@@ -15,6 +15,7 @@ struct MetaBaseApp: App {
     var body: some Scene {
         MainScene(root: root)
         OnboardingScene(root: root)
+        MigrateScene(root: root)
     }
 }
 

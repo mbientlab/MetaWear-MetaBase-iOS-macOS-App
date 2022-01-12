@@ -39,6 +39,14 @@ public extension UIFactory {
         .init(importer: importer)
     }
 
+    func makeMigrationVM() -> OnboardingVM {
+        OnboardingVM(initialState: .importer)
+    }
+
+    func makeOnboardingVM() -> OnboardingVM {
+        OnboardingVM(initialState: .intro)
+    }
+
     func makeDiscoveredDeviceListVM() -> DiscoveryListVM {
         .init(scanner: scanner, store: devices)
     }

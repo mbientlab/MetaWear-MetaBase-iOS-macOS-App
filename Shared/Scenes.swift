@@ -1,6 +1,7 @@
 // Copyright 2022 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import mbientSwiftUI
+import SwiftUI
 
 struct MainScene: Scene {
 
@@ -21,10 +22,12 @@ struct MainScene: Scene {
                 .environmentObject(root.bluetoothVM)
                 .environmentObject(root.factory)
                 .environmentObject(root.routing)
+                .handleOnlyEvents(ExternalEvent.launch)
 #if os(macOS)
                 .frame(minWidth: Self.minWidth, minHeight: Self.minHeight)
 #endif
         }
+        .handleOnlyEvents(ExternalEvent.launch)
 #if os(macOS)
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unified)
@@ -40,13 +43,32 @@ struct OnboardingScene: Scene {
 
     var body: some Scene {
         WindowGroup("Welcome") {
-            Onboarding(factory: root.factory)
+            Onboarding(importer: root.factory.makeImportVM(), vm: root.factory.makeOnboardingVM())
                 .environment(\.namespace, namespace)
                 .frame(minWidth: 900, minHeight: MainScene.minHeight)
                 .handleOnlyEvents(ExternalEvent.onboarding)
                 .environmentObject(root.factory)
         }
         .handleOnlyEvents(ExternalEvent.onboarding)
+        .windowStyle(.hiddenTitleBar)
+        .windowToolbarStyle(.unified(showsTitle: false))
+    }
+}
+
+struct MigrateScene: Scene {
+
+    let root: Root
+    @Namespace private var namespace
+
+    var body: some Scene {
+        WindowGroup("Migrate Data") {
+            Onboarding(importer: root.factory.makeImportVM(), vm: root.factory.makeMigrationVM())
+                .environment(\.namespace, namespace)
+                .frame(minWidth: 900, minHeight: MainScene.minHeight)
+                .handleOnlyEvents(ExternalEvent.migrate)
+                .environmentObject(root.factory)
+        }
+        .handleOnlyEvents(ExternalEvent.migrate)
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unified(showsTitle: false))
     }

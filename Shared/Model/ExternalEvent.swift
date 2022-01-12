@@ -3,8 +3,9 @@
 import mbientSwiftUI
 
 enum ExternalEvent: String, ExternalEvents {
-    case onboarding = "onboarding"
-    case migrate = "migrate"
+    case onboarding
+    case migrate
+    case launch
 
     var url: URL { URL(string: Self.urlPrefix + tag)! }
     var tag: String { rawValue }

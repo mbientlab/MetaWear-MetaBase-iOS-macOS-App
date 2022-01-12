@@ -3,13 +3,16 @@
 import Foundation
 import mbientSwiftUI
 
-class OnboardingVM: ObservableObject {
+public class OnboardingVM: ObservableObject {
 
-    @Published var focus: Focus = .intro
+    @Published private(set) var focus: Focus
     let showMigrationCTAs: Bool
 
-    let title: String
     let items: [Item]
+
+    @Published private(set) var title: String
+    private let onboardingTitle: String
+    private let importTitle = "Migrate Data"
 
     struct Item: Identifiable {
         var id: String { headline }
@@ -19,87 +22,56 @@ class OnboardingVM: ObservableObject {
         let color: Color
     }
 
-    init() {
+    init(initialState: Focus) {
         self.showMigrationCTAs = true
+        self.focus = initialState
 
-        (self.title, self.items) = showMigrationCTAs
-        ? Self.makeMetaBase4MigrationContent()
-        : Self.makeNewToMetaBaseContent()
+        switch initialState {
+            case .intro:
+                (self.onboardingTitle, self.items) = showMigrationCTAs
+                ? Self.makeMetaBase4MigrationContent()
+                : Self.makeNewToMetaBaseContent()
+
+                self.title = onboardingTitle
+
+            case .importer:
+                (self.onboardingTitle, self.title) = (importTitle, importTitle)
+                self.items = []
+
+            case .complete:
+                (self.onboardingTitle, self.title) = ("", "")
+                self.items = []
+        }
     }
 
     func setFocus(_ destination: Focus) {
         self.focus = destination
+        if destination == .intro { title = onboardingTitle }
+        if destination == .importer { title = importTitle }
+        if destination == .complete { completeOnboarding() }
     }
 
-    enum Focus {
+    func completeOnboarding() {
+        UserDefaults.standard.set(CurrentMetaBaseVersion, forKey: UserDefaults.MetaWear.Keys.didOnboardAppVersion)
+        NSUbiquitousKeyValueStore.default.set(CurrentMetaBaseVersion, forKey: UserDefaults.MetaWear.Keys.didOnboardAppVersion)
+#if os(macOS)
+        closeAndFadeWindow()
+#endif
+    }
+
+#if os(macOS)
+    func closeAndFadeWindow() {
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = 0.25
+            guard let key = NSApp.keyWindow else { return  }
+            key.animator().alphaValue = 0
+        }) { NSApp.keyWindow?.close() }
+    }
+#endif
+
+    public enum Focus {
         case intro
         case importer
         case complete
-    }
-}
-
-extension OnboardingVM {
-
-    static func makeNewToMetaBaseContent() -> (String, [Item]) {
-        ("Welcome to MetaBase", Self.makeNewToMetaBaseItems())
-    }
-
-    static func makeMetaBase4MigrationContent() -> (String, [Item]) {
-        ("New in MetaBase 5", Self.makeMetaBase4MigrationItems())
-    }
-
-    // MARK: - Content
-
-
-    static func makeNewToMetaBaseItems() -> [Item] {
-        [
-            .init(
-                symbol: .barometer,
-                headline: "Record Bluetooth Sensors",
-                description: "Group and configure your MetaWear sensors to log or stream data in CSV format.",
-                color: Color(.systemOrange)
-            ),
-            .init(
-                symbol: .icloud,
-                headline: "iCloud Sync",
-                description: "Access sensor recordings across your iPads, iPhones, and Macs.",
-                color: .myMint
-            ),
-            .init(
-                symbol: .swift,
-                headline: "Developing a MetaWear App?",
-                description: "Our new Swift SDK is SwiftUI-friendly. Find demos on mbientLab's GitHub.",
-                color: Color(.systemRed)
-            ),
-        ]
-    }
-
-    static func makeMetaBase4MigrationItems() -> [Item] {
-#if os(macOS)
-        let devicesTip = "iPads, iPhones, and Macs."
-#else
-        let devicesTip = "iOS and MacOS. (Try our new native MacOS app!)"
-#endif
-
-        return [
-            .init(
-                symbol: .icloud,
-                headline: "iCloud Sync",
-                description: "Sync recordings and settings across \(devicesTip)",
-                color: .myMint
-            ),
-            .init(
-                symbol: .shortcutMenu,
-                headline: "Sensor Presets",
-                description: "Save frequently used configurations for easier streaming and logging runs.",
-                color: Color(.systemOrange)
-            ),
-            .init(
-                symbol: .swift,
-                headline: "Combine SDK",
-                description: "For developers, our new Swift SDK is Bolts-free and SwiftUI-friendly. Find demos on mbientLab's GitHub.",
-                color: Color(.systemRed)
-            ),
-        ]
     }
 }

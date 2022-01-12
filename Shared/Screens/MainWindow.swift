@@ -15,8 +15,13 @@ struct MainWindow: View {
             .background(steadyHeaderBackground, alignment: .top)
             .animation(.easeOut, value: routing.destination)
             .foregroundColor(.myPrimary)
+        #if os(macOS)
             .toolbar { BluetoothErrorButton.ToolbarIcon() }
-
+        #elseif os(iOS)
+            .sheet(isPresented: showOnboardingSheet) {
+                Onboarding(importer: factory.makeImportVM(), vm: factory.makeOnboardingVM())
+            }
+        #endif
     }
 
     private var showOnboardingSheet: Binding<Bool> {
@@ -26,17 +31,13 @@ struct MainWindow: View {
 
     private var stackNavigation: some View {
         ZStack {
-            if didOnboard >= CurrentMetaBaseVersion {
-                switch routing.destination {
-                    case .choose:       ChooseDevicesScreen(routing, factory).transition(.add)
-                    case .history:      HistoryScreen(factory).transition(.add)
-                    case .configure:    ConfigureScreen(factory).transition(.add)
-                    case .log:          ActionScreen(factory).transition(.add)
-                    case .stream:       ActionScreen(factory).transition(.add)
-                    case .downloadLogs: ActionScreen(factory).transition(.add)
-                }
-            } else {
-                Onboarding(factory: factory)
+            switch routing.destination {
+                case .choose:       ChooseDevicesScreen(routing, factory).transition(.add)
+                case .history:      HistoryScreen(factory).transition(.add)
+                case .configure:    ConfigureScreen(factory).transition(.add)
+                case .log:          ActionScreen(factory).transition(.add)
+                case .stream:       ActionScreen(factory).transition(.add)
+                case .downloadLogs: ActionScreen(factory).transition(.add)
             }
         }
     }

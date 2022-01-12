@@ -31,7 +31,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
         private var willDisappear: Bool { vm.listIsEmpty == false && hasUsed >= CurrentMetaBaseVersion }
 
         // Coordinate the transition animations
-        @AppStorage(wrappedValue: 0.0, UserDefaults.MetaWear.Keys.hasUsedMetaBaseVersion) private var hasUsed
+        @AppStorage(wrappedValue: 0.0, UserDefaults.MetaWear.Keys.didGetNearbyDeviceInstructionForVersion) private var hasUsed
         @State private var didAppear = false
         @State private var animate = false
 
