@@ -4,6 +4,7 @@ import Foundation
 import Combine
 import MetaWear
 import MetaWearSync
+import CoreBluetooth
 
 public class HistoryScreenVM: ObservableObject, HeaderVM {
 
@@ -22,6 +23,11 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
     private var performDisconnectOnDisappear = true
     private var loggingUpdates: AnyCancellable? = nil
     private var didAppear = false
+
+#if os(iOS)
+    @Published public private(set) var allDevicesConnectionState: CBPeripheralState  = .disconnected
+    private var allDevicesConnectionSub: AnyCancellable? = nil
+#endif
 
     private unowned let routing: Routing
     private unowned let scanner: MetaWearScanner
@@ -112,6 +118,7 @@ private extension HistoryScreenVM {
             })
 
         showStartAlertUpdates = timer
+            .delay(for: 2, tolerance: 0.5, scheduler: DispatchQueue.main)
             .compactMap { [weak self] _ in
                 self?.items.allSatisfy { $0.isNearby }
             }
@@ -119,6 +126,20 @@ private extension HistoryScreenVM {
             .sink(receiveValue: { [weak self] canStart in
                 self?.showSessionStartAlert = !canStart
             })
+
+#if os(iOS)
+        allDevicesConnectionSub = timer
+            .compactMap { [weak self] _ -> CBPeripheralState? in
+                let states = Set(self?.items.map(\.connection) ?? [])
+                if states == [.connected] { return .connected }
+                if states.contains(.connecting) { return .connecting }
+                return states.min()
+            }
+            .removeDuplicates()
+            .sink { [weak self] state in
+                self?.allDevicesConnectionState = state
+            }
+#endif
     }
 }
 

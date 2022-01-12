@@ -40,7 +40,16 @@ extension HistoryScreen {
                             .padding(.trailing, .screenInset)
                     }
                     .transition(.move(edge: .bottom).combined(with: .opacity))
-                } else { cta.transition(.move(edge: .bottom).combined(with: .opacity)) }
+                } else {
+                    HStack(spacing: 20) {
+                        if vm.allDevicesConnectionState == .connecting {
+                            ProgressSpinner()
+                        }
+                        cta
+                    }
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
             }
             .animation(.easeIn, value: vm.showSessionStartAlert)
             .frame(maxWidth: .infinity, alignment: .trailing)
