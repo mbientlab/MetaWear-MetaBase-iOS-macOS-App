@@ -54,7 +54,6 @@
 		940E01B72780E4C7002AD641 /* UnderlineButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B62780E4C7002AD641 /* UnderlineButtonStyle.swift */; };
 		940E01B82780E4C7002AD641 /* UnderlineButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01B62780E4C7002AD641 /* UnderlineButtonStyle.swift */; };
 		940E01BE278148EE002AD641 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 940E01BD278148EE002AD641 /* mbientSwiftUI */; };
-		940E01C0278148F3002AD641 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 940E01BF278148F3002AD641 /* mbientSwiftUI */; };
 		940E01C227814BFD002AD641 /* CloudSaveStateIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01C127814BFD002AD641 /* CloudSaveStateIndicator.swift */; };
 		940E01C327814BFD002AD641 /* CloudSaveStateIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E01C127814BFD002AD641 /* CloudSaveStateIndicator.swift */; };
 		9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
@@ -146,6 +145,10 @@
 		949E5AB02773BCDA00D45740 /* FileMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AA52773BCDA00D45740 /* FileMO+CoreDataClass.swift */; };
 		949E5AB42773BD7800D45740 /* ModelConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AB32773BD7800D45740 /* ModelConvertible.swift */; };
 		949E5AB52773BD7800D45740 /* ModelConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AB32773BD7800D45740 /* ModelConvertible.swift */; };
+		949E992F278ECC9B00D594C2 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 949E992E278ECC9B00D594C2 /* mbientSwiftUI */; };
+		949E9931278ECCBC00D594C2 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 949E9930278ECCBC00D594C2 /* MetaWear */; };
+		949E9933278ECCBC00D594C2 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 949E9932278ECCBC00D594C2 /* MetaWearSync */; };
+		949E9935278ECCBC00D594C2 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 949E9934278ECCBC00D594C2 /* mbientSwiftUI */; };
 		94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
 		94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BD275F2F8600FA355D /* History+SessionsList.swift */; };
 		94A165C3275F2F8600FA355D /* History+AboutDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+AboutDevices.swift */; };
@@ -266,7 +269,6 @@
 		940E01B02780E487002AD641 /* HoverButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverButtonStyle.swift; sourceTree = "<group>"; };
 		940E01B32780E4A7002AD641 /* DepressButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepressButtonStyle.swift; sourceTree = "<group>"; };
 		940E01B62780E4C7002AD641 /* UnderlineButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineButtonStyle.swift; sourceTree = "<group>"; };
-		940E01BC278148B5002AD641 /* mbientSwiftUI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = mbientSwiftUI; path = ../../mbientSwiftUI/mbientSwiftUI; sourceTree = "<group>"; };
 		940E01C127814BFD002AD641 /* CloudSaveStateIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSaveStateIndicator.swift; sourceTree = "<group>"; };
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
 		94196C142770DF61000377A6 /* SensorPresetsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorPresetsLoader.swift; sourceTree = "<group>"; };
@@ -375,6 +377,7 @@
 				94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */,
 				9464CA8C278D029E00BE70C6 /* MetaWearFirmware in Frameworks */,
 				9464CA8E278D029E00BE70C6 /* MetaWearSync in Frameworks */,
+				949E992F278ECC9B00D594C2 /* mbientSwiftUI in Frameworks */,
 				9464CA88278D029E00BE70C6 /* MetaWear in Frameworks */,
 				940E01BE278148EE002AD641 /* mbientSwiftUI in Frameworks */,
 			);
@@ -384,8 +387,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				949E9933278ECCBC00D594C2 /* MetaWearSync in Frameworks */,
+				949E9931278ECCBC00D594C2 /* MetaWear in Frameworks */,
 				94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */,
-				940E01C0278148F3002AD641 /* mbientSwiftUI in Frameworks */,
+				949E9935278ECCBC00D594C2 /* mbientSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,7 +471,6 @@
 		9420E581275A097200A841D6 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				940E01BC278148B5002AD641 /* mbientSwiftUI */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -818,6 +822,7 @@
 				9464CA89278D029E00BE70C6 /* MetaWearCpp */,
 				9464CA8B278D029E00BE70C6 /* MetaWearFirmware */,
 				9464CA8D278D029E00BE70C6 /* MetaWearSync */,
+				949E992E278ECC9B00D594C2 /* mbientSwiftUI */,
 			);
 			productName = "MetaBase (iOS)";
 			productReference = 94E005D1275A07E9001B0DFD /* MetaBase.app */;
@@ -837,7 +842,9 @@
 			);
 			name = "MetaBase (macOS)";
 			packageProductDependencies = (
-				940E01BF278148F3002AD641 /* mbientSwiftUI */,
+				949E9930278ECCBC00D594C2 /* MetaWear */,
+				949E9932278ECCBC00D594C2 /* MetaWearSync */,
+				949E9934278ECCBC00D594C2 /* mbientSwiftUI */,
 			);
 			productName = "MetaBase (macOS)";
 			productReference = 94E005D7275A07E9001B0DFD /* MetaBase.app */;
@@ -926,6 +933,7 @@
 			mainGroup = 94E005C4275A07E9001B0DFD;
 			packageReferences = (
 				9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */,
+				949E992D278ECC9B00D594C2 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */,
 			);
 			productRefGroup = 94E005D2275A07E9001B0DFD /* Products */;
 			projectDirPath = "";
@@ -1679,14 +1687,18 @@
 				kind = branch;
 			};
 		};
+		949E992D278ECC9B00D594C2 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mbientlab/mbientSwiftUI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		940E01BD278148EE002AD641 /* mbientSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = mbientSwiftUI;
-		};
-		940E01BF278148F3002AD641 /* mbientSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = mbientSwiftUI;
 		};
@@ -1717,6 +1729,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
 			productName = MetaWearSync;
+		};
+		949E992E278ECC9B00D594C2 /* mbientSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 949E992D278ECC9B00D594C2 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
+			productName = mbientSwiftUI;
+		};
+		949E9930278ECCBC00D594C2 /* MetaWear */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWear;
+		};
+		949E9932278ECCBC00D594C2 /* MetaWearSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
+			productName = MetaWearSync;
+		};
+		949E9934278ECCBC00D594C2 /* mbientSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 949E992D278ECC9B00D594C2 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
+			productName = mbientSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 
