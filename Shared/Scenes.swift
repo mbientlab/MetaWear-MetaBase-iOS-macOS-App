@@ -1,12 +1,10 @@
 // Copyright 2022 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import mbientSwiftUI
-import SwiftUI
 
 struct MainScene: Scene {
 
     let root: Root
-    @Namespace private var namespace
 
     // ConfigureScreen showing 3 tiles w/ equal margins (635) + extra width (90)
     static let minWidth: CGFloat = 1100
@@ -16,8 +14,7 @@ struct MainScene: Scene {
 
     var body: some Scene {
         WindowGroup {
-            MainWindow()
-                .environment(\.namespace, namespace)
+            Namespaced(MainWindow())
                 .onAppear { root.start() }
                 .environmentObject(root.bluetoothVM)
                 .environmentObject(root.factory)
@@ -39,37 +36,49 @@ struct MainScene: Scene {
 struct OnboardingScene: Scene {
 
     let root: Root
-    @Namespace private var namespace
 
     var body: some Scene {
         WindowGroup("Welcome") {
-            Onboarding(importer: root.factory.makeImportVM(), vm: root.factory.makeOnboardingVM())
-                .environment(\.namespace, namespace)
-                .frame(minWidth: 900, minHeight: MainScene.minHeight)
-                .handleOnlyEvents(ExternalEvent.onboarding)
+            Namespaced(Content())
                 .environmentObject(root.factory)
+                .handleOnlyEvents(ExternalEvent.onboarding)
         }
         .handleOnlyEvents(ExternalEvent.onboarding)
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unified(showsTitle: false))
+    }
+
+    struct Content: View {
+        @EnvironmentObject var factory: UIFactory
+        var body: some View {
+            Onboarding(importer: factory.makeImportVM(),
+                       vm: factory.makeOnboardingVM())
+                .frame(minWidth: 900, minHeight: MainScene.minHeight)
+        }
     }
 }
 
 struct MigrateScene: Scene {
 
     let root: Root
-    @Namespace private var namespace
 
     var body: some Scene {
         WindowGroup("Migrate Data") {
-            Onboarding(importer: root.factory.makeImportVM(), vm: root.factory.makeMigrationVM())
-                .environment(\.namespace, namespace)
-                .frame(minWidth: 900, minHeight: MainScene.minHeight)
+            Namespaced(Content())
                 .handleOnlyEvents(ExternalEvent.migrate)
                 .environmentObject(root.factory)
         }
         .handleOnlyEvents(ExternalEvent.migrate)
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unified(showsTitle: false))
+    }
+
+    struct Content: View {
+        @EnvironmentObject var factory: UIFactory
+        var body: some View {
+            Onboarding(importer: factory.makeImportVM(),
+                       vm: factory.makeMigrationVM())
+                .frame(minWidth: 900, minHeight: MainScene.minHeight)
+        }
     }
 }
