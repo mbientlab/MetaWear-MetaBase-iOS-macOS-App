@@ -247,7 +247,7 @@ extension ChooseDevicesScreen.DeviceCell {
                         ledEmulator: ledEmulator
                     )
                         .environment(\.metaWearModel, models.first?.model ?? .unknown)
-                        .matchedGeometryEffect(id: models.first?.mac, in: namespace!)
+                        .matchedGeometryEffect(id: models.first?.mac ?? UUID().uuidString, in: namespace!)
                 }
             }
             .frame(width: imageWidth, height: imageHeight, alignment: .center)
