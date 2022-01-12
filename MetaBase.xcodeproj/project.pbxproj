@@ -179,6 +179,8 @@
 		94AEA0922785940700C8BE23 /* PeekingMetaWearBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA0902785940700C8BE23 /* PeekingMetaWearBG.swift */; };
 		94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE45276FE9AC009832E1 /* CloudKit.framework */; };
 		94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE47276FE9BE009832E1 /* CloudKit.framework */; };
+		94C80F75278F7312007522D5 /* DebugUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C80F74278F7312007522D5 /* DebugUtilities.swift */; };
+		94C80F76278F7312007522D5 /* DebugUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C80F74278F7312007522D5 /* DebugUtilities.swift */; };
 		94CF3EFA276427C300C2D8B0 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3EF9276427C300C2D8B0 /* Routing.swift */; };
 		94CF3EFB276427C300C2D8B0 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3EF9276427C300C2D8B0 /* Routing.swift */; };
 		94CF3EFD276427F100C2D8B0 /* ChooseDevicesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3EFC276427F100C2D8B0 /* ChooseDevicesScreen.swift */; };
@@ -341,6 +343,7 @@
 		94AEA0902785940700C8BE23 /* PeekingMetaWearBG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeekingMetaWearBG.swift; sourceTree = "<group>"; };
 		94BCCE45276FE9AC009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		94BCCE47276FE9BE009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		94C80F74278F7312007522D5 /* DebugUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugUtilities.swift; sourceTree = "<group>"; };
 		94CF3EF9276427C300C2D8B0 /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
 		94CF3EFC276427F100C2D8B0 /* ChooseDevicesScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseDevicesScreen.swift; sourceTree = "<group>"; };
 		94CF3EFF2764282300C2D8B0 /* CTAButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CTAButton.swift; sourceTree = "<group>"; };
@@ -738,8 +741,8 @@
 			isa = PBXGroup;
 			children = (
 				94E005CA275A07E9001B0DFD /* MetaBaseApp.swift */,
-				949E993C278F5E3D00D594C2 /* Scenes.swift */,
 				9452856C275BE1D5004D815B /* Root.swift */,
+				949E993C278F5E3D00D594C2 /* Scenes.swift */,
 				94CF3EF9276427C300C2D8B0 /* Routing.swift */,
 				949E9939278F570900D594C2 /* Menus.swift */,
 				941A08FF276FB789006D52E3 /* Model */,
@@ -748,6 +751,7 @@
 				9413CEB4275B13F900A36B5E /* Screens */,
 				94934FDC275A0C8800E388FF /* UI */,
 				94934FE5275A0D3C00E388FF /* Support */,
+				94C80F74278F7312007522D5 /* DebugUtilities.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -1067,6 +1071,7 @@
 				944C1761276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */,
 				949E5A6727729B7A00D45740 /* SessionRepository.swift in Sources */,
 				94E3A7F3275FF519007E2BAE /* AboutDeviceVM.swift in Sources */,
+				94C80F75278F7312007522D5 /* DebugUtilities.swift in Sources */,
 				9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */,
 				9452856D275BE1D5004D815B /* Root.swift in Sources */,
 				942E39362784FCF900629DFE /* UserDefaultsContainer.swift in Sources */,
@@ -1175,6 +1180,7 @@
 				944C1762276F9FF0006003C9 /* MBPresetSensorConfigurationsContainer.swift in Sources */,
 				949E5A6827729B7A00D45740 /* SessionRepository.swift in Sources */,
 				94528568275BE12B004D815B /* ActionScreen.swift in Sources */,
+				94C80F76278F7312007522D5 /* DebugUtilities.swift in Sources */,
 				94CF3F0D2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
 				94935024275A11C600E388FF /* KnownItemVM.swift in Sources */,
 				942E39372784FCF900629DFE /* UserDefaultsContainer.swift in Sources */,

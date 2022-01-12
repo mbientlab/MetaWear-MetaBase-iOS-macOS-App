@@ -10,8 +10,9 @@ struct Menus: Commands {
     var body: some Commands {
 #if DEBUG
         CommandMenu("Debug") {
-            Button("Wipe UserDefaults Local & Cloud") { wipeDefaults() }
-            Button("Wipe Onboarding States") { wipeOnboarding() }
+            Button("Wipe UserDefaults, Keeping MetaWears") { wipeDefaults(preserveMetaWearData: true) }
+            Button("Wipe All UserDefaults") { wipeDefaults(preserveMetaWearData: false) }
+            Button("Reset Onboarding State") { wipeOnboarding() }
         }
 #endif
         CommandGroup(replacing: .newItem) {
