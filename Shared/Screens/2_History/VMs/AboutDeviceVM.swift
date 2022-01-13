@@ -57,7 +57,9 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
 
     public init(device: MWKnownDevice, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing) {
 #if DEBUG
-        device.mw?.logDelegate = MWConsoleLogger.shared
+        if useMetabaseConsoleLogger {
+            device.mw?.logDelegate = MWConsoleLogger.shared
+        }
 #endif
 
         self.connection = device.mw?.connectionState == .connected ? .connected : .disconnected

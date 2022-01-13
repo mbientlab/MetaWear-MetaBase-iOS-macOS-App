@@ -48,7 +48,7 @@ public class KnownItemVM: ObservableObject, ItemVM {
     /// Represent a MetaWear (either cloud-synced or locally known) as an item
     public init(device: MWKnownDevice, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing, queue: DispatchQueue) {
 #if DEBUG
-        device.mw?.logDelegate = MWConsoleLogger.shared
+        if useMetabaseConsoleLogger { device.mw?.logDelegate = MWConsoleLogger.shared }
 #endif
         self.dropQueue = queue
         self.connection = device.mw?.connectionState == .connected ? .connected : .disconnected
@@ -78,8 +78,10 @@ public class KnownItemVM: ObservableObject, ItemVM {
         let _devices = store.getDevicesInGroup(group)
         self.devices = _devices
 #if DEBUG
-        _devices.forEach {
-            $0.mw?.logDelegate = MWConsoleLogger.shared
+        if useMetabaseConsoleLogger {
+            _devices.forEach {
+                $0.mw?.logDelegate = MWConsoleLogger.shared
+            }
         }
 #endif
         (self.rssi, self.rssiInt) = Self.getLowestSignal(in: _devices)
