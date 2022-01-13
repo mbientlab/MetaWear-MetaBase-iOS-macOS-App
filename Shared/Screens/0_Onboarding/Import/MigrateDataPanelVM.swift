@@ -4,7 +4,7 @@ import Foundation
 import mbientSwiftUI
 import Combine
 
-public class ImportSessionsVM: ObservableObject {
+public class MigrateDataPanelVM: ObservableObject {
 
     @Published public private(set) var error: MetaBase4SessionDataImporter.ImportError? = nil
     @Published public private(set) var canImport = true
@@ -27,7 +27,7 @@ public class ImportSessionsVM: ObservableObject {
 
     public init(importer: MetaBase4SessionDataImporter) {
         self.importer = importer
-        self.canImport = importer.didImport == false
+        self.canImport = importer.hideImportPromptsState == false
     }
 
     public enum State {
@@ -37,7 +37,7 @@ public class ImportSessionsVM: ObservableObject {
     }
 }
 
-public extension ImportSessionsVM {
+public extension MigrateDataPanelVM {
 
     func start() {
         isImporting = .importing

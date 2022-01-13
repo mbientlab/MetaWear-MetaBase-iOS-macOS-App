@@ -2,11 +2,49 @@
 
 import mbientSwiftUI
 
-struct ImportSessions {
-    private init() { }
+struct MigrateDataPanel: View {
+
+    init(importer: MigrateDataPanelVM, vm: MigrateDataPanelSoloVM)  {
+        _importer = .init(wrappedValue: importer)
+        _vm =  .init(wrappedValue: vm)
+    }
+    @StateObject var vm: MigrateDataPanelSoloVM
+    @StateObject var importer: MigrateDataPanelVM
+
+#if os(iOS)
+    let minHeight = UIScreen.main.bounds.shortestSide * 0.5
+#elseif os(macOS)
+    let minHeight = CGFloat(400)
+#endif
+
+    var body: some View {
+        FocusFlipPanel(vm: vm.focus) { maxWidth in
+            ItemsPanel(items: vm.content.debrief, useSmallerSizes: true, maxWidth: maxWidth)
+                .frame(minHeight: minHeight)
+        } down: { maxWidth in
+            ProgressReport()
+                .frame(maxWidth: maxWidth)
+        } cta: { cta }
+        .onAppear(perform: vm.onAppear)
+        .environmentObject(vm)
+        .environmentObject(importer)
+    }
+
+    @ViewBuilder private var cta: some View {
+        if vm.showMigrationCTAs {
+            CTAs(
+                willStartImport: { vm.focus.setFocus(.importer) },
+                skipAction: { vm.focus.setFocus(.complete) },
+                successAction: { vm.focus.setFocus(.complete) },
+                successCTA: vm.completionCTA
+            )
+        } else {
+            CTAButton(vm.completionCTA, padding: 6, action: { vm.focus.setFocus(.complete) })
+        }
+    }
 }
 
-extension ImportSessions {
+extension MigrateDataPanel {
 
     struct CTAs: View {
 
@@ -16,7 +54,7 @@ extension ImportSessions {
         let successAction: () -> Void
         let successCTA: String
 
-        @EnvironmentObject private var vm: ImportSessionsVM
+        @EnvironmentObject private var vm: MigrateDataPanelVM
 
         var body: some View {
             ZStack {
@@ -38,7 +76,7 @@ extension ImportSessions {
                     action: skipAction
                 )
                 CTAButton(
-                    "Migrate Local Data  􀆊",
+                    idiom.is_Mac ? "Migrate Local Data  􀆊" : "Migrate Local Data",
                     padding: padding,
                     action: {
                         willStartImport()
@@ -61,7 +99,7 @@ extension ImportSessions {
 
         let padding: CGFloat = 6
 
-        @EnvironmentObject private var vm: ImportSessionsVM
+        @EnvironmentObject private var vm: MigrateDataPanelVM
         @Namespace private var namespace
 
         var body: some View {
@@ -74,7 +112,7 @@ extension ImportSessions {
                     .foregroundColor(.myTertiary)
 
                 if vm.isImporting == .completed,
-                    let error = vm.error {
+                   let error = vm.error {
                     Text(error.localizedDescription)
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
@@ -108,13 +146,13 @@ extension ImportSessions {
                             .matchedGeometryEffect(id: "state", in: namespace)
                 }
             }
-                .frame(width: 60, height: 60)
-                .animation(.easeOut, value: vm.isImporting)
+            .frame(width: 60, height: 60)
+            .animation(.easeOut, value: vm.isImporting)
         }
 
         private var completedSymbol: SFSymbol {
             guard let error = vm.error,
-                    error != .alreadyImportedDataFromThisDevice
+                  error != .alreadyImportedDataFromThisDevice
             else { return .checkFilled }
             return .error
         }
