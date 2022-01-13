@@ -63,6 +63,10 @@ public extension Root {
 
     func start() {
         do {
+            if launchCounter.launches == 0 {
+                // Local SDK MAC recognition only, metadata imported by user command
+                UserDefaults.MetaWear.migrateFromBoltsSDK()
+            }
             coreData.setup()
             try devices.load()
             try presets.load()
