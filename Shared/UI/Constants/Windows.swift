@@ -2,12 +2,12 @@
 
 import mbientSwiftUI
 
-enum ExternalEvent: String, ExternalEvents {
+enum Windows: String, CaseIterable {
+    case metabaseMain
     case onboarding
-    case migrate
-    case launch
+    case migration
 
-    var url: URL { URL(string: Self.urlPrefix + tag)! }
     var tag: String { rawValue }
+    var externalEventURL: URL { URL(string: Self.urlPrefix + tag)! }
     static let urlPrefix = "metabase://"
 }

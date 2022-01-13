@@ -14,12 +14,28 @@ struct Menus: Commands {
         }
 #endif
         CommandGroup(replacing: .newItem) {
-            Button("Import MetaBase 4 Data") { open.callAsFunction(ExternalEvent.migrate.url) }
+            Button("Import MetaBase 4 Data") { open(window: .migration) }
         }
 
         CommandGroup(replacing: .help) {
-            Button("What's New?") { open.callAsFunction(ExternalEvent.onboarding.url) }
+            Button("What's New in MetaBase 5?") { open(window: .onboarding) }
         }
+
+        CommandGroup(before: .windowList) {
+            Button("Reopen Main Window") { open(window: .metabaseMain) }
+        }
+    }
+
+    func open(window target: Windows) {
+        for window in NSApp.windows {
+            guard let id = window.identifier?.rawValue else { continue }
+            if id.hasPrefix(target.tag) {
+                window.makeKeyAndOrderFront(nil)
+                return
+            }
+        }
+        // Resort to SwiftUI open only if there isn't an existing window for that identifier
+        open.callAsFunction(target.externalEventURL)
     }
 }
 
@@ -28,6 +44,9 @@ struct Menus: Commands {
 struct DebugMenu: View {
 
     var body: some View {
+        Button("Wipe Windows") {
+            NSApp.windows.forEach { $0.close() }
+        }
         Button("Wipe UserDefaults, Keeping MetaWears") { wipeDefaults(preserveMetaWearData: true) }
         Button("Wipe All UserDefaults") { wipeDefaults(preserveMetaWearData: false) }
         Button("Reset Onboarding State") { wipeOnboarding() }

@@ -15,7 +15,6 @@ public class MigrateDataPanelSoloVM: ObservableObject {
     private var focusUpdate: AnyCancellable? = nil
 
     public init(state: MigrationState) {
-
         print("-> Migration State", Self.self, "canMigrate", state.canMigrate, "didOnboard", state.didOnboard)
         self.content = .metaBase4
         self.completionCTA = state.didOnboard ? "Ok" : "Start"

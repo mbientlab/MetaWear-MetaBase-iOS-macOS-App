@@ -151,8 +151,8 @@
 		949E9931278ECCBC00D594C2 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 949E9930278ECCBC00D594C2 /* MetaWear */; };
 		949E9933278ECCBC00D594C2 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 949E9932278ECCBC00D594C2 /* MetaWearSync */; };
 		949E9935278ECCBC00D594C2 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 949E9934278ECCBC00D594C2 /* mbientSwiftUI */; };
-		949E9937278F51DB00D594C2 /* ExternalEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9936278F51DB00D594C2 /* ExternalEvent.swift */; };
-		949E9938278F51DB00D594C2 /* ExternalEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9936278F51DB00D594C2 /* ExternalEvent.swift */; };
+		949E9937278F51DB00D594C2 /* Windows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9936278F51DB00D594C2 /* Windows.swift */; };
+		949E9938278F51DB00D594C2 /* Windows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9936278F51DB00D594C2 /* Windows.swift */; };
 		949E993A278F570900D594C2 /* Menus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9939278F570900D594C2 /* Menus.swift */; };
 		949E993B278F570900D594C2 /* Menus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9939278F570900D594C2 /* Menus.swift */; };
 		949E993D278F5E3D00D594C2 /* Scenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E993C278F5E3D00D594C2 /* Scenes.swift */; };
@@ -329,7 +329,7 @@
 		949E5AA32773BCDA00D45740 /* SessionMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionMO+CoreDataClass.swift"; sourceTree = "<group>"; };
 		949E5AA52773BCDA00D45740 /* FileMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileMO+CoreDataClass.swift"; sourceTree = "<group>"; };
 		949E5AB32773BD7800D45740 /* ModelConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelConvertible.swift; sourceTree = "<group>"; };
-		949E9936278F51DB00D594C2 /* ExternalEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalEvent.swift; sourceTree = "<group>"; };
+		949E9936278F51DB00D594C2 /* Windows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Windows.swift; sourceTree = "<group>"; };
 		949E9939278F570900D594C2 /* Menus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menus.swift; sourceTree = "<group>"; };
 		949E993C278F5E3D00D594C2 /* Scenes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scenes.swift; sourceTree = "<group>"; };
 		949E9945278F629500D594C2 /* OnboardingContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContent.swift; sourceTree = "<group>"; };
@@ -478,7 +478,6 @@
 				941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */,
 				949E5A692772ACA500D45740 /* Session.swift */,
 				9409C5C127613890001FE850 /* UserSensorConfiguration.swift */,
-				949E9936278F51DB00D594C2 /* ExternalEvent.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -642,6 +641,7 @@
 		94934FE4275A0D1D00E388FF /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				949E9936278F51DB00D594C2 /* Windows.swift */,
 				94EBA3A2275A14DE008C62E7 /* Dimensions.swift */,
 				94CF3F1A276428CA00C2D8B0 /* Transitions.swift */,
 			);
@@ -1069,7 +1069,7 @@
 				949E5A6A2772ACA500D45740 /* Session.swift in Sources */,
 				94528564275BE0D8004D815B /* MainWindow.swift in Sources */,
 				9446F64727829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */,
-				949E9937278F51DB00D594C2 /* ExternalEvent.swift in Sources */,
+				949E9937278F51DB00D594C2 /* Windows.swift in Sources */,
 				942E393927850F2300629DFE /* LegacyModels.swift in Sources */,
 				94ACB3DC278FA8890065302F /* iOSFooter.swift in Sources */,
 				94ACB3EB278FCEB40065302F /* MigrateDataPanelSoloVM.swift in Sources */,
@@ -1179,7 +1179,7 @@
 				949E5A6B2772ACA500D45740 /* Session.swift in Sources */,
 				9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
 				9446F64827829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */,
-				949E9938278F51DB00D594C2 /* ExternalEvent.swift in Sources */,
+				949E9938278F51DB00D594C2 /* Windows.swift in Sources */,
 				942E393A27850F2300629DFE /* LegacyModels.swift in Sources */,
 				94ACB3DD278FA8890065302F /* iOSFooter.swift in Sources */,
 				94ACB3EC278FCEB40065302F /* MigrateDataPanelSoloVM.swift in Sources */,
