@@ -31,7 +31,7 @@ struct HistoryScreen: View {
 
     /// macOS + iPad
     private var wideLayout: some View {
-        HStack(alignment: .firstTextBaseline, spacing: .screenInset * (idiom.is_Mac ? 1 : 1.25) ) {
+        HStack(alignment: .firstTextBaseline, spacing: .screenInset) {
 
             VStack(alignment: .leading) {
                 ScreenSubsection(label: "About", trailing: {
@@ -42,7 +42,7 @@ struct HistoryScreen: View {
 
                 DevicesList()
             }
-            .frame(minWidth: 230)
+            .frame(minWidth: idiom.is_Mac ? 230 : 260)
 
             VStack(alignment: .leading) {
                 SessionListStaticSubhead()
