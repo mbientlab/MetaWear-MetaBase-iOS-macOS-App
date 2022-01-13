@@ -14,6 +14,9 @@ public extension UserDefaults.MetaWear.Keys {
     /// Contains: Double
     static let didOnboardAppVersion = key("didOnboardAppVersion")
 
+    /// Contains: Int
+    static let launchCount = key("launchCount")
+
     /// Contains: Versioned data
     static let sensorPresets = key("sensorPresets")
 

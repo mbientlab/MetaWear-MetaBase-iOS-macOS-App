@@ -1,9 +1,9 @@
 // Copyright 2021 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
-import Foundation
 import MetaWear
 import MetaWearSync
 import mbientSwiftUI
+import Combine
 
 public class UIFactory: ObservableObject {
 
@@ -13,7 +13,10 @@ public class UIFactory: ObservableObject {
                 _ logging:  ActiveLoggingSessionsStore,
                 _ importer: MetaBase4SessionDataImporter,
                 _ scanner:  MetaWearScanner,
-                _ routing:  Routing) {
+                _ routing:  Routing,
+                _ defaults: UserDefaultsContainer,
+                _ launches: LocalLaunchCounter
+    ) {
         self.presets = presets
         self.devices = devices
         self.sessions = sessions
@@ -21,8 +24,11 @@ public class UIFactory: ObservableObject {
         self.importer = importer
         self.routing = routing
         self.logging = logging
+        self.defaults = defaults
+        self.launches = launches
     }
 
+    private unowned let defaults: UserDefaultsContainer
     private unowned let devices:  MetaWearSyncStore
     private unowned let sessions: SessionRepository
     private unowned let presets:  PresetSensorParametersStore
@@ -30,21 +36,26 @@ public class UIFactory: ObservableObject {
     private unowned let importer: MetaBase4SessionDataImporter
     private unowned let scanner:  MetaWearScanner
     private unowned let routing:  Routing
-    private lazy var actionQueue = _makeBackgroundQueue(named: "action")
+    private unowned let launches: LocalLaunchCounter
+    private lazy var actionQueue  = _makeBackgroundQueue(named: "action")
 }
 
 public extension UIFactory {
 
-    func makeImportVM() -> ImportSessionsVM {
+    func makeImportVM() -> MigrateDataPanelVM {
         .init(importer: importer)
     }
 
-    func makeMigrationVM() -> OnboardingVM {
-        OnboardingVM(initialState: .importer)
+    func makeMigrationVM() -> MigrateDataPanelSoloVM {
+        .init(state: getMigrationState())
     }
 
     func makeOnboardingVM() -> OnboardingVM {
-        OnboardingVM(initialState: .intro)
+        .init(state: getMigrationState(), launchCounter: launches)
+    }
+
+    private func getMigrationState() -> MigrationState {
+        .init(defaults, importer: importer)
     }
 
     func makeDiscoveredDeviceListVM() -> DiscoveryListVM {
@@ -119,6 +130,9 @@ public extension UIFactory {
         )
     }
 
+    func getDidImportState() -> AnyPublisher<Bool,Never> {
+        importer.hideImportPrompts
+    }
 }
 
 private extension UIFactory {

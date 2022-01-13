@@ -3,6 +3,8 @@
 
 import Foundation
 
+let useMetabaseConsoleLogger = false
+
 func printUserDefaults() {
     let bundle = Bundle.main.bundleIdentifier!
     let defaults = UserDefaults.standard.persistentDomain(forName: bundle) ?? [:]
@@ -44,7 +46,8 @@ func wipeDefaults(preserveMetaWearData: Bool) {
 func wipeOnboarding() {
     [UserDefaults.MetaWear.Keys.didOnboardAppVersion,
      UserDefaults.MetaWear.Keys.didGetNearbyDeviceInstructionForVersion,
-     UserDefaults.MetaWear.Keys.importedLegacySessions
+     UserDefaults.MetaWear.Keys.importedLegacySessions,
+     UserDefaults.MetaWear.Keys.launchCount
     ].forEach  { key in
         UserDefaults.standard.removeObject(forKey: key)
         NSUbiquitousKeyValueStore.default.removeObject(forKey: key)
