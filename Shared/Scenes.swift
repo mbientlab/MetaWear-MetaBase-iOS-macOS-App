@@ -33,6 +33,8 @@ struct MainScene: Scene {
     }
 }
 
+// MARK: - Extra Window Scenes (macOS)
+
 struct OnboardingScene: Scene {
 
     let root: Root
@@ -44,16 +46,20 @@ struct OnboardingScene: Scene {
                 .handleOnlyEvents(ExternalEvent.onboarding)
         }
         .handleOnlyEvents(ExternalEvent.onboarding)
+#if os(macOS)
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unified(showsTitle: false))
+#endif
     }
 
     struct Content: View {
         @EnvironmentObject var factory: UIFactory
         var body: some View {
-            Onboarding(importer: factory.makeImportVM(),
-                       vm: factory.makeOnboardingVM())
+            OnboardingPanel(importer: factory.makeImportVM(),
+                            vm: factory.makeOnboardingVM())
+#if os(macOS)
                 .frame(minWidth: 900, minHeight: MainScene.minHeight)
+#endif
         }
     }
 }
@@ -69,16 +75,20 @@ struct MigrateScene: Scene {
                 .environmentObject(root.factory)
         }
         .handleOnlyEvents(ExternalEvent.migrate)
+#if os(macOS)
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unified(showsTitle: false))
+#endif
     }
 
     struct Content: View {
         @EnvironmentObject var factory: UIFactory
         var body: some View {
-            Onboarding(importer: factory.makeImportVM(),
-                       vm: factory.makeMigrationVM())
+            MigrateDataPanel(importer: factory.makeImportVM(),
+                             vm: factory.makeMigrationVM())
+#if os(macOS)
                 .frame(minWidth: 900, minHeight: MainScene.minHeight)
+#endif
         }
     }
 }
