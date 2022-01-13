@@ -24,7 +24,6 @@ public class MetaBase4SessionDataImporter {
         self.defaults = defaults
         let _dataExists = Self.legacyDataExists()
         self.legacyDataExistedAtLaunch = _dataExists
-        print("-> ", Self.self, _dataExists, "data exists", Self.didImportOnThisDevice(defaults), "didImportOnDevice")
         self.hideImportPromptsSubject = .init(_dataExists == false ? true : Self.didImportOnThisDevice(defaults))
         if hideImportPromptsSubject.value == false { loadGroups() }
     }
@@ -334,5 +333,10 @@ public struct MigrationState {
         let key = UserDefaults.MetaWear.Keys.didOnboardAppVersion
         self.didOnboard = defaults.cloudFirstDouble(for: key) >= CurrentMetaBaseVersion
         self.canMigrate = importer.hideImportPromptsState == false
+    }
+
+    init(canMigrate: Bool, didOnboard: Bool) {
+        self.canMigrate = canMigrate
+        self.didOnboard = didOnboard
     }
 }

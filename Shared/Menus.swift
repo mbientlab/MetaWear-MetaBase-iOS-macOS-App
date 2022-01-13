@@ -6,6 +6,7 @@ import mbientSwiftUI
 
 struct Menus: Commands {
     @Environment(\.openURL) private var open
+    let root: Root
 
     var body: some Commands {
 #if DEBUG
@@ -13,8 +14,11 @@ struct Menus: Commands {
             DebugMenu()
         }
 #endif
+
         CommandGroup(replacing: .newItem) {
-            Button("Import MetaBase 4 Data") { open(window: .migration) }
+            if root.importer.legacyDataExistedAtLaunch {
+                Button("Import MetaBase 4 Data") { open(window: .migration) }
+            }
         }
 
         CommandGroup(replacing: .help) {
@@ -22,7 +26,7 @@ struct Menus: Commands {
         }
 
         CommandGroup(before: .windowList) {
-            Button("Reopen Main Window") { open(window: .metabaseMain) }
+            Button("Focus Main Window") { open(window: .metabaseMain) }
         }
     }
 
@@ -44,9 +48,9 @@ struct Menus: Commands {
 struct DebugMenu: View {
 
     var body: some View {
-        Button("Wipe Windows") {
-            NSApp.windows.forEach { $0.close() }
-        }
+#if os(macOS)
+        Button("Kill Windows") { NSApp.windows.forEach { $0.close() } }
+#endif
         Button("Wipe UserDefaults, Keeping MetaWears") { wipeDefaults(preserveMetaWearData: true) }
         Button("Wipe All UserDefaults") { wipeDefaults(preserveMetaWearData: false) }
         Button("Reset Onboarding State") { wipeOnboarding() }

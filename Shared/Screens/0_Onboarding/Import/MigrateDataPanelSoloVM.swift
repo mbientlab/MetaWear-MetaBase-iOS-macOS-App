@@ -13,12 +13,21 @@ public class MigrateDataPanelSoloVM: ObservableObject {
     public let completionCTA: String
     public let showMigrationCTAs: Bool
     private var focusUpdate: AnyCancellable? = nil
+    /// Cause the view to trigger import immediately to show failure reason
+    let triggerImporter: Bool
 
     public init(state: MigrationState) {
-        print("-> Migration State", Self.self, "canMigrate", state.canMigrate, "didOnboard", state.didOnboard)
         self.content = .metaBase4
         self.completionCTA = state.didOnboard ? "Ok" : "Start"
         self.showMigrationCTAs = state.canMigrate
+
+        if state.canMigrate == false {
+            self.triggerImporter = true
+            self.focus.setShowPrimaryPane(false)
+            self.focus.setFocus(.importer)
+        } else {
+            self.triggerImporter = false
+        }
     }
 }
 
@@ -27,12 +36,16 @@ public extension MigrateDataPanelSoloVM {
 
     func onAppear() {
         focusUpdate = focus.$focus
-            .print()
             .sink { [weak self] nextFocus in
                 switch nextFocus {
-                    case .complete: return
-//                        self?.focus.dismissPanel.send()
-                    default: return
+                    case .debrief:
+                        self?.focus.setShowPrimaryPane(true)
+
+                    case .importer:
+                        self?.focus.setShowPrimaryPane(false)
+
+                    case .complete:
+                        self?.focus.dismissPanel.send()
                 }
             }
     }
@@ -68,7 +81,7 @@ public extension MigrateDataPanelSoloVM {
         public static let metaBase4 = Self.init(
             debriefTitle: "MetaBase 4 Migration",
             importerTitle: "Migrating",
-            completeTitle: "Migrated",
+            completeTitle: "MetaBase 4 Migration",
             debrief: [
                 .init(
                     symbol: .icloud,

@@ -25,7 +25,9 @@ struct MainWindow: View {
                 case .choose:
                     ChooseDevicesScreen(routing, factory).transition(.add)
 #if os(iOS)
-                        .overlay(iOSFooter(), alignment: .bottom)
+                        .overlay(OnboardingFooter_iOS(), alignment: .bottom)
+#elseif os(macOS)
+                        .background(OnboardingLauncher_macOS())
 #endif
                 case .history:      HistoryScreen(factory).transition(.add)
                 case .configure:    ConfigureScreen(factory).transition(.add)
@@ -40,7 +42,7 @@ struct MainWindow: View {
         if routing.destination != .choose {
             Color.myBackground
                 .edgesIgnoringSafeArea(.all)
-                .frame(height: .headerMinHeight + .headerTopPadding)
+                .frame(height: .headerMinHeight + .headerTopPadding + 10)
         }
     }
 }

@@ -12,13 +12,13 @@ public class Root: ObservableObject {
     public let presets:  PresetSensorParametersStore
     public let logging:  ActiveLoggingSessionsStore
     public let routing:  Routing
+    public let importer: MetaBase4SessionDataImporter
 
     // Services
     private let scanner:        MetaWearScanner
     private let sessions:       SessionRepository
     private let coreData:       CoreDataBackgroundController
     private let userDefaults:   UserDefaultsContainer
-    private let importer:       MetaBase4SessionDataImporter
     private let metawearLoader: MWLoader<MWKnownDevicesLoadable>
     private let presetsLoader:  MWLoader<SensorPresetsLoadable>
     private let loggingLoader:  MWLoader<LoggingTokensLoadable>
