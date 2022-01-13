@@ -33,7 +33,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     @Published var isExporting = false
     @Published var cloudSaveState: CloudSaveState = .notStarted
     private let sessionID = UUID()
-    public let name: String
+    public let title: String
     internal let startDate: Date
     private var files: [File] = []
     private var devicesExportReady:     Int = 0
@@ -70,7 +70,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
                 backgroundQueue: DispatchQueue
     ) {
         self.workQueue = backgroundQueue
-        self.name = name
+        self.title = name
         self.startDate = date
         self.sessions = sessions
         self.actionType = action
@@ -89,6 +89,9 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     public func onAppear() {
         startAction()
     }
+
+    // Header VM conformance
+    public var deviceCount: Int { deviceVMs.endIndex }
 }
 
 // MARK: - Intents
@@ -318,7 +321,7 @@ extension ActionVM: ActionController {
         let token = Session.LoggingToken(
             id: routing.focus!.item,
             date: startDate,
-            name: name
+            name: title
         )
         logging.register(token: token)
     }
@@ -357,7 +360,7 @@ internal extension ActionVM {
         guard devicesExportReady == devices.endIndex, files.isEmpty == false else { return }
         self.saveSessionToAppDatabase()
 
-        do { self.exporter = try .init(id: sessionID, name: name, files: files) }
+        do { self.exporter = try .init(id: sessionID, name: title, files: files) }
         catch { NSLog("\(Self.self)" + error.localizedDescription) }
 
         DispatchQueue.main.async { [weak self] in
@@ -373,7 +376,7 @@ internal extension ActionVM {
 
         let session = Session(id: sessionID,
                               date: startDate,
-                              name: name,
+                              name: title,
                               group: getGroup(),
                               devices: Set(deviceVMs.map(\.meta.mac)),
                               files: Set(files.map(\.id))

@@ -2,11 +2,15 @@
 
 import mbientSwiftUI
 
-public protocol ActionHeaderVM {
+public protocol ActionHeaderVM: HeaderVM {
     var actionType: ActionType { get }
     var representativeConfig: ModulesConfiguration { get }
-    var name: String { get }
+    var title: String { get }
     func backToHistory()
+}
+
+public extension ActionHeaderVM {
+    var showBackButton: Bool { true }
 }
 
 struct ActionHeader: View {
@@ -26,12 +30,18 @@ struct ActionHeader: View {
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
 
-                Text(vm.name)
+                Text(vm.title)
                     .adaptiveFont(.screenHeaderDetail)
                     .foregroundColor(.mySecondary)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
             }
+
+            Spacer()
+
+            Header.Icons(vm: vm)
+                .padding(.trailing, .screenInset)
+                .offset(y: -.headerMinHeight / 5)
         }
         .padding(.top, 10)
         .frame(maxWidth: .infinity, minHeight: .headerMinHeight, alignment: .topLeading)
