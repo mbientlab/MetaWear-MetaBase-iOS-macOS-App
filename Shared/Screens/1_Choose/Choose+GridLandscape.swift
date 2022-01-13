@@ -48,12 +48,12 @@ extension ChooseDevicesScreen {
         }
 
         // MARK: - Dividers
-
+        @Environment(\.colorScheme) private var colorScheme
         private var divider: some View {
             Rectangle()
                 .frame(width: 1)
-                .foregroundColor(.myGroupBackground)
-                .offset(y: -.verticalHoverDelta - .screenInset / 2)
+                .foregroundColor(colorScheme == .light ? .myPrimaryTinted.opacity(0.16) : .myGroupBackground)
+                .offset(y: .init(macOS: -.verticalHoverDelta - .screenInset / 2, iOS: .verticalHoverDelta))
         }
 
         private var showDividerA: Bool {

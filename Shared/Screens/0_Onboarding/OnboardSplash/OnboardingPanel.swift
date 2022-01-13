@@ -9,15 +9,35 @@ struct OnboardingPanel: View {
         _importer = .init(wrappedValue: importer)
         _vm =  .init(wrappedValue: vm)
     }
-    @StateObject var vm: OnboardingVM
-    @StateObject var importer: MigrateDataPanelVM
+    @StateObject private var vm: OnboardingVM
+    @StateObject private var importer: MigrateDataPanelVM
+
+    #if os(iOS)
+    private var width: CGFloat { .init(iPhone: UIScreen.main.bounds.width * 0.95, 450) }
+    #else
+    private let width: CGFloat = 450
+    #endif
 
     var body: some View {
-        FocusFlipPanel(vm: vm.focus) { maxWidth in
-            ItemsPanel(items: vm.content.items, maxWidth: maxWidth)
+        FocusFlipPanel(
+            vm: vm.focus,
+            centerColumnNominalWidth: width,
+            macOSHostWindowPrefix: Windows.onboarding.tag
+        ) { maxWidth in
+            if idiom == .iPhone {
+                ScrollView {
+                    ItemsPanel(items: vm.content.items, maxWidth: maxWidth)
+                }
+            } else {
+                ItemsPanel(items: vm.content.items, maxWidth: maxWidth)
+                    .scrollAtAccessibilitySize()
+            }
         } down: { maxWidth in
-            ImportStatus(maxWidth: maxWidth)
+            MigrateDataPanel.ProgressReportPane(maxWidth: maxWidth)
         } cta: { cta }
+#if os(iOS)
+        .padding(.top, 50)
+#endif
         .onAppear(perform: vm.onAppear)
         .environmentObject(vm)
         .environmentObject(importer)
@@ -33,22 +53,6 @@ struct OnboardingPanel: View {
             )
         } else {
             CTAButton(vm.completionCTA, padding: 6, action: { vm.focus.setFocus(.complete) })
-        }
-    }
-}
-
-extension OnboardingPanel {
-
-    struct ImportStatus: View {
-        var maxWidth: CGFloat
-        var body: some View {
-            VStack(alignment: .center, spacing: 45) {
-                MigrateDataPanel.ProgressReport()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-            .padding(40)
-            .background(ItemsPanel.PanelBG())
-            .frame(maxWidth: maxWidth, maxHeight: .infinity, alignment: .leading)
         }
     }
 }

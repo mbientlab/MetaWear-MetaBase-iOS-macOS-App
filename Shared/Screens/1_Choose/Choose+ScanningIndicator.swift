@@ -46,7 +46,7 @@ extension ChooseDevicesScreen {
             .whenHovered { iconIsHovered = $0 }
             .frame(maxWidth: .infinity, alignment: .center)
             .animation(.easeOut, value: iconIsHovered)
-            .offset(y: idiom == .iPad ? 40 : -40)
+            .offset(y: .init(iPad: 40, -40))
         }
 
         private var hoverLabel: some View {

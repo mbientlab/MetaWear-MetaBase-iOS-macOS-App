@@ -165,8 +165,8 @@
 		94A165C4275F2F8600FA355D /* History+AboutDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+AboutDevices.swift */; };
 		94A1E64727713FF100414FDF /* LifetimeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1E64627713FF100414FDF /* LifetimeCalculator.swift */; };
 		94A1E64827713FF100414FDF /* LifetimeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1E64627713FF100414FDF /* LifetimeCalculator.swift */; };
-		94ACB3DC278FA8890065302F /* iOSFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3DB278FA8890065302F /* iOSFooter.swift */; };
-		94ACB3DD278FA8890065302F /* iOSFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3DB278FA8890065302F /* iOSFooter.swift */; };
+		94ACB3DC278FA8890065302F /* OnboardingLaunchers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3DB278FA8890065302F /* OnboardingLaunchers.swift */; };
+		94ACB3DD278FA8890065302F /* OnboardingLaunchers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3DB278FA8890065302F /* OnboardingLaunchers.swift */; };
 		94ACB3E2278FABE30065302F /* OnboardingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3E1278FABE30065302F /* OnboardingVM.swift */; };
 		94ACB3E3278FABE30065302F /* OnboardingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3E1278FABE30065302F /* OnboardingVM.swift */; };
 		94ACB3E6278FBAB50065302F /* OnboardingPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3E5278FBAB50065302F /* OnboardingPanel.swift */; };
@@ -337,7 +337,7 @@
 		94A165BD275F2F8600FA355D /* History+SessionsList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+SessionsList.swift"; sourceTree = "<group>"; };
 		94A165BE275F2F8600FA355D /* History+AboutDevices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+AboutDevices.swift"; sourceTree = "<group>"; };
 		94A1E64627713FF100414FDF /* LifetimeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifetimeCalculator.swift; sourceTree = "<group>"; };
-		94ACB3DB278FA8890065302F /* iOSFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSFooter.swift; sourceTree = "<group>"; };
+		94ACB3DB278FA8890065302F /* OnboardingLaunchers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingLaunchers.swift; sourceTree = "<group>"; };
 		94ACB3E1278FABE30065302F /* OnboardingVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVM.swift; sourceTree = "<group>"; };
 		94ACB3E5278FBAB50065302F /* OnboardingPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPanel.swift; sourceTree = "<group>"; };
 		94ACB3EA278FCEB40065302F /* MigrateDataPanelSoloVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrateDataPanelSoloVM.swift; sourceTree = "<group>"; };
@@ -499,7 +499,7 @@
 		942E393B278511C300629DFE /* 0_Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				94ACB3DB278FA8890065302F /* iOSFooter.swift */,
+				94ACB3DB278FA8890065302F /* OnboardingLaunchers.swift */,
 				94ACB3E8278FCCF30065302F /* Import */,
 				942E393C278511CC00629DFE /* OnboardSplash */,
 			);
@@ -1071,7 +1071,7 @@
 				9446F64727829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */,
 				949E9937278F51DB00D594C2 /* Windows.swift in Sources */,
 				942E393927850F2300629DFE /* LegacyModels.swift in Sources */,
-				94ACB3DC278FA8890065302F /* iOSFooter.swift in Sources */,
+				94ACB3DC278FA8890065302F /* OnboardingLaunchers.swift in Sources */,
 				94ACB3EB278FCEB40065302F /* MigrateDataPanelSoloVM.swift in Sources */,
 				94935023275A11C600E388FF /* KnownItemVM.swift in Sources */,
 				94CF3EFA276427C300C2D8B0 /* Routing.swift in Sources */,
@@ -1181,7 +1181,7 @@
 				9446F64827829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */,
 				949E9938278F51DB00D594C2 /* Windows.swift in Sources */,
 				942E393A27850F2300629DFE /* LegacyModels.swift in Sources */,
-				94ACB3DD278FA8890065302F /* iOSFooter.swift in Sources */,
+				94ACB3DD278FA8890065302F /* OnboardingLaunchers.swift in Sources */,
 				94ACB3EC278FCEB40065302F /* MigrateDataPanelSoloVM.swift in Sources */,
 				9452855C275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
 				9409C5DD2762E17D001FE850 /* Action+Row.swift in Sources */,
@@ -1458,7 +1458,7 @@
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Connect and program your MetaWear Bluetooth Low Energy sesnsors.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortraitUpsideDown;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1494,7 +1494,7 @@
 				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "Connect and program your MetaWear Bluetooth Low Energy sesnsors.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortraitUpsideDown;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;

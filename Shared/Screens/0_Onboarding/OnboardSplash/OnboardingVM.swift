@@ -15,7 +15,6 @@ public class OnboardingVM: ObservableObject {
     private var focusUpdate: AnyCancellable? = nil
 
     public init(state: MigrationState, launchCounter: LocalLaunchCounter) {
-        print("-> Migration State", Self.self, "canMigrate", state.canMigrate, "didOnboard", state.didOnboard)
         self.content = state.canMigrate ? .migrateMB4Content : .newUserContent
         self.completionCTA = state.didOnboard ? "Ok" : "Start"
         self.showMigrationCTAs = state.canMigrate
@@ -33,10 +32,15 @@ public extension OnboardingVM {
         focusUpdate = focus.$focus
             .sink { [weak self] nextFocus in
                 switch nextFocus {
+                    case .intro:
+                        self?.focus.setShowPrimaryPane(true)
+
+                    case .importer:
+                        self?.focus.setShowPrimaryPane(false)
+
                     case .complete:
                         self?.markDidOnboard()
                         self?.focus.dismissPanel.send()
-                    default: return
                 }
             }
     }

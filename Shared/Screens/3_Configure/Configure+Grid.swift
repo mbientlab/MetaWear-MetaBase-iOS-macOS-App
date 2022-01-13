@@ -12,13 +12,11 @@ extension ConfigureScreen {
 
         #if os(macOS)
         static let tileWidth = CGFloat(180)
-        static let tileHeight = CGFloat(170)
-        static private let gridSpacing = CGFloat(12)
         #else
-        static let tileWidth = idiom == .iPad ? CGFloat(220) : max(165, (UIScreen.main.bounds.width - gridSpacing) / 2)
-        static let tileHeight = idiom == .iPad ? CGFloat(210) : CGFloat(190)
-        static private let gridSpacing = idiom == .iPad ? CGFloat(25) : CGFloat(10)
+        static let tileWidth = CGFloat(iPad: 220, max(165, (UIScreen.main.bounds.width - gridSpacing - 16) / 2))
         #endif
+        static let tileHeight          = CGFloat(macOS: 170, iPad: 210, iOS: 150)
+        static private let gridSpacing = CGFloat(macOS: 12 , iPad: 25 , iOS: 5)
 
         static private let gridItemSize = Self.tileWidth
         private let item = GridItem(.adaptive(minimum: gridItemSize, maximum: gridItemSize),
@@ -32,6 +30,7 @@ extension ConfigureScreen {
             .animation(.interactiveSpring())
             #if os(iOS)
             .padding(.trailing, idiom == .iPhone ? 0 : .screenInset)
+            .padding(.horizontal, idiom == .iPhone ? 8 : 0)
             #endif
         }
     }

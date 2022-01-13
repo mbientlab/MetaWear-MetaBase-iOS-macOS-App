@@ -46,10 +46,7 @@ struct HistoryScreen: View {
 
             VStack(alignment: .leading) {
                 SessionListStaticSubhead()
-                SessionsList(
-                    factory,
-                    scrollingTopContent: { EmptyView() }
-                )
+                SessionsList(factory, scrollingTopContent: { EmptyView() })
 
                 CTAs(layoutVertically: idiom == .iPhone)
                     .padding(.top, .screenInset / 2)
@@ -65,20 +62,18 @@ struct HistoryScreen: View {
 #if os(iOS)
     @State private var showiOSAboutSheet = false
     private var narrowLayout: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
 
-            SessionsList(
-                factory,
-                scrollingTopContent: {
-                    iOSAboutDevicesButton.padding(HistoryScreen.listEdgeInsets.inverted())
-                        .listRowSeparator(.hidden)
+            SessionsList(factory, scrollingTopContent: {
+                iOSAboutDevicesButton
+                    .padding(.top, .screenInset * 1.5)
+                    .padding(HistoryScreen.listEdgeInsets.inverted())
+                    .listRowSeparator(.hidden)
 
-                    SessionListStaticSubhead()
-                        .padding(HistoryScreen.listEdgeInsets.horizontalInverted())
-                        .listRowSeparator(.hidden)
-
-                }
-            )
+                SessionListStaticSubhead()
+                    .padding(HistoryScreen.listEdgeInsets.horizontalInverted())
+                    .listRowSeparator(.hidden)
+            })
 
             CTAs(layoutVertically: idiom == .iPhone)
                 .padding(.top, .screenInset / 2)
@@ -86,10 +81,10 @@ struct HistoryScreen: View {
                 .padding(.horizontal, .screenInset)
                 .layoutPriority(2)
         }
-        .padding(.top, 5)
+        .padding(.top, -.screenInset * 1.5)
+        .padding(.top, 8)
         .onAppear { vm.items.forEach { $0.onAppear() } }
     }
-
 
     private var iOSAboutDevicesButton: some View {
         Button { showiOSAboutSheet.toggle() } label: {

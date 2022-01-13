@@ -36,7 +36,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
         @State private var animate = false
 
         var body: some View {
-            VStack(alignment: .center, spacing: idiom.is_iOS ? 80 : 0) {
+            VStack(alignment: .center, spacing: .init(macOS: 0, iOS: 80)) {
                 if didAppear {
                     atomAnimation
                     instruction

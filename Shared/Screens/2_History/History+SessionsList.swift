@@ -42,9 +42,9 @@ extension HistoryScreen {
                     #endif
                 }
 
-                Color.clear.frame(height: 25)
+                Color.clear.frame(height: ScrollFadeMask.defaultSize / 2)
             }
-            .mask(mask.offset(y: 1))
+            .mask(ScrollFadeMask(edge: .bottom).offset(y: 1))
             .onPreferenceChange(DateWK.self) { if $0 > dateWidth { dateWidth = $0 } }
             .onPreferenceChange(TimeWK.self) { if $0 > timeWidth { timeWidth = $0 } }
 #if os(macOS)
@@ -59,24 +59,12 @@ extension HistoryScreen {
             .environmentObject(vm)
             .onAppear(perform: vm.onAppear)
         }
-
-        private var mask: some View {
-            VStack(spacing: 0) {
-                Color.white
-                HStack(alignment: .bottom, spacing: 0) {
-                    LinearGradient(gradient: .init(colors: [
-                        .white, .white.opacity(0)
-                    ]), startPoint: .top, endPoint: .bottom)
-                    Color.white.frame(width: 10)
-                }.frame(height: 25)
-            }
-        }
     }
 
     #if os(iOS)
-    static let listEdgeInsets = idiom == .iPhone
+    static let listEdgeInsets = idiom.is_iPhone
     ? EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 10)
-    : EdgeInsets(top: 7, leading: 7, bottom: 7, trailing: 7)
+    : EdgeInsets(top: 7 , leading: 7 , bottom: 7 , trailing: 7)
     #elseif os(macOS)
     static let listEdgeInsets = EdgeInsets(top: 7, leading: 3, bottom: 7, trailing: 3)
     #endif

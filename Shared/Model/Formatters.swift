@@ -33,4 +33,12 @@ extension DateComponentsFormatter {
         formatter.zeroFormattingBehavior = .dropAll
         return formatter
     }
+
+    static func dayHour() -> DateComponentsFormatter {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour]
+        formatter.unitsStyle = .short
+        formatter.zeroFormattingBehavior = .dropAll
+        return formatter
+    }
 }

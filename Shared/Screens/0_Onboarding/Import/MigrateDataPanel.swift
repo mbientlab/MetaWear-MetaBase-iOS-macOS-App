@@ -1,6 +1,7 @@
 // Copyright 2022 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import mbientSwiftUI
+import SwiftUI
 
 struct MigrateDataPanel: View {
 
@@ -18,13 +19,20 @@ struct MigrateDataPanel: View {
 #endif
 
     var body: some View {
-        FocusFlipPanel(vm: vm.focus) { maxWidth in
+        FocusFlipPanel(
+            vm: vm.focus,
+            centerColumnNominalWidth: .init(iPhone: .infinity, 450),
+            macOSHostWindowPrefix: Windows.migration.tag
+        ) { maxWidth in
             ItemsPanel(items: vm.content.debrief, useSmallerSizes: true, maxWidth: maxWidth)
                 .frame(minHeight: minHeight)
         } down: { maxWidth in
-            ProgressReport()
-                .frame(maxWidth: maxWidth)
+            MigrateDataPanel.ProgressReportPane(maxWidth: maxWidth)
         } cta: { cta }
+#if os(iOS)
+        .padding(.top, 30)
+#endif
+        .onAppear { if vm.triggerImporter { importer.start() }}
         .onAppear(perform: vm.onAppear)
         .environmentObject(vm)
         .environmentObject(importer)
@@ -44,7 +52,22 @@ struct MigrateDataPanel: View {
     }
 }
 
+// MARK: - Components
+
 extension MigrateDataPanel {
+
+    struct ProgressReportPane: View {
+        var maxWidth: CGFloat
+        var body: some View {
+            VStack(alignment: .center, spacing: 45) {
+                MigrateDataPanel.ProgressReport()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .padding(40)
+            .background(ItemsPanel.PanelBG())
+            .frame(maxWidth: maxWidth, maxHeight: .infinity, alignment: .leading)
+        }
+    }
 
     struct CTAs: View {
 
@@ -76,7 +99,8 @@ extension MigrateDataPanel {
                     action: skipAction
                 )
                 CTAButton(
-                    idiom.is_Mac ? "Migrate Local Data  􀆊" : "Migrate Local Data",
+                    idiom.is_Mac ? "Migrate Local Data  􀆊" :
+                       (idiom == .iPhone ? "Migrate" : "Migrate Local Data"),
                     padding: padding,
                     action: {
                         willStartImport()
@@ -101,6 +125,7 @@ extension MigrateDataPanel {
 
         @EnvironmentObject private var vm: MigrateDataPanelVM
         @Namespace private var namespace
+        @Environment(\.colorScheme) private var colorScheme
 
         var body: some View {
             VStack(spacing: 30) {
@@ -109,7 +134,7 @@ extension MigrateDataPanel {
                 Text(vm.sessionsImportedLabel)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
-                    .foregroundColor(.myTertiary)
+                    .foregroundColor(colorScheme == .light ? .mySecondary : .myTertiary)
 
                 if vm.isImporting == .completed,
                    let error = vm.error {
