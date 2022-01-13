@@ -10,9 +10,7 @@ struct Menus: Commands {
     var body: some Commands {
 #if DEBUG
         CommandMenu("Debug") {
-            Button("Wipe UserDefaults, Keeping MetaWears") { wipeDefaults(preserveMetaWearData: true) }
-            Button("Wipe All UserDefaults") { wipeDefaults(preserveMetaWearData: false) }
-            Button("Reset Onboarding State") { wipeOnboarding() }
+            DebugMenu()
         }
 #endif
         CommandGroup(replacing: .newItem) {
@@ -22,8 +20,16 @@ struct Menus: Commands {
         CommandGroup(replacing: .help) {
             Button("What's New?") { open.callAsFunction(ExternalEvent.onboarding.url) }
         }
-        
     }
 }
 
 #endif
+
+struct DebugMenu: View {
+
+    var body: some View {
+        Button("Wipe UserDefaults, Keeping MetaWears") { wipeDefaults(preserveMetaWearData: true) }
+        Button("Wipe All UserDefaults") { wipeDefaults(preserveMetaWearData: false) }
+        Button("Reset Onboarding State") { wipeOnboarding() }
+    }
+}
