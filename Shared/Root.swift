@@ -22,6 +22,7 @@ public class Root: ObservableObject {
     private let metawearLoader: MWLoader<MWKnownDevicesLoadable>
     private let presetsLoader:  MWLoader<SensorPresetsLoadable>
     private let loggingLoader:  MWLoader<LoggingTokensLoadable>
+    private let launchCounter:  LocalLaunchCounter
 
     // UI
     public let factory:     UIFactory
@@ -36,6 +37,7 @@ public class Root: ObservableObject {
         self.presetsLoader   = SensorPresetsCloudLoader(userDefaults)
         self.loggingLoader   = LoggingTokensCloudLoader(userDefaults)
 
+        self.launchCounter   = LocalLaunchCounter(userDefaults)
         let scanner = MetaWearScanner.sharedRestore
         let devices = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
         self.presets = PresetSensorParametersStore(loader: presetsLoader)
@@ -46,7 +48,7 @@ public class Root: ObservableObject {
             defaults: userDefaults
         )
         let routing = Routing()
-        let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing)
+        let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing, userDefaults, launchCounter)
 
         self.devices = devices
         self.routing = routing
@@ -66,6 +68,7 @@ public extension Root {
             try presets.load()
             try logging.load()
             let _ = userDefaults.cloud.synchronize()
+            launchCounter.markLaunched()
 #if DEBUG
             printUserDefaults()
 #endif
