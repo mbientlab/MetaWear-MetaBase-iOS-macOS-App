@@ -1,7 +1,14 @@
 // Copyright 2022 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import mbientSwiftUI
-import SwiftUI
+
+extension Color {
+#if os(macOS)
+    static let lightModeFaintBG = Color(.quaternarySystemFill)
+#else
+    static let lightModeFaintBG = Color(.secondarySystemBackground)
+#endif
+}
 
 struct OnboardingPanel: View {
 
@@ -11,6 +18,7 @@ struct OnboardingPanel: View {
     }
     @StateObject private var vm: OnboardingVM
     @StateObject private var importer: MigrateDataPanelVM
+    @Environment(\.colorScheme) private var colorScheme
 
     #if os(iOS)
     private var width: CGFloat { .init(iPhone: UIScreen.main.bounds.width * 0.95, 450) }
@@ -18,29 +26,37 @@ struct OnboardingPanel: View {
     private let width: CGFloat = 450
     #endif
 
+    private var background: Color { colorScheme == .light ? .lightModeFaintBG : .defaultSystemBackground }
+
     var body: some View {
         FocusFlipPanel(
             vm: vm.focus,
             centerColumnNominalWidth: width,
-            macOSHostWindowPrefix: Windows.onboarding.tag
+            macOSHostWindowPrefix: Windows.onboarding.tag,
+            background: background
         ) { maxWidth in
-            if idiom == .iPhone {
-                ScrollView {
-                    ItemsPanel(items: vm.content.items, maxWidth: maxWidth)
-                }
-            } else {
-                ItemsPanel(items: vm.content.items, maxWidth: maxWidth)
-                    .scrollAtAccessibilitySize()
-            }
+            makeItemsPanel(maxWidth)
         } down: { maxWidth in
             MigrateDataPanel.ProgressReportPane(maxWidth: maxWidth)
         } cta: { cta }
 #if os(iOS)
         .padding(.top, 50)
 #endif
+        .background(background)
         .onAppear(perform: vm.onAppear)
         .environmentObject(vm)
         .environmentObject(importer)
+    }
+
+    @ViewBuilder private func makeItemsPanel(_ maxWidth: CGFloat) -> some View {
+        if idiom == .iPhone {
+            ScrollView {
+                ItemsPanel(items: vm.content.items, maxWidth: maxWidth)
+            }
+        } else {
+            ItemsPanel(items: vm.content.items, maxWidth: maxWidth)
+                .scrollAtAccessibilitySize()
+        }
     }
 
     @ViewBuilder private var cta: some View {

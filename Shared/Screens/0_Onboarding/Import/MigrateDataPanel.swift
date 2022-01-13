@@ -65,6 +65,7 @@ extension MigrateDataPanel {
             }
             .padding(40)
             .background(ItemsPanel.PanelBG())
+            .padding(10)
             .frame(maxWidth: maxWidth, maxHeight: .infinity, alignment: .leading)
         }
     }
@@ -148,7 +149,7 @@ extension MigrateDataPanel {
                         .hidden()
                 }
             }
-            .adaptiveFont(.primaryActionText)
+            .adaptiveFont(.deviceCellTitle)
             .lineSpacing(9)
             .multilineTextAlignment(.center)
         }

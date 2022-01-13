@@ -31,7 +31,6 @@ public class MigrateDataPanelSoloVM: ObservableObject {
     }
 }
 
-
 public extension MigrateDataPanelSoloVM {
 
     func onAppear() {
@@ -81,7 +80,7 @@ public extension MigrateDataPanelSoloVM {
         public static let metaBase4 = Self.init(
             debriefTitle: "MetaBase 4 Migration",
             importerTitle: "Migrating",
-            completeTitle: "MetaBase 4 Migration",
+            completeTitle: "",
             debrief: [
                 .init(
                     symbol: .icloud,

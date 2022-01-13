@@ -17,12 +17,12 @@ struct OnboardingFooter_iOS: View {
         .adaptiveFont(.hLabelSubheadline)
         .frame(maxWidth: .infinity, alignment: .center)
 
-//#if DEBUG
-//        .overlay(Menu("Debug") { DebugMenu() }
-//                    .opacity(0.5)
-//                    .menuStyle(.borderlessButton),
-//                 alignment: .trailing)
-//#endif
+#if DEBUG
+        .overlay(Menu("􀌛") { DebugMenu() }
+                    .opacity(0.25)
+                    .menuStyle(.borderlessButton),
+                 alignment: .trailing)
+#endif
         .padding(.screenInset)
         .opacity(showButtons ? 1 : 0)
         .animation(.easeIn, value: showButtons)
@@ -37,18 +37,18 @@ extension OnboardingFooter_iOS {
         @State private var showSheet = false
 
         var body: some View {
-            ZStack {
-                if showButton { button }
-            }
-            .onAppear { if hasNotOnboarded { showSheet = true } }
-            .onChange(of: lastOnboardedVersion) { showSheet = $0 < CurrentMetaBaseVersion }
+            button
+                .onAppear { if hasNotOnboarded { showSheet = true } }
+                .onChange(of: lastOnboardedVersion) { showSheet = $0 < CurrentMetaBaseVersion }
         }
 
-        private var button: some View {
-            Button("What's New?") { showSheet = true }
-            .sheet(isPresented: $showSheet) {
-                OnboardingPanel(importer: factory.makeImportVM(), vm: factory.makeOnboardingVM())
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+        @ViewBuilder private var button: some View {
+            if showButton {
+                Button("What's New?") { showSheet = true }
+                .sheet(isPresented: $showSheet) {
+                    OnboardingPanel(importer: factory.makeImportVM(), vm: factory.makeOnboardingVM())
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
             }
         }
 
@@ -68,17 +68,17 @@ extension OnboardingFooter_iOS {
         @State private var showButton = true
 
         var body: some View {
-            ZStack {
-                if showButton { button }
-            }
-            .onReceive(factory.getDidImportState()) { showButton = $0 == false }
+            button
+                .onReceive(factory.getDidImportState()) { showButton = $0 == false }
         }
 
-        private var button: some View {
-            Button("Migrate Data") { showSheet = true }
-            .sheet(isPresented: $showSheet) {
-                MigrateDataPanel(importer: factory.makeImportVM(), vm: factory.makeMigrationVM())
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+        @ViewBuilder private var button: some View {
+            if showButton {
+                Button("Migrate Data") { showSheet = true }
+                .sheet(isPresented: $showSheet) {
+                    MigrateDataPanel(importer: factory.makeImportVM(), vm: factory.makeMigrationVM())
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
             }
         }
     }
