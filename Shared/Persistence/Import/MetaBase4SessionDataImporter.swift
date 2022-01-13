@@ -8,7 +8,9 @@ import MetaWearSync
 public class MetaBase4SessionDataImporter {
 
     /// Whether an import completed during this or a prior app session. Updated on main queue.
-    public private(set) var didImport = false
+    public private(set) lazy var hideImportPrompts = hideImportPromptsSubject.eraseToAnyPublisher()
+    public var hideImportPromptsState: Bool { hideImportPromptsSubject.value }
+    public var legacyDataExistedAtLaunch = false
 
     public init(
         sessions: SessionRepository,
@@ -20,9 +22,11 @@ public class MetaBase4SessionDataImporter {
         self.sessions = sessions
         self.devices = devices
         self.defaults = defaults
-        self.didImport = self.didImportOnThisDevice()
-
-        if didImport == false { loadGroups() }
+        let _dataExists = Self.legacyDataExists()
+        self.legacyDataExistedAtLaunch = _dataExists
+        print("-> ", Self.self, _dataExists, "data exists", Self.didImportOnThisDevice(defaults), "didImportOnDevice")
+        self.hideImportPromptsSubject = .init(_dataExists == false ? true : Self.didImportOnThisDevice(defaults))
+        if hideImportPromptsSubject.value == false { loadGroups() }
     }
 
     public enum ImportError: Error, LocalizedError, Equatable {
@@ -57,6 +61,7 @@ public class MetaBase4SessionDataImporter {
     /// Outer: Session with unique start date.
     /// Inner: Device-centric session models for that date.
     private var importQueue: [[LegacySessionModel]] = []
+    private let hideImportPromptsSubject: CurrentValueSubject<Bool,Never>
     private var importKickoff: AnyCancellable? = nil
     private var importQueueSub: AnyCancellable? = nil
     private var groupsSub: AnyCancellable? = nil
@@ -70,8 +75,8 @@ public class MetaBase4SessionDataImporter {
     private unowned let sessions: SessionRepository
     private unowned let devices: MetaWearSyncStore
     private unowned let defaults: UserDefaultsContainer
-    private let key = UserDefaults.MetaWear.Keys.importedLegacySessions
-    private let legacyPrefix = "MetaDataKey"
+    private static let key = UserDefaults.MetaWear.Keys.importedLegacySessions
+    private static let legacyPrefix = "MetaDataKey"
 
 }
 
@@ -88,7 +93,7 @@ public extension MetaBase4SessionDataImporter {
     ///
     func importPriorSessions() -> AnyPublisher<Int,ImportError> {
         // If already imported, end early
-        guard didImport == false else {
+        guard hideImportPromptsSubject.value == false else {
             return Fail(error: ImportError.alreadyImportedDataFromThisDevice)
                 .eraseToAnyPublisher()
         }
@@ -106,7 +111,7 @@ public extension MetaBase4SessionDataImporter {
 
             // Clear local metadata
             UserDefaults.standard.dictionaryRepresentation().forEach { key, _ in
-                guard key.hasPrefix(self.legacyPrefix) else { return }
+                guard key.hasPrefix(Self.legacyPrefix) else { return }
                 UserDefaults.standard.removeObject(forKey: key)
             }
 
@@ -136,11 +141,11 @@ public extension MetaBase4SessionDataImporter {
 
     /// Whether this machine contains local MetaBase 4 data that can be imported. Expensive to calculate.
     ///
-    func legacyDataExists() -> Bool {
+    static func legacyDataExists() -> Bool {
         let decoder = JSONDecoder()
         return UserDefaults.standard.dictionaryRepresentation()
             .contains {
-                guard $0.key.hasPrefix(legacyPrefix),
+                guard $0.key.hasPrefix(Self.legacyPrefix),
                       let data = $0.value as? Data,
                       let metadata = try? decoder.decode(LegacyMetadata.self, from: data),
                       metadata.sessions.isEmpty == false
@@ -217,10 +222,10 @@ private extension MetaBase4SessionDataImporter {
 
     func markThisDeviceAsImported() {
         DispatchQueue.main.async { [self] in
-            didImport = true
-            var imported = defaults.cloudFirstArray(of: String.self, for: key) ?? []
+            hideImportPromptsSubject.send(true)
+            var imported = defaults.cloudFirstArray(of: String.self, for: Self.key) ?? []
             imported.append(getUniqueDeviceIdentifier())
-            defaults.setArray(imported, forKey: key)
+            defaults.setArray(imported, forKey: Self.key)
         }
     }
 
@@ -230,8 +235,8 @@ private extension MetaBase4SessionDataImporter {
 
 private extension MetaBase4SessionDataImporter {
 
-    func didImportOnThisDevice() -> Bool {
-        guard let pastImports = defaults.cloudFirstArray(of: String.self, for: key)
+    static func didImportOnThisDevice(_ defaults: UserDefaultsContainer) -> Bool {
+        guard let pastImports = defaults.cloudFirstArray(of: String.self, for: Self.key)
         else { return false }
         let deviceID = getUniqueDeviceIdentifier()
         return pastImports.contains(deviceID)
@@ -268,12 +273,12 @@ private extension MetaBase4SessionDataImporter {
     /// Load metadata containing a list of sessions and file paths from the local MetaBase 4 UserDefaults key.
     ///
     func loadLegacyMetadata() -> [MACAddress:LegacyMetadata] {
-        let keyPrefixLength = legacyPrefix.count
+        let keyPrefixLength = Self.legacyPrefix.count
         let decoder = JSONDecoder()
 
         let devices = UserDefaults.standard.dictionaryRepresentation()
             .reduce(into: [MACAddress:LegacyMetadata]()) { dict, element in
-                guard element.key.hasPrefix(legacyPrefix),
+                guard element.key.hasPrefix(Self.legacyPrefix),
                       let data = element.value as? Data,
                       let metadata = try? decoder.decode(LegacyMetadata.self, from: data)
                 else { return }
@@ -317,5 +322,17 @@ fileprivate extension FileManager {
         guard let documentsURL = urls(for: .documentDirectory, in: .userDomainMask).first
         else { return nil }
         return enumerator(at: documentsURL, includingPropertiesForKeys: [], options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])
+    }
+}
+
+public struct MigrationState {
+
+    let canMigrate: Bool
+    let didOnboard: Bool
+
+    init(_ defaults: UserDefaultsContainer, importer: MetaBase4SessionDataImporter) {
+        let key = UserDefaults.MetaWear.Keys.didOnboardAppVersion
+        self.didOnboard = defaults.cloudFirstDouble(for: key) >= CurrentMetaBaseVersion
+        self.canMigrate = importer.hideImportPromptsState == false
     }
 }
