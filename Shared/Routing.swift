@@ -13,9 +13,6 @@ public class Routing: ObservableObject {
     /// Focused item + configs set prior to navigation, read once in VM init or by `UIFactory`
     private(set) var focus: (item: Item, configs: [ModulesConfiguration], sessionNickname: String)? = nil
 
-    /// Flag that the app has already loaded and "splash" find devices screen needn't be displayed again.
-    private(set) var directlyShowDeviceList = false
-
     /// Coordinate view custom animations
     public private(set) lazy var willTransitionFrom = notifyWillTransitionFrom.eraseToAnyPublisher()
     
@@ -52,7 +49,6 @@ public extension Routing {
     /// Set focus before calling destinations other than `.choose`.
     ///
     func setDestination(_ next: Destination) {
-        self.directlyShowDeviceList = true // Flag that empty needn't be shown
         self.history.append(destination)
         if next == .choose { focus = nil }
         self.destination = next // Triggers a diff

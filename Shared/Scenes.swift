@@ -13,14 +13,15 @@ struct MainScene: Scene {
 
     var body: some Scene {
         WindowGroup("MetaBase", id: Windows.metabaseMain.tag) {
-            Namespaced(MainWindow())
+            Namespaced(RootNavigationController())
                 .onAppear { root.start() }
                 .environmentObject(root.bluetoothVM)
                 .environmentObject(root.factory)
                 .environmentObject(root.routing)
-            #if os(macOS)
+                .environmentObject(root.onboard)
+#if os(macOS)
                 .frame(minWidth: MainScene.minWidth, minHeight: MainScene.minHeight)
-            #endif
+#endif
         }
     }
 }
@@ -50,8 +51,8 @@ struct MacTitlelessWindow<Content: View>: Scene {
 struct MacOnboardingWindow: View {
     @EnvironmentObject var factory: UIFactory
     var body: some View {
-        OnboardingPanel(importer: factory.makeImportVM(),
-                        vm: factory.makeOnboardingVM())
+        OnboardingSession(importer: factory.makeImportVM(),
+                          vm: factory.makeOnboardingSessionVM())
             .frame(minWidth: 900, minHeight: MainScene.minHeight)
     }
 }
@@ -59,7 +60,7 @@ struct MacOnboardingWindow: View {
 struct MacMigrationWindow: View {
     @EnvironmentObject var factory: UIFactory
     var body: some View {
-        MigrateDataPanel(importer: factory.makeImportVM(),
+        MigrationSession(importer: factory.makeImportVM(),
                          vm: factory.makeMigrationVM())
             .frame(minWidth: 900, minHeight: MainScene.minHeight)
     }

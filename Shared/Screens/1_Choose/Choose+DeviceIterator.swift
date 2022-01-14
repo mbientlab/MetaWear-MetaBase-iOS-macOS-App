@@ -12,7 +12,6 @@ extension ChooseDevicesScreen {
         struct KnownGroups: View {
             @EnvironmentObject private var vm: DiscoveryListVM
             @EnvironmentObject private var factory: UIFactory
-            @Environment(\.namespace) private var list
             var body: some View {
                 ForEach(vm.groups) { group in
                     KnownDeviceCell(.group(group.id), factory: factory)
@@ -23,7 +22,6 @@ extension ChooseDevicesScreen {
         struct KnownUngrouped: View {
             @EnvironmentObject private var vm: DiscoveryListVM
             @EnvironmentObject private var factory: UIFactory
-            @Environment(\.namespace) private var list
             var body: some View {
                 ForEach(vm.ungrouped) { metadata in
                     KnownDeviceCell(.known(metadata.id), factory: factory)
@@ -34,7 +32,6 @@ extension ChooseDevicesScreen {
         struct UnknownNearby: View {
             @EnvironmentObject private var vm: DiscoveryListVM
             @EnvironmentObject private var factory: UIFactory
-            @Environment(\.namespace) private var list
             var body: some View {
                 ForEach(vm.unknown) { deviceID in
                     UnknownDeviceCell(unknown: deviceID, factory: factory)

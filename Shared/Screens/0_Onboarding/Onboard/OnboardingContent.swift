@@ -2,7 +2,7 @@
 
 import mbientSwiftUI
 
-public extension OnboardingVM {
+public extension OnboardingSessionVM {
 
     struct Content {
         var items: [ItemsPanel.Item] = []
@@ -12,7 +12,7 @@ public extension OnboardingVM {
     }
 }
 
-public extension OnboardingVM.Content {
+public extension OnboardingSessionVM.Content {
 
     static var newUserContent: Self = {
         .init(

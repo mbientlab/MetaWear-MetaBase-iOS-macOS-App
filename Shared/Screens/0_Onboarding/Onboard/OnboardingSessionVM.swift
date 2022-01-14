@@ -4,7 +4,7 @@ import mbientSwiftUI
 import MetaWear
 import Combine
 
-public class OnboardingVM: ObservableObject {
+public class OnboardingSessionVM: ObservableObject {
 
     public let content: Content
 
@@ -13,20 +13,22 @@ public class OnboardingVM: ObservableObject {
     public let completionCTA: String
     public let showMigrationCTAs: Bool
     private var focusUpdate: AnyCancellable? = nil
+    private unowned let defaults: UserDefaultsContainer
 
-    public init(state: MigrationState, launchCounter: LocalLaunchCounter) {
-        self.content = state.canMigrate ? .migrateMB4Content : .newUserContent
-        self.completionCTA = state.didOnboard ? "Ok" : "Start"
-        self.showMigrationCTAs = state.canMigrate
+    public init(didOnboard: Bool, canMigrate: Bool, launchCounter: LocalLaunchCounter, defaults: UserDefaultsContainer) {
+        self.defaults = defaults
+        self.content = canMigrate ? .migrateMB4Content : .newUserContent
+        self.completionCTA = didOnboard ? "Ok" : "Start"
+        self.showMigrationCTAs = canMigrate
 
-        if state.didOnboard == false,
-           launchCounter.launches > 2 {
+        if didOnboard == false,
+           launchCounter.launches > 1 {
             launchCounter.resetLaunches()
         }
     }
 }
 
-public extension OnboardingVM {
+public extension OnboardingSessionVM {
 
     func onAppear() {
         focusUpdate = focus.$focus
@@ -43,6 +45,11 @@ public extension OnboardingVM {
                         self?.focus.dismissPanel.send()
                 }
             }
+    }
+
+    func markDidOnboard() {
+        defaults.local.didOnboardAppVersion = CurrentMetaBaseVersion
+        defaults.cloud.didOnboardAppVersion = CurrentMetaBaseVersion
     }
 
     enum Focus: String, FlipPanelFocus, IdentifiableByRawValue {
@@ -69,13 +76,7 @@ public extension OnboardingVM {
     }
 }
 
-private extension OnboardingVM {
-
-    func markDidOnboard() {
-        let key = UserDefaults.MetaWear.Keys.didOnboardAppVersion
-        UserDefaults.standard.set(CurrentMetaBaseVersion, forKey: key)
-        NSUbiquitousKeyValueStore.default.set(CurrentMetaBaseVersion, forKey: key)
-    }
+private extension OnboardingSessionVM {
 
     func title(for focus: Focus) -> String {
         switch focus {

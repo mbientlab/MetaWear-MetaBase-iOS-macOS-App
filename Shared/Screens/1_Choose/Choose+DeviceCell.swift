@@ -45,6 +45,7 @@ extension ChooseDevicesScreen {
                     isWorking: state.isWorking,
                     showCloudSync: state.showCloudSync
                 )
+                    .opacity(isCompact ? 0.85 : 1)
 
                 LargeSignalDots(color: isCompact ? .myPrimaryTinted : .myPrimary)
                     .opacity(isHovered ? 1 : 0.75)
@@ -62,9 +63,9 @@ extension ChooseDevicesScreen {
                 }
             }
             .frame(minWidth: .deviceCellWidth)
+            .fixedSize(horizontal: true, vertical: false)
             .padding(isCompact ? 17 : 0)
             .padding(.bottom, isCompact ? 24 : 0)
-            .background(shadedBG)
             .whenHovered { isHovered = $0 }
 
             .environment(\.isHovered, isHovered)
@@ -81,34 +82,6 @@ extension ChooseDevicesScreen {
         }
 
         @Environment(\.colorScheme) private var colorScheme
-        @ViewBuilder private var shadedBG: some View {
-            if isCompact {
-                VStack(spacing: spacing) {
-                    DropOutcomeIndicator().hidden()
-                    ZStack {
-                        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        shape
-                            .foregroundColor(.myPrimaryTinted)
-                            .opacity(0.2)
-                            .shadow(color: Color.black.opacity(0.15), radius: 4, x: 3, y: 3)
-
-                        if colorScheme == .light {
-                            shape
-                                .strokeBorder(lineWidth: 1, antialiased: true)
-                                .foregroundColor(.myPrimaryTinted)
-                                .opacity(0.25)
-
-                            shape
-                                .strokeBorder(lineWidth: 6, antialiased: true)
-                                .foregroundColor(.myPrimaryTinted)
-                                .blur(radius: 8)
-                                .clipShape(shape)
-                                .opacity(0.15)
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -140,10 +113,13 @@ extension ChooseDevicesScreen.DeviceCell {
                 .offset(y: isDropping ? -.verticalHoverDelta * 2 : 0)
 
             Text(name)
+                .lineLimit(1)
+                .fixedSize(horizontal: false, vertical: true)
                 .adaptiveFont(.deviceCellTitle)
                 .offset(y: isHovering ? -.verticalHoverDelta : 0)
                 .offset(y: isDropping ? -.verticalHoverDelta * 2 : 0)
                 .foregroundColor(colorScheme == .light ? .myPrimary.opacity(0.7) : .myPrimary)
+                .layoutPriority(10)
 
             MetaWearImages(isGroup: isGroup, models: models, ledEmulator: ledEmulator)
                 .compositingGroup()

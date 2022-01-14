@@ -2,55 +2,84 @@
 #if DEBUG
 
 import Foundation
+import Combine
 
 let useMetabaseConsoleLogger = false
+var root: Root!
+var defaults: UserDefaultsContainer!
 
 func printUserDefaults() {
-    let bundle = Bundle.main.bundleIdentifier!
-    let defaults = UserDefaults.standard.persistentDomain(forName: bundle) ?? [:]
     let defaultsPath = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first ?? "Error"
 
+    print("-- LOCAL --")
+    print("Defaults stored at:", defaultsPath)
     print("")
-    for key in defaults.sorted(by: { $0.key < $1.key }) {
+    for key in defaults.local.dictionaryRepresentation().sorted(by: { $0.key < $1.key }) {
         if key.key.contains("NSWindow Frame"), let value = key.value as? String {
             let dimensions = value.components(separatedBy: .whitespaces)
             let width = dimensions[2]
             let height = dimensions[3]
             print("Window", "w", width, "h", height)
-        } else {
+        } else if key.key.contains("mbient") {
             print(key.key, ":", key.value)
         }
     }
-    print("")
-    print("Defaults stored at:", defaultsPath)
+    print("-- CLOUD -- ")
+    for key in defaults.cloud.dictionaryRepresentation.sorted(by: { $0.key < $1.key }) {
+        print(key.key, ":", key.value)
+    }
     print("")
 }
 
+fileprivate var subs = Set<AnyCancellable>()
+
 func wipeDefaults(preserveMetaWearData: Bool) {
+    wipeOnboarding()
+
+    if !preserveMetaWearData {
+        root.devices.knownDevices
+            .sink {
+                $0.forEach { root.devices.forget(globally: $0) }
+                finishWipe(preserveMetaWearData: preserveMetaWearData)
+            }
+            .store(in: &subs)
+    } else {
+        finishWipe(preserveMetaWearData: preserveMetaWearData)
+    }
+}
+
+private func finishWipe(preserveMetaWearData: Bool) {
     let preserve: Set<String> = [
         UserDefaults.MetaWear.Keys.localPeripherals,
         UserDefaults.MetaWear.Keys.syncedMetadata,
         UserDefaults.MetaWear.Keys.loggingTokens
     ]
 
-    UserDefaults.standard.dictionaryRepresentation().keys.forEach {
+    defaults.local.dictionaryRepresentation().keys.forEach {
         if preserveMetaWearData, preserve.contains($0) { return }
-        UserDefaults.standard.removeObject(forKey: $0)
+        defaults.local.removeObject(forKey: $0)
     }
-    NSUbiquitousKeyValueStore.default.dictionaryRepresentation.keys.forEach {
+    defaults.cloud.dictionaryRepresentation.keys.forEach {
         if preserveMetaWearData, preserve.contains($0) { return }
-        NSUbiquitousKeyValueStore.default.removeObject(forKey: $0)
+        defaults.cloud.removeObject(forKey: $0)
+    }
+    DispatchQueue.main.after(1) {
+        printUserDefaults()
     }
 }
 
 func wipeOnboarding() {
-    [UserDefaults.MetaWear.Keys.didOnboardAppVersion,
-     UserDefaults.MetaWear.Keys.didGetNearbyDeviceInstructionForVersion,
-     UserDefaults.MetaWear.Keys.importedLegacySessions,
-     UserDefaults.MetaWear.Keys.launchCount
+    defaults.local.didOnboardAppVersion = 0.0
+    [
+        UserDefaults.MetaWear.Keys.launchCount,
+        UserDefaults.MetaWear.Keys.didOnboardAppVersion,
+        UserDefaults.MetaWear.Keys.importedLegacySessions,
     ].forEach  { key in
-        UserDefaults.standard.removeObject(forKey: key)
-        NSUbiquitousKeyValueStore.default.removeObject(forKey: key)
+        defaults.local.removeObject(forKey: key)
+        defaults.cloud.removeObject(forKey: key)
+    }
+    DispatchQueue.main.after(1) {
+        printUserDefaults()
     }
 }
 #endif

@@ -25,13 +25,14 @@ private extension ChooseDevicesScreen.NoDevicesFound {
         let frame: CGRect
         let shouldDisappear: Binding<Bool>
         @Environment(\.namespace) private var namespace
+        @Environment(\.colorScheme) private var colorScheme
 
         // Coordinate an animated disappearance
         @EnvironmentObject private var vm: DiscoveryListVM
-        private var willDisappear: Bool { vm.listIsEmpty == false && hasUsed >= CurrentMetaBaseVersion }
+        @EnvironmentObject private var onboard: OnboardState
+        private var willDisappear: Bool { vm.listIsEmpty == false && onboard.didOnboard }
 
         // Coordinate the transition animations
-        @AppStorage(wrappedValue: 0.0, UserDefaults.MetaWear.Keys.didGetNearbyDeviceInstructionForVersion) private var hasUsed
         @State private var didAppear = false
         @State private var animate = false
 
@@ -56,16 +57,17 @@ private extension ChooseDevicesScreen.NoDevicesFound {
 
         private func startAnimations() {
             didAppear.toggle()
-            hasUsed = CurrentMetaBaseVersion
             DispatchQueue.main.after(transitionInterval) {
                 animate.toggle()
             }
         }
 
         private func startDisappearance(_ willDisappear: Bool) {
-            didAppear.toggle()
-            DispatchQueue.main.after(transitionInterval) {
-                shouldDisappear.wrappedValue.toggle()
+            DispatchQueue.main.after(1.5) {
+                didAppear.toggle()
+                DispatchQueue.main.after(transitionInterval) {
+                    shouldDisappear.wrappedValue = true
+                }
             }
         }
 
@@ -83,7 +85,8 @@ private extension ChooseDevicesScreen.NoDevicesFound {
 
             return AtomAnimation(
                 animate: animate,
-                size: min(180, max(90, frame.size.width * 0.15))
+                size: min(180, max(90, frame.size.width * 0.15)),
+                color: colorScheme == .light ? .mySuccess : .myPrimaryTinted
             )
             #if os(macOS)
                 .matchedGeometryEffect(id: "scanning", in: namespace!)
@@ -98,6 +101,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
             var text: some View {
                 Text("Finding nearby MetaWear")
                     .adaptiveFont(.onboardingLargeTitle)
+                    .foregroundColor(.myPrimaryTinted)
             }
 
             let removal = AnyTransition.opacity

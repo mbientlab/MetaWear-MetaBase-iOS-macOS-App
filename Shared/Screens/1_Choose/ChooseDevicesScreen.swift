@@ -5,6 +5,12 @@ import SwiftUI
 
 struct ChooseDevicesScreen: View {
 
+    init(_ routing: Routing, _ factory: UIFactory) {
+        let vm = factory.makeDiscoveredDeviceListVM()
+        _vm = .init(wrappedValue: vm)
+        _shouldShowList = .init(initialValue: factory.makeOnboardState().didOnboard && vm.didHaveDevicesAtLoad)
+    }
+
     @EnvironmentObject private var factory: UIFactory
     @EnvironmentObject private var bluetooth: BluetoothStateVM
     @EnvironmentObject private var routing: Routing
@@ -14,20 +20,17 @@ struct ChooseDevicesScreen: View {
     /// Locally managed flag to change "splash" and "list" screens, accounting for animation time needed for a transition.
     @State private var shouldShowList: Bool
 
-    init(_ routing: Routing, _ factory: UIFactory) {
-        _vm = .init(wrappedValue: factory.makeDiscoveredDeviceListVM())
-
-        // If already navigated around, rebuilds screen to skip the splash screen
-        _shouldShowList = .init(initialValue: routing.directlyShowDeviceList)
-    }
-
     var body: some View {
         VStack {
-            if shouldShowList { GridRouter() }
-            else { NoDevicesFound(shouldShowList: $shouldShowList) }
+            if shouldShowList {
+                ScanningIndicator()
+                    .padding(.top, CGFloat(macOS: 0, iPad: 10, iOS: 60))
+
+                WideOneRowGrid()
+
+            } else { NoDevicesFound(shouldShowList: $shouldShowList) }
         }
-        .animation(.easeOut, value: vm.listIsEmpty)
-        .animation(.easeOut, value: shouldShowList)
+
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 #if os(iOS)
         .background(atomIconShine.alignmentGuide(.top) { $0[VerticalAlignment.center] }, alignment: .top)
@@ -35,11 +38,16 @@ struct ChooseDevicesScreen: View {
 #endif
         .background(screenShine.edgesIgnoringSafeArea(.all))
         .backgroundToEdges(.myBackground)
-        .onAppear(perform: vm.didAppear)
-        .environmentObject(vm)
 #if os(iOS)
         .trackOrientation()
+        .overlay(OnboardingFooter_iOS().opacity(shouldShowList ? 1 : 0), alignment: .bottom)
+#elseif os(macOS)
+        .background(OnboardingLauncher_macOS())
 #endif
+        .animation(.easeOut, value: vm.listIsEmpty)
+        .animation(.easeOut, value: shouldShowList)
+        .onAppear(perform: vm.didAppear)
+        .environmentObject(vm)
     }
 
     private var vignette: some View {
@@ -58,42 +66,5 @@ struct ChooseDevicesScreen: View {
         if shouldShowList, idiom == .iPhone, shouldShowList, colorScheme == .light {
             SoftSpotlight(color: .white.opacity(0.9), radius: 180)
         }
-    }
-}
-
-// MARK: - Grid Router
-
-extension ChooseDevicesScreen {
-
-    /// Contain orientation changes to the grid layout.
-    ///
-    struct GridRouter: View {
-
-        @Environment(\.namespace) private var namespace
-
-#if os(macOS)
-        var body: some View {
-            ScanningIndicator()
-            WideOneRowGrid()
-        }
-#else
-        @Environment(\.isPortrait) private var isPortrait
-        private let scanTag = "router_scan"
-        private var useWideGrid: Bool { idiom == .iPad && !isPortrait }
-
-        var body: some View {
-            if useWideGrid {
-                ScanningIndicator()
-                    .matchedGeometryEffect(id: scanTag, in: namespace!)
-                WideOneRowGrid()
-            } else {
-                ScanningIndicator()
-                    .matchedGeometryEffect(id: scanTag, in: namespace!)
-                    .padding(.vertical, 60)
-                NarrowVerticallySectionedGrid()
-            }
-        }
-#endif
-
     }
 }

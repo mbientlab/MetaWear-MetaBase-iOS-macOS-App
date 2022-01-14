@@ -15,7 +15,8 @@ public class UIFactory: ObservableObject {
                 _ scanner:  MetaWearScanner,
                 _ routing:  Routing,
                 _ defaults: UserDefaultsContainer,
-                _ launches: LocalLaunchCounter
+                _ launches: LocalLaunchCounter,
+                _ onboard:  OnboardState
     ) {
         self.presets = presets
         self.devices = devices
@@ -26,6 +27,7 @@ public class UIFactory: ObservableObject {
         self.logging = logging
         self.defaults = defaults
         self.launches = launches
+        self.onboard = onboard
     }
 
     private unowned let defaults: UserDefaultsContainer
@@ -37,26 +39,31 @@ public class UIFactory: ObservableObject {
     private unowned let scanner:  MetaWearScanner
     private unowned let routing:  Routing
     private unowned let launches: LocalLaunchCounter
+    private unowned let onboard:  OnboardState
     private lazy var actionQueue  = _makeBackgroundQueue(named: "action")
 }
 
 public extension UIFactory {
 
+    // MARK: - First Launch(es)
+
     func makeImportVM() -> MigrateDataPanelVM {
         .init(importer: importer)
     }
 
-    func makeMigrationVM() -> MigrateDataPanelSoloVM {
-        .init(state: getMigrationState())
+    func makeMigrationVM() -> MigrationSessionVM {
+        .init(didOnboard: onboard.didOnboard, canMigrate: onboard.canMigrate)
     }
 
-    func makeOnboardingVM() -> OnboardingVM {
-        .init(state: getMigrationState(), launchCounter: launches)
+    func makeOnboardingSessionVM() -> OnboardingSessionVM {
+        .init(didOnboard: onboard.didOnboard, canMigrate: onboard.canMigrate, launchCounter: launches, defaults: defaults)
     }
 
-    private func getMigrationState() -> MigrationState {
-        .init(defaults, importer: importer)
+    func makeOnboardState() -> OnboardState {
+        onboard
     }
+
+    // MARK: - First Screen
 
     func makeDiscoveredDeviceListVM() -> DiscoveryListVM {
         .init(scanner: scanner, store: devices)
@@ -84,6 +91,8 @@ public extension UIFactory {
         .init(cbuuid: id, store: devices, logging: logging, routing: routing)
     }
 
+    // MARK: - Device History & Details
+
     func makeAboutDeviceVM(device: MWKnownDevice) -> AboutDeviceVM {
         .init(device: device, store: devices, logging: logging, routing: routing)
     }
@@ -105,11 +114,15 @@ public extension UIFactory {
         .init(sessionRepo: sessions, exportQueue: actionQueue, routing: routing)
     }
 
+    // MARK: - Create Sensor Recording Options
+
     func makeConfigureVM() -> ConfigureVM {
         guard let focus = routing.focus else { fatalError("Set focus before navigation") }
         let (title, metawears) = getKnownDevices(for: focus.item)
         return .init(title: title, item: focus.item, devices: metawears, presets: presets, routing: routing)
     }
+
+    // MARK: - Perform Log/Download/Stream
 
     func makeActionVM() -> ActionVM {
         guard let focus = routing.focus else { fatalError("Set focus before navigation") }
@@ -130,9 +143,6 @@ public extension UIFactory {
         )
     }
 
-    func getDidImportState() -> AnyPublisher<Bool,Never> {
-        importer.hideImportPrompts
-    }
 }
 
 private extension UIFactory {

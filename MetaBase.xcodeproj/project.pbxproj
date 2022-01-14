@@ -105,8 +105,8 @@
 		9452855F275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9452855D275BDEED004D815B /* Choose+NoDevicesFound.swift */; };
 		94528561275BDF8D004D815B /* UserDefaults+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528560275BDF8D004D815B /* UserDefaults+.swift */; };
 		94528562275BDF8D004D815B /* UserDefaults+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528560275BDF8D004D815B /* UserDefaults+.swift */; };
-		94528564275BE0D8004D815B /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528563275BE0D8004D815B /* MainWindow.swift */; };
-		94528565275BE0D8004D815B /* MainWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528563275BE0D8004D815B /* MainWindow.swift */; };
+		94528564275BE0D8004D815B /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528563275BE0D8004D815B /* RootNavigationController.swift */; };
+		94528565275BE0D8004D815B /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94528563275BE0D8004D815B /* RootNavigationController.swift */; };
 		94528567275BE128004D815B /* ConfigureScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */; };
 		94528568275BE12B004D815B /* ActionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A0275A1298008C62E7 /* ActionScreen.swift */; };
 		9452856D275BE1D5004D815B /* Root.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9452856C275BE1D5004D815B /* Root.swift */; };
@@ -133,6 +133,8 @@
 		94935023275A11C600E388FF /* KnownItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935022275A11C600E388FF /* KnownItemVM.swift */; };
 		94935024275A11C600E388FF /* KnownItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94935022275A11C600E388FF /* KnownItemVM.swift */; };
 		9493AE7527718A860027E059 /* LifetimeCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9493AE7427718A860027E059 /* LifetimeCalculatorTests.swift */; };
+		949D102127911F770024B180 /* OnboardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949D102027911F770024B180 /* OnboardState.swift */; };
+		949D102227911F770024B180 /* OnboardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949D102027911F770024B180 /* OnboardState.swift */; };
 		949E5A6727729B7A00D45740 /* SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A6627729B7A00D45740 /* SessionRepository.swift */; };
 		949E5A6827729B7A00D45740 /* SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A6627729B7A00D45740 /* SessionRepository.swift */; };
 		949E5A6A2772ACA500D45740 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5A692772ACA500D45740 /* Session.swift */; };
@@ -165,20 +167,20 @@
 		94A165C4275F2F8600FA355D /* History+AboutDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A165BE275F2F8600FA355D /* History+AboutDevices.swift */; };
 		94A1E64727713FF100414FDF /* LifetimeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1E64627713FF100414FDF /* LifetimeCalculator.swift */; };
 		94A1E64827713FF100414FDF /* LifetimeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A1E64627713FF100414FDF /* LifetimeCalculator.swift */; };
-		94ACB3DC278FA8890065302F /* OnboardingLaunchers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3DB278FA8890065302F /* OnboardingLaunchers.swift */; };
-		94ACB3DD278FA8890065302F /* OnboardingLaunchers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3DB278FA8890065302F /* OnboardingLaunchers.swift */; };
-		94ACB3E2278FABE30065302F /* OnboardingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3E1278FABE30065302F /* OnboardingVM.swift */; };
-		94ACB3E3278FABE30065302F /* OnboardingVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3E1278FABE30065302F /* OnboardingVM.swift */; };
-		94ACB3E6278FBAB50065302F /* OnboardingPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3E5278FBAB50065302F /* OnboardingPanel.swift */; };
-		94ACB3E7278FBAB50065302F /* OnboardingPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3E5278FBAB50065302F /* OnboardingPanel.swift */; };
-		94ACB3EB278FCEB40065302F /* MigrateDataPanelSoloVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3EA278FCEB40065302F /* MigrateDataPanelSoloVM.swift */; };
-		94ACB3EC278FCEB40065302F /* MigrateDataPanelSoloVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3EA278FCEB40065302F /* MigrateDataPanelSoloVM.swift */; };
+		94ACB3DC278FA8890065302F /* OnboardLaunchers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3DB278FA8890065302F /* OnboardLaunchers.swift */; };
+		94ACB3DD278FA8890065302F /* OnboardLaunchers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3DB278FA8890065302F /* OnboardLaunchers.swift */; };
+		94ACB3E2278FABE30065302F /* OnboardingSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3E1278FABE30065302F /* OnboardingSessionVM.swift */; };
+		94ACB3E3278FABE30065302F /* OnboardingSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3E1278FABE30065302F /* OnboardingSessionVM.swift */; };
+		94ACB3E6278FBAB50065302F /* OnboardingSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3E5278FBAB50065302F /* OnboardingSession.swift */; };
+		94ACB3E7278FBAB50065302F /* OnboardingSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3E5278FBAB50065302F /* OnboardingSession.swift */; };
+		94ACB3EB278FCEB40065302F /* MigrationSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3EA278FCEB40065302F /* MigrationSessionVM.swift */; };
+		94ACB3EC278FCEB40065302F /* MigrationSessionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ACB3EA278FCEB40065302F /* MigrationSessionVM.swift */; };
 		94AEA07F27854E2200C8BE23 /* CloudSaveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA07E27854E2200C8BE23 /* CloudSaveState.swift */; };
 		94AEA08027854E2200C8BE23 /* CloudSaveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA07E27854E2200C8BE23 /* CloudSaveState.swift */; };
 		94AEA08227854E5F00C8BE23 /* UniqueDeviceIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA08127854E5F00C8BE23 /* UniqueDeviceIdentifier.swift */; };
 		94AEA08327854E5F00C8BE23 /* UniqueDeviceIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA08127854E5F00C8BE23 /* UniqueDeviceIdentifier.swift */; };
-		94AEA085278556E500C8BE23 /* MigrateDataPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA084278556E500C8BE23 /* MigrateDataPanel.swift */; };
-		94AEA086278556E500C8BE23 /* MigrateDataPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA084278556E500C8BE23 /* MigrateDataPanel.swift */; };
+		94AEA085278556E500C8BE23 /* MigrationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA084278556E500C8BE23 /* MigrationSession.swift */; };
+		94AEA086278556E500C8BE23 /* MigrationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA084278556E500C8BE23 /* MigrationSession.swift */; };
 		94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE45276FE9AC009832E1 /* CloudKit.framework */; };
 		94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE47276FE9BE009832E1 /* CloudKit.framework */; };
 		94C80F75278F7312007522D5 /* DebugUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C80F74278F7312007522D5 /* DebugUtilities.swift */; };
@@ -231,8 +233,6 @@
 		94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A0275A1298008C62E7 /* ActionScreen.swift */; };
 		94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A2275A14DE008C62E7 /* Dimensions.swift */; };
 		94EBA3A6275A160A008C62E7 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A2275A14DE008C62E7 /* Dimensions.swift */; };
-		94FED79E278A207100C3AEBD /* Choose+GridPortrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FED79D278A207100C3AEBD /* Choose+GridPortrait.swift */; };
-		94FED79F278A207100C3AEBD /* Choose+GridPortrait.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FED79D278A207100C3AEBD /* Choose+GridPortrait.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -308,7 +308,7 @@
 		9452855A275BDEE2004D815B /* Choose+DeviceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+DeviceCell.swift"; sourceTree = "<group>"; };
 		9452855D275BDEED004D815B /* Choose+NoDevicesFound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+NoDevicesFound.swift"; sourceTree = "<group>"; };
 		94528560275BDF8D004D815B /* UserDefaults+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+.swift"; sourceTree = "<group>"; };
-		94528563275BE0D8004D815B /* MainWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindow.swift; sourceTree = "<group>"; };
+		94528563275BE0D8004D815B /* RootNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootNavigationController.swift; sourceTree = "<group>"; };
 		9452856C275BE1D5004D815B /* Root.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Root.swift; sourceTree = "<group>"; };
 		94528579275BE77A004D815B /* Choose+EditGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+EditGroup.swift"; sourceTree = "<group>"; };
 		9464CA80278B61F500BE70C6 /* HistoryScreen+CTAs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryScreen+CTAs.swift"; sourceTree = "<group>"; };
@@ -322,6 +322,7 @@
 		94935022275A11C600E388FF /* KnownItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownItemVM.swift; sourceTree = "<group>"; };
 		9493AE7227718A860027E059 /* MetaBaseUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MetaBaseUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9493AE7427718A860027E059 /* LifetimeCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifetimeCalculatorTests.swift; sourceTree = "<group>"; };
+		949D102027911F770024B180 /* OnboardState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardState.swift; sourceTree = "<group>"; };
 		949E5A6627729B7A00D45740 /* SessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRepository.swift; sourceTree = "<group>"; };
 		949E5A692772ACA500D45740 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		949E5A6D2773243800D45740 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -337,13 +338,13 @@
 		94A165BD275F2F8600FA355D /* History+SessionsList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+SessionsList.swift"; sourceTree = "<group>"; };
 		94A165BE275F2F8600FA355D /* History+AboutDevices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "History+AboutDevices.swift"; sourceTree = "<group>"; };
 		94A1E64627713FF100414FDF /* LifetimeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifetimeCalculator.swift; sourceTree = "<group>"; };
-		94ACB3DB278FA8890065302F /* OnboardingLaunchers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingLaunchers.swift; sourceTree = "<group>"; };
-		94ACB3E1278FABE30065302F /* OnboardingVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVM.swift; sourceTree = "<group>"; };
-		94ACB3E5278FBAB50065302F /* OnboardingPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPanel.swift; sourceTree = "<group>"; };
-		94ACB3EA278FCEB40065302F /* MigrateDataPanelSoloVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrateDataPanelSoloVM.swift; sourceTree = "<group>"; };
+		94ACB3DB278FA8890065302F /* OnboardLaunchers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardLaunchers.swift; sourceTree = "<group>"; };
+		94ACB3E1278FABE30065302F /* OnboardingSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSessionVM.swift; sourceTree = "<group>"; };
+		94ACB3E5278FBAB50065302F /* OnboardingSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSession.swift; sourceTree = "<group>"; };
+		94ACB3EA278FCEB40065302F /* MigrationSessionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationSessionVM.swift; sourceTree = "<group>"; };
 		94AEA07E27854E2200C8BE23 /* CloudSaveState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSaveState.swift; sourceTree = "<group>"; };
 		94AEA08127854E5F00C8BE23 /* UniqueDeviceIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueDeviceIdentifier.swift; sourceTree = "<group>"; };
-		94AEA084278556E500C8BE23 /* MigrateDataPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrateDataPanel.swift; sourceTree = "<group>"; };
+		94AEA084278556E500C8BE23 /* MigrationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationSession.swift; sourceTree = "<group>"; };
 		94BCCE45276FE9AC009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		94BCCE47276FE9BE009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		94C80F74278F7312007522D5 /* DebugUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugUtilities.swift; sourceTree = "<group>"; };
@@ -379,7 +380,6 @@
 		94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureScreen.swift; sourceTree = "<group>"; };
 		94EBA3A0275A1298008C62E7 /* ActionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionScreen.swift; sourceTree = "<group>"; };
 		94EBA3A2275A14DE008C62E7 /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
-		94FED79D278A207100C3AEBD /* Choose+GridPortrait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Choose+GridPortrait.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -456,7 +456,7 @@
 		9413CEB4275B13F900A36B5E /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				94528563275BE0D8004D815B /* MainWindow.swift */,
+				94528563275BE0D8004D815B /* RootNavigationController.swift */,
 				942E393B278511C300629DFE /* 0_Onboarding */,
 				94934FD8275A0BCB00E388FF /* 1_Choose */,
 				94934FD9275A0C0A00E388FF /* 2_History */,
@@ -499,21 +499,21 @@
 		942E393B278511C300629DFE /* 0_Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				94ACB3DB278FA8890065302F /* OnboardingLaunchers.swift */,
-				94ACB3E8278FCCF30065302F /* Import */,
-				942E393C278511CC00629DFE /* OnboardSplash */,
+				94ACB3DB278FA8890065302F /* OnboardLaunchers.swift */,
+				94ACB3E8278FCCF30065302F /* Migrate */,
+				942E393C278511CC00629DFE /* Onboard */,
 			);
 			path = 0_Onboarding;
 			sourceTree = "<group>";
 		};
-		942E393C278511CC00629DFE /* OnboardSplash */ = {
+		942E393C278511CC00629DFE /* Onboard */ = {
 			isa = PBXGroup;
 			children = (
-				94ACB3E1278FABE30065302F /* OnboardingVM.swift */,
-				94ACB3E5278FBAB50065302F /* OnboardingPanel.swift */,
+				94ACB3E1278FABE30065302F /* OnboardingSessionVM.swift */,
+				94ACB3E5278FBAB50065302F /* OnboardingSession.swift */,
 				949E9945278F629500D594C2 /* OnboardingContent.swift */,
 			);
-			path = OnboardSplash;
+			path = Onboard;
 			sourceTree = "<group>";
 		};
 		9473B7B12770F73F006F4994 /* Persistence */ = {
@@ -523,7 +523,6 @@
 				9477FACA2784A39E0019F9A8 /* Import */,
 				949E5A882773B8CE00D45740 /* CoreData */,
 				9473B7B22770F8B2006F4994 /* UserDefaults */,
-				9431A626278FFE2B00B5FD8A /* LaunchCounter.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -545,6 +544,8 @@
 			isa = PBXGroup;
 			children = (
 				9446F64C2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift */,
+				9431A626278FFE2B00B5FD8A /* LaunchCounter.swift */,
+				949D102027911F770024B180 /* OnboardState.swift */,
 				941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */,
 				949E5A6627729B7A00D45740 /* SessionRepository.swift */,
 			);
@@ -576,7 +577,6 @@
 				94DFEC60275D458D00BB80DB /* VMs */,
 				94CF3EFC276427F100C2D8B0 /* ChooseDevicesScreen.swift */,
 				94528554275BDDB9004D815B /* Choose+GridLandscape.swift */,
-				94FED79D278A207100C3AEBD /* Choose+GridPortrait.swift */,
 				94528557275BDE1E004D815B /* Choose+DeviceIterator.swift */,
 				9452855A275BDEE2004D815B /* Choose+DeviceCell.swift */,
 				94DFEC5D275D389700BB80DB /* Choose+KnownUnknownCells.swift */,
@@ -693,14 +693,14 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
-		94ACB3E8278FCCF30065302F /* Import */ = {
+		94ACB3E8278FCCF30065302F /* Migrate */ = {
 			isa = PBXGroup;
 			children = (
-				94AEA084278556E500C8BE23 /* MigrateDataPanel.swift */,
-				94ACB3EA278FCEB40065302F /* MigrateDataPanelSoloVM.swift */,
+				94AEA084278556E500C8BE23 /* MigrationSession.swift */,
+				94ACB3EA278FCEB40065302F /* MigrationSessionVM.swift */,
 				942E393D278511D400629DFE /* MigrateDataPanelVM.swift */,
 			);
-			path = Import;
+			path = Migrate;
 			sourceTree = "<group>";
 		};
 		94B35A0A27864E52004DF0FB /* Buttons */ = {
@@ -723,10 +723,10 @@
 			isa = PBXGroup;
 			children = (
 				94935019275A112200E388FF /* DiscoveryListVM.swift */,
+				9445E58E276D493300B8E8F3 /* DropOutcome.swift */,
 				94DFEC61275D459B00BB80DB /* ItemVM.swift */,
 				94935022275A11C600E388FF /* KnownItemVM.swift */,
 				94DFEC64275D45F000BB80DB /* UnknownItemVM.swift */,
-				9445E58E276D493300B8E8F3 /* DropOutcome.swift */,
 			);
 			path = VMs;
 			sourceTree = "<group>";
@@ -1050,7 +1050,7 @@
 				949E9946278F629500D594C2 /* OnboardingContent.swift in Sources */,
 				9409C5E82763B764001FE850 /* ActionType.swift in Sources */,
 				940E01AB2780DC7C002AD641 /* EditableSubhead.swift in Sources */,
-				94ACB3E6278FBAB50065302F /* OnboardingPanel.swift in Sources */,
+				94ACB3E6278FBAB50065302F /* OnboardingSession.swift in Sources */,
 				944538BD2767DCE000841880 /* StreamingCountersContainer.swift in Sources */,
 				949E5AB42773BD7800D45740 /* ModelConvertible.swift in Sources */,
 				94A1E64727713FF100414FDF /* LifetimeCalculator.swift in Sources */,
@@ -1067,12 +1067,12 @@
 				94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */,
 				94528561275BDF8D004D815B /* UserDefaults+.swift in Sources */,
 				949E5A6A2772ACA500D45740 /* Session.swift in Sources */,
-				94528564275BE0D8004D815B /* MainWindow.swift in Sources */,
+				94528564275BE0D8004D815B /* RootNavigationController.swift in Sources */,
 				9446F64727829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */,
 				949E9937278F51DB00D594C2 /* Windows.swift in Sources */,
 				942E393927850F2300629DFE /* LegacyModels.swift in Sources */,
-				94ACB3DC278FA8890065302F /* OnboardingLaunchers.swift in Sources */,
-				94ACB3EB278FCEB40065302F /* MigrateDataPanelSoloVM.swift in Sources */,
+				94ACB3DC278FA8890065302F /* OnboardLaunchers.swift in Sources */,
+				94ACB3EB278FCEB40065302F /* MigrationSessionVM.swift in Sources */,
 				94935023275A11C600E388FF /* KnownItemVM.swift in Sources */,
 				94CF3EFA276427C300C2D8B0 /* Routing.swift in Sources */,
 				9409C5DC2762E17D001FE850 /* Action+Row.swift in Sources */,
@@ -1091,6 +1091,7 @@
 				942E39362784FCF900629DFE /* UserDefaultsContainer.swift in Sources */,
 				94DFEC5E275D389700BB80DB /* Choose+KnownUnknownCells.swift in Sources */,
 				9408E2E52783A1B300D2D1BF /* MorePill.swift in Sources */,
+				949D102127911F770024B180 /* OnboardState.swift in Sources */,
 				94CF3F0C2764286B00C2D8B0 /* SpotlightShimmerText.swift in Sources */,
 				9452855B275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
 				94DFEC62275D459B00BB80DB /* ItemVM.swift in Sources */,
@@ -1115,7 +1116,6 @@
 				949E5A6E2773243800D45740 /* Sessions.xcdatamodeld in Sources */,
 				940E01AE2780DEB9002AD641 /* Configure+Estimates.swift in Sources */,
 				94E3A7F5275FF557007E2BAE /* HistoryScreen.swift in Sources */,
-				94FED79E278A207100C3AEBD /* Choose+GridPortrait.swift in Sources */,
 				940E01B12780E487002AD641 /* HoverButtonStyle.swift in Sources */,
 				94AEA08227854E5F00C8BE23 /* UniqueDeviceIdentifier.swift in Sources */,
 				946F64D5277BCEB700AE293C /* FilesExporter.swift in Sources */,
@@ -1126,11 +1126,11 @@
 				940E01A82780D85F002AD641 /* Formatters.swift in Sources */,
 				9409C5CC2761F438001FE850 /* Configure+SensorIterator.swift in Sources */,
 				9493501A275A112200E388FF /* DiscoveryListVM.swift in Sources */,
-				94ACB3E2278FABE30065302F /* OnboardingVM.swift in Sources */,
+				94ACB3E2278FABE30065302F /* OnboardingSessionVM.swift in Sources */,
 				940E01B42780E4A7002AD641 /* DepressButtonStyle.swift in Sources */,
 				94196C152770DF61000377A6 /* SensorPresetsLoader.swift in Sources */,
 				94336F0A2775244B00759C55 /* CoreDataSessionRepository.swift in Sources */,
-				94AEA085278556E500C8BE23 /* MigrateDataPanel.swift in Sources */,
+				94AEA085278556E500C8BE23 /* MigrationSession.swift in Sources */,
 				940E01C227814BFD002AD641 /* CloudSaveStateIndicator.swift in Sources */,
 				9446F6442782695200B535AD /* HighlightToggleStyle.swift in Sources */,
 				940E01A5277F9D1D002AD641 /* UnderlineRect.swift in Sources */,
@@ -1160,7 +1160,7 @@
 				949E9947278F629500D594C2 /* OnboardingContent.swift in Sources */,
 				9409C5E92763B764001FE850 /* ActionType.swift in Sources */,
 				940E01AC2780DC7C002AD641 /* EditableSubhead.swift in Sources */,
-				94ACB3E7278FBAB50065302F /* OnboardingPanel.swift in Sources */,
+				94ACB3E7278FBAB50065302F /* OnboardingSession.swift in Sources */,
 				94DFEC66275D45F000BB80DB /* UnknownItemVM.swift in Sources */,
 				949E5AB52773BD7800D45740 /* ModelConvertible.swift in Sources */,
 				94A1E64827713FF100414FDF /* LifetimeCalculator.swift in Sources */,
@@ -1181,8 +1181,8 @@
 				9446F64827829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */,
 				949E9938278F51DB00D594C2 /* Windows.swift in Sources */,
 				942E393A27850F2300629DFE /* LegacyModels.swift in Sources */,
-				94ACB3DD278FA8890065302F /* OnboardingLaunchers.swift in Sources */,
-				94ACB3EC278FCEB40065302F /* MigrateDataPanelSoloVM.swift in Sources */,
+				94ACB3DD278FA8890065302F /* OnboardLaunchers.swift in Sources */,
+				94ACB3EC278FCEB40065302F /* MigrationSessionVM.swift in Sources */,
 				9452855C275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
 				9409C5DD2762E17D001FE850 /* Action+Row.swift in Sources */,
 				94CF3EFB276427C300C2D8B0 /* Routing.swift in Sources */,
@@ -1201,6 +1201,7 @@
 				942E39372784FCF900629DFE /* UserDefaultsContainer.swift in Sources */,
 				9452856E275BE1D5004D815B /* Root.swift in Sources */,
 				9408E2E62783A1B300D2D1BF /* MorePill.swift in Sources */,
+				949D102227911F770024B180 /* OnboardState.swift in Sources */,
 				9413CEAE275B118600A36B5E /* UIFactory.swift in Sources */,
 				94DFEC5F275D389700BB80DB /* Choose+KnownUnknownCells.swift in Sources */,
 				94E005F3275A07E9001B0DFD /* MetaBaseApp.swift in Sources */,
@@ -1217,7 +1218,7 @@
 				94CF3F0F2764286B00C2D8B0 /* ProgressBar.swift in Sources */,
 				94CF3F022764282300C2D8B0 /* CTAButton.swift in Sources */,
 				94AEA08027854E2200C8BE23 /* CloudSaveState.swift in Sources */,
-				94528565275BE0D8004D815B /* MainWindow.swift in Sources */,
+				94528565275BE0D8004D815B /* RootNavigationController.swift in Sources */,
 				949E5AB02773BCDA00D45740 /* FileMO+CoreDataClass.swift in Sources */,
 				941A08F7276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */,
 				941A08FE276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */,
@@ -1225,7 +1226,6 @@
 				949E5A6F2773243800D45740 /* Sessions.xcdatamodeld in Sources */,
 				940E01AF2780DEB9002AD641 /* Configure+Estimates.swift in Sources */,
 				9452855F275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
-				94FED79F278A207100C3AEBD /* Choose+GridPortrait.swift in Sources */,
 				940E01B22780E487002AD641 /* HoverButtonStyle.swift in Sources */,
 				94AEA08327854E5F00C8BE23 /* UniqueDeviceIdentifier.swift in Sources */,
 				946F64D6277BCEB700AE293C /* FilesExporter.swift in Sources */,
@@ -1236,11 +1236,11 @@
 				940E01A92780D85F002AD641 /* Formatters.swift in Sources */,
 				9409C5CD2761F438001FE850 /* Configure+SensorIterator.swift in Sources */,
 				94A165C2275F2F8600FA355D /* History+SessionsList.swift in Sources */,
-				94ACB3E3278FABE30065302F /* OnboardingVM.swift in Sources */,
+				94ACB3E3278FABE30065302F /* OnboardingSessionVM.swift in Sources */,
 				940E01B52780E4A7002AD641 /* DepressButtonStyle.swift in Sources */,
 				94196C162770DF61000377A6 /* SensorPresetsLoader.swift in Sources */,
 				94336F0B2775244B00759C55 /* CoreDataSessionRepository.swift in Sources */,
-				94AEA086278556E500C8BE23 /* MigrateDataPanel.swift in Sources */,
+				94AEA086278556E500C8BE23 /* MigrationSession.swift in Sources */,
 				940E01C327814BFD002AD641 /* CloudSaveStateIndicator.swift in Sources */,
 				9446F6452782695200B535AD /* HighlightToggleStyle.swift in Sources */,
 				940E01A6277F9D1D002AD641 /* UnderlineRect.swift in Sources */,

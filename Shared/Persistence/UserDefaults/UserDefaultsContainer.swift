@@ -14,29 +14,10 @@ public class UserDefaultsContainer {
 
 public extension UserDefaultsContainer {
 
-    /// Gets Bool from Cloud, if present, then local
-    ///
-    func cloudFirst(for key: String) -> Bool {
-        cloud.dictionaryRepresentation[key] as? Bool
-        ?? local.bool(forKey: key)
-    }
-
-    /// Gets Double from Cloud, if present, then local
-    ///
-    func cloudFirstDouble(for key: String) -> Double {
-        cloud.dictionaryRepresentation[key] as? Double
-        ?? local.double(forKey: key)
-    }
-
     /// Gets cast array of objects for a key, if present, then local, if present
     ///
     func cloudFirstArray<T>(of type: T.Type, for key: String) -> [T]? {
         cloud.array(forKey: key) as? [T] ?? local.array(forKey: key) as? [T]
-    }
-
-    func setBool(_ bool: Bool, forKey key: String) {
-        cloud.set(bool, forKey: key)
-        local.set(bool, forKey: key)
     }
 
     func setArray(_ array: [Any]?, forKey key: String) {
