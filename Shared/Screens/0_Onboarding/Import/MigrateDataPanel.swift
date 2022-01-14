@@ -29,9 +29,7 @@ struct MigrateDataPanel: View {
         } down: { maxWidth in
             MigrateDataPanel.ProgressReportPane(maxWidth: maxWidth)
         } cta: { cta }
-#if os(iOS)
-        .padding(.top, 30)
-#endif
+        .padding(.top, .init(macOS: 25, iOS: 35))
         .onAppear { if vm.triggerImporter { importer.start() }}
         .onAppear(perform: vm.onAppear)
         .environmentObject(vm)

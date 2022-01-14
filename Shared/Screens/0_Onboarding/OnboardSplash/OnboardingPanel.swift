@@ -4,7 +4,7 @@ import mbientSwiftUI
 
 extension Color {
 #if os(macOS)
-    static let lightModeFaintBG = Color(.quaternarySystemFill)
+    static let lightModeFaintBG = Color(.windowBackgroundColor)
 #else
     static let lightModeFaintBG = Color(.secondarySystemBackground)
 #endif
@@ -39,10 +39,8 @@ struct OnboardingPanel: View {
         } down: { maxWidth in
             MigrateDataPanel.ProgressReportPane(maxWidth: maxWidth)
         } cta: { cta }
-#if os(iOS)
-        .padding(.top, 50)
-#endif
-        .background(background)
+        .padding(.top, .init(macOS: 25, iOS: 50))
+        .background(background.edgesIgnoringSafeArea(.all))
         .onAppear(perform: vm.onAppear)
         .environmentObject(vm)
         .environmentObject(importer)

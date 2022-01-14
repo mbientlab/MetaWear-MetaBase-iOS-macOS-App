@@ -32,8 +32,8 @@ struct ChooseDevicesScreen: View {
 #if os(iOS)
         .background(atomIconShine.alignmentGuide(.top) { $0[VerticalAlignment.center] }, alignment: .top)
         .background(vignette.edgesIgnoringSafeArea(.all), alignment: .topLeading)
-        .background(screenShine)
 #endif
+        .background(screenShine.edgesIgnoringSafeArea(.all))
         .backgroundToEdges(.myBackground)
         .onAppear(perform: vm.didAppear)
         .environmentObject(vm)
@@ -50,7 +50,7 @@ struct ChooseDevicesScreen: View {
 
     @ViewBuilder private var screenShine: some View {
         if colorScheme == .light {
-            SoftSpotlight(color: .white.opacity(0.9), radius: 500)
+            SoftSpotlight(color: .white.opacity(idiom.is_Mac ? 0.8 : 0.9), radius: 500)
         }
     }
 
