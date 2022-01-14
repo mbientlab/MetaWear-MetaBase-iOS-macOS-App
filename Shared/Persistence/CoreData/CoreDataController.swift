@@ -5,45 +5,27 @@ import CoreData
 import Combine
 
 public protocol CoreDataBackgroundController: AnyObject {
+    func setup()
     func makeBackgroundContext() -> NSManagedObjectContext
     var viewContext: NSManagedObjectContext { get }
     var containerDidChange: AnyPublisher<Void,Never> { get }
+    var error: AnyPublisher<Error,Never> { get }
 }
 
 public class CloudKitCoreDataController: CoreDataBackgroundController {
 
-    public let containerDidChange: AnyPublisher<Void,Never>
     public var viewContext: NSManagedObjectContext { container.viewContext }
+    public private(set) lazy var containerDidChange: AnyPublisher<Void,Never> = containerDidChangeSubject.share().eraseToAnyPublisher()
+    public private(set) lazy var error: AnyPublisher<Error, Never> = errorSubject.share().eraseToAnyPublisher()
+    public let inMemory: Bool
+
     private let containerDidChangeSubject = PassthroughSubject<Void,Never>()
-    private let container: NSPersistentCloudKitContainer
+    private let errorSubject = PassthroughSubject<Error,Never>()
+    private var container: NSPersistentCloudKitContainer!
+    private var didSetup = false
 
     public init(inMemory: Bool = false) {
-        container = {
-            let cloud = NSPersistentCloudKitContainer(name: "Sessions")
-            let description = cloud.persistentStoreDescriptions.first
-            description?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-            return cloud
-        }()
-
-        self.containerDidChange = containerDidChangeSubject.share().eraseToAnyPublisher()
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(containerChanged),
-            name: .NSPersistentStoreRemoteChange,
-            object: container.persistentStoreCoordinator
-        )
-
-        if inMemory {
-            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
-        }
-
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-
-        configure(context: container.viewContext)
+        self.inMemory = inMemory
     }
 
     public func makeBackgroundContext() -> NSManagedObjectContext {
@@ -60,5 +42,36 @@ public class CloudKitCoreDataController: CoreDataBackgroundController {
 
     @objc private func containerChanged() {
         containerDidChangeSubject.send()
+    }
+
+    public func setup() {
+        guard didSetup == false else { return }
+        didSetup = true
+
+        container = {
+            let cloud = NSPersistentCloudKitContainer(name: "Sessions")
+            let description = cloud.persistentStoreDescriptions.first
+            description?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+            return cloud
+        }()
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(containerChanged),
+            name: .NSPersistentStoreRemoteChange,
+            object: container.persistentStoreCoordinator
+        )
+
+        if inMemory {
+            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+        }
+
+        container.loadPersistentStores(completionHandler: { [weak self] (storeDescription, error) in
+            guard let error = error else { return }
+            self?.errorSubject.send(error)
+            NSLog("\(Self.self) \(error.localizedDescription)")
+        })
+
+        configure(context: container.viewContext)
     }
 }

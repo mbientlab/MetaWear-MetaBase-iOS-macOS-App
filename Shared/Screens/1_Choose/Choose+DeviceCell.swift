@@ -49,6 +49,7 @@ extension ChooseDevicesScreen {
                 LargeSignalDots(color: isCompact ? .myPrimaryTinted : .myPrimary)
                     .opacity(isHovered ? 1 : 0.75)
                     .opacity(isCompact ? 0.85 : 1)
+                    .opacity(idiom.is_Mac && colorScheme == .light ? 0.8 : 1)
                     .padding(.top, idiom == .iPhone ? 0 : spacing)
 
                 if idiom == .macOS {
@@ -147,7 +148,9 @@ extension ChooseDevicesScreen.DeviceCell {
             MetaWearImages(isGroup: isGroup, models: models, ledEmulator: ledEmulator)
                 .compositingGroup()
             #if os(iOS)
-                .shadow(color: Color.black.opacity(0.15), radius: 4, x: 3, y: 3)
+                .shadow(color: Color.myPrimaryTinted.opacity(0.15), radius: 4, x: 3, y: 3)
+            #elseif os(macOS)
+                .shadow(color: Color.myPrimaryTinted.opacity(colorScheme == .light ? 0.15 : 0), radius: 4, x: 3, y: 3)
             #endif
                 .overlay(cta)
         }
@@ -228,10 +231,9 @@ extension ChooseDevicesScreen.DeviceCell {
         @Environment(\.namespace) private var namespace
 
         private var imageWidth: CGFloat { 140 }
-
         private var imageHeight: CGFloat { isHovering ? 160 : 135 }
 
-        var overlap: CGFloat { models.endIndex <= 2 ? 0.2 : 0.4 }
+        private var overlap: CGFloat { models.endIndex <= 2 ? 0.2 : 0.4 }
 
         private var groupCenteringXOffset: CGFloat {
             let oneLess = max(0, min(3, models.endIndex - 1))

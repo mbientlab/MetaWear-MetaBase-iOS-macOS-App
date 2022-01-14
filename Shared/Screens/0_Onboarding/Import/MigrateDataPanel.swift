@@ -1,12 +1,72 @@
 // Copyright 2022 MbientLab Inc. All rights reserved. See LICENSE.MD.
 
 import mbientSwiftUI
+import SwiftUI
 
-struct ImportSessions {
-    private init() { }
+struct MigrateDataPanel: View {
+
+    init(importer: MigrateDataPanelVM, vm: MigrateDataPanelSoloVM)  {
+        _importer = .init(wrappedValue: importer)
+        _vm =  .init(wrappedValue: vm)
+    }
+    @StateObject var vm: MigrateDataPanelSoloVM
+    @StateObject var importer: MigrateDataPanelVM
+
+#if os(iOS)
+    let minHeight = UIScreen.main.bounds.shortestSide * 0.5
+#elseif os(macOS)
+    let minHeight = CGFloat(400)
+#endif
+
+    var body: some View {
+        FocusFlipPanel(
+            vm: vm.focus,
+            centerColumnNominalWidth: .init(iPhone: .infinity, 450),
+            macOSHostWindowPrefix: Windows.migration.tag
+        ) { maxWidth in
+            ItemsPanel(items: vm.content.debrief, useSmallerSizes: true, maxWidth: maxWidth)
+                .frame(minHeight: minHeight)
+        } down: { maxWidth in
+            MigrateDataPanel.ProgressReportPane(maxWidth: maxWidth)
+        } cta: { cta }
+        .padding(.top, .init(macOS: 25, iOS: 35))
+        .onAppear { if vm.triggerImporter { importer.start() }}
+        .onAppear(perform: vm.onAppear)
+        .environmentObject(vm)
+        .environmentObject(importer)
+    }
+
+    @ViewBuilder private var cta: some View {
+        if vm.showMigrationCTAs {
+            CTAs(
+                willStartImport: { vm.focus.setFocus(.importer) },
+                skipAction: { vm.focus.setFocus(.complete) },
+                successAction: { vm.focus.setFocus(.complete) },
+                successCTA: vm.completionCTA
+            )
+        } else {
+            CTAButton(vm.completionCTA, padding: 6, action: { vm.focus.setFocus(.complete) })
+        }
+    }
 }
 
-extension ImportSessions {
+// MARK: - Components
+
+extension MigrateDataPanel {
+
+    struct ProgressReportPane: View {
+        var maxWidth: CGFloat
+        var body: some View {
+            VStack(alignment: .center, spacing: 45) {
+                MigrateDataPanel.ProgressReport()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .padding(40)
+            .background(ItemsPanel.PanelBG())
+            .padding(10)
+            .frame(maxWidth: maxWidth, maxHeight: .infinity, alignment: .leading)
+        }
+    }
 
     struct CTAs: View {
 
@@ -16,7 +76,7 @@ extension ImportSessions {
         let successAction: () -> Void
         let successCTA: String
 
-        @EnvironmentObject private var vm: ImportSessionsVM
+        @EnvironmentObject private var vm: MigrateDataPanelVM
 
         var body: some View {
             ZStack {
@@ -38,7 +98,8 @@ extension ImportSessions {
                     action: skipAction
                 )
                 CTAButton(
-                    "Migrate Local Data  􀆊",
+                    idiom.is_Mac ? "Migrate Local Data  􀆊" :
+                       (idiom == .iPhone ? "Migrate" : "Migrate Local Data"),
                     padding: padding,
                     action: {
                         willStartImport()
@@ -61,8 +122,9 @@ extension ImportSessions {
 
         let padding: CGFloat = 6
 
-        @EnvironmentObject private var vm: ImportSessionsVM
+        @EnvironmentObject private var vm: MigrateDataPanelVM
         @Namespace private var namespace
+        @Environment(\.colorScheme) private var colorScheme
 
         var body: some View {
             VStack(spacing: 30) {
@@ -71,10 +133,10 @@ extension ImportSessions {
                 Text(vm.sessionsImportedLabel)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
-                    .foregroundColor(.myTertiary)
+                    .foregroundColor(colorScheme == .light ? .mySecondary : .myTertiary)
 
                 if vm.isImporting == .completed,
-                    let error = vm.error {
+                   let error = vm.error {
                     Text(error.localizedDescription)
                         .lineLimit(nil)
                         .fixedSize(horizontal: false, vertical: true)
@@ -85,7 +147,7 @@ extension ImportSessions {
                         .hidden()
                 }
             }
-            .adaptiveFont(.primaryActionText)
+            .adaptiveFont(.deviceCellTitle)
             .lineSpacing(9)
             .multilineTextAlignment(.center)
         }
@@ -108,13 +170,13 @@ extension ImportSessions {
                             .matchedGeometryEffect(id: "state", in: namespace)
                 }
             }
-                .frame(width: 60, height: 60)
-                .animation(.easeOut, value: vm.isImporting)
+            .frame(width: 60, height: 60)
+            .animation(.easeOut, value: vm.isImporting)
         }
 
         private var completedSymbol: SFSymbol {
             guard let error = vm.error,
-                    error != .alreadyImportedDataFromThisDevice
+                  error != .alreadyImportedDataFromThisDevice
             else { return .checkFilled }
             return .error
         }

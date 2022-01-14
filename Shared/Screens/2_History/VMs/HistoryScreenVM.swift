@@ -13,7 +13,6 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
 
     public let title: String
     public var deviceCount: Int { items.endIndex }
-    public let showBackButton = true
 
     @Published public private(set) var enableCTA = false
     @Published public private(set) var showSessionStartAlert = false

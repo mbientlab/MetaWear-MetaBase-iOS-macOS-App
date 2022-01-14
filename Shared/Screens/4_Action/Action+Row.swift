@@ -26,6 +26,7 @@ extension ActionScreen {
                     }}
                 .onAppear(perform: vm.onAppear)
                 .padding()
+                .padding(.horizontal, 8)
                 .padding(.vertical, 8)
                 .foregroundColor(foreground)
                 .background(background)
@@ -60,13 +61,14 @@ extension ActionScreen {
 
         private let spacing = CGFloat(15)
         private let connectionSpacing = CGFloat(35)
+        private let deviceImageSize: CGFloat = .init(iPad: 44, 36)
 
         private var deviceLabel: some View {
             HStack(spacing: spacing) {
                 SharedImages.metawearTop.image()
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 35, height: 35)
+                    .frame(width: deviceImageSize, height: deviceImageSize)
                     .shadow(color: .black.opacity(0.2), radius: 4, x: 2, y: 2)
                     .shadow(color: .black.opacity(0.4), radius: 1, x: 1, y: 1)
 
@@ -82,7 +84,7 @@ extension ActionScreen {
             HStack(spacing: spacing) {
                 ConnectionIcon(color: foreground)
                 LargeSignalDots(color: foreground, dotSize: 9, spacing: 3)
-            }
+            }.opacity(0.85)
         }
 
         private var actionState: some View {

@@ -41,8 +41,8 @@ extension ConfigureScreen {
                 } else { Text("No compatible saved presets") }
             } label: {
                 Text("Presets")
-                    .foregroundColor(isHovered ? .myHighlight : .mySecondary)
-                    .font(.adaptiveFace(notScaled: .configurePresentsMenu))
+                    .foregroundColor(isHovered || idiom.is_iOS ? .myHighlight : .mySecondary)
+                    .font(.adaptiveFace(notScaled: .configureSessionTitle))
             }
 #if os(macOS)
             .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))

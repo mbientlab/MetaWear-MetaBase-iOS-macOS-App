@@ -40,7 +40,7 @@ public class UnknownItemVM: ObservableObject, ItemVM {
         guard let device = _device.device else { fatalError() }
         self.models = [(mac: device.peripheral.identifier.uuidString, model: device.info.model)]
 #if DEBUG
-        device.logDelegate = MWConsoleLogger.shared
+        if useMetabaseConsoleLogger { device.logDelegate = MWConsoleLogger.shared }
 #endif
         self.isCloudSynced = store.deviceIsCloudSynced(mac: device.info.mac)
         self.device = device

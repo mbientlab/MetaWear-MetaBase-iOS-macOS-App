@@ -12,16 +12,17 @@ public class Root: ObservableObject {
     public let presets:  PresetSensorParametersStore
     public let logging:  ActiveLoggingSessionsStore
     public let routing:  Routing
+    public let importer: MetaBase4SessionDataImporter
 
     // Services
     private let scanner:        MetaWearScanner
     private let sessions:       SessionRepository
     private let coreData:       CoreDataBackgroundController
     private let userDefaults:   UserDefaultsContainer
-    private let importer:       MetaBase4SessionDataImporter
     private let metawearLoader: MWLoader<MWKnownDevicesLoadable>
     private let presetsLoader:  MWLoader<SensorPresetsLoadable>
     private let loggingLoader:  MWLoader<LoggingTokensLoadable>
+    private let launchCounter:  LocalLaunchCounter
 
     // UI
     public let factory:     UIFactory
@@ -36,6 +37,7 @@ public class Root: ObservableObject {
         self.presetsLoader   = SensorPresetsCloudLoader(userDefaults)
         self.loggingLoader   = LoggingTokensCloudLoader(userDefaults)
 
+        self.launchCounter   = LocalLaunchCounter(userDefaults)
         let scanner = MetaWearScanner.sharedRestore
         let devices = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
         self.presets = PresetSensorParametersStore(loader: presetsLoader)
@@ -46,7 +48,7 @@ public class Root: ObservableObject {
             defaults: userDefaults
         )
         let routing = Routing()
-        let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing)
+        let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing, userDefaults, launchCounter)
 
         self.devices = devices
         self.routing = routing
@@ -61,45 +63,19 @@ public extension Root {
 
     func start() {
         do {
+            if launchCounter.launches == 0 {
+                // Local SDK MAC recognition only, metadata imported by user command
+                UserDefaults.MetaWear.migrateFromBoltsSDK()
+            }
+            coreData.setup()
             try devices.load()
             try presets.load()
             try logging.load()
             let _ = userDefaults.cloud.synchronize()
+            launchCounter.markLaunched()
 #if DEBUG
-            debugs()
+            printUserDefaults()
 #endif
         } catch { NSLog("Load Failure: \(error.localizedDescription)") }
     }
 }
-
-#if DEBUG
-fileprivate func debugs() {
-    let bundle = Bundle.main.bundleIdentifier!
-    let defaults = UserDefaults.standard.persistentDomain(forName: bundle) ?? [:]
-    let defaultsPath = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first ?? "Error"
-
-    print("")
-    for key in defaults.sorted(by: { $0.key < $1.key }) {
-        if key.key.contains("NSWindow Frame"), let value = key.value as? String {
-            let dimensions = value.components(separatedBy: .whitespaces)
-            let width = dimensions[2]
-            let height = dimensions[3]
-            print("Window", "w", width, "h", height)
-        } else {
-            print(key.key, ":", key.value)
-        }
-    }
-    print("")
-    print("Defaults stored at:", defaultsPath)
-    print("")
-}
-
-func wipeDefaults() {
-    UserDefaults.standard.dictionaryRepresentation().forEach { element in
-        UserDefaults.standard.removeObject(forKey: element.key)
-    }
-    NSUbiquitousKeyValueStore.default.dictionaryRepresentation.keys.forEach {
-        NSUbiquitousKeyValueStore.default.removeObject(forKey: $0)
-    }
-}
-#endif

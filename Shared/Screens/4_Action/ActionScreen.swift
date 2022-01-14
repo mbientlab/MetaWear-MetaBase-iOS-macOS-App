@@ -27,9 +27,12 @@ struct ActionScreen: View {
                     .animation(.easeOut, value: vm.actionFocus)
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
+
+                Color.clear.frame(height: ScrollFadeMask.defaultSize / 2)
             }
             .padding(.horizontal, .screenInset)
             .onPreferenceChange(NameWK.self) { nameWidth = $0 }
+            .mask(ScrollFadeMask(edge: .bottom).offset(y: 1))
 
             CTAs()
                 .padding(.bottom, .screenInset)

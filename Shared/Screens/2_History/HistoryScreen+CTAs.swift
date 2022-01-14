@@ -42,9 +42,11 @@ extension HistoryScreen {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 } else {
                     HStack(spacing: 20) {
+                        #if os(iOS)
                         if vm.allDevicesConnectionState == .connecting {
                             ProgressSpinner()
                         }
+                        #endif
                         cta
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)

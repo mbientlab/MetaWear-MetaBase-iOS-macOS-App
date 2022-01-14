@@ -31,7 +31,7 @@ struct HistoryScreen: View {
 
     /// macOS + iPad
     private var wideLayout: some View {
-        HStack(alignment: .firstTextBaseline, spacing: .screenInset * (idiom.is_Mac ? 1 : 1.25) ) {
+        HStack(alignment: .firstTextBaseline, spacing: .screenInset) {
 
             VStack(alignment: .leading) {
                 ScreenSubsection(label: "About", trailing: {
@@ -42,14 +42,11 @@ struct HistoryScreen: View {
 
                 DevicesList()
             }
-            .frame(minWidth: 230)
+            .frame(minWidth: idiom.is_Mac ? 230 : 260)
 
             VStack(alignment: .leading) {
                 SessionListStaticSubhead()
-                SessionsList(
-                    factory,
-                    scrollingTopContent: { EmptyView() }
-                )
+                SessionsList(factory, scrollingTopContent: { EmptyView() })
 
                 CTAs(layoutVertically: idiom == .iPhone)
                     .padding(.top, .screenInset / 2)
@@ -64,21 +61,20 @@ struct HistoryScreen: View {
 
 #if os(iOS)
     @State private var showiOSAboutSheet = false
+
     private var narrowLayout: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
 
-            SessionsList(
-                factory,
-                scrollingTopContent: {
-                    iOSAboutDevicesButton.padding(HistoryScreen.listEdgeInsets.inverted())
-                        .listRowSeparator(.hidden)
+            SessionsList(factory, scrollingTopContent: {
+                iOSAboutDevicesButton
+                    .padding(.top, .screenInset * 1.5)
+                    .padding(HistoryScreen.listEdgeInsets.inverted())
+                    .listRowSeparator(.hidden)
 
-                    SessionListStaticSubhead()
-                        .padding(HistoryScreen.listEdgeInsets.horizontalInverted())
-                        .listRowSeparator(.hidden)
-
-                }
-            )
+                SessionListStaticSubhead()
+                    .padding(HistoryScreen.listEdgeInsets.horizontalInverted())
+                    .listRowSeparator(.hidden)
+            })
 
             CTAs(layoutVertically: idiom == .iPhone)
                 .padding(.top, .screenInset / 2)
@@ -86,10 +82,13 @@ struct HistoryScreen: View {
                 .padding(.horizontal, .screenInset)
                 .layoutPriority(2)
         }
-        .padding(.top, 5)
+        .padding(.top, -.screenInset * 1.5)
+        .padding(.top, 8)
         .onAppear { vm.items.forEach { $0.onAppear() } }
     }
 
+    @Environment(\.colorScheme) private var colorScheme
+    private var sheetBG: Color { colorScheme == .light ? .lightModeFaintBG : .defaultSystemBackground }
 
     private var iOSAboutDevicesButton: some View {
         Button { showiOSAboutSheet.toggle() } label: {
@@ -102,6 +101,7 @@ struct HistoryScreen: View {
         .sheet(isPresented: $showiOSAboutSheet) {
             DevicesList(initiallyShowDetails: true)
                 .modifier(CloseSheet())
+                .background(sheetBG.edgesIgnoringSafeArea(.all))
                 .edgesIgnoringSafeArea(.bottom)
         }
     }

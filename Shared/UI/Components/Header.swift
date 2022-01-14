@@ -5,25 +5,25 @@ import mbientSwiftUI
 public protocol HeaderVM {
     var title: String { get }
     var deviceCount: Int { get }
-    var showBackButton: Bool { get }
 }
 
 struct Header: View {
 
     let vm: HeaderVM
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.namespace) private var namespace
 
     var body: some View {
         HStack(alignment: .top, spacing: 15) {
 
-            if vm.showBackButton { HeaderBackButton() }
-            else { HeaderBackButton().hidden().disabled(true).allowsHitTesting(false) }
+            HeaderBackButton()
 
             Text(vm.title)
                 .adaptiveFont(.screenHeader)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
                 .foregroundColor(colorScheme == .light ? .myPrimaryTinted : .myPrimary)
+                .matchedGeometryEffect(id: "HeaderTitle", in: namespace!, properties: .position)
 
             Spacer()
 
@@ -35,7 +35,7 @@ struct Header: View {
         .frame(maxWidth: .infinity, minHeight: .headerMinHeight, alignment: .topLeading)
         .padding(.top, .headerTopPadding)
         .backgroundToEdges(.myBackground)
-        .padding(.bottom, .screenInset)
+        .padding(.bottom, .init(iPhone: .screenInset * 1.5, .screenInset))
     }
 }
 
@@ -65,7 +65,7 @@ struct HeaderBackButton: View {
                 .padding(.vertical, 9)
                 .padding(.horizontal, 12)
                 .contentShape(Rectangle())
-                .frame(minWidth: 65, maxWidth: nil, alignment: .center)
+                .frame(minWidth: .init(iPhone: 50, 65), maxWidth: nil, alignment: .center)
         }
         .buttonStyle(UnderlinedButtonStyle(color: .myHighlight,
                                            isHovered: isHovered,
@@ -73,6 +73,7 @@ struct HeaderBackButton: View {
         .brightness(colorScheme == .light && isHovered ? -0.08 : 0)
         .whenHovered { isHovered = $0 }
         .animation(.spring(), value: isHovered)
+        .offset(y: .init(iPhone: -2, 0))
         .padding(.leading, 10)
 
 #if os(macOS)
@@ -91,19 +92,21 @@ extension Header {
 
         let vm: HeaderVM
         @State private var iconsDidAppear = false
-        private static let deviceIconMaxSize = idiom == .iPad ? CGFloat(90) : CGFloat(70)
+        private static let deviceIconMaxSize = CGFloat(macOS: 70, iPad: 90, iOS: 50)
+        @Environment(\.namespace) private var namespace
 
         var body: some View {
             if vm.deviceCount > 0 {
                 deviceImage
+                    .matchedGeometryEffect(id: "Icon1", in: namespace!)
                     .rotationEffect(.degrees(-3))
                     .frame(width: Self.deviceIconMaxSize)
                     .background(secondDevice.offset(x: secondDeviceXOffset), alignment: .topTrailing)
                     .background(thirdDevice.offset(x: thirdDeviceXOffset), alignment: .topTrailing)
-                #if os(iOS)
+#if os(iOS)
                     .compositingGroup()
                     .shadow(color: Color.black.opacity(0.15), radius: 4, x: 3, y: 3)
-                #endif
+#endif
                     .animation(.easeOut, value: iconsDidAppear)
                     .onAppear { DispatchQueue.main.after(0.35) { iconsDidAppear.toggle() } }
                     .padding(.trailing, 12 * CGFloat(vm.deviceCount))
@@ -112,15 +115,19 @@ extension Header {
 
         @ViewBuilder private var secondDevice: some View {
             if vm.deviceCount > 1 {
-                deviceImage.frame(width: Self.deviceIconMaxSize * 0.95)
+                deviceImage
+                    .frame(width: Self.deviceIconMaxSize * 0.95)
                     .rotationEffect(iconsDidAppear ? .degrees(-12) : .degrees(0), anchor: .top)
+                    .matchedGeometryEffect(id: "Icon2", in: namespace!)
             }
         }
 
         @ViewBuilder private var thirdDevice: some View {
             if vm.deviceCount > 2 {
-                deviceImage.frame(width: Self.deviceIconMaxSize * 0.85)
+                deviceImage
+                    .frame(width: Self.deviceIconMaxSize * 0.85)
                     .rotationEffect(iconsDidAppear ? .degrees(-18) : .degrees(0), anchor: .top)
+                    .matchedGeometryEffect(id: "Icon3", in: namespace!)
             }
         }
 

@@ -34,12 +34,11 @@ public class ConfigureVM: ObservableObject, HeaderVM {
     // Estimates
     @Published private(set) var batteryLifetime = "—"
     @Published private(set) var logLifetime = "—"
-    private let timeFormatter: DateComponentsFormatter = .dayHourMinute()
+    private let timeFormatter: DateComponentsFormatter = idiom == .iPhone ? .dayHour() : .dayHourMinute()
 
     // Header
     public let title: String
     public var deviceCount: Int { devices.endIndex }
-    public let showBackButton = true
 
     // Model
     private let devices: [MWKnownDevice]
