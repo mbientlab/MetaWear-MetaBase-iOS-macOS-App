@@ -5,88 +5,29 @@ import MetaWear
 import Combine
 import MetaWearSync
 
-extension UserDefaults.MetaWear.Keys {
-    static let legacyMetaDataPrefix = "MetaDataKey"
-}
-
-struct MetaBase4ImportState {
-
-    let dataExists: Bool
-    let couldImport: Bool
-
-    private static let key = UserDefaults.MetaWear.Keys.importedLegacySessions
-    private static let prefix = UserDefaults.MetaWear.Keys.legacyMetaDataPrefix
-
-    init(_ defaults: DefaultsContainer) {
-        self.dataExists = Self.legacyDataExists(in: defaults.local)
-        self.couldImport = dataExists ? !Self.didImportOnThisDevice(defaults) : false
-    }
-
-    static func legacyDataExists(in defaults: UserDefaults) -> Bool {
-        let decoder = JSONDecoder()
-        return defaults.dictionaryRepresentation()
-            .contains {
-                guard $0.key.hasPrefix(Self.prefix),
-                      let data = $0.value as? Data,
-                      let metadata = try? decoder.decode(LegacyMetadata.self, from: data),
-                      metadata.sessions.isEmpty == false
-                else { return false }
-                return true
-            }
-    }
-
-    static func didImportOnThisDevice(_ defaults: DefaultsContainer) -> Bool {
-        guard let pastImports = defaults.cloudFirstArray(of: String.self, for: Self.key)
-        else { return false }
-        let deviceID = getUniqueDeviceIdentifier()
-        return pastImports.contains(deviceID)
-    }
-}
-
-public enum ImportError: Error, LocalizedError, Equatable {
-    case noMetaBase4MetadataToImport
-    case alreadyImportedDataFromThisDevice
-    case unexpected(Error)
-
-
-    public var errorDescription: String? {
-        switch self {
-            case .noMetaBase4MetadataToImport: return "No MetaBase 4 session data found. Try importing from another iOS device."
-            case .alreadyImportedDataFromThisDevice: return "Already imported MetaBase 4 session data from this device."
-            case .unexpected(let error): return error.localizedDescription
-        }
-    }
-
-    public static func == (lhs: ImportError, rhs: ImportError) -> Bool {
-        switch (lhs, rhs) {
-            case (.noMetaBase4MetadataToImport, .noMetaBase4MetadataToImport), (.alreadyImportedDataFromThisDevice, .alreadyImportedDataFromThisDevice): return true
-            case (.unexpected(let left), .unexpected(let right)):
-                return left.localizedDescription == right.localizedDescription
-            default: return false
-        }
-    }
-}
-
 public class MetaBase4SessionDataImporter {
 
     /// Whether an import completed during this or a prior app session and data exists. Updated on main queue.
     public private(set) lazy var couldImport = couldImportSubject.eraseToAnyPublisher()
     public var couldImportState: Bool { couldImportSubject.value }
     public let legacyDataExistsOnDevice: Bool
+    public var missingFiles = [String]()
 
     public init(
         sessions: SessionRepository,
         devices: MetaWearSyncStore,
         defaults: DefaultsContainer,
-        workQueue: DispatchQueue = ._makeQueue(named: "importer", qos: .userInitiated)
+        workQueue: DispatchQueue = ._makeQueue(named: "importer", qos: .userInitiated),
+        localDeviceID: String
     ) {
         self.queue = workQueue
         self.sessions = sessions
         self.devices = devices
         self.defaults = defaults
-        let state = MetaBase4ImportState(defaults)
+        let state = MetaBase4ImportState(defaults, localDeviceID: localDeviceID)
         self.legacyDataExistsOnDevice = state.dataExists
         self.couldImportSubject = .init(state.couldImport)
+        self.localDeviceID = localDeviceID
     }
 
     // MARK: - Internal properties
@@ -102,9 +43,9 @@ public class MetaBase4SessionDataImporter {
     private var importQueueSub: AnyCancellable? = nil
     private var groupsSub: AnyCancellable? = nil
     private let queue: DispatchQueue
+    private var hasImportSession = false
 
     // - Grouped devices in MetaBase 5
-    private var didLoadGroups = false
     private let groups: CurrentValueSubject<[Set<MACAddress>:UUID],Never> = .init([:])
 
     // - Dependencies
@@ -112,8 +53,8 @@ public class MetaBase4SessionDataImporter {
     private unowned let devices: MetaWearSyncStore
     private unowned let defaults: DefaultsContainer
     private static let key = UserDefaults.MetaWear.Keys.importedLegacySessions
-    private static let legacyPrefix = UserDefaults.MetaWear.Keys.legacyMetaDataPrefix
-
+    private static let legacyPrefix = LegacyMetadata.defaultsKeyPrefix
+    private let localDeviceID: String
 }
 
 // MARK: - Public API
@@ -136,7 +77,14 @@ public extension MetaBase4SessionDataImporter {
             return Fail(error: error).eraseToAnyPublisher()
         }
 
-        defer { performImport() }
+        defer {
+            if hasImportSession == false {
+                hasImportSession = true
+                queue.async { [weak self] in
+                    self?.performImport()
+                }
+            }
+        }
 
         // Provide progress updates for import
         return progress.receive(on: DispatchQueue.main).eraseToAnyPublisher()
@@ -145,12 +93,12 @@ public extension MetaBase4SessionDataImporter {
     /// Wipes UserDefaults (cannot recover) and trashes CSV files (recoverable).
     ///
     func removePriorSessions(didComplete: @escaping (Error?) -> Void) {
-        queue.async {
+        queue.async { [weak self] in
 
             // Clear local metadata
-            UserDefaults.standard.dictionaryRepresentation().forEach { key, _ in
+            self?.defaults.local.dictionaryRepresentation().forEach { key, _ in
                 guard key.hasPrefix(Self.legacyPrefix) else { return }
-                UserDefaults.standard.removeObject(forKey: key)
+                self?.defaults.local.removeObject(forKey: key)
             }
 
             var fmError: Error? = nil
@@ -183,26 +131,22 @@ public extension MetaBase4SessionDataImporter {
 private extension MetaBase4SessionDataImporter {
 
     func performImport() {
-        queue.async { [self] in
-            let perform = {
-                importQueue = groupLegacySessions(in: loadLegacyMetadata())
-                guard importQueue.isEmpty == false else {
+        importKickoff = groups
+            .dropFirst()
+            .first()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                self.importQueue = self.groupLegacySessions(in: self.loadLegacyMetadata())
+                guard self.importQueue.isEmpty == false else {
                     // End early
-                    markThisDeviceAsImported()
-                    progress.send(completion: .failure(.noMetaBase4MetadataToImport))
+                    self.markThisDeviceAsImported()
+                    self.progress.send(completion: .failure(.noMetaBase4MetadataToImport))
                     return
                 }
-                importNextSession()
+                self.importNextSession()
             }
 
-            guard didLoadGroups else {
-                // Wait for groups to load, then kickoff import
-                importKickoff = groups.sink { _ in perform() }
-                loadGroups()
-                return
-            }
-            perform()
-        }
+        self.loadGroups()
     }
 
     func importNextSession() {
@@ -225,7 +169,7 @@ private extension MetaBase4SessionDataImporter {
         let session = Session(
             id: .init(),
             date: representativeItem.started,
-            name: representativeItem.name,
+            name: representativeItem.note,
             group: groupID,
             devices: deviceMACs,
             files: Set(files.map(\.id))
@@ -245,11 +189,12 @@ private extension MetaBase4SessionDataImporter {
     }
 
     func markThisDeviceAsImported() {
-        DispatchQueue.main.async { [self] in
-            couldImportSubject.send(false)
-            var imported = defaults.cloudFirstArray(of: String.self, for: Self.key) ?? []
-            imported.append(getUniqueDeviceIdentifier())
-            defaults.setArray(imported, forKey: Self.key)
+        DispatchQueue.main.sync { [weak self] in
+            guard let self = self else { return }
+            self.couldImportSubject.send(false)
+            var imported = Set(self.defaults.cloudFirstArray(of: String.self, for: Self.key) ?? [])
+            imported.insert(self.localDeviceID)
+            self.defaults.setArray(imported.sorted(), forKey: Self.key)
         }
     }
 
@@ -264,10 +209,12 @@ private extension MetaBase4SessionDataImporter {
     func getLegacyFiles(in deviceSessions: [LegacySessionModel]) -> [File] {
         deviceSessions.reduce(into: [File]()) { output, legacy in
             legacy.files.forEach { legacyFile in
-                guard let data = FileManager.default.contents(atPath: legacyFile.url.path) else { return }
-                let file = File(id: .init(),
-                                csv: data,
-                                name: legacyFile.csvFilename)
+                let path = legacyFile.url.path
+                guard let data = legacyFile.load() else {
+                    missingFiles.append(path)
+                    return
+                }
+                let file = File(id: .init(), csv: data, name: legacyFile.csvFilename)
                 output.append(file)
             }
         }
@@ -293,7 +240,7 @@ private extension MetaBase4SessionDataImporter {
         let keyPrefixLength = Self.legacyPrefix.count
         let decoder = JSONDecoder()
 
-        let devices = UserDefaults.standard.dictionaryRepresentation()
+        let devices = defaults.local.dictionaryRepresentation()
             .reduce(into: [MACAddress:LegacyMetadata]()) { dict, element in
                 guard element.key.hasPrefix(Self.legacyPrefix),
                       let data = element.value as? Data,
@@ -327,10 +274,7 @@ private extension MetaBase4SessionDataImporter {
                     dict[group.deviceMACs] = group.id
                 })
             }
-            .sink { [self] in
-                groups.value = $0
-                didLoadGroups = true
-            }
+            .sink { [weak self] in self?.groups.value = $0 }
     }
 }
 

@@ -49,7 +49,8 @@ public class Root: ObservableObject {
             sessions: sessions,
             devices: devices,
             defaults: userDefaults,
-            workQueue: priorityQueue
+            workQueue: priorityQueue,
+            localDeviceID: getUniqueDeviceIdentifier()
         )
         self.onboard         = OnboardState(importer, userDefaults, launchCounter)
         let routing = Routing()

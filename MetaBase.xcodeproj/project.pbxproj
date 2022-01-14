@@ -60,11 +60,14 @@
 		9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		94196C152770DF61000377A6 /* SensorPresetsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94196C142770DF61000377A6 /* SensorPresetsLoader.swift */; };
 		94196C162770DF61000377A6 /* SensorPresetsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94196C142770DF61000377A6 /* SensorPresetsLoader.swift */; };
-		9419AF482791616B00AAD6E0 /* MetaBase4Importer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9419AF472791616B00AAD6E0 /* MetaBase4Importer.swift */; };
+		9419AF482791616B00AAD6E0 /* MetaBase4ImporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9419AF472791616B00AAD6E0 /* MetaBase4ImporterTests.swift */; };
 		941A08F6276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */; };
 		941A08F7276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */; };
 		941A08FD276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */; };
 		941A08FE276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */; };
+		942C82DD279241CC008F146D /* SessionRepoSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942C82DC279241CC008F146D /* SessionRepoSpy.swift */; };
+		942C82DF27924228008F146D /* MockDefaultsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942C82DE27924228008F146D /* MockDefaultsContainer.swift */; };
+		942C82E227924395008F146D /* Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv in Resources */ = {isa = PBXBuildFile; fileRef = 942C82E127924395008F146D /* Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv */; };
 		942E39342784B89200629DFE /* MetaBase4SessionDataImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9477FACB2784A3AC0019F9A8 /* MetaBase4SessionDataImporter.swift */; };
 		942E39362784FCF900629DFE /* UserDefaultsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942E39352784FCF900629DFE /* UserDefaultsContainer.swift */; };
 		942E39372784FCF900629DFE /* UserDefaultsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942E39352784FCF900629DFE /* UserDefaultsContainer.swift */; };
@@ -234,6 +237,10 @@
 		94EBA3A1275A1298008C62E7 /* ActionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A0275A1298008C62E7 /* ActionScreen.swift */; };
 		94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A2275A14DE008C62E7 /* Dimensions.swift */; };
 		94EBA3A6275A160A008C62E7 /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EBA3A2275A14DE008C62E7 /* Dimensions.swift */; };
+		94FB7F13279234C700A4BC97 /* MetaBase4ImportState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FB7F12279234C700A4BC97 /* MetaBase4ImportState.swift */; };
+		94FB7F14279234C700A4BC97 /* MetaBase4ImportState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FB7F12279234C700A4BC97 /* MetaBase4ImportState.swift */; };
+		94FB7F162792359D00A4BC97 /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FB7F152792359D00A4BC97 /* ImportError.swift */; };
+		94FB7F172792359D00A4BC97 /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FB7F152792359D00A4BC97 /* ImportError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -287,9 +294,12 @@
 		940E01C127814BFD002AD641 /* CloudSaveStateIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSaveStateIndicator.swift; sourceTree = "<group>"; };
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
 		94196C142770DF61000377A6 /* SensorPresetsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorPresetsLoader.swift; sourceTree = "<group>"; };
-		9419AF472791616B00AAD6E0 /* MetaBase4Importer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaBase4Importer.swift; sourceTree = "<group>"; };
+		9419AF472791616B00AAD6E0 /* MetaBase4ImporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaBase4ImporterTests.swift; sourceTree = "<group>"; };
 		941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorParametersStore.swift; sourceTree = "<group>"; };
 		941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorConfiguration.swift; sourceTree = "<group>"; };
+		942C82DC279241CC008F146D /* SessionRepoSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRepoSpy.swift; sourceTree = "<group>"; };
+		942C82DE27924228008F146D /* MockDefaultsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDefaultsContainer.swift; sourceTree = "<group>"; };
+		942C82E127924395008F146D /* Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv"; sourceTree = "<group>"; };
 		942E39352784FCF900629DFE /* UserDefaultsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsContainer.swift; sourceTree = "<group>"; };
 		942E393827850F2300629DFE /* LegacyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyModels.swift; sourceTree = "<group>"; };
 		942E393D278511D400629DFE /* MigrateDataPanelVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrateDataPanelVM.swift; sourceTree = "<group>"; };
@@ -382,6 +392,8 @@
 		94EBA39E275A128A008C62E7 /* ConfigureScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureScreen.swift; sourceTree = "<group>"; };
 		94EBA3A0275A1298008C62E7 /* ActionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionScreen.swift; sourceTree = "<group>"; };
 		94EBA3A2275A14DE008C62E7 /* Dimensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
+		94FB7F12279234C700A4BC97 /* MetaBase4ImportState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaBase4ImportState.swift; sourceTree = "<group>"; };
+		94FB7F152792359D00A4BC97 /* ImportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -498,6 +510,23 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
+		942C82E027924386008F146D /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				942C82E127924395008F146D /* Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		942C82E327924DAD008F146D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				942C82DC279241CC008F146D /* SessionRepoSpy.swift */,
+				942C82DE27924228008F146D /* MockDefaultsContainer.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		942E393B278511C300629DFE /* 0_Onboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -557,8 +586,10 @@
 		9477FACA2784A39E0019F9A8 /* Import */ = {
 			isa = PBXGroup;
 			children = (
-				9477FACB2784A3AC0019F9A8 /* MetaBase4SessionDataImporter.swift */,
+				94FB7F152792359D00A4BC97 /* ImportError.swift */,
 				942E393827850F2300629DFE /* LegacyModels.swift */,
+				94FB7F12279234C700A4BC97 /* MetaBase4ImportState.swift */,
+				9477FACB2784A3AC0019F9A8 /* MetaBase4SessionDataImporter.swift */,
 				94AEA08127854E5F00C8BE23 /* UniqueDeviceIdentifier.swift */,
 			);
 			path = Import;
@@ -677,7 +708,9 @@
 			isa = PBXGroup;
 			children = (
 				9493AE7427718A860027E059 /* LifetimeCalculatorTests.swift */,
-				9419AF472791616B00AAD6E0 /* MetaBase4Importer.swift */,
+				9419AF472791616B00AAD6E0 /* MetaBase4ImporterTests.swift */,
+				942C82E027924386008F146D /* Assets */,
+				942C82E327924DAD008F146D /* Helpers */,
 			);
 			path = MetaBaseUnitTests;
 			sourceTree = "<group>";
@@ -992,6 +1025,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				942C82E227924395008F146D /* Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1032,8 +1066,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9419AF482791616B00AAD6E0 /* MetaBase4Importer.swift in Sources */,
+				9419AF482791616B00AAD6E0 /* MetaBase4ImporterTests.swift in Sources */,
 				9493AE7527718A860027E059 /* LifetimeCalculatorTests.swift in Sources */,
+				942C82DD279241CC008F146D /* SessionRepoSpy.swift in Sources */,
+				942C82DF27924228008F146D /* MockDefaultsContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1079,6 +1115,7 @@
 				94ACB3EB278FCEB40065302F /* MigrationSessionVM.swift in Sources */,
 				94935023275A11C600E388FF /* KnownItemVM.swift in Sources */,
 				94CF3EFA276427C300C2D8B0 /* Routing.swift in Sources */,
+				94FB7F162792359D00A4BC97 /* ImportError.swift in Sources */,
 				9409C5DC2762E17D001FE850 /* Action+Row.swift in Sources */,
 				9409C5CF2762969B001FE850 /* Configure+Grid.swift in Sources */,
 				94E3A7FA27603238007E2BAE /* IdentifyByLEDButton.swift in Sources */,
@@ -1120,6 +1157,7 @@
 				949E5A6E2773243800D45740 /* Sessions.xcdatamodeld in Sources */,
 				940E01AE2780DEB9002AD641 /* Configure+Estimates.swift in Sources */,
 				94E3A7F5275FF557007E2BAE /* HistoryScreen.swift in Sources */,
+				94FB7F13279234C700A4BC97 /* MetaBase4ImportState.swift in Sources */,
 				940E01B12780E487002AD641 /* HoverButtonStyle.swift in Sources */,
 				94AEA08227854E5F00C8BE23 /* UniqueDeviceIdentifier.swift in Sources */,
 				946F64D5277BCEB700AE293C /* FilesExporter.swift in Sources */,
@@ -1189,6 +1227,7 @@
 				94ACB3EC278FCEB40065302F /* MigrationSessionVM.swift in Sources */,
 				9452855C275BDEE2004D815B /* Choose+DeviceCell.swift in Sources */,
 				9409C5DD2762E17D001FE850 /* Action+Row.swift in Sources */,
+				94FB7F172792359D00A4BC97 /* ImportError.swift in Sources */,
 				94CF3EFB276427C300C2D8B0 /* Routing.swift in Sources */,
 				9409C5D02762969B001FE850 /* Configure+Grid.swift in Sources */,
 				94E3A7FB276032BD007E2BAE /* IdentifyByLEDButton.swift in Sources */,
@@ -1230,6 +1269,7 @@
 				949E5A6F2773243800D45740 /* Sessions.xcdatamodeld in Sources */,
 				940E01AF2780DEB9002AD641 /* Configure+Estimates.swift in Sources */,
 				9452855F275BDEED004D815B /* Choose+NoDevicesFound.swift in Sources */,
+				94FB7F14279234C700A4BC97 /* MetaBase4ImportState.swift in Sources */,
 				940E01B22780E487002AD641 /* HoverButtonStyle.swift in Sources */,
 				94AEA08327854E5F00C8BE23 /* UniqueDeviceIdentifier.swift in Sources */,
 				946F64D6277BCEB700AE293C /* FilesExporter.swift in Sources */,

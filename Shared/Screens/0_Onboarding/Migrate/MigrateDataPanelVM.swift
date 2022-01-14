@@ -6,7 +6,7 @@ import Combine
 
 public class MigrateDataPanelVM: ObservableObject {
 
-    @Published public private(set) var error: MetaBase4SessionDataImporter.ImportError? = nil
+    @Published public private(set) var error: ImportError? = nil
     @Published public private(set) var canImport = true
     @Published public private(set) var isImporting: State = .notStarted
     @Published public private(set) var sessionsImported = 0
@@ -27,7 +27,7 @@ public class MigrateDataPanelVM: ObservableObject {
 
     public init(importer: MetaBase4SessionDataImporter) {
         self.importer = importer
-        self.canImport = importer.couldImport
+        self.canImport = importer.couldImportState
     }
 
     public enum State {
