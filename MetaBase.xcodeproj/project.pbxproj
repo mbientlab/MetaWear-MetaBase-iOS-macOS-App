@@ -60,6 +60,7 @@
 		9413CEAF275B118600A36B5E /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9413CEAD275B10C100A36B5E /* UIFactory.swift */; };
 		94196C152770DF61000377A6 /* SensorPresetsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94196C142770DF61000377A6 /* SensorPresetsLoader.swift */; };
 		94196C162770DF61000377A6 /* SensorPresetsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94196C142770DF61000377A6 /* SensorPresetsLoader.swift */; };
+		9419AF482791616B00AAD6E0 /* MetaBase4Importer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9419AF472791616B00AAD6E0 /* MetaBase4Importer.swift */; };
 		941A08F6276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */; };
 		941A08F7276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */; };
 		941A08FD276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */; };
@@ -286,6 +287,7 @@
 		940E01C127814BFD002AD641 /* CloudSaveStateIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSaveStateIndicator.swift; sourceTree = "<group>"; };
 		9413CEAD275B10C100A36B5E /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
 		94196C142770DF61000377A6 /* SensorPresetsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorPresetsLoader.swift; sourceTree = "<group>"; };
+		9419AF472791616B00AAD6E0 /* MetaBase4Importer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaBase4Importer.swift; sourceTree = "<group>"; };
 		941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorParametersStore.swift; sourceTree = "<group>"; };
 		941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorConfiguration.swift; sourceTree = "<group>"; };
 		942E39352784FCF900629DFE /* UserDefaultsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsContainer.swift; sourceTree = "<group>"; };
@@ -675,6 +677,7 @@
 			isa = PBXGroup;
 			children = (
 				9493AE7427718A860027E059 /* LifetimeCalculatorTests.swift */,
+				9419AF472791616B00AAD6E0 /* MetaBase4Importer.swift */,
 			);
 			path = MetaBaseUnitTests;
 			sourceTree = "<group>";
@@ -1029,6 +1032,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9419AF482791616B00AAD6E0 /* MetaBase4Importer.swift in Sources */,
 				9493AE7527718A860027E059 /* LifetimeCalculatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

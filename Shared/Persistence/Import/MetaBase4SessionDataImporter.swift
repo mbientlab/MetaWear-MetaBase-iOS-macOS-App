@@ -5,51 +5,88 @@ import MetaWear
 import Combine
 import MetaWearSync
 
+extension UserDefaults.MetaWear.Keys {
+    static let legacyMetaDataPrefix = "MetaDataKey"
+}
+
+struct MetaBase4ImportState {
+
+    let dataExists: Bool
+    let couldImport: Bool
+
+    private static let key = UserDefaults.MetaWear.Keys.importedLegacySessions
+    private static let prefix = UserDefaults.MetaWear.Keys.legacyMetaDataPrefix
+
+    init(_ defaults: DefaultsContainer) {
+        self.dataExists = Self.legacyDataExists(in: defaults.local)
+        self.couldImport = dataExists ? !Self.didImportOnThisDevice(defaults) : false
+    }
+
+    static func legacyDataExists(in defaults: UserDefaults) -> Bool {
+        let decoder = JSONDecoder()
+        return defaults.dictionaryRepresentation()
+            .contains {
+                guard $0.key.hasPrefix(Self.prefix),
+                      let data = $0.value as? Data,
+                      let metadata = try? decoder.decode(LegacyMetadata.self, from: data),
+                      metadata.sessions.isEmpty == false
+                else { return false }
+                return true
+            }
+    }
+
+    static func didImportOnThisDevice(_ defaults: DefaultsContainer) -> Bool {
+        guard let pastImports = defaults.cloudFirstArray(of: String.self, for: Self.key)
+        else { return false }
+        let deviceID = getUniqueDeviceIdentifier()
+        return pastImports.contains(deviceID)
+    }
+}
+
+public enum ImportError: Error, LocalizedError, Equatable {
+    case noMetaBase4MetadataToImport
+    case alreadyImportedDataFromThisDevice
+    case unexpected(Error)
+
+
+    public var errorDescription: String? {
+        switch self {
+            case .noMetaBase4MetadataToImport: return "No MetaBase 4 session data found. Try importing from another iOS device."
+            case .alreadyImportedDataFromThisDevice: return "Already imported MetaBase 4 session data from this device."
+            case .unexpected(let error): return error.localizedDescription
+        }
+    }
+
+    public static func == (lhs: ImportError, rhs: ImportError) -> Bool {
+        switch (lhs, rhs) {
+            case (.noMetaBase4MetadataToImport, .noMetaBase4MetadataToImport), (.alreadyImportedDataFromThisDevice, .alreadyImportedDataFromThisDevice): return true
+            case (.unexpected(let left), .unexpected(let right)):
+                return left.localizedDescription == right.localizedDescription
+            default: return false
+        }
+    }
+}
+
 public class MetaBase4SessionDataImporter {
 
-    /// Whether an import completed during this or a prior app session. Updated on main queue.
-    public private(set) lazy var hideImportPrompts = hideImportPromptsSubject.eraseToAnyPublisher()
-    public var hideImportPromptsState: Bool { hideImportPromptsSubject.value }
-    public var legacyDataExistedAtLaunch = false
+    /// Whether an import completed during this or a prior app session and data exists. Updated on main queue.
+    public private(set) lazy var couldImport = couldImportSubject.eraseToAnyPublisher()
+    public var couldImportState: Bool { couldImportSubject.value }
+    public let legacyDataExistsOnDevice: Bool
 
     public init(
         sessions: SessionRepository,
         devices: MetaWearSyncStore,
-        defaults: UserDefaultsContainer,
-        workQueue: DispatchQueue = .global(qos: .userInitiated)
+        defaults: DefaultsContainer,
+        workQueue: DispatchQueue = ._makeQueue(named: "importer", qos: .userInitiated)
     ) {
         self.queue = workQueue
         self.sessions = sessions
         self.devices = devices
         self.defaults = defaults
-        let _dataExists = Self.legacyDataExists()
-        self.legacyDataExistedAtLaunch = _dataExists
-        self.hideImportPromptsSubject = .init(_dataExists == false ? true : Self.didImportOnThisDevice(defaults))
-        if hideImportPromptsSubject.value == false { loadGroups() }
-    }
-
-    public enum ImportError: Error, LocalizedError, Equatable {
-        case noMetaBase4MetadataToImport
-        case alreadyImportedDataFromThisDevice
-        case unexpected(Error)
-
-
-        public var errorDescription: String? {
-            switch self {
-                case .noMetaBase4MetadataToImport: return "No MetaBase 4 session data found. Try importing from another iOS device."
-                case .alreadyImportedDataFromThisDevice: return "Already imported MetaBase 4 session data from this device."
-                case .unexpected(let error): return error.localizedDescription
-            }
-        }
-
-        public static func == (lhs: MetaBase4SessionDataImporter.ImportError, rhs: MetaBase4SessionDataImporter.ImportError) -> Bool {
-            switch (lhs, rhs) {
-                case (.noMetaBase4MetadataToImport, .noMetaBase4MetadataToImport), (.alreadyImportedDataFromThisDevice, .alreadyImportedDataFromThisDevice): return true
-                case (.unexpected(let left), .unexpected(let right)):
-                    return left.localizedDescription == right.localizedDescription
-                default: return false
-            }
-        }
+        let state = MetaBase4ImportState(defaults)
+        self.legacyDataExistsOnDevice = state.dataExists
+        self.couldImportSubject = .init(state.couldImport)
     }
 
     // MARK: - Internal properties
@@ -60,7 +97,7 @@ public class MetaBase4SessionDataImporter {
     /// Outer: Session with unique start date.
     /// Inner: Device-centric session models for that date.
     private var importQueue: [[LegacySessionModel]] = []
-    private let hideImportPromptsSubject: CurrentValueSubject<Bool,Never>
+    private let couldImportSubject: CurrentValueSubject<Bool,Never>
     private var importKickoff: AnyCancellable? = nil
     private var importQueueSub: AnyCancellable? = nil
     private var groupsSub: AnyCancellable? = nil
@@ -73,9 +110,9 @@ public class MetaBase4SessionDataImporter {
     // - Dependencies
     private unowned let sessions: SessionRepository
     private unowned let devices: MetaWearSyncStore
-    private unowned let defaults: UserDefaultsContainer
+    private unowned let defaults: DefaultsContainer
     private static let key = UserDefaults.MetaWear.Keys.importedLegacySessions
-    private static let legacyPrefix = "MetaDataKey"
+    private static let legacyPrefix = UserDefaults.MetaWear.Keys.legacyMetaDataPrefix
 
 }
 
@@ -92,9 +129,11 @@ public extension MetaBase4SessionDataImporter {
     ///
     func importPriorSessions() -> AnyPublisher<Int,ImportError> {
         // If already imported, end early
-        guard hideImportPromptsSubject.value == false else {
-            return Fail(error: ImportError.alreadyImportedDataFromThisDevice)
-                .eraseToAnyPublisher()
+        guard couldImportSubject.value == true else {
+            let error = legacyDataExistsOnDevice
+            ? ImportError.alreadyImportedDataFromThisDevice
+            : .noMetaBase4MetadataToImport
+            return Fail(error: error).eraseToAnyPublisher()
         }
 
         defer { performImport() }
@@ -137,21 +176,6 @@ public extension MetaBase4SessionDataImporter {
             }
         }
     }
-
-    /// Whether this machine contains local MetaBase 4 data that can be imported. Expensive to calculate.
-    ///
-    static func legacyDataExists() -> Bool {
-        let decoder = JSONDecoder()
-        return UserDefaults.standard.dictionaryRepresentation()
-            .contains {
-                guard $0.key.hasPrefix(Self.legacyPrefix),
-                      let data = $0.value as? Data,
-                      let metadata = try? decoder.decode(LegacyMetadata.self, from: data),
-                      metadata.sessions.isEmpty == false
-                else { return false }
-                return true
-            }
-    }
 }
 
 // MARK: - Import
@@ -165,7 +189,7 @@ private extension MetaBase4SessionDataImporter {
                 guard importQueue.isEmpty == false else {
                     // End early
                     markThisDeviceAsImported()
-                    progress.send(completion: .failure(ImportError.noMetaBase4MetadataToImport))
+                    progress.send(completion: .failure(.noMetaBase4MetadataToImport))
                     return
                 }
                 importNextSession()
@@ -174,6 +198,7 @@ private extension MetaBase4SessionDataImporter {
             guard didLoadGroups else {
                 // Wait for groups to load, then kickoff import
                 importKickoff = groups.sink { _ in perform() }
+                loadGroups()
                 return
             }
             perform()
@@ -221,7 +246,7 @@ private extension MetaBase4SessionDataImporter {
 
     func markThisDeviceAsImported() {
         DispatchQueue.main.async { [self] in
-            hideImportPromptsSubject.send(true)
+            couldImportSubject.send(false)
             var imported = defaults.cloudFirstArray(of: String.self, for: Self.key) ?? []
             imported.append(getUniqueDeviceIdentifier())
             defaults.setArray(imported, forKey: Self.key)
@@ -233,13 +258,6 @@ private extension MetaBase4SessionDataImporter {
 // MARK: - Helper Methods
 
 private extension MetaBase4SessionDataImporter {
-
-    static func didImportOnThisDevice(_ defaults: UserDefaultsContainer) -> Bool {
-        guard let pastImports = defaults.cloudFirstArray(of: String.self, for: Self.key)
-        else { return false }
-        let deviceID = getUniqueDeviceIdentifier()
-        return pastImports.contains(deviceID)
-    }
 
     /// Obtain all CSVs files available for a legacy session
     ///

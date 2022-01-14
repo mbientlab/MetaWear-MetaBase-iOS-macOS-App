@@ -26,9 +26,8 @@ public class MigrateDataPanelVM: ObservableObject {
     private unowned let importer: MetaBase4SessionDataImporter
 
     public init(importer: MetaBase4SessionDataImporter) {
-        print("->", Self.self, "hideImportPromptsState", importer.hideImportPromptsState)
         self.importer = importer
-        self.canImport = importer.hideImportPromptsState == false
+        self.canImport = importer.couldImport
     }
 
     public enum State {

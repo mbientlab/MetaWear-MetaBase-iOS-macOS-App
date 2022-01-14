@@ -16,7 +16,8 @@ public class UIFactory: ObservableObject {
                 _ routing:  Routing,
                 _ defaults: UserDefaultsContainer,
                 _ launches: LocalLaunchCounter,
-                _ onboard:  OnboardState
+                _ onboard:  OnboardState,
+                _ workQueue: DispatchQueue
     ) {
         self.presets = presets
         self.devices = devices
@@ -28,6 +29,7 @@ public class UIFactory: ObservableObject {
         self.defaults = defaults
         self.launches = launches
         self.onboard = onboard
+        self.workQueue = workQueue
     }
 
     private unowned let defaults: UserDefaultsContainer
@@ -40,7 +42,7 @@ public class UIFactory: ObservableObject {
     private unowned let routing:  Routing
     private unowned let launches: LocalLaunchCounter
     private unowned let onboard:  OnboardState
-    private lazy var actionQueue  = _makeBackgroundQueue(named: "action")
+    private unowned let workQueue: DispatchQueue
 }
 
 public extension UIFactory {
@@ -78,12 +80,12 @@ public extension UIFactory {
             case .known(let mac):
                 guard let known = devices.getDeviceAndMetadata(mac)
                 else { fatalError() }
-                return .init(device: known, store: devices, logging: logging, routing: routing, queue: actionQueue)
+                return .init(device: known, store: devices, logging: logging, routing: routing, queue: workQueue)
 
             case .group(let id):
                 guard let group = devices.getGroup(id: id)
                 else { fatalError() }
-                return .init(group: group, store: devices, logging: logging, routing: routing, queue: actionQueue)
+                return .init(group: group, store: devices, logging: logging, routing: routing, queue: workQueue)
         }
     }
 
@@ -111,7 +113,7 @@ public extension UIFactory {
     }
 
     func makePastSessionsVM() -> HistoricalSessionsVM {
-        .init(sessionRepo: sessions, exportQueue: actionQueue, routing: routing)
+        .init(sessionRepo: sessions, exportQueue: workQueue, routing: routing)
     }
 
     // MARK: - Create Sensor Recording Options
@@ -139,7 +141,7 @@ public extension UIFactory {
                      sessions: sessions,
                      routing: routing,
                      logging: logging,
-                     backgroundQueue: actionQueue
+                     backgroundQueue: workQueue
         )
     }
 
@@ -166,10 +168,14 @@ private extension UIFactory {
         return (title: "Error", devices: [])
     }
 
-    private func _makeBackgroundQueue(named: String) -> DispatchQueue {
+
+}
+
+public extension DispatchQueue  {
+    static func _makeQueue(named: String, qos: DispatchQoS = .background) -> DispatchQueue {
         DispatchQueue(
             label: Bundle.main.bundleIdentifier! + ".\(named)",
-            qos: .userInitiated,
+            qos: qos,
             attributes: .concurrent
         )
     }

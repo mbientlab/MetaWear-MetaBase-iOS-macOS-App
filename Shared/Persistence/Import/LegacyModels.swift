@@ -30,6 +30,7 @@ struct LegacySessionModel: Codable {
 }
 
 class LegacyMetadata: Codable {
+    static let defaultsKeyPrefix = "MetaDataKey"
     private let key: String
     var name: String = ""
     var battery: UInt8 = 80

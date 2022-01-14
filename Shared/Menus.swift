@@ -16,7 +16,7 @@ struct Menus: Commands {
 #endif
 
         CommandGroup(replacing: .newItem) {
-            if root.importer.legacyDataExistedAtLaunch {
+            if root.importer.couldImportState {
                 Button("Import MetaBase 4 Data") { open(window: .migration) }
             }
         }
