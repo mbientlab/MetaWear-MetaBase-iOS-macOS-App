@@ -5,7 +5,6 @@ import SwiftUI
 
 struct OnboardingFooter_iOS: View {
 
-    @EnvironmentObject private var factory: UIFactory
     @State private var showButtons = false
 
     var body: some View {
@@ -33,50 +32,50 @@ struct OnboardingFooter_iOS: View {
 extension OnboardingFooter_iOS {
 
     struct OnboardingControl: View {
+
+        @EnvironmentObject private var state: OnboardState
         @EnvironmentObject private var factory: UIFactory
         @State private var showSheet = false
 
         var body: some View {
             button
-                .onAppear { if hasNotOnboarded { showSheet = true } }
-                .onChange(of: lastOnboardedVersion) { showSheet = $0 < CurrentMetaBaseVersion }
+                .onAppear {
+                    guard state.didOnboard == false else { return }
+                    DispatchQueue.main.after(0.5) {
+                        showSheet = true
+                    }
+                }
+                .onChange(of: state.didOnboard) { didOnboard in
+                    if !showSheet && didOnboard == false { showSheet = true }
+                }
         }
 
         @ViewBuilder private var button: some View {
-            if showButton {
+            if state.didOnboard == false || state.launches < 3 {
                 Button("What's New?") { showSheet = true }
                 .sheet(isPresented: $showSheet) {
-                    OnboardingPanel(importer: factory.makeImportVM(), vm: factory.makeOnboardingVM())
+                    OnboardingSession(importer: factory.makeImportVM(), vm: factory.makeOnboardingSessionVM())
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
         }
-
-        private var showButton:      Bool { hasNotOnboarded || launchCount < 3 }
-        private var hasNotOnboarded: Bool { lastOnboardedVersion < CurrentMetaBaseVersion }
-        @AppStorage(wrappedValue: 0.0, Self.keyOnboard)  private var lastOnboardedVersion
-        @AppStorage(wrappedValue: 0,   Self.keyLaunches) private var launchCount
-        private static let keyOnboard  = UserDefaults.MetaWear.Keys.didOnboardAppVersion
-        private static let keyLaunches = UserDefaults.MetaWear.Keys.launchCount
-
     }
 
     struct MigrationControl: View {
 
+        @EnvironmentObject private var state: OnboardState
         @EnvironmentObject private var factory: UIFactory
         @State private var showSheet = false
-        @State private var showButton = true
 
         var body: some View {
             button
-                .onReceive(factory.getDidImportState()) { showButton = $0 == false }
         }
 
         @ViewBuilder private var button: some View {
-            if showButton {
+            if state.canMigrate {
                 Button("Migrate Data") { showSheet = true }
                 .sheet(isPresented: $showSheet) {
-                    MigrateDataPanel(importer: factory.makeImportVM(), vm: factory.makeMigrationVM())
+                    MigrationSession(importer: factory.makeImportVM(), vm: factory.makeMigrationVM())
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
@@ -87,13 +86,13 @@ extension OnboardingFooter_iOS {
 #if os(macOS)
 struct OnboardingLauncher_macOS: View {
 
-    @AppStorage(wrappedValue: 0.0, UserDefaults.MetaWear.Keys.didOnboardAppVersion) private var lastOnboardVersion
+    @EnvironmentObject var state: OnboardState
     @Environment(\.openURL) private var open
 
     var body: some View {
         Color.clear.hidden()
             .onAppear {
-                guard lastOnboardVersion < CurrentMetaBaseVersion else { return }
+                guard state.didOnboard == false else { return }
 
                 for window in NSApp.windows {
                     guard let id = window.identifier?.rawValue else { continue }

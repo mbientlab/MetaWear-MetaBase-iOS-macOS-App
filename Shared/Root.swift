@@ -12,6 +12,7 @@ public class Root: ObservableObject {
     public let presets:  PresetSensorParametersStore
     public let logging:  ActiveLoggingSessionsStore
     public let routing:  Routing
+    public let onboard:  OnboardState
     public let importer: MetaBase4SessionDataImporter
 
     // Services
@@ -32,23 +33,24 @@ public class Root: ObservableObject {
         self.coreData = CloudKitCoreDataController(inMemory: false)
         self.sessions = CoreDataSessionRepository(coreData: coreData)
 
-        self.userDefaults = .init(cloud: .default, local: .standard)
+        self.userDefaults    = .init(cloud: .default, local: .standard)
         self.metawearLoader  = MetaWeariCloudSyncLoader(userDefaults.local, userDefaults.cloud)
         self.presetsLoader   = SensorPresetsCloudLoader(userDefaults)
         self.loggingLoader   = LoggingTokensCloudLoader(userDefaults)
 
         self.launchCounter   = LocalLaunchCounter(userDefaults)
-        let scanner = MetaWearScanner.sharedRestore
-        let devices = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
-        self.presets = PresetSensorParametersStore(loader: presetsLoader)
-        self.logging = ActiveLoggingSessionsStore(loader: loggingLoader)
-        let importer = MetaBase4SessionDataImporter(
+        let scanner          = MetaWearScanner.sharedRestore
+        let devices          = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
+        self.presets         = PresetSensorParametersStore(loader: presetsLoader)
+        self.logging         = ActiveLoggingSessionsStore(loader: loggingLoader)
+        let importer         = MetaBase4SessionDataImporter(
             sessions: sessions,
             devices: devices,
             defaults: userDefaults
         )
+        self.onboard         = OnboardState(importer, userDefaults, launchCounter)
         let routing = Routing()
-        let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing, userDefaults, launchCounter)
+        let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing, userDefaults, launchCounter, onboard)
 
         self.devices = devices
         self.routing = routing
@@ -63,6 +65,7 @@ public extension Root {
 
     func start() {
         do {
+            onboard.startMonitoring()
             if launchCounter.launches == 0 {
                 // Local SDK MAC recognition only, metadata imported by user command
                 UserDefaults.MetaWear.migrateFromBoltsSDK()
@@ -74,6 +77,8 @@ public extension Root {
             let _ = userDefaults.cloud.synchronize()
             launchCounter.markLaunched()
 #if DEBUG
+            root = self
+            defaults = self.userDefaults
             printUserDefaults()
 #endif
         } catch { NSLog("Load Failure: \(error.localizedDescription)") }

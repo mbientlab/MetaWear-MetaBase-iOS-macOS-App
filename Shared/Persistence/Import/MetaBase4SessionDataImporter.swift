@@ -323,20 +323,3 @@ fileprivate extension FileManager {
         return enumerator(at: documentsURL, includingPropertiesForKeys: [], options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])
     }
 }
-
-public struct MigrationState {
-
-    let canMigrate: Bool
-    let didOnboard: Bool
-
-    init(_ defaults: UserDefaultsContainer, importer: MetaBase4SessionDataImporter) {
-        let key = UserDefaults.MetaWear.Keys.didOnboardAppVersion
-        self.didOnboard = defaults.cloudFirstDouble(for: key) >= CurrentMetaBaseVersion
-        self.canMigrate = importer.hideImportPromptsState == false
-    }
-
-    init(canMigrate: Bool, didOnboard: Bool) {
-        self.canMigrate = canMigrate
-        self.didOnboard = didOnboard
-    }
-}

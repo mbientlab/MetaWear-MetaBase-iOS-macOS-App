@@ -3,13 +3,13 @@
 import mbientSwiftUI
 import SwiftUI
 
-struct MigrateDataPanel: View {
+struct MigrationSession: View {
 
-    init(importer: MigrateDataPanelVM, vm: MigrateDataPanelSoloVM)  {
+    init(importer: MigrateDataPanelVM, vm: MigrationSessionVM)  {
         _importer = .init(wrappedValue: importer)
         _vm =  .init(wrappedValue: vm)
     }
-    @StateObject var vm: MigrateDataPanelSoloVM
+    @StateObject var vm: MigrationSessionVM
     @StateObject var importer: MigrateDataPanelVM
 
 #if os(iOS)
@@ -27,7 +27,7 @@ struct MigrateDataPanel: View {
             ItemsPanel(items: vm.content.debrief, useSmallerSizes: true, maxWidth: maxWidth)
                 .frame(minHeight: minHeight)
         } down: { maxWidth in
-            MigrateDataPanel.ProgressReportPane(maxWidth: maxWidth)
+            MigrationSession.ProgressReportPane(maxWidth: maxWidth)
         } cta: { cta }
         .padding(.top, .init(macOS: 25, iOS: 35))
         .onAppear { if vm.triggerImporter { importer.start() }}
@@ -52,13 +52,13 @@ struct MigrateDataPanel: View {
 
 // MARK: - Components
 
-extension MigrateDataPanel {
+extension MigrationSession {
 
     struct ProgressReportPane: View {
         var maxWidth: CGFloat
         var body: some View {
             VStack(alignment: .center, spacing: 45) {
-                MigrateDataPanel.ProgressReport()
+                MigrationSession.ProgressReport()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .padding(40)

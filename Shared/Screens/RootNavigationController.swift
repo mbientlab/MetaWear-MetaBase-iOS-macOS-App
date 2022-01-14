@@ -3,7 +3,7 @@
 import mbientSwiftUI
 
 /// The app's single window. A manual navigation stack is used instead of NavigationView across both iOS and macOS.
-struct MainWindow: View {
+struct RootNavigationController: View {
 
     @EnvironmentObject private var routing: Routing
     @EnvironmentObject private var factory: UIFactory
@@ -22,13 +22,7 @@ struct MainWindow: View {
     private var stackNavigation: some View {
         ZStack {
             switch routing.destination {
-                case .choose:
-                    ChooseDevicesScreen(routing, factory).transition(.add)
-#if os(iOS)
-                        .overlay(OnboardingFooter_iOS(), alignment: .bottom)
-#elseif os(macOS)
-                        .background(OnboardingLauncher_macOS())
-#endif
+                case .choose:       ChooseDevicesScreen(routing, factory).transition(.add)
                 case .history:      HistoryScreen(factory).transition(.add)
                 case .configure:    ConfigureScreen(factory).transition(.add)
                 case .log:          ActionScreen(factory).transition(.add)

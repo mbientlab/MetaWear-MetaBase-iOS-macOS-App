@@ -10,13 +10,13 @@ extension Color {
 #endif
 }
 
-struct OnboardingPanel: View {
+struct OnboardingSession: View {
 
-    init(importer: MigrateDataPanelVM, vm: OnboardingVM)  {
+    init(importer: MigrateDataPanelVM, vm: OnboardingSessionVM)  {
         _importer = .init(wrappedValue: importer)
         _vm =  .init(wrappedValue: vm)
     }
-    @StateObject private var vm: OnboardingVM
+    @StateObject private var vm: OnboardingSessionVM
     @StateObject private var importer: MigrateDataPanelVM
     @Environment(\.colorScheme) private var colorScheme
 
@@ -37,13 +37,14 @@ struct OnboardingPanel: View {
         ) { maxWidth in
             makeItemsPanel(maxWidth)
         } down: { maxWidth in
-            MigrateDataPanel.ProgressReportPane(maxWidth: maxWidth)
+            MigrationSession.ProgressReportPane(maxWidth: maxWidth)
         } cta: { cta }
         .padding(.top, .init(macOS: 25, iOS: 50))
         .background(background.edgesIgnoringSafeArea(.all))
         .onAppear(perform: vm.onAppear)
         .environmentObject(vm)
         .environmentObject(importer)
+        .onDisappear(perform: vm.markDidOnboard)
     }
 
     @ViewBuilder private func makeItemsPanel(_ maxWidth: CGFloat) -> some View {
@@ -59,14 +60,14 @@ struct OnboardingPanel: View {
 
     @ViewBuilder private var cta: some View {
         if vm.showMigrationCTAs {
-            MigrateDataPanel.CTAs(
-                willStartImport: { vm.focus.setFocus(.importer) },
-                skipAction: { vm.focus.setFocus(.complete) },
-                successAction: { vm.focus.setFocus(.complete) },
+            MigrationSession.CTAs(
+                willStartImport: { [weak vm] in vm?.focus.setFocus(.importer) },
+                skipAction: { [weak vm] in vm?.focus.setFocus(.complete) },
+                successAction: { [weak vm] in vm?.focus.setFocus(.complete) },
                 successCTA: vm.completionCTA
             )
         } else {
-            CTAButton(vm.completionCTA, padding: 6, action: { vm.focus.setFocus(.complete) })
+            CTAButton(vm.completionCTA, padding: 6, action: { [weak vm] in vm?.focus.setFocus(.complete) })
         }
     }
 }

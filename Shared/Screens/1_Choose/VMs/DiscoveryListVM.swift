@@ -11,6 +11,7 @@ public class DiscoveryListVM: ObservableObject {
     @Published private(set) public var ungrouped = [MetaWear.Metadata]()
     @Published private(set) public var unknown = [UUID]()
     @Published private(set) public var isScanning = false
+    let didHaveDevicesAtLoad: Bool
 
     private unowned let scanner: MetaWearScanner
     private unowned let store: MetaWearSyncStore
@@ -21,6 +22,7 @@ public class DiscoveryListVM: ObservableObject {
                 store: MetaWearSyncStore) {
         self.scanner = scanner
         self.store = store
+        self.didHaveDevicesAtLoad = store.hasDevices()
     }
 
     deinit { scanner.stopScan() }

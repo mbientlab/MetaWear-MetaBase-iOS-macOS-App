@@ -4,7 +4,7 @@ import mbientSwiftUI
 import MetaWear
 import Combine
 
-public class MigrateDataPanelSoloVM: ObservableObject {
+public class MigrationSessionVM: ObservableObject {
 
     public let content: Content
 
@@ -16,12 +16,12 @@ public class MigrateDataPanelSoloVM: ObservableObject {
     /// Cause the view to trigger import immediately to show failure reason
     let triggerImporter: Bool
 
-    public init(state: MigrationState) {
+    public init(didOnboard: Bool, canMigrate: Bool) {
         self.content = .metaBase4
-        self.completionCTA = state.didOnboard ? "Ok" : "Start"
-        self.showMigrationCTAs = state.canMigrate
+        self.completionCTA = didOnboard ? "Ok" : "Start"
+        self.showMigrationCTAs = canMigrate
 
-        if state.canMigrate == false {
+        if canMigrate == false {
             self.triggerImporter = true
             self.focus.setShowPrimaryPane(false)
             self.focus.setFocus(.importer)
@@ -31,7 +31,7 @@ public class MigrateDataPanelSoloVM: ObservableObject {
     }
 }
 
-public extension MigrateDataPanelSoloVM {
+public extension MigrationSessionVM {
 
     func onAppear() {
         focusUpdate = focus.$focus
@@ -105,7 +105,7 @@ public extension MigrateDataPanelSoloVM {
     }
 }
 
-private extension MigrateDataPanelSoloVM {
+private extension MigrationSessionVM {
 
     func title(for focus: Focus) -> String {
         switch focus {
