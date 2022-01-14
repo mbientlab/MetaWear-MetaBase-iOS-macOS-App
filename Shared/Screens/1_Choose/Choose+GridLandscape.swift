@@ -2,8 +2,6 @@
 
 import mbientSwiftUI
 
-// MARK: - MacOS / iPad Wide Grid
-
 extension ChooseDevicesScreen {
 
     /// Layout and style the screen
@@ -11,104 +9,92 @@ extension ChooseDevicesScreen {
     struct WideOneRowGrid: View {
 
         @EnvironmentObject private var vm: DiscoveryListVM
+        @Environment(\.colorScheme) private var colorScheme
+        @Environment(\.namespace) private var namespace
+
+        // Layout state
+        @State private var windowWidth  = CGFloat.mainWindowMinWidth
+        @State private var contentWidth = CGFloat.deviceCellWidth
+        private var isStaticContentWidth: Bool {
+            (contentWidth + .screenInset) < windowWidth
+        }
 
         var body: some View {
-            ScrollViewReader { scroller in
-                ScrollView(.horizontal, showsIndicators: true) {
-                    grid
-                        .padding(.leading, centeringPadding)
-                        .offset(y: -.verticalHoverDelta)
-                        .animation(.easeOut, value: centeringPadding)
-                        .animation(.easeOut, value: vm.groups)
-                        .animation(.easeOut, value: vm.ungrouped)
-                        .animation(.easeOut, value: vm.unknown)
+            toggleScrollLayout
+                .compositingGroup()
+                .animation(.linear(duration: 0.15), value: isStaticContentWidth)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                .background(MeasureWidth($windowWidth))
+        }
+
+        @ViewBuilder private var toggleScrollLayout: some View {
+            if isStaticContentWidth {
+                grid
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    grid.padding(.horizontal, .screenInset)
                 }
             }
-            .frame(maxHeight: .infinity, alignment: .bottom)
-            .background(measureWidth)
-
         }
 
         private var grid: some View {
-            HStack(alignment: .center, spacing: cellSpacing) {
+            HStack(alignment: .center, spacing: .screenInset * 2) {
                 sections
-                    .frame(height: Self.macItemHeight, alignment: .bottom)
+                    .frame(height: .deviceCellHeight, alignment: .bottom)
             }
             .frame(maxHeight: .infinity, alignment: .center)
+            .background(MeasureWidth($contentWidth))
+            .offset(y: -.verticalHoverDelta)
+
+            .animation(.easeOut, value: vm.groups)
+            .animation(.easeOut, value: vm.ungrouped)
+            .animation(.easeOut, value: vm.unknown)
+            .matchedGeometryEffect(id: "\(Self.self)", in: namespace!)
         }
 
+#if os(iOS)
         @ViewBuilder private var sections: some View {
             DeviceIterator.KnownGroups()
-#if os(iOS)
+                .padding(.horizontal, CGFloat(iPhone: -.screenInset, 0))
+
             if showDividerA { divider }
-#endif
+
+            DeviceIterator.KnownUngrouped()
+                .padding(.horizontal, CGFloat(iPhone: -.screenInset, 0))
+
+            if showDividerB { divider }
+            DeviceIterator.UnknownNearby()
+        }
+#else
+        @ViewBuilder private var sections: some View {
+            DeviceIterator.KnownGroups()
             DeviceIterator.KnownUngrouped()
             if showDividerB { divider }
             DeviceIterator.UnknownNearby()
         }
-
-        // MARK: - Dividers
-        @Environment(\.colorScheme) private var colorScheme
-        private var divider: some View {
-            Rectangle()
-                .frame(width: 1)
-                .foregroundColor(colorScheme == .light ? .myPrimaryTinted.opacity(0.16) : .myGroupBackground)
-                .offset(y: .init(macOS: -.verticalHoverDelta - .screenInset / 2, iOS: .verticalHoverDelta))
-        }
-
-        private var showDividerA: Bool {
-            vm.groups.isEmpty == false
-            && (vm.ungrouped.isEmpty == false || vm.unknown.isEmpty == false)
-        }
-
-        private var showDividerB: Bool {
-            vm.ungrouped.isEmpty == false
-            && vm.unknown.isEmpty == false
-        }
-
-        // MARK: - Layout Dimensions
-#if os(macOS)
-        @State private var windowWidth = MainScene.minWidth
-#else
-        @State private var windowWidth = UIScreen.main.bounds.width
 #endif
-        private var cellSpacing: CGFloat = .screenInset * 2
-        private static let macItemHeight: CGFloat = 320
-        private let rows = [GridItem(.fixed(Self.macItemHeight), spacing: 0, alignment: .bottom)]
-
-        private var measureWidth: some View {
-            GeometryReader { geo  in
-                Color.clear
-                    .onAppear { windowWidth = geo.size.width }
-                    .onChange(of: geo.size.width) { windowWidth = $0 }
-            }
-        }
     }
 }
+
+// MARK: - Dividers
 
 extension ChooseDevicesScreen.WideOneRowGrid {
 
-    private var centeringPadding: CGFloat {
-        let usedSpace = contentWidth + .screenInset
-        let emptySpace = windowWidth - usedSpace
-        return emptySpace <= 0
-        ? .screenInset
-        : (emptySpace / 2)
+    private var divider: some View {
+        Rectangle()
+            .frame(width: 1)
+            .foregroundColor(colorScheme == .light ? .myPrimaryTinted.opacity(0.16) : .myGroupBackground)
+            .offset(y: .init(macOS: -.verticalHoverDelta - .screenInset / 2, iOS: .verticalHoverDelta))
+            .padding(.trailing, .init(iPhone: 20, 0))
     }
 
-    private var contentWidth: CGFloat  {
-        let cells = CGFloat(vm.deviceCount)
-        let sections = CGFloat(countSections())
-        let interItemSpacing = cellSpacing * (cells - 1)
-        let interSectionSpacing = (cellSpacing + 1) * (max(0, sections - 1))
-        let cellsContentWidth = .deviceCellWidth * cells
-        return interItemSpacing + interSectionSpacing + cellsContentWidth
+    private var showDividerA: Bool {
+        vm.groups.isEmpty == false
+        && (vm.ungrouped.isEmpty == false || vm.unknown.isEmpty == false)
     }
 
-    private func countSections() -> Int {
-        (vm.groups.isEmpty ? 0 : 1)
-        + (vm.ungrouped.isEmpty ? 0 : 1)
-        + (vm.unknown.isEmpty ? 0 : 1)
+    private var showDividerB: Bool {
+        vm.ungrouped.isEmpty == false
+        && vm.unknown.isEmpty == false
     }
 }
-
