@@ -61,6 +61,7 @@ struct HistoryScreen: View {
 
 #if os(iOS)
     @State private var showiOSAboutSheet = false
+
     private var narrowLayout: some View {
         VStack(alignment: .leading, spacing: 0) {
 
@@ -86,6 +87,9 @@ struct HistoryScreen: View {
         .onAppear { vm.items.forEach { $0.onAppear() } }
     }
 
+    @Environment(\.colorScheme) private var colorScheme
+    private var sheetBG: Color { colorScheme == .light ? .lightModeFaintBG : .defaultSystemBackground }
+
     private var iOSAboutDevicesButton: some View {
         Button { showiOSAboutSheet.toggle() } label: {
             ScreenSubsection(label: vm.items.endIndex > 1 ? "Devices" : "Device", trailing: {
@@ -97,6 +101,7 @@ struct HistoryScreen: View {
         .sheet(isPresented: $showiOSAboutSheet) {
             DevicesList(initiallyShowDetails: true)
                 .modifier(CloseSheet())
+                .background(sheetBG.edgesIgnoringSafeArea(.all))
                 .edgesIgnoringSafeArea(.bottom)
         }
     }
