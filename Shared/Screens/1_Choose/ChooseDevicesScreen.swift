@@ -38,8 +38,6 @@ struct ChooseDevicesScreen: View {
 #endif
         .background(screenShine.edgesIgnoringSafeArea(.all))
         .backgroundToEdges(.myBackground)
-        .onAppear(perform: vm.didAppear)
-        .environmentObject(vm)
 #if os(iOS)
         .trackOrientation()
         .overlay(OnboardingFooter_iOS().opacity(shouldShowList ? 1 : 0), alignment: .bottom)
@@ -48,6 +46,8 @@ struct ChooseDevicesScreen: View {
 #endif
         .animation(.easeOut, value: vm.listIsEmpty)
         .animation(.easeOut, value: shouldShowList)
+        .onAppear(perform: vm.didAppear)
+        .environmentObject(vm)
     }
 
     private var vignette: some View {
