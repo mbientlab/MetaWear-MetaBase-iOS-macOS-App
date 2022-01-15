@@ -2,7 +2,7 @@
 
 import Foundation
 
-public class UserDefaultsContainer {
+public class UserDefaultsContainer: DefaultsContainer {
     public init(cloud: NSUbiquitousKeyValueStore, local: UserDefaults) {
         self.cloud = cloud
         self.local = local
@@ -24,4 +24,11 @@ public extension UserDefaultsContainer {
         cloud.set(array, forKey: key)
         local.set(array, forKey: key)
     }
+}
+
+public protocol DefaultsContainer: AnyObject {
+    var cloud: NSUbiquitousKeyValueStore { get }
+    var local: UserDefaults { get }
+    func cloudFirstArray<T>(of type: T.Type, for key: String) -> [T]?
+    func setArray(_ array: [Any]?, forKey key: String)
 }

@@ -16,7 +16,7 @@ public class OnboardState: ObservableObject {
 
     public init(_ importer: MetaBase4SessionDataImporter, _ defaults: UserDefaultsContainer, _ launches: LocalLaunchCounter) {
         self.didOnboard = defaults.local.didOnboardAppVersion >= CurrentMetaBaseVersion
-        self.canMigrate = importer.hideImportPromptsState.opposite
+        self.canMigrate = importer.couldImportState
         self.importer = importer
         self.defaults = defaults
         self.launches = launches.launches
@@ -24,13 +24,11 @@ public class OnboardState: ObservableObject {
 
     public func startMonitoring() {
         onboard = defaults.local.publisher(for: \.didOnboardAppVersion)
-            .print()
             .map { $0 >= CurrentMetaBaseVersion }
             .sink { [weak self]  in self?.didOnboard = $0 }
 
-        migrate = importer.hideImportPrompts
-            .print()
-            .sink { [weak self] in self?.canMigrate = $0.opposite }
+        migrate = importer.couldImport
+            .sink { [weak self] in self?.canMigrate = $0 }
     }
 }
 

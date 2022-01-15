@@ -28,6 +28,7 @@ public class Root: ObservableObject {
     // UI
     public let factory:     UIFactory
     public let bluetoothVM: BluetoothStateVM
+    public let priorityQueue: DispatchQueue
 
     public init() {
         self.coreData = CloudKitCoreDataController(inMemory: false)
@@ -38,6 +39,7 @@ public class Root: ObservableObject {
         self.presetsLoader   = SensorPresetsCloudLoader(userDefaults)
         self.loggingLoader   = LoggingTokensCloudLoader(userDefaults)
 
+        self.priorityQueue = ._makeQueue(named: "actions", qos: .userInitiated)
         self.launchCounter   = LocalLaunchCounter(userDefaults)
         let scanner          = MetaWearScanner.sharedRestore
         let devices          = MetaWearSyncStore(scanner: scanner, loader: metawearLoader)
@@ -46,11 +48,13 @@ public class Root: ObservableObject {
         let importer         = MetaBase4SessionDataImporter(
             sessions: sessions,
             devices: devices,
-            defaults: userDefaults
+            defaults: userDefaults,
+            workQueue: priorityQueue,
+            localDeviceID: getUniqueDeviceIdentifier()
         )
         self.onboard         = OnboardState(importer, userDefaults, launchCounter)
         let routing = Routing()
-        let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing, userDefaults, launchCounter, onboard)
+        let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing, userDefaults, launchCounter, onboard, priorityQueue)
 
         self.devices = devices
         self.routing = routing
