@@ -44,7 +44,7 @@ struct Menus: Commands {
 }
 
 #endif
-
+#if DEBUG
 struct DebugMenu: View {
 
     var body: some View {
@@ -56,3 +56,4 @@ struct DebugMenu: View {
         Button("Reset Onboarding State") { wipeOnboarding() }
     }
 }
+#endif

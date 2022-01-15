@@ -29,7 +29,14 @@ extension HistoryScreen {
                         .listRowInsets(HistoryScreen.listEdgeInsets)
                 }
 
-                if vm.sessions.isEmpty { empty }
+                if vm.sessions.isEmpty {
+                    if #available(iOS 15.0, *) {
+                        empty
+#if os(iOS)
+                            .listRowSeparator(.hidden)
+#endif
+                    } else { empty }
+                }
 
                 Color.clear.frame(height: ScrollFadeMask.defaultSize / 2)
             }
@@ -57,9 +64,6 @@ extension HistoryScreen {
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .center)
-            #if os(iOS)
-                .listRowSeparator(.hidden)
-            #endif
         }
     }
 
@@ -93,7 +97,7 @@ extension HistoryScreen.SessionsList {
         @State private var timeString = ""
 
         var body: some View {
-            if #available(macOS 12.0, iOS 14.0, *) {
+            if #available(macOS 12.0, iOS 15.0, *) {
                 content
                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
                         Button("Rename") { vm.rename(session: session) }

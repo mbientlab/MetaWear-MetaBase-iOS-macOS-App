@@ -65,16 +65,27 @@ struct HistoryScreen: View {
     private var narrowLayout: some View {
         VStack(alignment: .leading, spacing: 0) {
 
-            SessionsList(factory, scrollingTopContent: {
-                iOSAboutDevicesButton
-                    .padding(.top, .screenInset * 1.5)
-                    .padding(HistoryScreen.listEdgeInsets.inverted())
-                    .listRowSeparator(.hidden)
+            if #available(iOS 15, *) {
+                SessionsList(factory, scrollingTopContent: {
+                    iOSAboutDevicesButton
+                        .padding(.top, .screenInset * 1.5)
+                        .padding(HistoryScreen.listEdgeInsets.inverted())
+                        .listRowSeparator(.hidden)
 
-                SessionListStaticSubhead()
-                    .padding(HistoryScreen.listEdgeInsets.horizontalInverted())
-                    .listRowSeparator(.hidden)
-            })
+                    SessionListStaticSubhead()
+                        .padding(HistoryScreen.listEdgeInsets.horizontalInverted())
+                        .listRowSeparator(.hidden)
+                })
+            } else {
+                SessionsList(factory, scrollingTopContent: {
+                    iOSAboutDevicesButton
+                        .padding(.top, .screenInset * 1.5)
+                        .padding(HistoryScreen.listEdgeInsets.inverted())
+
+                    SessionListStaticSubhead()
+                        .padding(HistoryScreen.listEdgeInsets.horizontalInverted())
+                })
+            }
 
             CTAs(layoutVertically: idiom == .iPhone)
                 .padding(.top, .screenInset / 2)
