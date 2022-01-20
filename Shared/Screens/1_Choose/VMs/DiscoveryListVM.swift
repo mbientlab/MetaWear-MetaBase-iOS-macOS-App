@@ -7,8 +7,8 @@ import MetaWearSync
 
 public class DiscoveryListVM: ObservableObject {
 
-    @Published private(set) public var groups = [MetaWear.Group]()
-    @Published private(set) public var ungrouped = [MetaWear.Metadata]()
+    @Published private(set) public var groups = [MetaWearGroup]()
+    @Published private(set) public var ungrouped = [MetaWearMetadata]()
     @Published private(set) public var unknown = [UUID]()
     @Published private(set) public var isScanning = false
     let didHaveDevicesAtLoad: Bool

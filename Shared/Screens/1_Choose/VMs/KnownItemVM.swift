@@ -14,13 +14,13 @@ import CoreBluetooth
 public class KnownItemVM: ObservableObject, ItemVM {
 
     // Identity
-    @Published private var group: MetaWear.Group?
-    @Published private var devices: [MWKnownDevice]
+    @Published private var group:                  MetaWearGroup?
+    @Published private var devices:                [MWKnownDevice]
 
     // Connection state
-    @Published public private(set) var rssiInt: Int
+    @Published public private(set) var rssiInt:    Int
     @Published public private(set) var connection: CBPeripheralState
-    public private(set) var rssi: SignalLevel
+    public private(set) var rssi:                  SignalLevel
 
     // Logging state
     @Published public private(set) var isLogging = false
@@ -71,7 +71,7 @@ public class KnownItemVM: ObservableObject, ItemVM {
     }
 
     /// Represent a group as a single item
-    public init(group: MetaWear.Group, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing, queue: DispatchQueue) {
+    public init(group: MetaWearGroup, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing, queue: DispatchQueue) {
         self.dropQueue = queue
         self.store = store
         self.routing = routing
@@ -114,7 +114,7 @@ public extension KnownItemVM {
     var name:        String    { group?.name ?? devices.first?.meta.name ?? "Error" }
     var macs:        [String]  { devices.map(\.meta.mac) }
     var localIDs:    [String?] { devices.map(\.mw?.peripheral.identifier.uuidString) }
-    var metadata:    [MetaWear.Metadata] { devices.map(\.meta) }
+    var metadata:    [MetaWearMetadata] { devices.map(\.meta) }
     var identifyTip: String {
         "Flash LED\(macs.endIndex > 1 ? "s" : "") for \(macs.joined(separator: ", "))"
     }
@@ -220,7 +220,7 @@ public extension KnownItemVM {
     /// If reforming a previous grouping of devices, MetaWearSyncStore
     /// will recover the UUID and name of that old group.
     ///
-    func group(withItems: [MetaWear.Metadata]) {
+    func group(withItems: [MetaWearMetadata]) {
         guard withItems.isEmpty == false else { return }
         if var group = group {
             group.deviceMACs.formUnion(withItems.map(\.mac))
@@ -229,13 +229,13 @@ public extension KnownItemVM {
         } else {
             var itemMacs = macs + withItems.map(\.mac)
             itemMacs.removeAll { $0.contains("Unknown") }
-            let newGroup = MetaWear.Group(id: .init(), deviceMACs: Set(itemMacs), name: "Group")
+            let newGroup = MetaWearGroup(id: .init(), deviceMACs: Set(itemMacs), name: "Group")
             store.add(group: newGroup)
         }
     }
 
     /// Merges the group into self (whether self is a group or solo device)
-    func group(withGroup: MetaWear.Group) {
+    func group(withGroup: MetaWearGroup) {
         if var group = group {
             group.deviceMACs.formUnion(withGroup.deviceMACs)
             store.update(group: group)

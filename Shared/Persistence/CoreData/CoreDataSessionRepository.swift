@@ -25,7 +25,7 @@ extension CoreDataSessionRepository: SessionRepository {
         fetchSessions(withPredicate: { nil })
     }
 
-    public func fetchSessions(matchingGroupID: MetaWear.Group.ID) -> AnyPublisher<[Session],Error> {
+    public func fetchSessions(matchingGroupID: MetaWearGroup.ID) -> AnyPublisher<[Session],Error> {
         fetchSessions {
             NSPredicate(format: "%K == %@", #keyPath(SessionMO.group), matchingGroupID as CVarArg)
         }

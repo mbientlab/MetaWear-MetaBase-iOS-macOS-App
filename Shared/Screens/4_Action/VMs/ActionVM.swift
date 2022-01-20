@@ -11,7 +11,7 @@ import MetaWearSync
 ///
 public class ActionVM: ObservableObject, ActionHeaderVM {
     public typealias QueueItem = (device: MetaWear?,
-                                  meta: MetaWear.Metadata,
+                                  meta: MetaWearMetadata,
                                   config: ModulesConfiguration)
 
     // Overview of action
@@ -29,16 +29,16 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
 
     // Data export state
     @Published private(set) var export: Any? = nil
-    @Published var showExportFilesCTA  = false
-    @Published var isExporting = false
-    @Published var cloudSaveState: CloudSaveState = .notStarted
-    private let sessionID = UUID()
-    public let title: String
-    internal let startDate: Date
-    private var files: [File] = []
+    @Published var showExportFilesCTA = false
+    @Published var isExporting        = false
+    @Published var cloudSaveState:      CloudSaveState = .notStarted
+    private let sessionID             = UUID()
+    public let title:                   String
+    internal let startDate:             Date
+    private var files:                  [File] = []
     private var devicesExportReady:     Int = 0
-    private var exporter: FilesExporter? = nil
-    private var saveSession: AnyCancellable? = nil
+    private var exporter:               FilesExporter? = nil
+    private var saveSession:            AnyCancellable? = nil
 
     // Queue for performing action device-by-device (on private DispatchQueue)
     private var nextQueueItem:          QueueItem? = nil
@@ -48,7 +48,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     private let configs:                [ModulesConfiguration]
     internal let streamCancel            = PassthroughSubject<Void,Never>()
     private var bleQueue:               DispatchQueue { store.bleQueue }
-    internal unowned let workQueue:      DispatchQueue
+    internal unowned let workQueue:     DispatchQueue
     internal let timeoutDuration = DispatchQueue.SchedulerTimeType.Stride(30)
 
     // References
@@ -99,7 +99,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
 public extension ActionVM {
 
     /// User intent to enqueue a recovery for a device whose connection or operation failed/timed out
-    func retry(_ meta: MetaWear.Metadata) {
+    func retry(_ meta: MetaWearMetadata) {
         workQueue.sync {
             guard nextQueueItem?.meta != meta else { return }
         }
@@ -284,7 +284,7 @@ private extension ActionVM {
     }
 
     /// Success cases: Advance to the next item, no need to update UI state
-    func succeed(fromCurrent: MetaWear.Metadata) {
+    func succeed(fromCurrent: MetaWearMetadata) {
         if Thread.isMainThread {
             actionState[fromCurrent.mac] = .completed
         } else {

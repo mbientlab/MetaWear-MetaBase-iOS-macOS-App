@@ -41,8 +41,8 @@ public struct ModulesConfiguration: Equatable, Hashable {
         }
 
         if config.gyroscope {
-            self.gyroscope = .init(range: config.gyroscopeScale,
-                                   frequency: config.gyroscopeRate)
+            self.gyroscope = .init(rate: config.gyroscopeRate,
+                                   range: config.gyroscopeScale)
         }
 
         if config.humidity {
@@ -63,7 +63,7 @@ public struct ModulesConfiguration: Equatable, Hashable {
            let sensors = modules[.thermometer],
            case let MWModules.thermometer(sources) = sensors,
            let onboardChannel = sources.firstIndex(of: MWThermometer.Source.onboard) {
-            self.thermometer = .init(type: .onboard, channel: onboardChannel, rate: config.temperatureRate.freq)
+            self.thermometer = .init(rate: config.temperatureRate.freq, type: .onboard, channel: onboardChannel)
         }
 
         if config.sensorFusion {

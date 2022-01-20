@@ -18,7 +18,7 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     public var id: String { matchedGeometryID }
 
     @Published public private(set) var info:    MetaWear.DeviceInformation
-    @Published public private(set) var meta:    MetaWear.Metadata
+    @Published public private(set) var meta:    MetaWearMetadata
     @Published public private(set) var battery: String = "–"
 
     public var rssiRepresentable: String {

@@ -19,7 +19,7 @@ class SessionsRepoSpy: SessionRepository {
         Just(mockSessions.value).erase()
     }
 
-    func fetchSessions(matchingGroupID: MetaWear.Group.ID) -> AnyPublisher<[Session], Error> {
+    func fetchSessions(matchingGroupID: MetaWearGroup.ID) -> AnyPublisher<[Session], Error> {
         Just(mockSessions.value.filter { $0.group == matchingGroupID }).erase()
     }
 

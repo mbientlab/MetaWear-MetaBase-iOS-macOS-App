@@ -121,10 +121,6 @@
 		945494F927656A840021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F827656A840021E3D6 /* MetaWear */; };
 		9464CA81278B61F500BE70C6 /* HistoryScreen+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9464CA80278B61F500BE70C6 /* HistoryScreen+CTAs.swift */; };
 		9464CA82278B61F500BE70C6 /* HistoryScreen+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9464CA80278B61F500BE70C6 /* HistoryScreen+CTAs.swift */; };
-		9464CA88278D029E00BE70C6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 9464CA87278D029E00BE70C6 /* MetaWear */; };
-		9464CA8A278D029E00BE70C6 /* MetaWearCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9464CA89278D029E00BE70C6 /* MetaWearCpp */; };
-		9464CA8C278D029E00BE70C6 /* MetaWearFirmware in Frameworks */ = {isa = PBXBuildFile; productRef = 9464CA8B278D029E00BE70C6 /* MetaWearFirmware */; };
-		9464CA8E278D029E00BE70C6 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 9464CA8D278D029E00BE70C6 /* MetaWearSync */; };
 		946F64D5277BCEB700AE293C /* FilesExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946F64D4277BCEB700AE293C /* FilesExporter.swift */; };
 		946F64D6277BCEB700AE293C /* FilesExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946F64D4277BCEB700AE293C /* FilesExporter.swift */; };
 		9473B7B52770FAC4006F4994 /* KnownDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473B7B42770FAC4006F4994 /* KnownDevice+.swift */; };
@@ -154,8 +150,6 @@
 		949E5AB42773BD7800D45740 /* ModelConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AB32773BD7800D45740 /* ModelConvertible.swift */; };
 		949E5AB52773BD7800D45740 /* ModelConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E5AB32773BD7800D45740 /* ModelConvertible.swift */; };
 		949E992F278ECC9B00D594C2 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 949E992E278ECC9B00D594C2 /* mbientSwiftUI */; };
-		949E9931278ECCBC00D594C2 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 949E9930278ECCBC00D594C2 /* MetaWear */; };
-		949E9933278ECCBC00D594C2 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 949E9932278ECCBC00D594C2 /* MetaWearSync */; };
 		949E9935278ECCBC00D594C2 /* mbientSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 949E9934278ECCBC00D594C2 /* mbientSwiftUI */; };
 		949E9937278F51DB00D594C2 /* Windows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9936278F51DB00D594C2 /* Windows.swift */; };
 		949E9938278F51DB00D594C2 /* Windows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949E9936278F51DB00D594C2 /* Windows.swift */; };
@@ -207,6 +201,12 @@
 		94CF3F132764286B00C2D8B0 /* LabeledItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F092764286B00C2D8B0 /* LabeledItem.swift */; };
 		94CF3F1C276428CA00C2D8B0 /* Transitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F1A276428CA00C2D8B0 /* Transitions.swift */; };
 		94CF3F1D276428CA00C2D8B0 /* Transitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF3F1A276428CA00C2D8B0 /* Transitions.swift */; };
+		94DE33E32799299F0093E8F1 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94DE33E22799299F0093E8F1 /* MetaWear */; };
+		94DE33E52799299F0093E8F1 /* MetaWearFirmware in Frameworks */ = {isa = PBXBuildFile; productRef = 94DE33E42799299F0093E8F1 /* MetaWearFirmware */; };
+		94DE33E72799299F0093E8F1 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 94DE33E62799299F0093E8F1 /* MetaWearSync */; };
+		94DE33E9279929B70093E8F1 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 94DE33E8279929B70093E8F1 /* MetaWear */; };
+		94DE33EB279929B70093E8F1 /* MetaWearFirmware in Frameworks */ = {isa = PBXBuildFile; productRef = 94DE33EA279929B70093E8F1 /* MetaWearFirmware */; };
+		94DE33ED279929B70093E8F1 /* MetaWearSync in Frameworks */ = {isa = PBXBuildFile; productRef = 94DE33EC279929B70093E8F1 /* MetaWearSync */; };
 		94DFEC5E275D389700BB80DB /* Choose+KnownUnknownCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC5D275D389700BB80DB /* Choose+KnownUnknownCells.swift */; };
 		94DFEC5F275D389700BB80DB /* Choose+KnownUnknownCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC5D275D389700BB80DB /* Choose+KnownUnknownCells.swift */; };
 		94DFEC62275D459B00BB80DB /* ItemVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DFEC61275D459B00BB80DB /* ItemVM.swift */; };
@@ -408,12 +408,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9464CA8A278D029E00BE70C6 /* MetaWearCpp in Frameworks */,
 				94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */,
-				9464CA8C278D029E00BE70C6 /* MetaWearFirmware in Frameworks */,
-				9464CA8E278D029E00BE70C6 /* MetaWearSync in Frameworks */,
 				949E992F278ECC9B00D594C2 /* mbientSwiftUI in Frameworks */,
-				9464CA88278D029E00BE70C6 /* MetaWear in Frameworks */,
+				94DE33EB279929B70093E8F1 /* MetaWearFirmware in Frameworks */,
+				94DE33ED279929B70093E8F1 /* MetaWearSync in Frameworks */,
+				94DE33E9279929B70093E8F1 /* MetaWear in Frameworks */,
 				940E01BE278148EE002AD641 /* mbientSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -422,10 +421,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				949E9933278ECCBC00D594C2 /* MetaWearSync in Frameworks */,
-				949E9931278ECCBC00D594C2 /* MetaWear in Frameworks */,
 				94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */,
+				94DE33E32799299F0093E8F1 /* MetaWear in Frameworks */,
 				949E9935278ECCBC00D594C2 /* mbientSwiftUI in Frameworks */,
+				94DE33E72799299F0093E8F1 /* MetaWearSync in Frameworks */,
+				94DE33E52799299F0093E8F1 /* MetaWearFirmware in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,11 +890,10 @@
 			name = "MetaBase (iOS)";
 			packageProductDependencies = (
 				940E01BD278148EE002AD641 /* mbientSwiftUI */,
-				9464CA87278D029E00BE70C6 /* MetaWear */,
-				9464CA89278D029E00BE70C6 /* MetaWearCpp */,
-				9464CA8B278D029E00BE70C6 /* MetaWearFirmware */,
-				9464CA8D278D029E00BE70C6 /* MetaWearSync */,
 				949E992E278ECC9B00D594C2 /* mbientSwiftUI */,
+				94DE33E8279929B70093E8F1 /* MetaWear */,
+				94DE33EA279929B70093E8F1 /* MetaWearFirmware */,
+				94DE33EC279929B70093E8F1 /* MetaWearSync */,
 			);
 			productName = "MetaBase (iOS)";
 			productReference = 94E005D1275A07E9001B0DFD /* MetaBase.app */;
@@ -914,9 +913,10 @@
 			);
 			name = "MetaBase (macOS)";
 			packageProductDependencies = (
-				949E9930278ECCBC00D594C2 /* MetaWear */,
-				949E9932278ECCBC00D594C2 /* MetaWearSync */,
 				949E9934278ECCBC00D594C2 /* mbientSwiftUI */,
+				94DE33E22799299F0093E8F1 /* MetaWear */,
+				94DE33E42799299F0093E8F1 /* MetaWearFirmware */,
+				94DE33E62799299F0093E8F1 /* MetaWearSync */,
 			);
 			productName = "MetaBase (macOS)";
 			productReference = 94E005D7275A07E9001B0DFD /* MetaBase.app */;
@@ -1004,8 +1004,8 @@
 			);
 			mainGroup = 94E005C4275A07E9001B0DFD;
 			packageReferences = (
-				9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */,
 				949E992D278ECC9B00D594C2 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */,
+				94DE33E12799299F0093E8F1 /* XCRemoteSwiftPackageReference "MetaWear-Swift-Combine-SDK" */,
 			);
 			productRefGroup = 94E005D2275A07E9001B0DFD /* Products */;
 			projectDirPath = "";
@@ -1773,20 +1773,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mbientlab/MetaWear-SDK-Swift-Combine";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		949E992D278ECC9B00D594C2 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mbientlab/mbientSwiftUI";
 			requirement = {
 				branch = main;
 				kind = branch;
+			};
+		};
+		94DE33E12799299F0093E8F1 /* XCRemoteSwiftPackageReference "MetaWear-Swift-Combine-SDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mbientlab/MetaWear-Swift-Combine-SDK";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1804,45 +1804,45 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MetaWear;
 		};
-		9464CA87278D029E00BE70C6 /* MetaWear */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWear;
-		};
-		9464CA89278D029E00BE70C6 /* MetaWearCpp */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWearCpp;
-		};
-		9464CA8B278D029E00BE70C6 /* MetaWearFirmware */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWearFirmware;
-		};
-		9464CA8D278D029E00BE70C6 /* MetaWearSync */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWearSync;
-		};
 		949E992E278ECC9B00D594C2 /* mbientSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 949E992D278ECC9B00D594C2 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
 			productName = mbientSwiftUI;
 		};
-		949E9930278ECCBC00D594C2 /* MetaWear */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWear;
-		};
-		949E9932278ECCBC00D594C2 /* MetaWearSync */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9464CA86278D029E00BE70C6 /* XCRemoteSwiftPackageReference "MetaWear-SDK-Swift-Combine" */;
-			productName = MetaWearSync;
-		};
 		949E9934278ECCBC00D594C2 /* mbientSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 949E992D278ECC9B00D594C2 /* XCRemoteSwiftPackageReference "mbientSwiftUI" */;
 			productName = mbientSwiftUI;
+		};
+		94DE33E22799299F0093E8F1 /* MetaWear */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94DE33E12799299F0093E8F1 /* XCRemoteSwiftPackageReference "MetaWear-Swift-Combine-SDK" */;
+			productName = MetaWear;
+		};
+		94DE33E42799299F0093E8F1 /* MetaWearFirmware */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94DE33E12799299F0093E8F1 /* XCRemoteSwiftPackageReference "MetaWear-Swift-Combine-SDK" */;
+			productName = MetaWearFirmware;
+		};
+		94DE33E62799299F0093E8F1 /* MetaWearSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94DE33E12799299F0093E8F1 /* XCRemoteSwiftPackageReference "MetaWear-Swift-Combine-SDK" */;
+			productName = MetaWearSync;
+		};
+		94DE33E8279929B70093E8F1 /* MetaWear */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94DE33E12799299F0093E8F1 /* XCRemoteSwiftPackageReference "MetaWear-Swift-Combine-SDK" */;
+			productName = MetaWear;
+		};
+		94DE33EA279929B70093E8F1 /* MetaWearFirmware */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94DE33E12799299F0093E8F1 /* XCRemoteSwiftPackageReference "MetaWear-Swift-Combine-SDK" */;
+			productName = MetaWearFirmware;
+		};
+		94DE33EC279929B70093E8F1 /* MetaWearSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94DE33E12799299F0093E8F1 /* XCRemoteSwiftPackageReference "MetaWear-Swift-Combine-SDK" */;
+			productName = MetaWearSync;
 		};
 /* End XCSwiftPackageProductDependency section */
 

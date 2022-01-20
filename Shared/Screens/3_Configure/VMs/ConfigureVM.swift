@@ -13,11 +13,16 @@ public class ConfigureVM: ObservableObject, HeaderVM {
     @Published var shouldStream = true // View edits via binding
     @Published var config: UserSensorConfiguration // View edits via binding
     @Published private(set) var presets: [PresetSensorConfiguration] = []
+
     public let options: LegalSensorParameters
     public var canStart: Bool { config.totalFreq.rateHz > 0 }
-    var selectedPreset: PresetSensorConfiguration? { presets.first(where: { $0.config == config }) }
+    var selectedPreset: PresetSensorConfiguration? {
+        presets.first(where: { $0.config == config })
+    }
     var frequencyLabel: String {
-        config.totalFreq.rateHz == 0 ? "—" : String(int: config.totalFreq.rateHz) + " Hz"
+        config.totalFreq.rateHz == 0
+        ? "—"
+        : String(int: config.totalFreq.rateHz) + " Hz"
     }
 
     // User intent
