@@ -369,6 +369,7 @@
 		94CF3F082764286B00C2D8B0 /* ScreenSubsection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenSubsection.swift; sourceTree = "<group>"; };
 		94CF3F092764286B00C2D8B0 /* LabeledItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabeledItem.swift; sourceTree = "<group>"; };
 		94CF3F1A276428CA00C2D8B0 /* Transitions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transitions.swift; sourceTree = "<group>"; };
+		94DE33EE27992D730093E8F1 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		94DFEC5D275D389700BB80DB /* Choose+KnownUnknownCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Choose+KnownUnknownCells.swift"; sourceTree = "<group>"; };
 		94DFEC61275D459B00BB80DB /* ItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemVM.swift; sourceTree = "<group>"; };
 		94DFEC64275D45F000BB80DB /* UnknownItemVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnknownItemVM.swift; sourceTree = "<group>"; };
@@ -770,6 +771,7 @@
 		94E005C4275A07E9001B0DFD = {
 			isa = PBXGroup;
 			children = (
+				94DE33EE27992D730093E8F1 /* README.md */,
 				94A165BB275E8E0C00FA355D /* MetaBase (iOS).entitlements */,
 				94934FD7275A0A4200E388FF /* MetaBase--macOS--Info.plist */,
 				94934FD6275A0A2E00E388FF /* MetaBase--iOS--Info.plist */,
