@@ -22,6 +22,7 @@ extension HistoryScreen {
             HStack(spacing: 35) {
                 Spacer(minLength: 0)
                 alert
+                stopLoggingCTA
                 cta
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -47,6 +48,7 @@ extension HistoryScreen {
                             ProgressSpinner()
                         }
                         #endif
+                        stopLoggingCTA
                         cta
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -78,6 +80,16 @@ extension HistoryScreen {
                 .keyboardShortcut(.defaultAction)
                 .disabled(!vm.enableCTA)
                 .allowsHitTesting(vm.enableCTA)
+        }
+
+        @ViewBuilder private var stopLoggingCTA: some View {
+            if vm.cta == .downloadLog {
+                CTAButton("Stop Logging",
+                          hover: .myPrimary,
+                          base: .myTertiary,
+                          style: .major, action: vm.stopLoggingAllDevices
+                )
+            }
         }
     }
 }

@@ -85,11 +85,16 @@ extension HistoryScreen.DevicesList {
                 IdentifyByLEDButton(flashScale: 2, request: vm.identifyByLED, emulator: vm.led)
 
                 MiniMenuButton {
-                    Button("Update Firmware") { }.disabled(true)
-                    Button("Run Diagnostic") { }.disabled(true)
+                    Button("Rename") { vm.rename() }
+                    Button("Stop any logging") { vm.stopLogging() }
                     Divider()
-                    Button("Factory Reset") { vm.reset() }
-                    Text("Advanced").disabled(true)
+                    Button("Run diagnostic") { }.disabled(true)
+                    Divider()
+                    Button("Delete any logged data") { vm.deleteLoggedData() }
+                    Button("Factory reset") { vm.reset() }
+                    Button("Update firmware") { }.disabled(true)
+
+
                 }
                 .padding(.vertical, verticalPadding)
             }
@@ -108,6 +113,7 @@ extension HistoryScreen.DevicesList {
             }
             HLabel("RSSI", item: vm.rssiRepresentable,              align: alignment)
             HLabel("Battery", item: vm.battery,                     align: alignment)
+            HLabel("Log Size", item: vm.loggedBytesRepresentable,   align: alignment)
             if showDetails {
                 HLabel("MAC", item: vm.meta.mac,                        align: alignment)
                 HLabel("Serial", item: vm.meta.serial,                  align: alignment)

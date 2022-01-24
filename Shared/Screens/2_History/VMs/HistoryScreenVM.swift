@@ -21,6 +21,7 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
     private var showStartAlertUpdates: AnyCancellable? = nil
     private var performDisconnectOnDisappear = true
     private var loggingUpdates: AnyCancellable? = nil
+    private var manualLogsCheck: AnyCancellable? = nil
     private var didAppear = false
 
 #if os(iOS)
@@ -43,7 +44,7 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
         self.scanner = scanner
         self.logging = logging
         self.title = title
-        self.items = vms
+        self.items = vms.sorted(by: { $0.meta.name < $1.meta.name })
         self.cta = .init(ongoingLoggingSession: logging.session(for: routing.focus!.item))
         self.alert = Self.makeAlertMessage(soloTitle: vms.endIndex > 1 ? nil : title)
     }
@@ -65,23 +66,6 @@ public class HistoryScreenVM: ObservableObject, HeaderVM {
 
 public extension HistoryScreenVM {
 
-    func performCTA() {
-        performDisconnectOnDisappear = false
-        switch cta {
-            case .newSession:
-                // No need to reset focus
-                routing.setDestination(.configure)
-            case .isLogging:
-                let ongoingSessionName = logging.session(for: routing.focus!.item)?.name ?? "New Session"
-                routing.setSessionName(ongoingSessionName)
-                routing.setDestination(.downloadLogs)
-        }
-    }
-
-    func refresh() {
-        items.forEach { $0.refreshAll() }
-    }
-
     func onAppear() {
         guard didAppear == false else { return }
         didAppear = true
@@ -94,10 +78,40 @@ public extension HistoryScreenVM {
             .map { $0[focus] }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] token in
-                self?.cta = .init(ongoingLoggingSession: token)
+                guard let self = self else { return }
+                // If not connected, use the cloud-synced logging token to offer the right CTA
+                let ctaByToken = AvailableActivity(ongoingLoggingSession: token)
+                let ctaByLogLength = AvailableActivity(verifyByLogLength: self.items)
+
+                // Clear out stale state
+                if ctaByLogLength == .newSession && ctaByToken == .downloadLog {
+                    self.logging.remove(token: focus)
+                }
+                self.cta = ctaByLogLength ?? ctaByToken
             }
     }
 
+    func performCTA() {
+        performDisconnectOnDisappear = false
+        switch cta {
+            case .newSession:
+                // No need to reset focus
+                routing.setDestination(.configure)
+            case .downloadLog:
+                let ongoingSessionName = logging.session(for: routing.focus!.item)?.name ?? "New Session"
+                routing.setSessionName(ongoingSessionName)
+                routing.setDestination(.downloadLogs)
+        }
+    }
+
+    func stopLoggingAllDevices() {
+        items.forEach { $0.stopLogging() }
+    }
+
+    func refresh() {
+        items.forEach { $0.refreshAll() }
+        startValidatingSessionStartCTA()
+    }
 }
 
 private extension HistoryScreenVM {
@@ -107,13 +121,23 @@ private extension HistoryScreenVM {
             .autoconnect()
             .share()
 
+        let logSizeUpdates = Publishers.MergeMany(items.map(\.loggedDataBytesSubject))
+
         enableCTAUpdates = timer
             .compactMap { [weak self] _ in
                 self?.items.allSatisfy { $0.connection == .connected }
             }
             .removeDuplicates()
-            .sink(receiveValue: { [weak self] canStart in
-                self?.enableCTA = canStart
+            .combineLatest(logSizeUpdates)
+            .sink(receiveValue: { [weak self] canStart, _ in
+                guard let self = self else { return }
+                if let verifiedCTA = AvailableActivity(verifyByLogLength: self.items) {
+                    self.cta = verifiedCTA
+                    if verifiedCTA == .newSession, let focus = self.routing.focus?.item {
+                        self.logging.remove(token: focus)
+                    }
+                }
+                self.enableCTA = canStart
             })
 
         showStartAlertUpdates = timer
@@ -143,18 +167,31 @@ private extension HistoryScreenVM {
 }
 
 public enum AvailableActivity {
-    case isLogging
+    case downloadLog
     case newSession
 
     public var label: String {
         switch self {
-            case .isLogging: return "Download Log"
+            case .downloadLog: return "Download Log"
             case .newSession: return "New Session"
         }
     }
 
     fileprivate init(ongoingLoggingSession: Session.LoggingToken?) {
-        if let _ = ongoingLoggingSession { self = .isLogging }
+        if let _ = ongoingLoggingSession { self = .downloadLog }
         else { self = .newSession }
+    }
+
+    fileprivate init?(verifyByLogLength devices: [AboutDeviceVM]) {
+        let hasAnyData = devices.contains { $0.loggedDataBytesSubject.value ?? 0 > 1 }
+        let confirmedNoData = devices.allSatisfy { $0.loggedDataBytesSubject.value ?? 2 <= 1 }
+
+        if hasAnyData {
+            self = .downloadLog
+        } else if confirmedNoData {
+            self = .newSession
+        } else { // Missing devices
+            return nil
+        }
     }
 }

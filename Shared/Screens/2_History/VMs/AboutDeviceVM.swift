@@ -20,18 +20,8 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     @Published public private(set) var info:    MetaWear.DeviceInformation
     @Published public private(set) var meta:    MetaWearMetadata
     @Published public private(set) var battery: String = "–"
+    public let loggedDataBytesSubject: CurrentValueSubject<Int?,Never> = .init(nil)
 
-    public var rssiRepresentable: String {
-        if isLocallyKnown == false { return "–" }
-        if rssiInt == Int(SignalLevel.noBarsRSSI) { return "–" }
-        return .init(rssiInt)
-    }
-    public var connectionRepresentable: String {
-        isLocallyKnown ? connection.label : "Cloud Synced"
-    }
-    public var isNearby: Bool {
-        connection == .connected || (isLocallyKnown && rssiInt != Int(SignalLevel.noBarsRSSI))
-    }
     public private(set) var rssi:                  SignalLevel
     @Published public private(set) var rssiInt:    Int
     @Published public private(set) var connection: CBPeripheralState
@@ -45,6 +35,8 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     private var ledSub:            AnyCancellable? = nil
     private var resetSub:          AnyCancellable? = nil
     private var refreshSub:        AnyCancellable? = nil
+    private var stopLoggingSub:    AnyCancellable? = nil
+    private var deleteDataSub:     AnyCancellable? = nil
     private var misc               = Set<AnyCancellable>()
     private unowned let store:     MetaWearSyncStore
     private unowned let logging:   ActiveLoggingSessionsStore
@@ -55,7 +47,10 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     var isStreaming                = false
     let cancel                     = PassthroughSubject<Void,Never>()
 
-    public init(device: MWKnownDevice, store: MetaWearSyncStore, logging: ActiveLoggingSessionsStore, routing: Routing) {
+    public init(device: MWKnownDevice,
+                store: MetaWearSyncStore,
+                logging: ActiveLoggingSessionsStore,
+                routing: Routing) {
 #if DEBUG
         if useMetabaseConsoleLogger {
             device.mw?.logDelegate = MWConsoleLogger.shared
@@ -71,12 +66,14 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
         let _rssi = device.mw?.rssi ?? Int(SignalLevel.noBarsRSSI)
         self.rssi = .init(rssi: _rssi)
         self.rssiInt = _rssi
-        self.info = device.mw?.info ?? .init(manufacturer: "—",
-                                             model: .unknown,
-                                             serialNumber: device.meta.serial,
-                                             firmwareRevision: "—",
-                                             hardwareRevision: "—",
-                                             mac: device.meta.mac)
+        self.info = device.mw?.info ?? .init(
+            manufacturer: "—",
+            model: .unknown,
+            serialNumber: device.meta.serial,
+            firmwareRevision: "—",
+            hardwareRevision: "—",
+            mac: device.meta.mac
+        )
     }
     
     /// Set a unique LED identification pattern when in a group of devices.
@@ -87,10 +84,38 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
 
 public extension AboutDeviceVM {
 
+    var loggedBytesRepresentable: String {
+        String(describingBytes: loggedDataBytesSubject.value)
+    }
+
+    var rssiRepresentable: String {
+        if isLocallyKnown == false { return "–" }
+        if rssiInt == Int(SignalLevel.noBarsRSSI) { return "–" }
+        return .init(rssiInt)
+    }
+
+    var connectionRepresentable: String {
+        isLocallyKnown ? connection.label : "Cloud Synced"
+    }
+
+    var isNearby: Bool {
+        connection == .connected || (isLocallyKnown && rssiInt != Int(SignalLevel.noBarsRSSI))
+    }
+
+}
+
+public extension AboutDeviceVM {
+
     /// Starts tracking state and refreshes battery and device information
     func onAppear() {
         guard didAppear == false else { return }
         didAppear = true
+        loggedDataBytesSubject
+            .removeDuplicates()
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            .store(in: &misc)
         trackState()
         refreshAll()
     }
@@ -111,22 +136,24 @@ public extension AboutDeviceVM {
             .sink(receiveValue: { [weak self] _ in
                 self?.refreshBattery()
                 self?.refreshDeviceInformation()
+                self?.updateLoggedDataSize()
             })
-        if (device?.connectionState ?? .connecting) < .connecting {
-            connect()
-        }
+        connectIfNeeded()
     }
 
     func identifyByLED() {
+
         ledSub = device?
             .publishWhenConnected()
             .first()
+            .command(.buzz(milliseconds: 500))
+            .command(.buzzMMR(milliseconds: 500, percentStrength: 1))
             .command(.ledFlash(led.pattern))
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] _ in
                 self?.led.emulate()
             })
 
-        connect()
+        connectIfNeeded()
     }
 
     func reset() {
@@ -145,12 +172,60 @@ public extension AboutDeviceVM {
             .delay(for: 1.5, tolerance: 0.5, scheduler: DispatchQueue.main)
             .sink { $0.connect() }
 
-        if device?.connectionState != .connected { connect() }
+        connectIfNeeded()
     }
 
+    /// To support downloading at a later date (@ThomasMcGuckian feature request)
+    func stopLogging() {
+        let pattern = MWLED.Flash.Pattern(color: .systemPink, intensity: 1, repetitions: 2, duration: 300, period: 800)
+        stopLoggingSub = device?
+            .publishWhenConnected()
+            .first()
+            .loggersPause()
+            .command(.ledFlash(pattern))
+            .command(.powerDownSensors)
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] _ in
+                self?.updateLoggedDataSize()
+            })
+
+        connectIfNeeded()
+    }
+
+    func deleteLoggedData() {
+        let pattern = MWLED.Flash.Pattern(color: .systemRed, intensity: 1, repetitions: 2, duration: 300, period: 800)
+        deleteDataSub = device?
+            .publishWhenConnected()
+            .first()
+            .command(.deleteLoggedData)
+            .command(.ledFlash(pattern))
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] _ in
+                self?.updateLoggedDataSize()
+            })
+
+        connectIfNeeded()
+    }
+
+    func updateLoggedDataSize() {
+        device?.publishWhenConnected().first()
+            .read(.logLength)
+            .map(\.value)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] bytes in
+                self?.loggedDataBytes = bytes
+            })
+            .store(in: &misc)
+
+        connectIfNeeded()
+    }
 }
 
 private extension AboutDeviceVM {
+
+    private func connectIfNeeded() {
+        if (device?.connectionState ?? .connecting) < .connecting {
+            connect()
+        }
+    }
 
     func _reloadDevice() {
         guard device == nil else { return }
@@ -165,7 +240,7 @@ private extension AboutDeviceVM {
                 self?.info = info
             })
 
-        if device?.connectionState != .connected { device?.connect() }
+        connectIfNeeded()
     }
 
     func refreshBattery() {
@@ -179,41 +254,31 @@ private extension AboutDeviceVM {
     }
 
     func trackState() {
-        // If MetaWear reference not available at load
-        // (scanner might be slower than persistence),
-        // then keep retrying until found.
-        guard let device = device else {
-            rssiSub = retryTimer()
-                .sink { [weak self] _ in
-                    self?.rssiSub?.cancel()
-                    self?.trackState()
-                }
-            return
-        }
-
+        trackIdentity()
+        guard let device = device else { return }
         trackRSSI(device)
         trackConnection(device)
     }
 
-    /// Retry using updated device references
-    func retryTimer() -> AnyPublisher<MWKnownDevice,Never> {
-        Timer.TimerPublisher(interval: 1, tolerance: 1, runLoop: RunLoop.main, mode: .default, options: nil)
-            .autoconnect()
-            .compactMap { [weak self] _ -> MWKnownDevice? in
-                guard let metadata = self?.meta,
-                      let update = self?.store.getDeviceAndMetadata(metadata.mac)
-                else { return nil }
-                let metadataDidUpdate = update.meta != metadata
-                if update.mw != nil || metadataDidUpdate { return update }
-                else { return nil }
-            }
-            .handleEvents(receiveOutput: { [weak self] update in
-                DispatchQueue.main.async { [weak self] in
-                    self?.device = update.mw
-                    self?.meta = update.meta
+    func trackIdentity() {
+        // If MetaWear reference not available at load
+        // (scanner might be slower than persistence),
+        // then keep retrying until found.
+
+        store.publisher(for: meta.mac)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] deviceReference, metadata in
+                let justFoundMetaWear = self?.device == nil && deviceReference != nil
+                self?.device = deviceReference
+                self?.meta = metadata
+
+                if justFoundMetaWear {
+                    self?.trackRSSI(deviceReference!)
+                    self?.trackConnection(deviceReference!)
+                    self?.refreshAll()
                 }
-            })
-            .eraseToAnyPublisher()
+            }
+            .store(in: &misc)
     }
 
     func trackRSSI(_ device: MetaWear) {
@@ -235,5 +300,21 @@ private extension AboutDeviceVM {
             .sink(receiveValue: { [weak self] update in
                 self?.connection = update
             })
+    }
+}
+
+fileprivate extension String {
+    init(describingBytes bytes: Int?) {
+        guard let bytes = bytes else { self = "—"; return }
+        switch bytes {
+            case ...999: self = "\(bytes) bytes"
+            case ...999_999:
+                let kilobytes = Double(bytes) / 1_000
+                self = String(format: "%1.2f", kilobytes) + " KB"
+            default:
+                let megabytes = Double(bytes) / 1_000_000
+                let nonZeroMB = Double.maximum(0.01, megabytes)
+                self = String(format: "%1.2f", nonZeroMB) + " MB"
+        }
     }
 }
