@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import Parse
 import Bolts
 @testable import MetaWear
 @testable import MetaBase

@@ -3,7 +3,7 @@ platform :ios, '14.5'
 use_frameworks!
 
 def all_pods
-  pod 'MetaWear', :subspecs => ['UI', 'AsyncUtils', 'Mocks', 'DFU']
+  pod 'MetaWear', :subspecs => ['UI', 'AsyncUtils', 'DFU']
   pod 'PNChart'
   pod 'MBProgressHUD'
   pod 'RMessage', '~> 2.3.4'
