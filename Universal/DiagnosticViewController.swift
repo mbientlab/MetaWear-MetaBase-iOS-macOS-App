@@ -165,6 +165,32 @@ class DiagnosticViewController: UIViewController {
     @IBAction func updateFirmwarePressed(_ sender: Any) {
         connectionManager.updateFirmware()
     }
+
+    @IBAction func haltAllLogging(_ sender: Any) {
+        device.connectAndSetup().continueOnSuccessWithTask { t -> Task<MetaWear> in
+
+            let board = self.device.board
+            mbl_mw_logging_stop(board)
+            mbl_mw_sensor_fusion_stop(board)
+            mbl_mw_acc_stop(board)
+
+            if mbl_mw_metawearboard_lookup_module(board, MBL_MW_MODULE_GYRO) == MBL_MW_MODULE_GYRO_TYPE_BMI160 {
+                mbl_mw_gyro_bmi160_stop(board)
+            } else {
+                mbl_mw_gyro_bmi270_stop(board)
+            }
+
+            if mbl_mw_metawearboard_lookup_module(board, MBL_MW_MODULE_MAGNETOMETER) != MBL_MW_MODULE_TYPE_NA {
+                mbl_mw_mag_bmm150_stop(board)
+            }
+
+            if mbl_mw_metawearboard_lookup_module(board, MBL_MW_MODULE_AMBIENT_LIGHT) != MBL_MW_MODULE_TYPE_NA {
+                mbl_mw_als_ltr329_stop(board)
+            }
+            self.device.flashLED(color: .purple, intensity: 1.0, _repeat: 2)
+            return t
+        }
+    }
     
     @IBAction func advancedPressed(_ sender: Any) {
         let alertController = UIAlertController(title: "Advanced Options", message: nil, preferredStyle: .actionSheet)
