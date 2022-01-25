@@ -24,6 +24,7 @@ struct IdentifyByLEDButton: View {
                 .adaptiveFont(.ctaMinor)
                 .foregroundColor(foregroundColor)
                 .padding(4)
+                .contentShape(Rectangle())
         }
         .whenHovered { isHovering = $0 }
         .buttonStyle(DepressButtonStyle())
