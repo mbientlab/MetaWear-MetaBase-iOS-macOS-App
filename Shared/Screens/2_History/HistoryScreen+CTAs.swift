@@ -26,6 +26,8 @@ extension HistoryScreen {
                 cta
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
+            .animation(.easeOut, value: vm.cta)
+            .animation(.easeOut, value: vm.enableCTA)
         }
 
         private var verticalLayout: some View {
@@ -55,6 +57,8 @@ extension HistoryScreen {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
+            .animation(.easeOut, value: vm.cta)
+            .animation(.easeOut, value: vm.enableCTA)
             .animation(.easeIn, value: vm.showSessionStartAlert)
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
@@ -89,6 +93,8 @@ extension HistoryScreen {
                           base: .myTertiary,
                           style: .major, action: vm.stopLoggingAllDevices
                 )
+                    .disabled(!vm.enableCTA)
+                    .allowsHitTesting(vm.enableCTA)
             }
         }
     }

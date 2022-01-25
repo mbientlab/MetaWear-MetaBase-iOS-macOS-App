@@ -175,6 +175,12 @@ public extension AboutDeviceVM {
         connectIfNeeded()
     }
 
+    func rename() {
+        let controller = RenamePopupPromptController.shared
+        controller.delegate = self
+        controller.rename(existingName: meta.name, mac: meta.mac)
+    }
+
     /// To support downloading at a later date (@ThomasMcGuckian feature request)
     func stopLogging() {
         let pattern = MWLED.Flash.Pattern(color: .systemPink, intensity: 1, repetitions: 2, duration: 300, period: 800)
@@ -182,8 +188,9 @@ public extension AboutDeviceVM {
             .publishWhenConnected()
             .first()
             .loggersPause()
-            .command(.ledFlash(pattern))
             .command(.powerDownSensors)
+            .command(.resetActivities)
+            .command(.ledFlash(pattern))
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] _ in
                 self?.updateLoggedDataSize()
             })
@@ -211,13 +218,27 @@ public extension AboutDeviceVM {
             .map(\.value)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] bytes in
-                self?.loggedDataBytes = bytes
+                self?.loggedDataBytesSubject.value = bytes
             })
             .store(in: &misc)
 
         connectIfNeeded()
     }
 }
+
+// MARK: - Rename Delegate
+
+extension AboutDeviceVM: RenameDelegate {
+    public func userDidRenameMetaWear(mac: MACAddress, newName: String) {
+        try? store.rename(known: self.meta, to: newName)
+    }
+
+    public func userDidRenameGroup(id: UUID, newName: String) {
+        fatalError("This controller should only represent a single device.")
+    }
+}
+
+// MARK: - Internal - State updates
 
 private extension AboutDeviceVM {
 
