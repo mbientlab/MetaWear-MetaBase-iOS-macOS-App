@@ -22,9 +22,12 @@ extension HistoryScreen {
             HStack(spacing: 35) {
                 Spacer(minLength: 0)
                 alert
+                stopLoggingCTA
                 cta
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
+            .animation(.easeOut, value: vm.cta)
+            .animation(.easeOut, value: vm.enableCTA)
         }
 
         private var verticalLayout: some View {
@@ -47,12 +50,15 @@ extension HistoryScreen {
                             ProgressSpinner()
                         }
                         #endif
+                        stopLoggingCTA
                         cta
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
+            .animation(.easeOut, value: vm.cta)
+            .animation(.easeOut, value: vm.enableCTA)
             .animation(.easeIn, value: vm.showSessionStartAlert)
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
@@ -78,6 +84,18 @@ extension HistoryScreen {
                 .keyboardShortcut(.defaultAction)
                 .disabled(!vm.enableCTA)
                 .allowsHitTesting(vm.enableCTA)
+        }
+
+        @ViewBuilder private var stopLoggingCTA: some View {
+            if vm.cta == .downloadLog {
+                CTAButton("Stop Logging",
+                          hover: .myPrimary,
+                          base: .myTertiary,
+                          style: .major, action: vm.stopLoggingAllDevices
+                )
+                    .disabled(!vm.enableCTA)
+                    .allowsHitTesting(vm.enableCTA)
+            }
         }
     }
 }

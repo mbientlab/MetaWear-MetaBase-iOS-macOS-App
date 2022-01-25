@@ -15,7 +15,7 @@
         "repositoryURL": "https://github.com/mbientlab/mbientSwiftUI",
         "state": {
           "branch": "main",
-          "revision": "52350efd57865ee4f7ac982293fb3e356b1c48c8",
+          "revision": "2032ccbad7db7f8539765e16a7ae291f3de3cfab",
           "version": null
         }
       },
@@ -24,7 +24,7 @@
         "repositoryURL": "https://github.com/mbientlab/MetaWear-Swift-Combine-SDK",
         "state": {
           "branch": "main",
-          "revision": "d0f9c19abfefd3ec8944e2b9c73da6a2d73e9d92",
+          "revision": "d584129f0188e808b502bd4847b26aa4e2503f7b",
           "version": null
         }
       },

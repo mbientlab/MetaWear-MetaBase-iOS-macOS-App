@@ -12,6 +12,7 @@ extension ActionScreen {
 
         @EnvironmentObject private var action: ActionVM
         @Environment(\.namespace) private var namespace
+        @Namespace private var fallbackNamespace
         @ObservedObject var vm: AboutDeviceVM
         var nameWidth: CGFloat
         @Environment(\.reverseOutColor) private var reverseOut
@@ -100,7 +101,7 @@ extension ActionScreen {
             if isActionFocus {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .fill(Color.myHighlight)
-                    .matchedGeometryEffect(id: "focus", in: namespace!)
+                    .matchedGeometryEffect(id: "focus", in: namespace ?? fallbackNamespace)
             } else {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .fill(Color.myGroupBackground2)

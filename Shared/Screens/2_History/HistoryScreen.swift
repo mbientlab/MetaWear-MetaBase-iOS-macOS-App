@@ -29,15 +29,23 @@ struct HistoryScreen: View {
         .onAppear(perform: vm.onAppear)
     }
 
+    @State private var spinRefresh: Double = 0
+    private func refreshAnimationIntercept() {
+        spinRefresh += 360
+        vm.refresh()
+    }
+
     /// macOS + iPad
     private var wideLayout: some View {
         HStack(alignment: .firstTextBaseline, spacing: .screenInset) {
 
             VStack(alignment: .leading) {
                 ScreenSubsection(label: "About", trailing: {
-                    RefreshButton(help: "Refresh All", didTap: vm.refresh)
+                    RefreshButton(help: "Refresh All", didTap: refreshAnimationIntercept)
                         .buttonStyle(HoverButtonStyle())
                         .opacity(vm.showSessionStartAlert ? 0 : 1)
+                        .rotationEffect(.degrees(spinRefresh))
+                        .animation(.spring().speed(0.4), value: spinRefresh)
                 })
 
                 DevicesList()
