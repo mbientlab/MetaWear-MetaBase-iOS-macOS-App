@@ -12,6 +12,7 @@ struct Header: View {
     let vm: HeaderVM
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.namespace) private var namespace
+    @Namespace private var fallbackNamespace
 
     var body: some View {
         HStack(alignment: .top, spacing: 15) {
@@ -23,7 +24,7 @@ struct Header: View {
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
                 .foregroundColor(colorScheme == .light ? .myPrimaryTinted : .myPrimary)
-                .matchedGeometryEffect(id: "HeaderTitle", in: namespace!, properties: .position)
+                .matchedGeometryEffect(id: "HeaderTitle", in: namespace ?? fallbackNamespace, properties: .position)
 
             Spacer()
 
@@ -94,11 +95,12 @@ extension Header {
         @State private var iconsDidAppear = false
         private static let deviceIconMaxSize = CGFloat(macOS: 70, iPad: 90, iOS: 50)
         @Environment(\.namespace) private var namespace
+        @Namespace private var fallbackNamespace
 
         var body: some View {
             if vm.deviceCount > 0 {
                 deviceImage
-                    .matchedGeometryEffect(id: "Icon1", in: namespace!)
+                    .matchedGeometryEffect(id: "Icon1", in: namespace ?? fallbackNamespace)
                     .rotationEffect(.degrees(-3))
                     .frame(width: Self.deviceIconMaxSize)
                     .background(secondDevice.offset(x: secondDeviceXOffset), alignment: .topTrailing)
@@ -118,7 +120,7 @@ extension Header {
                 deviceImage
                     .frame(width: Self.deviceIconMaxSize * 0.95)
                     .rotationEffect(iconsDidAppear ? .degrees(-12) : .degrees(0), anchor: .top)
-                    .matchedGeometryEffect(id: "Icon2", in: namespace!)
+                    .matchedGeometryEffect(id: "Icon2", in: namespace ?? fallbackNamespace)
             }
         }
 
@@ -127,7 +129,7 @@ extension Header {
                 deviceImage
                     .frame(width: Self.deviceIconMaxSize * 0.85)
                     .rotationEffect(iconsDidAppear ? .degrees(-18) : .degrees(0), anchor: .top)
-                    .matchedGeometryEffect(id: "Icon3", in: namespace!)
+                    .matchedGeometryEffect(id: "Icon3", in: namespace ?? fallbackNamespace)
             }
         }
 

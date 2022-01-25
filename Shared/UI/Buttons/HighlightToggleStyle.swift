@@ -40,7 +40,8 @@ struct HighlightToggleStyle: ToggleStyle {
         var font: Font.Config
         var padding: CGFloat = 6
         @Environment(\.namespace) private var namespace
-
+        @Namespace private var fallbackNamespace
+        
         var body: some View {
             Button(action: set) {
                 Text(label)
@@ -61,7 +62,7 @@ struct HighlightToggleStyle: ToggleStyle {
                 RoundedRectangle(cornerRadius: 1.5)
                     .frame(height: 3)
                     .foregroundColor(color)
-                    .matchedGeometryEffect(id: "toggle", in: namespace!)
+                    .matchedGeometryEffect(id: "toggle", in: namespace ?? fallbackNamespace)
             }
         }
     }

@@ -36,7 +36,7 @@ extension OnboardingFooter_iOS {
         @EnvironmentObject private var state: OnboardState
         @EnvironmentObject private var factory: UIFactory
         @State private var showSheet = false
-
+        @Environment(\.namespace) var namespace
         var body: some View {
             button
                 .onAppear {
@@ -55,6 +55,7 @@ extension OnboardingFooter_iOS {
                 Button("What's New?") { showSheet = true }
                 .sheet(isPresented: $showSheet) {
                     OnboardingSession(importer: factory.makeImportVM(), vm: factory.makeOnboardingSessionVM())
+                        .environment(\.namespace, namespace)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
@@ -66,6 +67,7 @@ extension OnboardingFooter_iOS {
         @EnvironmentObject private var state: OnboardState
         @EnvironmentObject private var factory: UIFactory
         @State private var showSheet = false
+        @Environment(\.namespace) var namespace
 
         var body: some View {
             button
@@ -76,6 +78,7 @@ extension OnboardingFooter_iOS {
                 Button("Migrate Data") { showSheet = true }
                 .sheet(isPresented: $showSheet) {
                     MigrationSession(importer: factory.makeImportVM(), vm: factory.makeMigrationVM())
+                        .environment(\.namespace, namespace)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }

@@ -16,6 +16,7 @@ struct ChooseDevicesScreen: View {
     @EnvironmentObject private var routing: Routing
     @StateObject private var vm: DiscoveryListVM
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.namespace) private var namespace
 
     /// Locally managed flag to change "splash" and "list" screens, accounting for animation time needed for a transition.
     @State private var shouldShowList: Bool
@@ -40,7 +41,10 @@ struct ChooseDevicesScreen: View {
         .backgroundToEdges(.myBackground)
 #if os(iOS)
         .trackOrientation()
-        .overlay(OnboardingFooter_iOS().opacity(shouldShowList ? 1 : 0), alignment: .bottom)
+        .overlay(OnboardingFooter_iOS()
+                    .environment(\.namespace, namespace)
+                    .opacity(shouldShowList ? 1 : 0),
+                 alignment: .bottom)
 #elseif os(macOS)
         .background(OnboardingLauncher_macOS())
 #endif

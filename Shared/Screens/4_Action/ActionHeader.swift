@@ -17,6 +17,7 @@ struct ActionHeader: View {
     @EnvironmentObject private var routing: Routing
     @State private var didAppear = false
     @Environment(\.namespace) private var namespace
+    @Namespace private var fallbackNamespace
 
     var body: some View {
         HStack(alignment: .top, spacing: 15) {
@@ -28,7 +29,7 @@ struct ActionHeader: View {
                     .foregroundColor(.myPrimary)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
-                    .matchedGeometryEffect(id: "HeaderTitle", in: namespace!, properties: .position)
+                    .matchedGeometryEffect(id: "HeaderTitle", in: namespace ?? fallbackNamespace, properties: .position)
 
                 Text(vm.title)
                     .adaptiveFont(.screenHeaderDetail)

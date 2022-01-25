@@ -25,6 +25,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
         let frame: CGRect
         let shouldDisappear: Binding<Bool>
         @Environment(\.namespace) private var namespace
+        @Namespace private var fallbackNamespace
         @Environment(\.colorScheme) private var colorScheme
 
         // Coordinate an animated disappearance
@@ -89,7 +90,7 @@ private extension ChooseDevicesScreen.NoDevicesFound {
                 color: colorScheme == .light ? .mySuccess : .myPrimaryTinted
             )
             #if os(macOS)
-                .matchedGeometryEffect(id: "scanning", in: namespace!)
+                .matchedGeometryEffect(id: "scanning", in: namespace ?? fallbackNamespace)
             #endif
                 .padding(.bottom, 75)
                 .transition(.asymmetric(insertion: insertion, removal: removal))

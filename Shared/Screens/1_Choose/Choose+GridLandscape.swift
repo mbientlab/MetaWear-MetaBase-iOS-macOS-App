@@ -11,6 +11,7 @@ extension ChooseDevicesScreen {
         @EnvironmentObject private var vm: DiscoveryListVM
         @Environment(\.colorScheme) private var colorScheme
         @Environment(\.namespace) private var namespace
+        @Namespace private var fallbackNamespace
 
         // Layout state
         @State private var windowWidth  = CGFloat.mainWindowMinWidth
@@ -49,7 +50,7 @@ extension ChooseDevicesScreen {
             .animation(.easeOut, value: vm.groups)
             .animation(.easeOut, value: vm.ungrouped)
             .animation(.easeOut, value: vm.unknown)
-            .matchedGeometryEffect(id: "\(Self.self)", in: namespace!)
+            .matchedGeometryEffect(id: "\(Self.self)", in: namespace ?? fallbackNamespace)
         }
 
 #if os(iOS)

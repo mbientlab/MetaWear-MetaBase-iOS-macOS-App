@@ -9,6 +9,7 @@ extension ChooseDevicesScreen {
         @EnvironmentObject private var vm: DiscoveryListVM
         @EnvironmentObject private var bluetooth: BluetoothStateVM
         @Environment(\.namespace) private var namespace
+        @Namespace private var fallbackNamespace
         @State private var iconIsHovered = false
         @State private var animate = false
 
@@ -38,7 +39,7 @@ extension ChooseDevicesScreen {
             VStack(alignment: .center, spacing: 15) {
                 AtomAnimation(animate: animate, size: 25, color: .myPrimary)
                     .onAppear { if vm.isScanning { animate.toggle() } }
-                    .matchedGeometryEffect(id: "scanning", in: namespace!)
+                    .matchedGeometryEffect(id: "scanning", in: namespace ?? fallbackNamespace)
                     .contentShape(Rectangle())
 
                 hoverLabel

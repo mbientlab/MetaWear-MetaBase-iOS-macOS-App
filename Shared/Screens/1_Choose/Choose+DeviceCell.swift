@@ -205,6 +205,7 @@ extension ChooseDevicesScreen.DeviceCell {
         @Environment(\.isHovered) private var isHovering
         @Environment(\.dragProvider) private var dragProvider
         @Environment(\.namespace) private var namespace
+        @Namespace private var fallbackNamespace
 
         private var imageWidth: CGFloat { 140 }
         private var imageHeight: CGFloat { isHovering ? 160 : 135 }
@@ -225,7 +226,7 @@ extension ChooseDevicesScreen.DeviceCell {
                         ledEmulator: ledEmulator
                     )
                         .environment(\.metaWearModel, models.first?.model ?? .unknown)
-                        .matchedGeometryEffect(id: models.first?.mac ?? UUID().uuidString, in: namespace!)
+                        .matchedGeometryEffect(id: models.first?.mac ?? UUID().uuidString, in: namespace ?? fallbackNamespace)
                 }
             }
             .frame(width: imageWidth, height: imageHeight, alignment: .center)
@@ -261,7 +262,7 @@ extension ChooseDevicesScreen.DeviceCell {
                     height: imageHeight * groupItemScale,
                     ledEmulator: ledEmulator
                 )
-                    .matchedGeometryEffect(id: id, in: namespace!)
+                    .matchedGeometryEffect(id: id, in: namespace ?? fallbackNamespace)
                     .environment(\.metaWearModel, model)
                     .arrangeGroupedMetaWearImages(at: index, overlap: imageWidth * overlap, xCentering: centering)
             }
