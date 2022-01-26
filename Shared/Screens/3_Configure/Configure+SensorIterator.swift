@@ -124,6 +124,16 @@ extension ConfigureScreen {
                     option: $placeholder
                 )
             }
+            if vm.options.mechanicalSwitch {
+                Tile(
+                    module: "Button",
+                    symbol: .mechanicalSwitch,
+                    isSelected: $vm.config.button,
+                    frequency: $placeholder,
+                    frequencies: [],
+                    option: $placeholder
+                )
+            }
         }
 
         @ViewBuilder private var accelerometerMixedRateWarning: some View {

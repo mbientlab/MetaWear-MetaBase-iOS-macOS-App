@@ -15,6 +15,7 @@ public struct ModulesConfiguration: Equatable, Hashable {
     public private(set) var magnetometer: MWMagnetometer? = nil
     public private(set) var pressure: MWBarometer.MWPressure? = nil
     public private(set) var thermometer: MWThermometer? = nil
+    public private(set) var button: MWMechanicalButton? = nil
 
     public private(set) var fusionEuler: MWSensorFusion.EulerAngles? = nil
     public private(set) var fusionGravity: MWSensorFusion.Gravity? = nil
@@ -76,6 +77,9 @@ public struct ModulesConfiguration: Equatable, Hashable {
             }
         }
 
+        if config.button {
+            self.button = MWMechanicalButton()
+        }
     }
 
     /// Blank

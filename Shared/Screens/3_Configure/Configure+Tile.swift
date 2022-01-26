@@ -81,23 +81,25 @@ extension ConfigureScreen {
 
         // MARK: - Options
 
-        private var frequencyMenu: some View {
-            CrossPlatformStylizedMenu(
-                selected: $frequency,
-                options: frequencies,
-                labelFont: .configureTileMenu,
-                labelColor: reverseOut
-            )
-                .animation(nil)
-#if os(macOS)
-                .fixedSize()
-#endif
-                .frame(maxWidth: .infinity, alignment: .center)
-#if os(iOS)
-                .background(preventUnwantedTouchesOn_iOS)
-#endif
-                .padding(.bottom, idiom == .macOS ? 0 : 7)
-                .help(Text("Sampling Frequency"))
+        @ViewBuilder private var frequencyMenu: some View {
+            if frequencies.isEmpty == false {
+                CrossPlatformStylizedMenu(
+                    selected: $frequency,
+                    options: frequencies,
+                    labelFont: .configureTileMenu,
+                    labelColor: reverseOut
+                )
+                    .animation(nil)
+    #if os(macOS)
+                    .fixedSize()
+    #endif
+                    .frame(maxWidth: .infinity, alignment: .center)
+    #if os(iOS)
+                    .background(preventUnwantedTouchesOn_iOS)
+    #endif
+                    .padding(.bottom, idiom == .macOS ? 0 : 7)
+                    .help(Text("Sampling Frequency"))
+            }
         }
 
         private var optionsFont: Font.Config {

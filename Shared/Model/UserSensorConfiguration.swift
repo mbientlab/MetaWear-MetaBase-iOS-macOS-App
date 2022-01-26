@@ -9,6 +9,7 @@ public struct UserSensorConfiguration: Hashable, Equatable {
     public private(set) var accelerometer   = false
     public private(set) var altitude        = false
     public              var ambientLight    = false
+    public              var button          = false
     public private(set) var gyroscope       = false
     public              var humidity        = false
     public private(set) var magnetometer    = false

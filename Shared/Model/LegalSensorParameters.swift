@@ -39,7 +39,7 @@ public struct LegalSensorParameters {
     public var humidity:            Bool { !humidityRate.isEmpty }
     public var magnetometer:        Bool { !magnetometerRate.isEmpty }
     public var temperature:         Bool { !temperatureRate.isEmpty }
-
+    public let mechanicalSwitch:    Bool
 }
 
 public extension LegalSensorParameters {
@@ -86,6 +86,7 @@ public extension LegalSensorParameters {
         }
 
         // MARK: - Barometers
+
         let allHaveBarometers = modules.allSatisfy { device in device.keys.contains(.barometer) }
 
         let barometers = modules.reduce(into: Set<MWBarometer.Model>()) { result, dict in
@@ -128,6 +129,10 @@ public extension LegalSensorParameters {
             return true
         }()
         self.temperatureRate = allHaveOnboardThermometer ? commonFrequencies : []
+
+        // MARK: - Mechanical Button
+
+        self.mechanicalSwitch = modules.allSatisfy { device in device.keys.contains(.mechanicalSwitch) }
     }
 }
 

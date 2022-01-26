@@ -15,7 +15,7 @@ public class ConfigureVM: ObservableObject, HeaderVM {
     @Published private(set) var presets: [PresetSensorConfiguration] = []
 
     public let options: LegalSensorParameters
-    public var canStart: Bool { config.totalFreq.rateHz > 0 }
+    public var canStart: Bool { config.totalFreq.rateHz > 0 || config.button }
     var selectedPreset: PresetSensorConfiguration? {
         presets.first(where: { $0.config == config })
     }

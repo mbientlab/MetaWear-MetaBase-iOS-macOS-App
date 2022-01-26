@@ -103,6 +103,7 @@ fileprivate extension AnyPublisher where Output == MetaWear {
     func macro(_ config: ModulesConfiguration) -> MWPublisher<MWMacroIdentifier> {
         self
             .command(.macroStartRecording(runOnStartup: true))
+            .optionallyLog(config.button)
             .optionallyLog(config.accelerometer)
             .optionallyLog(config.altitude)
             .optionallyLog(config.gyroscope)
@@ -159,6 +160,7 @@ extension ActionType {
         optionallyStream(config.fusionGravity, &streams, setup)
         optionallyStream(config.fusionLinear, &streams, setup)
         optionallyStream(config.fusionQuaternion, &streams, setup)
+        optionallyStream(config.button, &streams, setup)
 
         return Publishers.MergeMany(streams)
             .receive(on: controller.workQueue)
