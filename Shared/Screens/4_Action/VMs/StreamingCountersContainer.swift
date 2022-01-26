@@ -8,9 +8,9 @@ import MetaWearSync
 /// Segregate high-frequency updates into one object
 public class StreamingCountersContainer: ObservableObject {
 
-    @Published private(set) var counts: [MACAddress:ActionState] = [:]
-    private(set) var counters:          [MACAddress:PassthroughSubject<Void,Never>] = [:]
-    private var subs                    = Set<AnyCancellable>()
+    private(set) var counts:    [MACAddress:ActionState] = [:]
+    private(set) var counters:  [MACAddress:PassthroughSubject<Void,Never>] = [:]
+    private var subs            = Set<AnyCancellable>()
 
     init(_ action: ActionType, _ devices: [MWKnownDevice]) {
         guard action == .stream else { return }
@@ -21,8 +21,12 @@ public class StreamingCountersContainer: ObservableObject {
             counter
                 .scan(0) { sum, _ in sum + 1 }
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] sum in
+                .handleEvents(receiveOutput: { [weak self] sum in
                     self?.counts[mac] = .working(sum)
+                })
+                .throttle(for: 1, scheduler: DispatchQueue.main, latest: true)
+                .sink { [weak self] sum in
+                    self?.objectWillChange.send()
                 }
                 .store(in: &subs)
         }

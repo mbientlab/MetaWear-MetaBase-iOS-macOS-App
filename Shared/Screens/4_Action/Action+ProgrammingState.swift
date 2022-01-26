@@ -142,44 +142,71 @@ extension ActionScreen {
                case let .working(dataPoints) = action.streamCounters.counts[vm.meta.mac],
                 dataPoints > 0 {
 
-                if #available(iOS 15.0, macOS 12.0, *) {
-                    TimelineView(.periodic(from: Date(), by: 2)) { _ in stats }
-                } else { stats }
+                DataPointCounter(mac: vm.meta.mac,
+                                 invertTextColor: invertTextColor,
+                                 counters: action.streamCounters)
 
             } else if action.actionType == .downloadLogs {
 
-                if #available(iOS 15.0, macOS 12.0, *) {
-                    TimelineView(.periodic(from: Date(), by: 2)) { _ in downloadPercent }
-                } else { downloadPercent }
+                DownloadPercentBar(mac: vm.info.mac)
             }
         }
 
-        private var stats: some View {
-            let streamDatapointCount: String = {
-                if let count = action.streamCounters.counts[vm.meta.mac]?.info {
-                    return " " + count + " data points"
-                } else { return "" }
-            }()
-            return Text(streamDatapointCount)
-                .foregroundColor(invertTextColor ? reverseOut.opacity(0.7) : .mySecondary)
-                .adaptiveFont(.actionStateDetail)
-        }
 
-        @ViewBuilder private var downloadPercent: some View {
-            if case let .working(percent) = action.actionState[vm.info.mac] {
-                let label = String(percent) + "%"
+    }
+}
 
-                ProgressView(
-                    value: Double(percent),
-                    total: 100,
-                    label: { },
-                    currentValueLabel: { }
-                )
-                    .progressViewStyle(LinearProgressViewStyle(tint: reverseOut))
-                    .accessibilityValue(Text(label))
-                    .help(label)
-                    .frame(width: 100)
-            }
+struct DataPointCounter: View {
+
+    let mac: MACAddress
+    var invertTextColor: Bool
+    @ObservedObject var counters: StreamingCountersContainer
+    @Environment(\.reverseOutColor) private var reverseOut
+
+    var body: some View {
+        if #available(iOS 15.0, macOS 12.0, *) {
+            TimelineView(.periodic(from: Date(), by: 1)) { _ in stats }
+        } else { stats }
+    }
+
+    private var stats: some View {
+        let streamDatapointCount: String = {
+            if let count = counters.counts[mac]?.info {
+                return " " + count + " data points"
+            } else { return "" }
+        }()
+        return Text(streamDatapointCount)
+            .foregroundColor(invertTextColor ? reverseOut.opacity(0.7) : .mySecondary)
+            .adaptiveFont(.actionStateDetail)
+    }
+}
+
+struct DownloadPercentBar: View {
+
+    var mac: MACAddress
+    @EnvironmentObject private var action: ActionVM
+    @Environment(\.reverseOutColor) private var reverseOut
+
+    var body: some View {
+        if #available(iOS 15.0, macOS 12.0, *) {
+            TimelineView(.periodic(from: Date(), by: 1)) { _ in downloadPercent }
+        } else { downloadPercent }
+    }
+
+    @ViewBuilder private var downloadPercent: some View {
+        if case let .working(percent) = action.actionState[mac] {
+            let label = String(percent) + "%"
+
+            ProgressView(
+                value: Double(percent),
+                total: 100,
+                label: { },
+                currentValueLabel: { }
+            )
+                .progressViewStyle(LinearProgressViewStyle(tint: reverseOut))
+                .accessibilityValue(Text(label))
+                .help(label)
+                .frame(width: 100)
         }
     }
 }

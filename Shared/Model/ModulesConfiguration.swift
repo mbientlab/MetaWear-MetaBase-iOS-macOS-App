@@ -7,19 +7,19 @@ import MetaWearSync
 /// Generate sensor configuration based on user parameters
 public struct ModulesConfiguration: Equatable, Hashable {
 
-    public var accelerometer: MWAccelerometer? = nil
-    public var altitude: MWBarometer.MWAltitude? = nil
-    public var ambientLight: MWAmbientLight? = nil
-    public var gyroscope: MWGyroscope? = nil
-    public var humidity: MWHumidity? = nil
-    public var magnetometer: MWMagnetometer? = nil
-    public var pressure: MWBarometer.MWPressure? = nil
-    public var thermometer: MWThermometer? = nil
+    public private(set) var accelerometer: MWAccelerometer? = nil
+    public private(set) var altitude: MWBarometer.MWAltitude? = nil
+    public private(set) var ambientLight: MWAmbientLight? = nil
+    public private(set) var gyroscope: MWGyroscope? = nil
+    public private(set) var humidity: MWHumidity? = nil
+    public private(set) var magnetometer: MWMagnetometer? = nil
+    public private(set) var pressure: MWBarometer.MWPressure? = nil
+    public private(set) var thermometer: MWThermometer? = nil
 
-    public var fusionEuler: MWSensorFusion.EulerAngles? = nil
-    public var fusionGravity: MWSensorFusion.Gravity? = nil
-    public var fusionLinear: MWSensorFusion.LinearAcceleration? = nil
-    public var fusionQuaternion: MWSensorFusion.Quaternion? = nil
+    public private(set) var fusionEuler: MWSensorFusion.EulerAngles? = nil
+    public private(set) var fusionGravity: MWSensorFusion.Gravity? = nil
+    public private(set) var fusionLinear: MWSensorFusion.LinearAcceleration? = nil
+    public private(set) var fusionQuaternion: MWSensorFusion.Quaternion? = nil
 
     public init(_ config: UserSensorConfiguration, modules: [MWModules.ID:MWModules]) {
 
