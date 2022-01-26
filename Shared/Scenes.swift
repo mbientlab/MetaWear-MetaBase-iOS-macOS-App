@@ -7,7 +7,7 @@ struct MainScene: Scene {
     static let minWidth: CGFloat = 1100
 
     // ConfigureScreen showing 2 tile rows (585)
-    static let minHeight: CGFloat = 675
+    static let minHeight: CGFloat = 700
 
     let root: Root
 
