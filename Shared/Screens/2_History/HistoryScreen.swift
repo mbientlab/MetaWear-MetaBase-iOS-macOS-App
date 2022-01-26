@@ -37,7 +37,7 @@ struct HistoryScreen: View {
 
     /// macOS + iPad
     private var wideLayout: some View {
-        HStack(alignment: .firstTextBaseline, spacing: .screenInset) {
+        HStack(alignment: .top, spacing: .screenInset) {
 
             VStack(alignment: .leading) {
                 ScreenSubsection(label: "About", trailing: {
