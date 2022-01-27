@@ -28,7 +28,7 @@ public struct ItemState {
 
     public var identifyTip: String
     public var isIdentifying: Bool
-    public var ledVM: MWLED.Flash.Pattern.Emulator
+    public var ledVM: MWLED.Flash.Emulator
 
     public var isWorking: Bool { isIdentifying || connection == .connecting }
     public var showCloudSync: Bool { isLocallyKnown == false && models.isEmpty == false }

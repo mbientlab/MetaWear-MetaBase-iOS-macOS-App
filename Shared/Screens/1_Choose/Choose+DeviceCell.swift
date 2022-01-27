@@ -98,7 +98,7 @@ extension ChooseDevicesScreen.DeviceCell {
         var name: String
         var models: [(mac: String, model: MetaWear.Model)]
         var isGroup: Bool
-        let ledEmulator: MWLED.Flash.Pattern.Emulator
+        let ledEmulator: MWLED.Flash.Emulator
         let isUnrecognized: Bool
         var isLogging: Bool
 
@@ -199,7 +199,7 @@ extension ChooseDevicesScreen.DeviceCell {
 
         var isGroup: Bool
         var models: [(mac: String, model: MetaWear.Model)]
-        let ledEmulator: MWLED.Flash.Pattern.Emulator
+        let ledEmulator: MWLED.Flash.Emulator
 
         @Environment(\.isDropTarget) private var isDropping
         @Environment(\.isHovered) private var isHovering

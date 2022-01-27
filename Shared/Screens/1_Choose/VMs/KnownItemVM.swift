@@ -28,7 +28,7 @@ public class KnownItemVM: ObservableObject, ItemVM {
     // Flash LED action
     @Published private var isIdentifyingMACs = Set<MACAddress>()
     public var isIdentifying: Bool { isIdentifyingMACs.isEmpty == false }
-    public let ledVM = MWLED.Flash.Pattern.Emulator(preset: .zero)
+    public let ledVM = MWLED.Flash.Emulator(preset: .zero)
 
     // Drag/drop
     @Published private(set) public var dropOutcome: DraggableMetaWear.DropOutcome = .noDrop
@@ -184,7 +184,7 @@ public extension KnownItemVM {
         isIdentifyingMACs.insert(device.meta.mac)
 
         metawear.publishWhenConnected()
-            .command(.ledFlash(ledVM.pattern))
+            .command(.led(ledVM.color, ledVM.pattern))
             .first()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in

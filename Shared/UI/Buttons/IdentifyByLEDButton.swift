@@ -8,7 +8,7 @@ struct IdentifyByLEDButton: View {
 
     var flashScale: CGFloat = 1.3
     var request: () -> Void
-    @ObservedObject var emulator: MWLED.Flash.Pattern.Emulator
+    @ObservedObject var emulator: MWLED.Flash.Emulator
     @Environment(\.reverseOutColor) private var reverseOut
 
 
@@ -34,7 +34,7 @@ struct IdentifyByLEDButton: View {
     }
 
     var flashingBackground: some View {
-        Circle().foregroundColor(emulator.ledIsOn ? .init(emulator.pattern.color) : .clear)
+        Circle().foregroundColor(emulator.ledIsOn ? .init(emulator.color) : .clear)
             .scaleEffect(flashScale)
     }
 }
@@ -43,7 +43,7 @@ struct IdentifyByLEDLargeButton: View {
 
     var request: () -> Void
     var isRequesting: Bool
-    @ObservedObject var emulator: MWLED.Flash.Pattern.Emulator
+    @ObservedObject var emulator: MWLED.Flash.Emulator
     @Environment(\.reverseOutColor) private var reverseOut
 
     var body: some View {
@@ -73,6 +73,6 @@ struct IdentifyByLEDLargeButton: View {
 
     var flashingBackground: some View {
         RoundedRectangle(cornerRadius: 2)
-            .foregroundColor(emulator.ledIsOn ? .init(emulator.pattern.color) : .clear)
+            .foregroundColor(emulator.ledIsOn ? .init(emulator.color) : .clear)
     }
 }

@@ -25,7 +25,7 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     public private(set) var rssi:                  SignalLevel
     @Published public private(set) var rssiInt:    Int
     @Published public private(set) var connection: CBPeripheralState
-    let led = MWLED.Flash.Pattern.Emulator(preset: .one)
+    let led = MWLED.Flash.Emulator(preset: .one)
 
     @Published private var device: MetaWear?
     private var rssiSub:           AnyCancellable? = nil
@@ -78,7 +78,7 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     
     /// Set a unique LED identification pattern when in a group of devices.
     public func configure(for index: Int) {
-        led.pattern = MWLED.Flash.Pattern.Presets.init(rawValue: index % 10)!.pattern
+        led.pattern = MWLED.Preset.init(rawValue: index % 10)!.pattern
     }
 }
 
@@ -148,7 +148,7 @@ public extension AboutDeviceVM {
             .first()
             .command(.buzz(milliseconds: 500))
             .command(.buzzMMR(milliseconds: 500, percentStrength: 1))
-            .command(.ledFlash(led.pattern))
+            .command(.led(led.color, led.pattern))
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] _ in
                 self?.led.emulate()
             })
@@ -183,14 +183,13 @@ public extension AboutDeviceVM {
 
     /// To support downloading at a later date (@ThomasMcGuckian feature request)
     func stopLogging() {
-        let pattern = MWLED.Flash.Pattern(color: .systemPink, intensity: 1, repetitions: 2, duration: 300, period: 800)
         stopLoggingSub = device?
             .publishWhenConnected()
             .first()
             .loggersPause()
             .command(.powerDownSensors)
             .command(.resetActivities)
-            .command(.ledFlash(pattern))
+            .command(.led(.systemPink, .pulse(repetitions: 1)))
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] _ in
                 self?.updateLoggedDataSize()
             })
@@ -199,12 +198,11 @@ public extension AboutDeviceVM {
     }
 
     func deleteLoggedData() {
-        let pattern = MWLED.Flash.Pattern(color: .systemRed, intensity: 1, repetitions: 2, duration: 300, period: 800)
         deleteDataSub = device?
             .publishWhenConnected()
             .first()
             .command(.deleteLoggedData)
-            .command(.ledFlash(pattern))
+            .command(.led(.red, .pulse(repetitions: 2)))
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] _ in
                 self?.updateLoggedDataSize()
             })

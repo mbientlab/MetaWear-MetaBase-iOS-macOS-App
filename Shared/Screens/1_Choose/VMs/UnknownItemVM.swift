@@ -11,7 +11,7 @@ import Combine
 ///
 public class UnknownItemVM: ObservableObject, ItemVM {
 
-    public let ledVM: MWLED.Flash.Pattern.Emulator = .init(preset: .eight)
+    public let ledVM: MWLED.Flash.Emulator = .init(preset: .eight)
 
     public var matchedGeometryID: String { device.peripheral.identifier.uuidString }
     public private(set) var name: String
