@@ -297,7 +297,7 @@ class SensorConfig: NSObject {
         values: ["12.5 Hz", "25 Hz", "50 Hz", "100 Hz", "200 Hz", "400 Hz", "800 Hz"],
         frequencyLookup: [12.5, 25.0, 50.0, 100.0, 200.0, 400.0, 800.0],
         valueLookup: [12.5, 25, 50, 100, 200, 400, 800],
-        moduleId: MBL_MW_MODULE_ACC_TYPE_BMI270,
+        moduleId: UInt8(MBL_MW_MODULE_ACC_TYPE_BMI270),
         rangeValues: ["±16 Gs", "±8 G's", "±4 G's"," ±2 G's"],
         rangeLookup: [16.0, 8.0, 4.0, 2.0]
     )
@@ -305,7 +305,7 @@ class SensorConfig: NSObject {
         values: ["12.5 Hz", "25 Hz", "50 Hz", "100 Hz", "200 Hz", "400 Hz", "800 Hz"],
         frequencyLookup: [12.5, 25.0, 50.0, 100.0, 200.0, 400.0, 800.0],
         valueLookup: [12.5, 25, 50, 100, 200, 400, 800],
-        moduleId: MBL_MW_MODULE_ACC_TYPE_BMI160,
+        moduleId: UInt8(MBL_MW_MODULE_ACC_TYPE_BMI160),
         rangeValues: ["±16 Gs", "±8 G's", "±4 G's"," ±2 G's"],
         rangeLookup: [16.0, 8.0, 4.0, 2.0]
     )
@@ -313,7 +313,7 @@ class SensorConfig: NSObject {
         values: ["15.62 Hz", "31.26 Hz", "62.5 Hz", "125 Hz", "250 Hz", "500 Hz"],
         frequencyLookup: [15.62, 31.26, 62.5, 125.0, 250.0, 500],
         valueLookup: [15.62, 31.26, 62.5, 125, 250, 500],
-        moduleId: MBL_MW_MODULE_ACC_TYPE_BMA255,
+        moduleId: UInt8(MBL_MW_MODULE_ACC_TYPE_BMA255),
         rangeValues: ["±16 Gs", "±8 G's", "±4 G's"," ±2 G's"],
         rangeLookup: [16.0, 8.0, 4.0, 2.0]
     )
@@ -321,7 +321,7 @@ class SensorConfig: NSObject {
         values: ["1.56 Hz", "6.25 Hz", "12.5 Hz", "50 Hz", "100 Hz", "200 Hz", "400 Hz", "800 Hz"],
         frequencyLookup: [1.56, 6.25, 12.5, 50.0, 100.0, 200.0, 400.0, 800.0],
         valueLookup: [1.56, 6.25, 12.5, 50, 100, 200, 400, 800],
-        moduleId: MBL_MW_MODULE_ACC_TYPE_MMA8452Q,
+        moduleId: UInt8(MBL_MW_MODULE_ACC_TYPE_MMA8452Q),
         rangeValues: ["±8 G's", "±4 G's"," ±2 G's"],
         rangeLookup: [8.0, 4.0, 2.0]
     )
@@ -454,7 +454,7 @@ class SensorConfig: NSObject {
             mbl_mw_baro_bosch_write_config(board)
             return Task<()>(())
         },
-        moduleId: MBL_MW_MODULE_BARO_TYPE_BMP280
+        moduleId: UInt8(MBL_MW_MODULE_BARO_TYPE_BMP280)
     )
     static let pressureBME280 = SensorConfig.Pressure(
         values: ["0.99 Hz", "1.96 Hz", "3.82 Hz", "7.33 Hz", "13.5 Hz", "31.8 Hz", "46.5 Hz", "83.3 Hz"],
@@ -474,7 +474,7 @@ class SensorConfig: NSObject {
             mbl_mw_baro_bosch_write_config(board)
             return Task<()>(())
         },
-        moduleId: MBL_MW_MODULE_BARO_TYPE_BME280
+        moduleId: UInt8(MBL_MW_MODULE_BARO_TYPE_BME280)
     )
     static let humidity = TimedSensorConfig(
         name: "Humidity",
