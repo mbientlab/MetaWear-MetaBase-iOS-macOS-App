@@ -172,7 +172,8 @@ private extension MetaBase4SessionDataImporter {
             name: representativeItem.note,
             group: groupID,
             devices: deviceMACs,
-            files: Set(files.map(\.id))
+            files: Set(files.map(\.id)),
+            didComplete: true
         )
 
         importQueueSub = sessions.addSession(session, files: files)

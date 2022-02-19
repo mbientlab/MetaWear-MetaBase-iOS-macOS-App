@@ -11,23 +11,35 @@ public struct Session: Identifiable, Hashable {
     public var group: UUID? = nil
     public var devices: Set<MACAddress>
     public var files: Set<UUID>
+    /// Did the download complete
+    public var didComplete: Bool
 
 
     public func duplicate(files: [File]) -> (session: Self, files: [File]) {
         let files = files.map { $0.duplicate() }
-        let session = Self.init(id: .init(), date: date, name: name, group: group, devices: devices, files: Set(files.map(\.id)))
+        let session = Self.init(id: .init(),
+                                date: date,
+                                name: name,
+                                group: group,
+                                devices: devices,
+                                files: Set(files.map(\.id)),
+                                didComplete: self.didComplete)
         return (session, files)
     }
 
     public struct LoggingToken: Identifiable, Hashable {
         public var id: Routing.Item
+        public var sessionID: Session.ID
         public var date: Date
         public var name: String
+        public var isLogging: Bool
 
-        public init(id: Routing.Item, date: Date, name: String) {
+        public init(id: Routing.Item, date: Date, name: String, sessionID: Session.ID, isLogging: Bool) {
             self.id = id
             self.date = date
             self.name = name
+            self.sessionID = sessionID
+            self.isLogging = isLogging
         }
     }
 }

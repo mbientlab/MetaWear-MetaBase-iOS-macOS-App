@@ -22,10 +22,13 @@ protocol ActionController: AnyObject {
     var streamCancel:    PassthroughSubject<Void,Never> { get }
     var streamCounters:  StreamingCountersContainer { get }
 
-    func registerLoggingToken()
+    func registerLoggingToken(isLogging: Bool)
     func removeLoggingToken()
     func updateActionState(mac: MACAddress, state: ActionState)
-    func saveData(tables: [MWDataTable], for mac: MACAddress)
+    /// Store accumulating data in preparation for a completion or early termination of the action
+    func stashData(tables: [MWDataTable], for mac: MACAddress)
+    /// Persist the accumulated data
+    func saveData(for mac: MACAddress, didComplete: Bool)
 }
 
 extension ActionType {
@@ -63,15 +66,19 @@ extension ActionType {
             .downloadLogs(startDate: controller.startDate)
             .receive(on: controller.workQueue)
             .handleEvents(receiveOutput: { [weak controller] download in
+                // Update data and report current progress
+                controller?.stashData(tables: download.data, for: mac)
                 let percent = Int(download.percentComplete * 100)
                 controller?.updateActionState(mac: mac, state: .working(percent))
             })
-            .drop(while: { $0.percentComplete < 1 })
-            .handleEvents(receiveOutput: { [weak controller] download in
-                controller?.saveData(tables: download.data, for: mac)
+            .handleEvents(receiveCancel: { [weak controller] in
+                // Export and save on pause
+                controller?.saveData(for: mac, didComplete: false)
             })
+            .drop(while: { $0.percentComplete < 1 })
             .map { _ in () }
             .handleEvents(receiveOutput: { [weak controller] _ in
+                controller?.saveData(for: mac, didComplete: true)
                 controller?.removeLoggingToken()
             })
             .eraseToAnyPublisher()
@@ -89,11 +96,13 @@ extension ActionType {
             .publishWhenConnected()
             .first()
             .mapToMWError()
+            .command(.resetActivities)
+            .command(.macroEraseAll)
             .macro(config)
             .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .map { _ in () }
             .handleEvents(receiveOutput: { [weak controller] _ in
-                controller?.registerLoggingToken()
+                controller?.registerLoggingToken(isLogging: true)
             })
             .eraseToAnyPublisher()
     }
@@ -166,7 +175,8 @@ extension ActionType {
             .receive(on: controller.workQueue)
             .collect()
             .handleEvents(receiveOutput: { [weak controller] tables in
-                controller?.saveData(tables: tables, for: mac)
+                controller?.stashData(tables: tables, for: mac)
+                controller?.saveData(for: mac, didComplete: true)
             })
             .map { _ in () }
             .eraseToAnyPublisher()

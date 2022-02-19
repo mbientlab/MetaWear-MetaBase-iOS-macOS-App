@@ -97,7 +97,7 @@ public extension HistoricalSessionsVM {
             return
         }
 
-        sessionRepo.fetchFiles(in: session)
+        sessionRepo.fetchFiles(sessionID: session.id)
             .receive(on: backgroundQueue)
             .tryMap { files -> FilesExporter in
                 try FilesExporter(

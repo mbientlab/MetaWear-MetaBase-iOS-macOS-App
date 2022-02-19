@@ -170,7 +170,10 @@ public extension AboutDeviceVM {
         refreshSub = device?.publishWhenDisconnected()
             .first()
             .delay(for: 1.5, tolerance: 0.5, scheduler: DispatchQueue.main)
-            .sink { $0.connect() }
+            .sink { [weak self] in
+                $0.connect()
+                self?.refreshAll()
+            }
 
         connectIfNeeded()
     }
@@ -188,7 +191,6 @@ public extension AboutDeviceVM {
             .first()
             .loggersPause()
             .command(.powerDownSensors)
-            .command(.resetActivities)
             .command(.led(.systemPink, .pulse(repetitions: 1)))
             .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] _ in
                 self?.updateLoggedDataSize()

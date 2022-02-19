@@ -42,15 +42,19 @@ fileprivate struct MBLoggingTokenDTO1: Codable {
     var id: RoutingItemDTO1
     var date: Date
     var name: String
+    var sessionID: UUID
+    var isLogging: Bool
 
     init(model: Session.LoggingToken) {
         self.id = .init(model: model.id)
         self.date = model.date
         self.name = model.name
+        self.sessionID = model.sessionID
+        self.isLogging = model.isLogging
     }
 
     func load() -> Session.LoggingToken {
-        .init(id: id.load(), date: date, name: name)
+        .init(id: id.load(), date: date, name: name, sessionID: sessionID, isLogging: isLogging)
     }
 }
 

@@ -12,6 +12,7 @@ public class SessionMO: NSManagedObject, Identifiable {
     @NSManaged public var date: Date?
     @NSManaged public var files: NSSet?
     @NSManaged public var devices: NSSet?
+    @NSManaged public var didComplete: Bool
 }
 
 extension SessionMO {

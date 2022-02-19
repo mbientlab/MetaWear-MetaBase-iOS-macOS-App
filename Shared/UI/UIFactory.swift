@@ -129,12 +129,17 @@ public extension UIFactory {
     func makeActionVM() -> ActionVM {
         guard let focus = routing.focus else { fatalError("Set focus before navigation") }
         let action = ActionType(destination: routing.destination)
-        let date = logging.session(for: focus.item)?.date ?? Date()
+        let token = logging.session(for: focus.item) ??
+            .init(id: focus.item,
+                  date: Date(),
+                  name: focus.sessionNickname,
+                  sessionID: .init(),
+                  isLogging: true
+            )
         let (_, metawears) = getKnownDevices(for: focus.item)
         let vms = makeAboutVMs(for: metawears)
         return .init(action: action,
-                     name: focus.sessionNickname,
-                     date: date,
+                     token: token,
                      devices: metawears,
                      vms: vms,
                      store: devices,
