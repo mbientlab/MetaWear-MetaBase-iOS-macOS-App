@@ -21,8 +21,10 @@ extension ActionScreen {
                     successCTAs
                 } else if vm.actionType == .stream {
                     CTAButton("Stop Streaming") { vm.stopStreaming() }
+                } else if vm.actionType == .downloadLogs {
+                    pauseDownloadCTA
                 } else {
-                    CTAButton("Cancel", hover: .mySecondary, base: .mySecondary) { vm.cancelAndUndo() }
+                    cancelCTA
                 }
             }
             .frame(maxWidth: .infinity)
@@ -30,6 +32,14 @@ extension ActionScreen {
 #if os(macOS)
             .controlSize(.large)
 #endif
+        }
+
+        private var cancelCTA: some View {
+            CTAButton("Cancel", hover: .mySecondary, base: .mySecondary) { vm.cancelAndUndo() }
+        }
+
+        private var pauseDownloadCTA: some View {
+            CTAButton("Stop", hover: .mySecondary, base: .mySecondary) { vm.pauseDownload() }
         }
 
         @ViewBuilder private var successCTAs: some View {
