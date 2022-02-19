@@ -195,12 +195,15 @@ public extension ActionVM {
 
     func pauseDownload() {
         deviceVMs.forEach { $0.disconnect() }
-        actions.forEach { $0.value.cancel() }
-        actionFocus = ""
-        actionState = actionState.mapValues({ state in
-            guard state.hasOutcome == false else { return state }
-            return .completed
-        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) { [self] in
+
+            actions.forEach { $0.value.cancel() }
+            actionFocus = ""
+            actionState = actionState.mapValues({ state in
+                guard state.hasOutcome == false else { return state }
+                return .completed
+            })
+        }
     }
 
     func cancelAndUndo() {
@@ -219,11 +222,13 @@ public extension ActionVM {
 
     func backToHistory() {
         streamCancel.send()
+        deviceVMs.forEach { $0.disconnect() }
         routing.goBack(until: .history)
     }
 
     func backToChooseDevices() {
         streamCancel.send()
+        deviceVMs.forEach { $0.disconnect() }
         routing.goBack(until: .choose)
     }
 }
@@ -369,7 +374,6 @@ extension ActionVM: ActionController {
     /// Call after downloading or completing streaming for one device
     func saveData(for mac: MACAddress, didComplete: Bool) {
         workQueue.async(flags: .barrier) { [weak self] in
-
             guard let self = self, let tables = self.currentDataStream[mac] else { return }
 
             for table in tables {
@@ -404,6 +408,9 @@ internal extension ActionVM {
 
     /// Call on background queue to trigger, when all devices' data are ready, a database write + option for user to immediately export
     private func updateDevicesExportReadyState(didComplete: Bool) {
+        print("----updateDevicesExportReadyState-------")
+        print(self.files, self.currentDataStream.mapValues { $0.map(\.rows.count) })
+        print("-----------")
         devicesExportReady += 1
         guard devicesExportReady == devices.endIndex, files.isEmpty == false else { return }
         self.saveSessionToAppDatabase(didComplete: didComplete)
@@ -413,6 +420,9 @@ internal extension ActionVM {
 
         DispatchQueue.main.async { [weak self] in
             self?.showExportFilesCTA = true
+            print("-----------")
+            print("SHOW EXPORT")
+            print("-----------")
         }
     }
 
