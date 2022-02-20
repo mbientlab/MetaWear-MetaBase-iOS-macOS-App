@@ -41,6 +41,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     private var devicesExportReady:     Int = 0
     private var exporter:               FilesExporter? = nil
     private var saveSession:            AnyCancellable? = nil
+    private var navigationSub:          AnyCancellable? = nil
 
     // Queue for performing action device-by-device (on private DispatchQueue)
     private var nextQueueItem:          QueueItem? = nil
@@ -195,15 +196,12 @@ public extension ActionVM {
 
     func pauseDownload() {
         deviceVMs.forEach { $0.disconnect() }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) { [self] in
-
-            actions.forEach { $0.value.cancel() }
-            actionFocus = ""
-            actionState = actionState.mapValues({ state in
-                guard state.hasOutcome == false else { return state }
-                return .completed
-            })
-        }
+        actions.forEach { $0.value.cancel() }
+        actionFocus = ""
+        actionState = actionState.mapValues({ state in
+            guard state.hasOutcome == false else { return state }
+            return .completed
+        })
     }
 
     func cancelAndUndo() {
@@ -222,14 +220,23 @@ public extension ActionVM {
 
     func backToHistory() {
         streamCancel.send()
+        navigateUponDisconnect(to: .history)
         deviceVMs.forEach { $0.disconnect() }
-        routing.goBack(until: .history)
     }
 
     func backToChooseDevices() {
         streamCancel.send()
+        navigateUponDisconnect(to: .choose)
         deviceVMs.forEach { $0.disconnect() }
-        routing.goBack(until: .choose)
+    }
+
+    private func navigateUponDisconnect(to dest: Routing.Destination) {
+        navigationSub = Publishers.MergeMany(deviceVMs.map(\.$connection))
+            .filter { $0 == .disconnected }
+            .collect(deviceVMs.count)
+            .sink { [weak self] _ in
+                self?.routing.goBack(until: dest)
+            }
     }
 }
 
@@ -292,7 +299,7 @@ private extension ActionVM {
             : self.actionFails.reversed()
         }
         for item in actionQueue {
-            DispatchQueue.main.sync  { [weak self] in
+            DispatchQueue.main.async  { [weak self] in
                 self?.actionState[item.meta.mac, default: .notStarted] = .notStarted
             }
         }
