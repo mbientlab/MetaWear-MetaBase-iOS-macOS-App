@@ -77,20 +77,7 @@ public extension HistoryScreenVM {
         items.forEach { $0.connect() }
 
         startValidatingSessionStartCTA()
-
-        let focus = routing.focus!.item
-        loggingUpdates = logging.tokens
-            .map { $0[focus] }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] token in
-                guard let self = self else { return }
-                self.loggingToken = token
-                if token == nil {
-                    self.setCTAByLogLength()
-                } else {
-                    self.cta = AvailableActivity(ongoingLoggingSession: token)
-                }
-            }
+        trackLoggingTokenToUpdateCTA()
     }
 
     func performCTA() {
@@ -146,6 +133,7 @@ private extension HistoryScreenVM {
         let timer = Timer.TimerPublisher(interval: 0.5, tolerance: 0.5, runLoop: .main, mode: .common)
             .autoconnect()
             .share()
+
         enableCTAUpdates = timer
             .compactMap { [weak self] _ in
                 self?.items.allSatisfy { $0.connection == .connected }
@@ -166,6 +154,7 @@ private extension HistoryScreenVM {
                 self?.showSessionStartAlert = !canStart
             })
 
+        // Coalesce devices into one "connection state"
 #if os(iOS)
         allDevicesConnectionSub = timer
             .compactMap { [weak self] _ -> CBPeripheralState? in
@@ -179,6 +168,22 @@ private extension HistoryScreenVM {
                 self?.allDevicesConnectionState = state
             }
 #endif
+    }
+
+    func trackLoggingTokenToUpdateCTA() {
+        let focus = routing.focus!.item
+        loggingUpdates = logging.tokens
+            .map { $0[focus] }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] token in
+                guard let self = self else { return }
+                self.loggingToken = token
+                if token == nil {
+                    self.setCTAByLogLength()
+                } else {
+                    self.cta = AvailableActivity(ongoingLoggingSession: token)
+                }
+            }
     }
 }
 

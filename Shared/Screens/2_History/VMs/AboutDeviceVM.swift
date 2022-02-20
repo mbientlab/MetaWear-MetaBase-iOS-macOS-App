@@ -110,6 +110,7 @@ public extension AboutDeviceVM {
     func onAppear() {
         guard didAppear == false else { return }
         didAppear = true
+        // Publish updates when logged bytes change
         loggedDataBytesSubject
             .removeDuplicates()
             .sink { [weak self] _ in
