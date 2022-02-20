@@ -350,7 +350,6 @@ private extension ActionVM {
 
 // MARK: - Save data from Stream or Download actions
 
-
 extension ActionVM: ActionController {
 
     func updateActionState(mac: MACAddress, state: ActionState) {
@@ -401,8 +400,9 @@ extension ActionVM: ActionController {
                 }
 
                 // Add new data to the end of any existing data
+                let newCSVPrefix = newFile.csv.isEmpty ? "" : "\n"
                 let newCSV = table.makeCSV(withHeaderRow: newFile.csv.isEmpty)
-                newFile.csv.append(newCSV.data(using: .utf8) ?? .init())
+                newFile.csv.append((newCSVPrefix + newCSV).data(using: .utf8) ?? .init())
                 self.files.append(newFile)
             }
 
