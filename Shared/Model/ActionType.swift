@@ -92,12 +92,31 @@ extension ActionType {
     func recordMacro(for device: MetaWear,
                      _ config: ModulesConfiguration,
                      _ controller: ActionController) -> MWPublisher<Void> {
-        device
+
+        let reset =  device
             .publishWhenConnected()
             .first()
             .mapToMWError()
             .command(.resetActivities)
             .command(.macroEraseAll)
+            .command(.restart)
+            .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
+            .map { _ in () }
+            .eraseToAnyPublisher()
+
+        let reconnect = device
+            .publishWhenDisconnected()
+            .first()
+            .handleEvents(receiveOutput: { $0.connect() })
+            .mapToMWError()
+            .map { _ in () }
+            .eraseToAnyPublisher()
+
+        let program = device
+            .publishWhenConnected()
+            .dropFirst()
+            .first()
+            .mapToMWError()
             .macro(config)
             .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .map { _ in () }
@@ -105,13 +124,15 @@ extension ActionType {
                 controller?.registerLoggingToken(isLogging: true)
             })
             .eraseToAnyPublisher()
+
+        return Publishers.Zip3(reset, reconnect, program).map { _ in () }.eraseToAnyPublisher()
     }
 }
 
 fileprivate extension AnyPublisher where Output == MetaWear {
-    func macro(_ config: ModulesConfiguration) -> MWPublisher<MWMacroIdentifier> {
+    func macro(_ config: ModulesConfiguration) -> MWPublisher<MetaWear> {
         self
-            .command(.macroStartRecording(runOnStartup: true))
+//            .command(.macroStartRecording(runOnStartup: true))
             .optionallyLog(config.button)
             .optionallyLog(config.accelerometer)
             .optionallyLog(config.altitude)
@@ -125,8 +146,8 @@ fileprivate extension AnyPublisher where Output == MetaWear {
             .optionallyLog(config.fusionGravity)
             .optionallyLog(config.fusionLinear)
             .optionallyLog(config.fusionQuaternion)
-            .command(.macroStopRecordingAndGenerateIdentifier)
-            .map(\.result)
+//            .command(.macroStopRecordingAndGenerateIdentifier)
+//            .map(\.result)
             .eraseToAnyPublisher()
     }
 }
