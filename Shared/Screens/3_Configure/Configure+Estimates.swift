@@ -13,14 +13,14 @@ extension ConfigureScreen {
         var body: some View {
             content
                 .adaptiveFont(.estimates)
-                .animation(.easeOut, value: vm.shouldStream)
+                .animation(.easeOut, value: vm.mode)
                 .animation(.easeOut, value: vm.config.totalFreq.rateHz)
         }
 
         @ViewBuilder private var content: some View {
             batteryLife
 
-            if vm.shouldStream == .stream {
+            if vm.mode == .stream {
                 streamRate
             } else {
                 logFillDuration

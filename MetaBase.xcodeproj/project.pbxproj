@@ -65,6 +65,8 @@
 		941A08F7276FB2AE006D52E3 /* PresetSensorParametersStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */; };
 		941A08FD276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */; };
 		941A08FE276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */; };
+		9428FA0127C8437F00245F06 /* RecordingPreferenceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9428FA0027C8437F00245F06 /* RecordingPreferenceStore.swift */; };
+		9428FA0227C8437F00245F06 /* RecordingPreferenceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9428FA0027C8437F00245F06 /* RecordingPreferenceStore.swift */; };
 		942C82DD279241CC008F146D /* SessionRepoSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942C82DC279241CC008F146D /* SessionRepoSpy.swift */; };
 		942C82DF27924228008F146D /* MockDefaultsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942C82DE27924228008F146D /* MockDefaultsContainer.swift */; };
 		942C82E227924395008F146D /* Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv in Resources */ = {isa = PBXBuildFile; fileRef = 942C82E127924395008F146D /* Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv */; };
@@ -301,6 +303,7 @@
 		9419AF472791616B00AAD6E0 /* MetaBase4ImporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaBase4ImporterTests.swift; sourceTree = "<group>"; };
 		941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorParametersStore.swift; sourceTree = "<group>"; };
 		941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorConfiguration.swift; sourceTree = "<group>"; };
+		9428FA0027C8437F00245F06 /* RecordingPreferenceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingPreferenceStore.swift; sourceTree = "<group>"; };
 		942C82DC279241CC008F146D /* SessionRepoSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRepoSpy.swift; sourceTree = "<group>"; };
 		942C82DE27924228008F146D /* MockDefaultsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDefaultsContainer.swift; sourceTree = "<group>"; };
 		942C82E127924395008F146D /* Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv"; sourceTree = "<group>"; };
@@ -587,6 +590,7 @@
 				949D102027911F770024B180 /* OnboardState.swift */,
 				941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */,
 				949E5A6627729B7A00D45740 /* SessionRepository.swift */,
+				9428FA0027C8437F00245F06 /* RecordingPreferenceStore.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -1118,6 +1122,7 @@
 				94BBC21327C5535A002D9396 /* HighlightingSegmentedControl.swift in Sources */,
 				94BBC21627C570D4002D9396 /* RecordingModes.swift in Sources */,
 				94528561275BDF8D004D815B /* UserDefaults+.swift in Sources */,
+				9428FA0127C8437F00245F06 /* RecordingPreferenceStore.swift in Sources */,
 				949E5A6A2772ACA500D45740 /* Session.swift in Sources */,
 				94528564275BE0D8004D815B /* RootNavigationController.swift in Sources */,
 				9446F64727829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */,
@@ -1232,6 +1237,7 @@
 				94BBC21427C5535A002D9396 /* HighlightingSegmentedControl.swift in Sources */,
 				94BBC21727C570D4002D9396 /* RecordingModes.swift in Sources */,
 				94E3A7F8275FF5DD007E2BAE /* HistoryScreenVM.swift in Sources */,
+				9428FA0227C8437F00245F06 /* RecordingPreferenceStore.swift in Sources */,
 				949E5A6B2772ACA500D45740 /* Session.swift in Sources */,
 				9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
 				9446F64827829E3A00B535AD /* MBLoggingTokensContainer.swift in Sources */,

@@ -20,6 +20,12 @@ public extension UserDefaults.MetaWear.Keys {
     /// Contains: Versioned data. Access only via a store.
     static let loggingTokens = key("loggingTokens")
 
+    /// Contains: String value for session recording method.
+    static let lastActionChoice = key("lastActionChoice")
+
+    /// Contains: Boolean for UI state of having onboarded the new remote recording mode
+    static let didOnboardRemoteMode = key("didOnboardRemoteMode")
+
     /// Contains: String array. Unique device identifiers (UUID string on iOS, ethernet MACs on Mac). Access only via a store.
     static let importedLegacySessions = key("importedLegacySessions")
 

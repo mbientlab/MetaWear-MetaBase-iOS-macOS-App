@@ -17,6 +17,7 @@ public class UIFactory: ObservableObject {
                 _ defaults: UserDefaultsContainer,
                 _ launches: LocalLaunchCounter,
                 _ onboard:  OnboardState,
+                _ recording: RecordingPreferenceStore,
                 _ workQueue: DispatchQueue
     ) {
         self.presets = presets
@@ -29,19 +30,21 @@ public class UIFactory: ObservableObject {
         self.defaults = defaults
         self.launches = launches
         self.onboard = onboard
+        self.recording = recording
         self.workQueue = workQueue
     }
 
-    private unowned let defaults: UserDefaultsContainer
-    private unowned let devices:  MetaWearSyncStore
-    private unowned let sessions: SessionRepository
-    private unowned let presets:  PresetSensorParametersStore
-    private unowned let logging:  ActiveLoggingSessionsStore
-    private unowned let importer: MetaBase4SessionDataImporter
-    private unowned let scanner:  MetaWearScanner
-    private unowned let routing:  Routing
-    private unowned let launches: LocalLaunchCounter
-    private unowned let onboard:  OnboardState
+    private unowned let defaults:  UserDefaultsContainer
+    private unowned let devices:   MetaWearSyncStore
+    private unowned let importer:  MetaBase4SessionDataImporter
+    private unowned let launches:  LocalLaunchCounter
+    private unowned let logging:   ActiveLoggingSessionsStore
+    private unowned let onboard:   OnboardState
+    private unowned let presets:   PresetSensorParametersStore
+    private unowned let recording: RecordingPreferenceStore
+    private unowned let routing:   Routing
+    private unowned let scanner:   MetaWearScanner
+    private unowned let sessions:  SessionRepository
     private unowned let workQueue: DispatchQueue
 }
 
@@ -121,7 +124,13 @@ public extension UIFactory {
     func makeConfigureVM() -> ConfigureVM {
         guard let focus = routing.focus else { fatalError("Set focus before navigation") }
         let (title, metawears) = getKnownDevices(for: focus.item)
-        return .init(title: title, item: focus.item, devices: metawears, presets: presets, routing: routing)
+        return .init(title: title,
+                     item: focus.item,
+                     devices: metawears,
+                     presets: presets,
+                     routing: routing,
+                     prefs: recording
+        )
     }
 
     // MARK: - Perform Log/Download/Stream

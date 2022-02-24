@@ -22,6 +22,9 @@ struct RemoteHelpView: View {
     @StateObject private var emulatorLog = MWLED.Flash.Emulator(.solid(), .red)
     @StateObject private var emulatorPause = MWLED.Flash.Emulator(.solid(), .yellow)
 
+    @AppStorage(UserDefaults.MetaWear.Keys.didOnboardRemoteMode)
+    private var didOnboardRemote = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
             Text("Remote Control Logging")
@@ -48,6 +51,7 @@ struct RemoteHelpView: View {
                 VStack { pause }
             }
         }
+        .onAppear { didOnboardRemote = true }
         .environment(\.metaWearModel, .motionS)
     }
 

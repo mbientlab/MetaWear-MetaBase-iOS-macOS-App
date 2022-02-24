@@ -23,6 +23,7 @@ public class Root: ObservableObject {
     private let metawearLoader: MWLoader<MWKnownDevicesLoadable>
     private let presetsLoader:  MWLoader<SensorPresetsLoadable>
     private let loggingLoader:  MWLoader<LoggingTokensLoadable>
+    private let recordingPrefs: RecordingPreferenceStore
     private let launchCounter:  LocalLaunchCounter
 
     // UI
@@ -39,6 +40,7 @@ public class Root: ObservableObject {
         self.metawearLoader  = MetaWeariCloudSyncLoader(userDefaults.local, userDefaults.cloud)
         self.presetsLoader   = SensorPresetsCloudLoader(userDefaults)
         self.loggingLoader   = LoggingTokensCloudLoader(userDefaults)
+        self.recordingPrefs  = RecordingPreferenceStore(userDefaults)
 
         self.priorityQueue = ._makeQueue(named: "actions", qos: .userInitiated)
         self.launchCounter   = LocalLaunchCounter(userDefaults)
@@ -55,7 +57,7 @@ public class Root: ObservableObject {
         )
         self.onboard         = OnboardState(importer, userDefaults, launchCounter)
         let routing = Routing()
-        let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing, userDefaults, launchCounter, onboard, priorityQueue)
+        let factory = UIFactory(devices, sessions, presets, logging, importer, scanner, routing, userDefaults, launchCounter, onboard, recordingPrefs, priorityQueue)
 
         self.devices = devices
         self.routing = routing

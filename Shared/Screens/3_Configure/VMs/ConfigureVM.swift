@@ -10,15 +10,30 @@ import mbientSwiftUI
 public class ConfigureVM: ObservableObject, HeaderVM {
 
     // State
-    @Published var shouldStream: RecordingModes = .stream // View edits via binding
-    @Published var config: UserSensorConfiguration // View edits via binding
+    /// Stream, log, etc.
+    @Published var mode: RecordingModes
+    { didSet { recordingStore.updateMode(to: mode) } }
+
+    /// Sensors chosen
+    @Published var config: UserSensorConfiguration
+
+    /// Quick select a prior sensor configuration
     @Published private(set) var presets: [PresetSensorConfiguration] = []
 
+    /// Legal sensor choices for selected device(s)
     public let options: LegalSensorParameters
-    public var canStart: Bool { config.totalFreq.rateHz > 0 || config.button }
+
+    /// Has selected sensors to record
+    public var canStart: Bool {
+        config.totalFreq.rateHz > 0 || config.button
+    }
+
+    /// Chosen sensors match a preset configuration
     var selectedPreset: PresetSensorConfiguration? {
         presets.first(where: { $0.config == config })
     }
+
+    /// Total data transmission frequency
     var frequencyLabel: String {
         config.totalFreq.rateHz == 0
         ? "—"
@@ -54,10 +69,17 @@ public class ConfigureVM: ObservableObject, HeaderVM {
     private let routingItem: Routing.Item
     private unowned let routing: Routing
     private unowned let presetsStore: PresetSensorParametersStore
+    private unowned let recordingStore: RecordingPreferenceStore
     private var presetsUpdates: AnyCancellable? = nil
     private var lifetimeEstimates: AnyCancellable? = nil
 
-    public init(title: String, item: Routing.Item, devices: [MWKnownDevice], presets: PresetSensorParametersStore, routing: Routing) {
+    public init(title: String,
+                item: Routing.Item,
+                devices: [MWKnownDevice],
+                presets: PresetSensorParametersStore,
+                routing: Routing,
+                prefs: RecordingPreferenceStore
+    ) {
         self.title = title
         self.routingItem = item
         self.devices = devices
@@ -68,6 +90,8 @@ public class ConfigureVM: ObservableObject, HeaderVM {
         self.routing = routing
         self.modules = devices.map(\.meta.modules.values).map { $0.map { $0 } }
         self.models = devices.map(\.meta.model)
+        self.recordingStore = prefs
+        self.mode = recordingStore.lastMode
         update(presets: presets)
         updateLifetimeEstimates()
     }
@@ -78,8 +102,8 @@ public class ConfigureVM: ObservableObject, HeaderVM {
 extension ConfigureVM {
 
     func requestStart() {
-        routing.setConfigs(buildConfigContainers(mode: shouldStream), sessionNickname: sessionNameBinding.wrappedValue)
-        routing.setDestination(shouldStream == .stream ? .stream : .log)
+        routing.setConfigs(buildConfigContainers(mode: mode), sessionNickname: sessionNameBinding.wrappedValue)
+        routing.setDestination(mode == .stream ? .stream : .log)
     }
 
 }
