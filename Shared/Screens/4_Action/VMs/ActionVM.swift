@@ -153,9 +153,12 @@ public extension ActionVM {
     func exportFiles() {
         isExporting = true
 #if os(macOS)
-        exporter?.runExportInteraction(onQueue: workQueue) { _ in
+        exporter?.runExportInteraction(onQueue: workQueue) { result in
             DispatchQueue.main.async { [weak self] in
                 self?.isExporting = false
+                if case let .success(url) = result, let url = url {
+                    NSWorkspace.shared.activateFileViewerSelecting([url])
+                }
             }
         }
 #else

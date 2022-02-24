@@ -20,7 +20,7 @@ extension ConfigureScreen {
         @ViewBuilder private var content: some View {
             batteryLife
 
-            if vm.shouldStream {
+            if vm.shouldStream == .stream {
                 streamRate
             } else {
                 logFillDuration

@@ -10,7 +10,7 @@ import mbientSwiftUI
 public class ConfigureVM: ObservableObject, HeaderVM {
 
     // State
-    @Published var shouldStream = true // View edits via binding
+    @Published var shouldStream: RecordingModes = .stream // View edits via binding
     @Published var config: UserSensorConfiguration // View edits via binding
     @Published private(set) var presets: [PresetSensorConfiguration] = []
 
@@ -78,8 +78,8 @@ public class ConfigureVM: ObservableObject, HeaderVM {
 extension ConfigureVM {
 
     func requestStart() {
-        routing.setConfigs(buildConfigContainers(), sessionNickname: sessionNameBinding.wrappedValue)
-        routing.setDestination(shouldStream ? .stream : .log)
+        routing.setConfigs(buildConfigContainers(mode: shouldStream), sessionNickname: sessionNameBinding.wrappedValue)
+        routing.setDestination(shouldStream == .stream ? .stream : .log)
     }
 
 }
@@ -175,9 +175,9 @@ public extension ConfigureVM {
 
 private extension ConfigureVM {
 
-    func buildConfigContainers() -> [ModulesConfiguration] {
+    func buildConfigContainers(mode: RecordingModes) -> [ModulesConfiguration] {
         devices.map { device in
-            ModulesConfiguration(config, modules: device.meta.modules)
+            ModulesConfiguration(config, modules: device.meta.modules, mode: mode)
         }
     }
 

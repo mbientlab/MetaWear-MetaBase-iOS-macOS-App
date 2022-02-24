@@ -43,9 +43,9 @@ extension ActionType {
                             _ controller: ActionController
     ) -> MWPublisher<Void> {
         switch self {
-            case .downloadLogs: return downloadLogs(for: device, mac, controller)
-            case .log: return recordMacro(for: device, config, controller)
-            case .stream: return stream(for: device, mac: mac, config: config, controller)
+        case .downloadLogs: return downloadLogs(for: device, mac, controller)
+        case .log: return recordMacro(for: device, config, controller)
+        case .stream: return stream(for: device, mac: mac, config: config, controller)
         }
     }
 
@@ -63,6 +63,8 @@ extension ActionType {
             .mapToMWError()
             .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .first()
+            .loggersStart()
+            .delay(for: 0.3, tolerance: 0, scheduler: controller.workQueue)
             .downloadLogs(startDate: controller.startDate)
             .receive(on: controller.workQueue)
             .handleEvents(receiveOutput: { [weak controller] download in
@@ -91,7 +93,8 @@ extension ActionType {
 
     func recordMacro(for device: MetaWear,
                      _ config: ModulesConfiguration,
-                     _ controller: ActionController) -> MWPublisher<Void> {
+                     _ controller: ActionController
+    ) -> MWPublisher<Void> {
 
         let reset =  device
             .publishWhenConnected()
@@ -117,7 +120,8 @@ extension ActionType {
             .dropFirst()
             .first()
             .mapToMWError()
-            .macro(config)
+            .writeRemoteStartPauseEvents(config)
+            .writeLoggingMacro(config)
             .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .map { _ in () }
             .handleEvents(receiveOutput: { [weak controller] _ in
@@ -129,26 +133,68 @@ extension ActionType {
     }
 }
 
-fileprivate extension AnyPublisher where Output == MetaWear {
-    func macro(_ config: ModulesConfiguration) -> MWPublisher<MetaWear> {
-        self
-//            .command(.macroStartRecording(runOnStartup: true))
-            .optionallyLog(config.button)
-            .optionallyLog(config.accelerometer)
-            .optionallyLog(config.altitude)
-            .optionallyLog(config.gyroscope)
-            .optionallyLog(byPolling: config.humidity)
-            .optionallyLog(config.ambientLight)
-            .optionallyLog(config.magnetometer)
-            .optionallyLog(config.pressure)
-            .optionallyLog(byPolling: config.thermometer)
-            .optionallyLog(config.fusionEuler)
-            .optionallyLog(config.fusionGravity)
-            .optionallyLog(config.fusionLinear)
-            .optionallyLog(config.fusionQuaternion)
-//            .command(.macroStopRecordingAndGenerateIdentifier)
-//            .map(\.result)
+fileprivate extension AnyPublisher where Output == MetaWear, Failure == MWError {
+    func writeLoggingMacro(_ config: ModulesConfiguration) -> MWPublisher<MWMacro.StopRecording.DataType> {
+        let startsImmediately = config.mode == .log
+        return self
+            .command(.macroStartRecording(runOnStartup: true))
+            .optionallyLog(config.button, startsImmediately: startsImmediately)
+            .optionallyLog(config.accelerometer, startsImmediately: startsImmediately)
+            .optionallyLog(config.altitude, startsImmediately: startsImmediately)
+            .optionallyLog(config.gyroscope, startsImmediately: startsImmediately)
+            .optionallyLog(byPolling: config.humidity, startsImmediately: startsImmediately)
+            .optionallyLog(config.ambientLight, startsImmediately: startsImmediately)
+            .optionallyLog(config.magnetometer, startsImmediately: startsImmediately)
+            .optionallyLog(config.pressure, startsImmediately: startsImmediately)
+            .optionallyLog(byPolling: config.thermometer, startsImmediately: startsImmediately)
+            .optionallyLog(config.fusionEuler, startsImmediately: startsImmediately)
+            .optionallyLog(config.fusionGravity, startsImmediately: startsImmediately)
+            .optionallyLog(config.fusionLinear, startsImmediately: startsImmediately)
+            .optionallyLog(config.fusionQuaternion, startsImmediately: startsImmediately)
+            .command(.macroStopRecordingAndGenerateIdentifier)
+            .map(\.result)
             .eraseToAnyPublisher()
+    }
+
+    func writeRemoteStartPauseEvents(_ config: ModulesConfiguration) -> MWPublisher<MetaWear> {
+        guard config.mode == .remote else {
+            return self
+                .command(.led(.red, .slowRecordingFlash()))
+        }
+        return self
+            .recordEvents(for: .buttonReleaseOdds) { record in
+                record
+                    .loggersStart()
+                    .command(.logUserEvent(flag: 3))
+                    .command(.led(.red, .slowRecordingFlash()))
+            }
+            .recordEvents(for: .buttonReleaseEvens) { record in
+                record
+                    .command(.logUserEvent(flag: 4))
+                    .loggersPause()
+                    .command(.led(.yellow, .slowRecordingFlash()))
+            }
+            .recordEvents(for: .buttonPressOdds) { record in
+                record.command(.led(.red, .solid()))
+            }
+            .recordEvents(for: .buttonPressEvens) { record in
+                record.command(.led(.yellow, .solid()))
+            }
+    }
+}
+
+extension MWLED.Flash.Pattern {
+    static func slowRecordingFlash() -> Self {
+        MWLED.Flash.Pattern.custom(
+            repetitions: .max,
+            period: 5000,
+            riseTime: 0,
+            highTime: 70,
+            fallTime: 0,
+            offset: 0,
+            intensityCeiling: 1,
+            intensityFloor: 0
+        )
     }
 }
 

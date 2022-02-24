@@ -13,7 +13,9 @@ extension ActionScreen {
 
         var body: some View {
             HStack {
+                
                 Spacer()
+
                 CloudSaveStateIndicator(state: vm.cloudSaveState, showSuccess: false)
                     .padding(.trailing, 75)
 

@@ -13,18 +13,20 @@ struct HighlightToggleStyle: ToggleStyle {
     @Namespace private var toggle
 
     func makeBody(configuration: Configuration) -> some View {
-        HStack(spacing: 10 - padding) {
+        HStack(spacing: max(0, 10 - padding)) {
             Option(label: off,
                    color: offColor,
                    isOn: !configuration.isOn,
                    set: { configuration.isOn = false },
-                   font: font
+                   font: font,
+                   padding: padding
             )
             Option(label: on,
                    color: onColor,
                    isOn: configuration.isOn,
                    set: { configuration.isOn = true },
-                   font: font
+                   font: font,
+                   padding: padding
             )
         }
         .environment(\.namespace, toggle)

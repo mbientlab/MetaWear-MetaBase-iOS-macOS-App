@@ -169,22 +169,25 @@ private extension HistoricalSessionsVM {
         export.runExportInteraction(onQueue: backgroundQueue) { [weak self] result in
             DispatchQueue.main.async { [weak self] in
                 switch result {
-                    case .failure(let error):
-                        #if os(iOS)
-                        self?.didDismissExportPopover(
-                            selectedActivity: nil,
-                            didPerformSelection: false,
-                            modifiedItems: nil,
-                            error: error)
-                        #elseif os(macOS)
-                        self?.didDismissExportPopover(error: error)
-                        #endif
+                case .failure(let error):
+#if os(iOS)
+                    self?.didDismissExportPopover(
+                        selectedActivity: nil,
+                        didPerformSelection: false,
+                        modifiedItems: nil,
+                        error: error)
+#elseif os(macOS)
+                    self?.didDismissExportPopover(error: error)
+#endif
 
-                    case .success(let exportable):
-                        self?.export = exportable
-                        self?.exportID = sessionID
+                case .success(let exportable):
+                    self?.export = exportable
+                    self?.exportID = sessionID
 #if os(macOS)
-                        self?.didDismissExportPopover(error: nil)
+                    if let url = exportable {
+                        NSWorkspace.shared.activateFileViewerSelecting([url])
+                    }
+                    self?.didDismissExportPopover(error: nil)
 #endif
                 }
             }

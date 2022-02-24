@@ -179,6 +179,10 @@
 		94AEA08327854E5F00C8BE23 /* UniqueDeviceIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA08127854E5F00C8BE23 /* UniqueDeviceIdentifier.swift */; };
 		94AEA085278556E500C8BE23 /* MigrationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA084278556E500C8BE23 /* MigrationSession.swift */; };
 		94AEA086278556E500C8BE23 /* MigrationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AEA084278556E500C8BE23 /* MigrationSession.swift */; };
+		94BBC21327C5535A002D9396 /* HighlightingSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94BBC21227C5535A002D9396 /* HighlightingSegmentedControl.swift */; };
+		94BBC21427C5535A002D9396 /* HighlightingSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94BBC21227C5535A002D9396 /* HighlightingSegmentedControl.swift */; };
+		94BBC21627C570D4002D9396 /* RecordingModes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94BBC21527C570D4002D9396 /* RecordingModes.swift */; };
+		94BBC21727C570D4002D9396 /* RecordingModes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94BBC21527C570D4002D9396 /* RecordingModes.swift */; };
 		94BCCE46276FE9AC009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE45276FE9AC009832E1 /* CloudKit.framework */; };
 		94BCCE48276FE9BE009832E1 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94BCCE47276FE9BE009832E1 /* CloudKit.framework */; };
 		94C80F75278F7312007522D5 /* DebugUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C80F74278F7312007522D5 /* DebugUtilities.swift */; };
@@ -357,6 +361,8 @@
 		94AEA07E27854E2200C8BE23 /* CloudSaveState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSaveState.swift; sourceTree = "<group>"; };
 		94AEA08127854E5F00C8BE23 /* UniqueDeviceIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueDeviceIdentifier.swift; sourceTree = "<group>"; };
 		94AEA084278556E500C8BE23 /* MigrationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationSession.swift; sourceTree = "<group>"; };
+		94BBC21227C5535A002D9396 /* HighlightingSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightingSegmentedControl.swift; sourceTree = "<group>"; };
+		94BBC21527C570D4002D9396 /* RecordingModes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingModes.swift; sourceTree = "<group>"; };
 		94BCCE45276FE9AC009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		94BCCE47276FE9BE009832E1 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		94C80F74278F7312007522D5 /* DebugUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugUtilities.swift; sourceTree = "<group>"; };
@@ -493,6 +499,7 @@
 				941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */,
 				949E5A692772ACA500D45740 /* Session.swift */,
 				9409C5C127613890001FE850 /* UserSensorConfiguration.swift */,
+				94BBC21527C570D4002D9396 /* RecordingModes.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -644,6 +651,7 @@
 				9481D767276FD5CE00AB97FA /* Configure+Presets.swift */,
 				940E01AD2780DEB9002AD641 /* Configure+Estimates.swift */,
 				9409C5D12762971D001FE850 /* Configure+CTAs.swift */,
+				94BBC21227C5535A002D9396 /* HighlightingSegmentedControl.swift */,
 			);
 			path = 3_Configure;
 			sourceTree = "<group>";
@@ -1107,6 +1115,8 @@
 				9446F64D2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift in Sources */,
 				94336F07277523E500759C55 /* CoreDataController.swift in Sources */,
 				94EBA39F275A128A008C62E7 /* ConfigureScreen.swift in Sources */,
+				94BBC21327C5535A002D9396 /* HighlightingSegmentedControl.swift in Sources */,
+				94BBC21627C570D4002D9396 /* RecordingModes.swift in Sources */,
 				94528561275BDF8D004D815B /* UserDefaults+.swift in Sources */,
 				949E5A6A2772ACA500D45740 /* Session.swift in Sources */,
 				94528564275BE0D8004D815B /* RootNavigationController.swift in Sources */,
@@ -1219,6 +1229,8 @@
 				9446F64E2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift in Sources */,
 				94336F08277523E500759C55 /* CoreDataController.swift in Sources */,
 				9493501B275A112200E388FF /* DiscoveryListVM.swift in Sources */,
+				94BBC21427C5535A002D9396 /* HighlightingSegmentedControl.swift in Sources */,
+				94BBC21727C570D4002D9396 /* RecordingModes.swift in Sources */,
 				94E3A7F8275FF5DD007E2BAE /* HistoryScreenVM.swift in Sources */,
 				949E5A6B2772ACA500D45740 /* Session.swift in Sources */,
 				9452857B275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
