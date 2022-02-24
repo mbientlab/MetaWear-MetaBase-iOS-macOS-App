@@ -404,7 +404,8 @@ extension ActionVM: ActionController {
 
                 // Add new data to the end of any existing data
                 let newCSVPrefix = newFile.csv.isEmpty ? "" : "\n"
-                let newCSV = table.makeCSV(withHeaderRow: newFile.csv.isEmpty)
+                let parsedTable = table.formatButtonLogs()
+                let newCSV = parsedTable.makeCSV(withHeaderRow: newFile.csv.isEmpty)
                 newFile.csv.append((newCSVPrefix + newCSV).data(using: .utf8) ?? .init())
                 self.files.append(newFile)
             }
@@ -418,9 +419,6 @@ internal extension ActionVM {
 
     /// Call on background queue to trigger, when all devices' data are ready, a database write + option for user to immediately export
     private func updateDevicesExportReadyState(didComplete: Bool) {
-        print("----updateDevicesExportReadyState-------")
-        print(self.files, self.currentDataStream.mapValues { $0.map(\.rows.count) })
-        print("-----------")
         devicesExportReady += 1
         guard devicesExportReady == devices.endIndex, files.isEmpty == false else { return }
         self.saveSessionToAppDatabase(didComplete: didComplete)
@@ -430,9 +428,6 @@ internal extension ActionVM {
 
         DispatchQueue.main.async { [weak self] in
             self?.showExportFilesCTA = true
-            print("-----------")
-            print("SHOW EXPORT")
-            print("-----------")
         }
     }
 

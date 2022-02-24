@@ -183,6 +183,31 @@ fileprivate extension AnyPublisher where Output == MetaWear, Failure == MWError 
     }
 }
 
+extension MWDataTable {
+    func formatButtonLogs() -> MWDataTable {
+        guard self.source == .mechanicalButton,
+              var dataIndex = self.rows.first?.endIndex
+        else { return self }
+        dataIndex = max(0, dataIndex - 1)
+        var edited = self
+        edited.rows = edited.rows.map { row in
+            switch row[dataIndex] {
+            case "3":
+                var row = row
+                row[dataIndex] = "Start"
+                return row
+            case "4":
+                var row = row
+                row[dataIndex] = "Pause"
+                return row
+            default:
+                return row
+            }
+        }
+        return edited
+    }
+}
+
 extension MWLED.Flash.Pattern {
     static func slowRecordingFlash() -> Self {
         MWLED.Flash.Pattern.custom(
