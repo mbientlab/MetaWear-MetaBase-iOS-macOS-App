@@ -60,7 +60,7 @@ struct CTAButton: View {
                 .padding(.horizontal, hPadding)
                 .padding(.vertical, vPadding)
                 .padding(padding)
-                .frame(minWidth: 150, maxWidth: maxWidth, alignment: .center)
+                .frame(minWidth: idiom == .iPhone ? 110 : 150, maxWidth: maxWidth, alignment: .center)
                 .whenHovered { isHovered = $0 }
         }
         .buttonStyle(UnderlinedButtonStyle(color: hover,

@@ -20,13 +20,13 @@ public extension OnboardingSessionVM.Content {
                 .init(
                     symbol: .barometer,
                     headline: "Record Bluetooth Sensors",
-                    description: "Group and configure your MetaWear sensors to log or stream data in CSV format.",
+                    description: "Group and configure MetaWear sensors to log or stream data in CSV format.",
                     color: Color(.systemOrange)
                 ),
                 .init(
                     symbol: .icloud,
                     headline: "iCloud Sync",
-                    description: "Access sensor recordings across your iPads, iPhones, and Macs.",
+                    description: "Access sensor recordings across iPads, iPhones, and Macs.",
                     color: .myMint
                 ),
                 .init(
@@ -54,7 +54,7 @@ public extension OnboardingSessionVM.Content {
                 .init(
                     symbol: .icloud,
                     headline: "iCloud Sync",
-                    description: "Sync recordings and settings across \(devicesTip)",
+                    description: "Sync recordings across \(devicesTip). Prior data can be imported or found in the Files app.",
                     color: .myMint
                 ),
                 .init(

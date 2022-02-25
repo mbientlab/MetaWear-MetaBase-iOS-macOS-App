@@ -35,7 +35,29 @@ struct HighlightToggleStyle: ToggleStyle {
 
     struct Option: View {
 
-        var label: String
+        internal init(symbol: SFSymbol, color: Color, isOn: Bool, set: @escaping () -> Void, font: Font.Config, padding: CGFloat = 6) {
+            self.label = AnyView(symbol.image())
+            self.color = color
+            self.isOn = isOn
+            self.set = set
+            self.font = font
+            self.padding = padding
+        }
+
+        internal init(label: String, color: Color, isOn: Bool, set: @escaping () -> Void, font: Font.Config, padding: CGFloat = 6) {
+            self.label = AnyView(
+                Text(label)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .lineLimit(1)
+            )
+            self.color = color
+            self.isOn = isOn
+            self.set = set
+            self.font = font
+            self.padding = padding
+        }
+
+        var label: AnyView
         var color: Color
         var isOn: Bool
         var set: () -> Void
@@ -46,10 +68,8 @@ struct HighlightToggleStyle: ToggleStyle {
         
         var body: some View {
             Button(action: set) {
-                Text(label)
+                label
                     .adaptiveFont(font.bumpWeight(isOn))
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(1)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 8)
                     .padding(padding)

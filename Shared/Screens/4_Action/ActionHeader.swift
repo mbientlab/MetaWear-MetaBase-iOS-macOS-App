@@ -6,7 +6,7 @@ public protocol ActionHeaderVM: HeaderVM {
     var actionType: ActionType { get }
     var representativeConfig: ModulesConfiguration { get }
     var title: String { get }
-    var hasError: Bool { get }
+    var hasErrors: Bool { get }
     var showExportFilesCTA: Bool { get }
     func backToHistory()
 }
@@ -63,7 +63,7 @@ struct ActionHeader: View {
     private func userDidTapBackButton() {
         if vm.actionType == .downloadLogs
             && vm.showExportFilesCTA == false
-            && vm.hasError == false {
+            && vm.hasErrors == false {
             showDownloadAlert = true
         } else {
             vm.backToHistory()

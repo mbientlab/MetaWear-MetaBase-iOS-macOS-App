@@ -74,7 +74,11 @@ extension ActionScreen {
                     .shadow(color: .black.opacity(0.4), radius: 1, x: 1, y: 1)
 
                 Text(vm.meta.name)
-                    .adaptiveFont(.actionDeviceTitle.bumpWeight(isActionFocus))
+                    .adaptiveFont(
+                        .actionDeviceTitle
+                            .bumpWeight(isActionFocus)
+                            .adjustingSize(steps: idiom == .iPhone ? -1 : 0)
+                    )
                     .padding(.trailing, connectionSpacing)
                     .reportMaxWidth(to: NameWK.self)
                     .frame(minWidth: nameWidth, alignment: .leading)
@@ -83,7 +87,7 @@ extension ActionScreen {
 
         private var connectionState: some View {
             HStack(spacing: spacing) {
-                ConnectionIcon(color: foreground)
+                ConnectionIcon(color: foreground, size: idiom == .iPhone ? .systemSubheadline : .systemHeadline)
                 LargeSignalDots(color: foreground, dotSize: 9, spacing: 3)
             }.opacity(0.85)
         }

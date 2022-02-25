@@ -6,18 +6,29 @@ import SwiftUI
 
 public enum RecordingModes: String, Selectable {
     case stream, log, remote
+
     public var displayName: String { rawValue.capitalized }
     public var id: RawValue { rawValue }
+    public var sfSymbol: SFSymbol {
+        switch self {
+        case .stream: return .stream
+        case .log: return .log
+        case .remote: return .mechanicalSwitch
+        }
+    }
 
     func helpView() -> AnyView? {
         switch self {
         case .stream, .log: return nil
-        case .remote: return AnyView(RemoteHelpView())
+        case .remote: return AnyView(RemoteHelpView(showNewToMetaBase: false))
         }
     }
 }
 
+
 struct RemoteHelpView: View {
+
+    var showNewToMetaBase: Bool
 
     @StateObject private var emulatorLog = MWLED.Flash.Emulator(.solid(), .red)
     @StateObject private var emulatorPause = MWLED.Flash.Emulator(.solid(), .yellow)
@@ -25,10 +36,21 @@ struct RemoteHelpView: View {
     @AppStorage(UserDefaults.MetaWear.Keys.didOnboardRemoteMode)
     private var didOnboardRemote = false
 
+    @Environment(\.presentationMode) private var present
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading, spacing: idiom == .macOS ? 15 : 25) {
+            #if os(iOS)
+            Button("Close", action: { present.wrappedValue.dismiss() })
+                .adaptiveFont(.systemHeadline)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.top)
+            #endif
+
+            if showNewToMetaBase { newLabel }
+
             Text("Remote Control Logging")
-                .adaptiveFont(.configureTileTitle)
+                .adaptiveFont(idiom == .macOS ? .configureTileTitle : .screenHeader)
                 .foregroundColor(.myHighlight)
 
             Text("Use the MetaWear's button to start or pause data recording.")
@@ -36,12 +58,12 @@ struct RemoteHelpView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .adaptiveFont(.configureTileMenu)
 
-            Text("Compared to logging started immediately from MetaBase, this mode saves some battery, minimizes download size, and helps to split sessions into trials.")
+            Text("Compared to logging that starts immediately from MetaBase, this mode minimizes writes to onboard flash memory and related battery use.")
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .adaptiveFont(.body)
 
-            Text("Logging starts (or pauses) the moment the button is released. While pressed, the LED's color indicates what will happen on release. Logs will include timestamps for button press and release.")
+            Text("Logging starts (or pauses) the moment the button is released. While pressed, the LED's color indicates what will happen on release. Thereafter, a 70 ms reminder LED will flash every 5 seconds. Timestamps for button events are logged.")
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .adaptiveFont(.body)
@@ -50,9 +72,25 @@ struct RemoteHelpView: View {
                 VStack { log }
                 VStack { pause }
             }
+            .padding(.top)
         }
-        .onAppear { didOnboardRemote = true }
+        .lineSpacing(5)
+        .padding(.horizontal, idiom == .macOS ? 0 : 12)
+        .onDisappear { didOnboardRemote = true }
         .environment(\.metaWearModel, .motionS)
+    }
+
+    private var newLabel: some View {
+        Text("New to MetaBase 5")
+            .adaptiveFont(.systemHeadline)
+            .fixedSize(horizontal: false, vertical: true)
+            .lineSpacing(5)
+            .lineLimit(nil)
+            .multilineTextAlignment(.leading)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal)
+            .padding(.vertical)
+            .background(RoundedRectangle(cornerRadius: 10).fill(Color.myGroupBackground3))
     }
 
     private let metaWearSize = CGFloat(100)
