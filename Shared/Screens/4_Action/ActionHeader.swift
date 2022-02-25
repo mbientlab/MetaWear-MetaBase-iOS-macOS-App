@@ -6,6 +6,8 @@ public protocol ActionHeaderVM: HeaderVM {
     var actionType: ActionType { get }
     var representativeConfig: ModulesConfiguration { get }
     var title: String { get }
+    var hasError: Bool { get }
+    var showExportFilesCTA: Bool { get }
     func backToHistory()
 }
 
@@ -18,10 +20,11 @@ struct ActionHeader: View {
     @State private var didAppear = false
     @Environment(\.namespace) private var namespace
     @Namespace private var fallbackNamespace
+    @State private var showDownloadAlert = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 15) {
-            HeaderBackButton(overrideBackAction: vm.backToHistory)
+            HeaderBackButton(overrideBackAction: userDidTapBackButton)
 
             VStack(alignment: .leading, spacing: .init(iPhone: 8, 12)) {
                 Text(vm.actionType.title)
@@ -54,5 +57,16 @@ struct ActionHeader: View {
         .onAppear { if idiom.is_iPhone { didAppear = true } }
         .onDisappear { if idiom.is_iPhone { didAppear = false } }
         .padding(.bottom, .init(iPhone: .screenInset * 1.5, .screenInset))
+        .alert(isPresented: $showDownloadAlert, content: { DownloadAlert.alert(stop: vm.backToHistory) })
+    }
+
+    private func userDidTapBackButton() {
+        if vm.actionType == .downloadLogs
+            && vm.showExportFilesCTA == false
+            && vm.hasError == false {
+            showDownloadAlert = true
+        } else {
+            vm.backToHistory()
+        }
     }
 }

@@ -17,15 +17,19 @@ public enum ActionType {
 protocol ActionController: AnyObject {
 
     var startDate:       Date { get }
+    var tempLoadDate:    [MACAddress: Date] { get set }
     var timeoutDuration: DispatchQueue.SchedulerTimeType.Stride { get }
     var workQueue:       DispatchQueue { get }
     var streamCancel:    PassthroughSubject<Void,Never> { get }
     var streamCounters:  StreamingCountersContainer { get }
 
-    func registerLoggingToken()
+    func registerLoggingToken(isLogging: Bool)
     func removeLoggingToken()
     func updateActionState(mac: MACAddress, state: ActionState)
-    func saveData(tables: [MWDataTable], for mac: MACAddress)
+    /// Store accumulating data in preparation for a completion or early termination of the action
+    func stashData(tables: [MWDataTable], for mac: MACAddress)
+    /// Persist the accumulated data
+    func saveData(for mac: MACAddress, didComplete: Bool)
 }
 
 extension ActionType {
@@ -40,9 +44,9 @@ extension ActionType {
                             _ controller: ActionController
     ) -> MWPublisher<Void> {
         switch self {
-            case .downloadLogs: return downloadLogs(for: device, mac, controller)
-            case .log: return recordMacro(for: device, config, controller)
-            case .stream: return stream(for: device, mac: mac, config: config, controller)
+        case .downloadLogs: return downloadLogs(for: device, mac, controller)
+        case .log: return recordMacro(for: device, config, controller)
+        case .stream: return stream(for: device, mac: mac, config: config, controller)
         }
     }
 
@@ -60,20 +64,31 @@ extension ActionType {
             .mapToMWError()
             .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .first()
+            .handleEvents(receiveOutput: { [weak controller] _ in
+                controller?.tempLoadDate[mac] = Date()
+            })
+            .loggersStart()
+            .delay(for: 0.1, tolerance: 0, scheduler: controller.workQueue)
             .downloadLogs(startDate: controller.startDate)
             .receive(on: controller.workQueue)
             .handleEvents(receiveOutput: { [weak controller] download in
+                // Update data and report current progress
+                controller?.stashData(tables: download.data, for: mac)
                 let percent = Int(download.percentComplete * 100)
                 controller?.updateActionState(mac: mac, state: .working(percent))
             })
-            .drop(while: { $0.percentComplete < 1 })
-            .handleEvents(receiveOutput: { [weak controller] download in
-                controller?.saveData(tables: download.data, for: mac)
+            .handleEvents(receiveCancel: { [weak controller] in
+                // Export and save on pause
+                controller?.saveData(for: mac, didComplete: false)
             })
-            .map { _ in () }
+            .drop(while: { $0.percentComplete < 1 })
             .handleEvents(receiveOutput: { [weak controller] _ in
+                controller?.saveData(for: mac, didComplete: true)
                 controller?.removeLoggingToken()
             })
+            .compactMap { [weak device] _ in device }
+            .command(.led(.green, .pulse(repetitions: 1)))
+            .map { _ in () }
             .eraseToAnyPublisher()
     }
 }
@@ -84,41 +99,159 @@ extension ActionType {
 
     func recordMacro(for device: MetaWear,
                      _ config: ModulesConfiguration,
-                     _ controller: ActionController) -> MWPublisher<Void> {
-        device
+                     _ controller: ActionController
+    ) -> MWPublisher<Void> {
+
+        let reset =  device
             .publishWhenConnected()
             .first()
             .mapToMWError()
-            .macro(config)
+            .command(.resetActivities)
+            .command(.macroEraseAll)
+            .command(.restart)
+            .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
+            .map { _ in () }
+            .eraseToAnyPublisher()
+
+        let reconnect = device
+            .publishWhenDisconnected()
+            .first()
+            .handleEvents(receiveOutput: { $0.connect() })
+            .mapToMWError()
+            .map { _ in () }
+            .eraseToAnyPublisher()
+
+        let program = device
+            .publishWhenConnected()
+            .dropFirst()
+            .first()
+            .mapToMWError()
+            .writeRemoteStartPauseEvents(config)
+            .writeLoggingMacro(config)
             .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .map { _ in () }
             .handleEvents(receiveOutput: { [weak controller] _ in
-                controller?.registerLoggingToken()
+                controller?.registerLoggingToken(isLogging: true)
             })
             .eraseToAnyPublisher()
+
+        return Publishers.Zip3(reset, reconnect, program).map { _ in () }.eraseToAnyPublisher()
     }
 }
 
-fileprivate extension AnyPublisher where Output == MetaWear {
-    func macro(_ config: ModulesConfiguration) -> MWPublisher<MWMacroIdentifier> {
-        self
+fileprivate extension AnyPublisher where Output == MetaWear, Failure == MWError {
+    func writeLoggingMacro(_ config: ModulesConfiguration) -> MWPublisher<MWMacro.StopRecording.DataType> {
+        let startsImmediately = config.mode == .log
+        return self
             .command(.macroStartRecording(runOnStartup: true))
-            .optionallyLog(config.button)
-            .optionallyLog(config.accelerometer)
-            .optionallyLog(config.altitude)
-            .optionallyLog(config.gyroscope)
-            .optionallyLog(byPolling: config.humidity)
-            .optionallyLog(config.ambientLight)
-            .optionallyLog(config.magnetometer)
-            .optionallyLog(config.pressure)
-            .optionallyLog(byPolling: config.thermometer)
-            .optionallyLog(config.fusionEuler)
-            .optionallyLog(config.fusionGravity)
-            .optionallyLog(config.fusionLinear)
-            .optionallyLog(config.fusionQuaternion)
+            .optionallyLog(config.button, startsImmediately: startsImmediately)
+            .optionallyLog(config.accelerometer, startsImmediately: startsImmediately)
+            .optionallyLog(config.altitude, startsImmediately: startsImmediately)
+            .optionallyLog(config.gyroscope, startsImmediately: startsImmediately)
+            .optionallyLog(byPolling: config.humidity, startsImmediately: startsImmediately)
+            .optionallyLog(config.ambientLight, startsImmediately: startsImmediately)
+            .optionallyLog(config.magnetometer, startsImmediately: startsImmediately)
+            .optionallyLog(config.pressure, startsImmediately: startsImmediately)
+            .optionallyLog(byPolling: config.thermometer, startsImmediately: startsImmediately)
+            .optionallyLog(config.fusionEuler, startsImmediately: startsImmediately)
+            .optionallyLog(config.fusionGravity, startsImmediately: startsImmediately)
+            .optionallyLog(config.fusionLinear, startsImmediately: startsImmediately)
+            .optionallyLog(config.fusionQuaternion, startsImmediately: startsImmediately)
             .command(.macroStopRecordingAndGenerateIdentifier)
             .map(\.result)
             .eraseToAnyPublisher()
+    }
+
+    func writeRemoteStartPauseEvents(_ config: ModulesConfiguration) -> MWPublisher<MetaWear> {
+        guard config.mode == .remote else {
+            return self
+                .command(.led(.red, .slowRecordingFlash()))
+        }
+        return self
+            .recordEvents(for: .buttonReleaseOdds) { record in
+                record
+                    .loggersStart()
+                    .command(.logUserEvent(flag: 3))
+                    .command(.led(.red, .slowRecordingFlash()))
+            }
+            .recordEvents(for: .buttonReleaseEvens) { record in
+                record
+                    .command(.logUserEvent(flag: 4))
+                    .loggersPause()
+                    .command(.led(.yellow, .slowRecordingFlash()))
+            }
+            .recordEvents(for: .buttonPressOdds) { record in
+                record.command(.led(.red, .solid()))
+            }
+            .recordEvents(for: .buttonPressEvens) { record in
+                record.command(.led(.yellow, .solid()))
+            }
+            .command(.led(.yellow, .slowRecordingFlash()))
+    }
+}
+
+extension MWDataTable {
+    
+    func prefixUntil(date: Date?) -> MWDataTable {
+        guard let date = date else { return self }
+
+        let lastIndexBeforeDate = self.rows.lastIndex(where: {
+            guard let epoch = Double($0.first ?? "")
+            else { return false }
+            return epoch < date.timeIntervalSince1970
+        })
+
+        guard let lastIndex = lastIndexBeforeDate else {
+            var edited = self
+            edited.rows = []
+            return edited
+        }
+
+        guard lastIndex < self.rows.endIndex - 1 else {
+            return self
+        }
+
+        var edited = self
+        edited.rows = Array(edited.rows.prefix(through: lastIndex))
+        return edited
+    }
+
+    func formatButtonLogs() -> MWDataTable {
+        guard self.source == .mechanicalButton,
+              var dataIndex = self.rows.first?.endIndex
+        else { return self }
+        dataIndex = max(0, dataIndex - 1)
+        var edited = self
+        edited.rows = edited.rows.map { row in
+            switch row[dataIndex] {
+            case "3":
+                var row = row
+                row[dataIndex] = "Start"
+                return row
+            case "4":
+                var row = row
+                row[dataIndex] = "Pause"
+                return row
+            default:
+                return row
+            }
+        }
+        return edited
+    }
+}
+
+extension MWLED.Flash.Pattern {
+    static func slowRecordingFlash() -> Self {
+        MWLED.Flash.Pattern.custom(
+            repetitions: .max,
+            period: 5000,
+            riseTime: 0,
+            highTime: 70,
+            fallTime: 0,
+            offset: 0,
+            intensityCeiling: 1,
+            intensityFloor: 0
+        )
     }
 }
 
@@ -166,7 +299,8 @@ extension ActionType {
             .receive(on: controller.workQueue)
             .collect()
             .handleEvents(receiveOutput: { [weak controller] tables in
-                controller?.saveData(tables: tables, for: mac)
+                controller?.stashData(tables: tables, for: mac)
+                controller?.saveData(for: mac, didComplete: true)
             })
             .map { _ in () }
             .eraseToAnyPublisher()
@@ -232,34 +366,34 @@ public extension ActionType {
 
     var title: String {
         switch self {
-            case .stream:       return "Stream"
-            case .log:          return "Log"
-            case .downloadLogs: return "Download Logs"
+        case .stream:       return "Stream"
+        case .log:          return "Log"
+        case .downloadLogs: return "Download Logs"
         }
     }
 
     var workingLabel: String {
         switch self {
-            case .stream:       return "Streaming"
-            case .log:          return "Programming"
-            case .downloadLogs: return "Downloading"
+        case .stream:       return "Streaming"
+        case .log:          return "Programming"
+        case .downloadLogs: return "Downloading"
         }
     }
 
     var completedLabel: String {
         switch self {
-            case .stream:       return "Streamed"
-            case .log:          return "Logging"
-            case .downloadLogs: return "Downloaded"
+        case .stream:       return "Streamed"
+        case .log:          return "Logging"
+        case .downloadLogs: return "Downloaded"
         }
     }
 
     init(destination: Routing.Destination) {
         switch destination {
-            case .stream: self = .stream
-            case .log: self = .log
-            case .downloadLogs: self = .downloadLogs
-            default: fatalError("Unrecognized action")
+        case .stream: self = .stream
+        case .log: self = .log
+        case .downloadLogs: self = .downloadLogs
+        default: fatalError("Unrecognized action")
         }
     }
 }

@@ -57,7 +57,8 @@ extension SessionMO: ModelConvertible {
                        name: name,
                        group: group,
                        devices: .init(),
-                       files: .init()
+                       files: .init(),
+                       didComplete: didComplete
         )
     }
 }

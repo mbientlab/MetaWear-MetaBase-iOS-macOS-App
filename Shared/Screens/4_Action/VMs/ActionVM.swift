@@ -18,6 +18,8 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     public var representativeConfig:    ModulesConfiguration { configs.first ?? .init() }
     public let actionType:              ActionType
     public var actionDidComplete:       Bool { actionState.allSatisfy { $0.value == .completed } }
+    public var hasErrors:               Bool { actionState.contains(where: { $0.value.hasError }) }
+    @Published private(set) var retrievingPriorSession = false
 
     /// Device currently the focus of connect/stream/log/download command
     @Published public var actionFocus:  MACAddress = ""
@@ -29,16 +31,18 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
 
     // Data export state
     @Published private(set) var export: Any? = nil
-    @Published var showExportFilesCTA = false
-    @Published var isExporting        = false
+    @Published public var showExportFilesCTA = false
+    @Published var isExporting               = false
     @Published var cloudSaveState:      CloudSaveState = .notStarted
-    private let sessionID             = UUID()
+    private let sessionID:              UUID
     public let title:                   String
     internal let startDate:             Date
     private var files:                  [File] = []
+    private var currentDataStream:      [MACAddress:[MWDataTable]] = [:]
     private var devicesExportReady:     Int = 0
     private var exporter:               FilesExporter? = nil
     private var saveSession:            AnyCancellable? = nil
+    private var navigationSub:          AnyCancellable? = nil
 
     // Queue for performing action device-by-device (on private DispatchQueue)
     private var nextQueueItem:          QueueItem? = nil
@@ -46,6 +50,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     private var actionFails:            [QueueItem] = []
     private var actions:                [MACAddress:AnyCancellable] = [:]
     private let configs:                [ModulesConfiguration]
+    internal var tempLoadDate:           [MACAddress : Date] = [:]
     internal let streamCancel            = PassthroughSubject<Void,Never>()
     private var bleQueue:               DispatchQueue { store.bleQueue }
     internal unowned let workQueue:     DispatchQueue
@@ -59,8 +64,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     private unowned let logging:        ActiveLoggingSessionsStore
 
     public init(action: ActionType,
-                name: String,
-                date: Date,
+                token: Session.LoggingToken,
                 devices: [MWKnownDevice],
                 vms: [AboutDeviceVM],
                 store: MetaWearSyncStore,
@@ -70,8 +74,9 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
                 backgroundQueue: DispatchQueue
     ) {
         self.workQueue = backgroundQueue
-        self.title = name
-        self.startDate = date
+        self.title = token.name
+        self.startDate = token.date
+        self.sessionID = token.sessionID
         self.sessions = sessions
         self.actionType = action
         self.devices = devices
@@ -87,7 +92,25 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     }
 
     public func onAppear() {
-        startAction()
+        retrievingPriorSession = true
+        saveSession = sessions.fetchFiles(sessionID: sessionID)
+            .sink { [weak self] completion in
+                // Will error if the session ID isn't pre-existing.
+                // That just means this is a new session, so proceed on.
+                guard case .failure = completion else { return }
+                DispatchQueue.main.async { [weak self] in
+                    self?.retrievingPriorSession = false
+                }
+                self?.startAction()
+            } receiveValue: { [weak self] files in
+                self?.workQueue.sync { [weak self] in
+                    self?.files = files
+                }
+                DispatchQueue.main.sync { [weak self] in
+                    self?.retrievingPriorSession = false
+                }
+                self?.startAction()
+            }
     }
 
     // Header VM conformance
@@ -132,9 +155,12 @@ public extension ActionVM {
     func exportFiles() {
         isExporting = true
 #if os(macOS)
-        exporter?.runExportInteraction(onQueue: workQueue) { _ in
+        exporter?.runExportInteraction(onQueue: workQueue) { result in
             DispatchQueue.main.async { [weak self] in
                 self?.isExporting = false
+                if case let .success(url) = result, let url = url {
+                    NSWorkspace.shared.activateFileViewerSelecting([url])
+                }
             }
         }
 #else
@@ -173,6 +199,16 @@ public extension ActionVM {
 
     // MARK: - Navigation
 
+    func pauseDownload() {
+        deviceVMs.forEach { $0.disconnect() }
+        actions.forEach { $0.value.cancel() }
+        actionFocus = ""
+        actionState = actionState.mapValues({ state in
+            guard state.hasOutcome == false else { return state }
+            return .completed
+        })
+    }
+
     func cancelAndUndo() {
         actions.forEach { $0.value.cancel() }
         workQueue.sync {
@@ -185,18 +221,27 @@ public extension ActionVM {
             return .notStarted
         }
         streamCancel.send()
-        deviceVMs.forEach { $0.reset() }
-
     }
 
     func backToHistory() {
         streamCancel.send()
-        routing.goBack(until: .history)
+        navigateUponDisconnect(to: .history)
+        deviceVMs.forEach { $0.disconnect() }
     }
 
     func backToChooseDevices() {
         streamCancel.send()
-        routing.goBack(until: .choose)
+        navigateUponDisconnect(to: .choose)
+        deviceVMs.forEach { $0.disconnect() }
+    }
+
+    private func navigateUponDisconnect(to dest: Routing.Destination) {
+        navigationSub = Publishers.MergeMany(deviceVMs.map(\.$connection))
+            .filter { $0 == .disconnected }
+            .collect(deviceVMs.count)
+            .sink { [weak self] _ in
+                self?.routing.goBack(until: dest)
+            }
     }
 }
 
@@ -259,7 +304,9 @@ private extension ActionVM {
             : self.actionFails.reversed()
         }
         for item in actionQueue {
-            self.actionState[item.meta.mac, default: .notStarted] = .notStarted
+            DispatchQueue.main.async  { [weak self] in
+                self?.actionState[item.meta.mac, default: .notStarted] = .notStarted
+            }
         }
     }
 
@@ -286,9 +333,11 @@ private extension ActionVM {
     /// Success cases: Advance to the next item, no need to update UI state
     func succeed(fromCurrent: MetaWearMetadata) {
         if Thread.isMainThread {
+            guard actionState[fromCurrent.mac] != .error("No data found") else { return }
             actionState[fromCurrent.mac] = .completed
         } else {
             DispatchQueue.main.sync { [weak self] in
+                guard self?.actionState[fromCurrent.mac] != .error("No data found") else { return }
                 self?.actionState[fromCurrent.mac] = .completed
             }
         }
@@ -308,7 +357,6 @@ private extension ActionVM {
 
 // MARK: - Save data from Stream or Download actions
 
-
 extension ActionVM: ActionController {
 
     func updateActionState(mac: MACAddress, state: ActionState) {
@@ -317,11 +365,13 @@ extension ActionVM: ActionController {
         }
     }
 
-    func registerLoggingToken() {
+    func registerLoggingToken(isLogging: Bool) {
         let token = Session.LoggingToken(
             id: routing.focus!.item,
             date: startDate,
-            name: title
+            name: title,
+            sessionID: sessionID,
+            isLogging: isLogging
         )
         logging.register(token: token)
     }
@@ -330,24 +380,58 @@ extension ActionVM: ActionController {
         logging.remove(token: self.routing.focus!.item)
     }
 
+    func stashData(tables: [MWDataTable], for mac: MACAddress) {
+        self.currentDataStream[mac, default: []] = tables
+    }
+
     /// Call after downloading or completing streaming for one device
-    func saveData(tables: [MWDataTable], for mac: MACAddress) {
+    func saveData(for mac: MACAddress, didComplete: Bool) {
         workQueue.async(flags: .barrier) { [weak self] in
-            guard let self = self else { return }
+            guard let self = self, var tables = self.currentDataStream[mac] else { return }
 
-            let files = tables.reduce(into: [File]()) { files, table in
-                guard table.rows.isEmpty == false else { return }
-                let data = table.makeCSV().data(using: .utf8) ?? Data()
+            for tableIndex in tables.indices {
+
+                guard tables[tableIndex].rows.isEmpty == false else { continue }
                 let deviceName = self.devices.first(where: { $0.meta.mac == mac })?.meta.name ?? mac
-                let file = File(csv: data,
-                                deviceName: deviceName,
-                                signal: table.source,
-                                date: self.startDate)
-                files.append(file)
-            }
-            self.files.append(contentsOf: files)
 
-            self.updateDevicesExportReadyState()
+                var newFile = File(
+                    csv: .init(),
+                    deviceName: deviceName,
+                    signal: tables[tableIndex].source,
+                    date: self.startDate
+                )
+
+                // If a prior session was loaded, use this as the starting data
+                if let preexistingIndex = self.files.firstIndex(where: { $0.name == newFile.name }) {
+                    newFile = self.files[preexistingIndex]
+                    self.files.remove(at: preexistingIndex)
+                }
+
+                // Add new data to the end of any existing data
+                let newCSVPrefix = newFile.csv.isEmpty ? "" : "\n"
+                tables[tableIndex] = tables[tableIndex]
+                    .formatButtonLogs()
+                    .prefixUntil(date: self.tempLoadDate[mac])
+
+                // Only create a CSV if there is data.
+                guard tables[tableIndex].rows.isEmpty == false else {
+                    if newFile.csv.isEmpty { continue }
+                    self.files.append(newFile)
+                    continue
+                }
+
+                let newCSV = tables[tableIndex].makeCSV(withHeaderRow: newFile.csv.isEmpty)
+                newFile.csv.append((newCSVPrefix + newCSV).data(using: .utf8) ?? .init())
+                self.files.append(newFile)
+            }
+
+            if tables.isEmpty || tables.allSatisfy({ $0.rows.isEmpty }) {
+                DispatchQueue.main.async { [weak self] in
+                    self?.actionState[mac] = .error("No data found")
+                }
+            }
+
+            self.updateDevicesExportReadyState(didComplete: didComplete)
         }
     }
 }
@@ -355,10 +439,18 @@ extension ActionVM: ActionController {
 internal extension ActionVM {
 
     /// Call on background queue to trigger, when all devices' data are ready, a database write + option for user to immediately export
-    private func updateDevicesExportReadyState() {
+    private func updateDevicesExportReadyState(didComplete: Bool) {
         devicesExportReady += 1
-        guard devicesExportReady == devices.endIndex, files.isEmpty == false else { return }
-        self.saveSessionToAppDatabase()
+
+        guard devicesExportReady == devices.endIndex,
+              files.isEmpty == false
+        else {
+            DispatchQueue.main.async { [weak self] in
+                self?.actionState = self?.actionState.mapValues { _ in .error("No data found") } ?? [:]
+            }
+            return
+        }
+        self.saveSessionToAppDatabase(didComplete: didComplete)
 
         do { self.exporter = try .init(id: sessionID, name: title, files: files) }
         catch { NSLog("\(Self.self)" + error.localizedDescription) }
@@ -368,18 +460,20 @@ internal extension ActionVM {
         }
     }
 
-    private func saveSessionToAppDatabase() {
+    private func saveSessionToAppDatabase(didComplete: Bool) {
         guard files.isEmpty == false else { return }
         DispatchQueue.main.async { [weak self] in
             self?.cloudSaveState = .saving
         }
 
-        let session = Session(id: sessionID,
-                              date: startDate,
-                              name: title,
-                              group: getGroup(),
-                              devices: Set(deviceVMs.map(\.meta.mac)),
-                              files: Set(files.map(\.id))
+        let session = Session(
+            id: sessionID,
+            date: startDate,
+            name: title,
+            group: getGroup(),
+            devices: Set(deviceVMs.map(\.meta.mac)),
+            files: Set(files.map(\.id)),
+            didComplete: didComplete
         )
 
         saveSession = sessions.addSession(session, files: files)

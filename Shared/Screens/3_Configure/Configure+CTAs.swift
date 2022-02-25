@@ -9,39 +9,17 @@ extension ConfigureScreen {
 
         @EnvironmentObject private var vm: ConfigureVM
 
+        @AppStorage(UserDefaults.MetaWear.Keys.didOnboardRemoteMode)
+        private var didOnboardRemote = false
+
         var body: some View {
             HStack(alignment: .center, spacing: .screenInset) {
-                styledToggle
+                HighlightedSegmentedControl(selection: $vm.mode, hoverDelay: didOnboardRemote ? 1 : 0.25)
                 CTAButton("Start", action: vm.requestStart)
                     .disabled(vm.canStart == false)
             }
-            .animation(.easeOut, value: vm.shouldStream)
+            .animation(.easeOut, value: vm.mode)
             .animation(.easeOut, value: vm.config.totalFreq.rateHz)
-        }
-
-        private var styledToggle: some View {
-            Toggle(isOn: $vm.shouldStream, label: { })
-                .toggleStyle(HighlightToggleStyle(off: "Log", on: "Stream"))
-        }
-
-        private var toggle: some View {
-            Picker(selection: $vm.shouldStream) {
-
-                Text("Stream")
-                    .tag(true)
-                    .help(SFSymbol.stream.accessibilityDescription)
-
-                Text("Log")
-                    .tag(false)
-                    .help(SFSymbol.log.accessibilityDescription)
-
-            } label: { }
-            .pickerStyle(.segmented)
-
-            .fixedSize()
-            #if os(macOS)
-            .controlSize(.large)
-            #endif
         }
     }
 }

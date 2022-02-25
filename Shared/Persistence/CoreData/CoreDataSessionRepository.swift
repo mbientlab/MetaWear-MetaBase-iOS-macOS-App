@@ -21,6 +21,12 @@ public class CoreDataSessionRepository {
 
 extension CoreDataSessionRepository: SessionRepository {
 
+    public func fetchSession(sessionID: Session.ID) -> AnyPublisher<Session, Error> {
+        _fetchSession(sessionID: sessionID)
+            .tryMap { try $0.session.mapToAppModel() }
+            .eraseToAnyPublisher()
+    }
+
     public func fetchAllSessions() -> AnyPublisher<[Session],Error> {
         fetchSessions(withPredicate: { nil })
     }
@@ -37,8 +43,8 @@ extension CoreDataSessionRepository: SessionRepository {
         }
     }
 
-    public func fetchFiles(in session: Session) -> AnyPublisher<[File],Error> {
-        fetchSession(sessionID: session.id)
+    public func fetchFiles(sessionID: Session.ID) -> AnyPublisher<[File],Error> {
+        _fetchSession(sessionID: sessionID)
             .tryMap { sessionMO, context -> [File] in
                 var files = [File]()
                 for fault in (sessionMO.files ?? [])  {
@@ -52,7 +58,7 @@ extension CoreDataSessionRepository: SessionRepository {
     }
 
     public func deleteSession(_ session: Session) -> AnyPublisher<Session,Error> {
-        fetchSession(sessionID: session.id)
+        _fetchSession(sessionID: session.id)
             .tryMap { sessionMO, context -> Session in
                 context.delete(sessionMO)
                 try context.save()
@@ -62,7 +68,7 @@ extension CoreDataSessionRepository: SessionRepository {
     }
 
     public func renameSession(_ session: Session, newName: String) -> AnyPublisher<String,Error> {
-        fetchSession(sessionID: session.id)
+        _fetchSession(sessionID: session.id)
             .tryMap { sessionMO, context in
                 sessionMO.name = newName
                 try context.save()
@@ -71,24 +77,24 @@ extension CoreDataSessionRepository: SessionRepository {
             .eraseToAnyPublisher()
     }
 
+    /// Add or update session
     public func addSession(_ session: Session, files: [File]) -> AnyPublisher<Session,Error> {
+        // Grab relevant MetaWear entities
         fetchDevices(deviceIDs: Array(session.devices))
-            .tryMap { deviceMOs, context -> Session in
-                let newSession = SessionMO(context: context)
-                newSession.id = session.id
-                newSession.name = session.name
-                newSession.group = session.group
-                newSession.date = session.date
+        // Grab relevant prior session or instantiate a new one
+            .tryMap { deviceMOs, context -> ([DeviceMO], NSManagedObjectContext, SessionMO) in
 
-                let files = files.map { file -> FileMO in
-                    let newFile = FileMO(context: context)
-                    newFile.id = file.id
-                    newFile.name = file.name
-                    newFile.csv = file.csv
-                    newFile.session = newSession
-                    return newFile
-                }
+                // Populate or update session
+                let request = SessionMO.fetchRequest()
+                request.predicate = NSPredicate(format: "id == %@", session.id as CVarArg)
+                let sessionMO = try context.fetch(request).first ?? SessionMO(context: context)
+                sessionMO.id = session.id
+                sessionMO.name = session.name
+                sessionMO.group = session.group
+                sessionMO.date = session.date
+                sessionMO.didComplete = session.didComplete
 
+                // Populate or update devices
                 var devices = deviceMOs
                 let existingDeviceMACs = Set(deviceMOs.compactMap(\.mac))
                 for deviceMAC in session.devices {
@@ -99,13 +105,33 @@ extension CoreDataSessionRepository: SessionRepository {
                 }
 
                 devices.forEach {
-                    $0.addToSession(newSession)
-                    newSession.addToDevices($0)
+                    $0.addToSession(sessionMO)
+                    sessionMO.addToDevices($0)
                 }
-                files.forEach { newSession.addToFiles($0) }
 
+                return (deviceMOs, context, sessionMO)
+            }
+        // Setup files by triggering faults in prior session and/or creating new files
+            .tryMap { deviceMOs, context, sessionMO -> ([DeviceMO], NSManagedObjectContext, SessionMO, [FileMO]) in
+                var fileMOs = (sessionMO.files ?? []).map { $0 as! FileMO }
+                for file in files {
+                    guard let fileMO = fileMOs.first(where: { $0.name == file.name }) else {
+                        let newFile = FileMO(context: context)
+                        newFile.id = file.id
+                        newFile.csv = file.csv
+                        newFile.name = file.name
+                        newFile.session = sessionMO
+                        fileMOs.append(newFile)
+                        continue
+                    }
+                    fileMO.csv = file.csv
+                }
+                fileMOs.forEach { sessionMO.addToFiles($0) }
+                return (deviceMOs, context, sessionMO, fileMOs)
+            }
+            .tryMap { _, context, sessionMO, _ in
                 try context.save()
-                return try newSession.mapToAppModel()
+                return try sessionMO.mapToAppModel()
             }
             .eraseToAnyPublisher()
     }
@@ -143,7 +169,7 @@ private extension CoreDataSessionRepository {
         }
     }
 
-    func fetchSession(sessionID: Session.ID)
+    func _fetchSession(sessionID: Session.ID)
     -> AnyPublisher<(session: SessionMO, context: NSManagedObjectContext),Error> {
 
         CoreData { weakSelf, context, promise in

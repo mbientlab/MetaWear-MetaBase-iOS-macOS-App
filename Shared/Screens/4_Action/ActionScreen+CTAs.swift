@@ -13,7 +13,9 @@ extension ActionScreen {
 
         var body: some View {
             HStack {
+                
                 Spacer()
+
                 CloudSaveStateIndicator(state: vm.cloudSaveState, showSuccess: false)
                     .padding(.trailing, 75)
 
@@ -21,8 +23,10 @@ extension ActionScreen {
                     successCTAs
                 } else if vm.actionType == .stream {
                     CTAButton("Stop Streaming") { vm.stopStreaming() }
+                } else if vm.actionType == .downloadLogs {
+                    pauseDownloadCTA
                 } else {
-                    CTAButton("Cancel", hover: .mySecondary, base: .mySecondary) { vm.cancelAndUndo() }
+                    cancelCTA
                 }
             }
             .frame(maxWidth: .infinity)
@@ -30,6 +34,21 @@ extension ActionScreen {
 #if os(macOS)
             .controlSize(.large)
 #endif
+        }
+
+        private var cancelCTA: some View {
+            CTAButton("Cancel", hover: .mySecondary, base: .mySecondary) { vm.cancelAndUndo() }
+        }
+
+        @State private var showPauseAlert = false
+        private var pauseDownloadCTA: some View {
+            CTAButton("Stop", hover: .mySecondary, base: .mySecondary) { userDidTapPause() }
+            .alert(isPresented: $showPauseAlert, content: { DownloadAlert.alert(stop: vm.pauseDownload) })
+        }
+
+        private func userDidTapPause() {
+            guard vm.showExportFilesCTA == false else { return }
+            showPauseAlert = true
         }
 
         @ViewBuilder private var successCTAs: some View {

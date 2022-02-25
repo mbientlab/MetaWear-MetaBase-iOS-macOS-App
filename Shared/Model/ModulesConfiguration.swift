@@ -22,7 +22,13 @@ public struct ModulesConfiguration: Equatable, Hashable {
     public private(set) var fusionLinear: MWSensorFusion.LinearAcceleration? = nil
     public private(set) var fusionQuaternion: MWSensorFusion.Quaternion? = nil
 
-    public init(_ config: UserSensorConfiguration, modules: [MWModules.ID:MWModules]) {
+    public private(set) var mode: RecordingModes = .log
+
+    public init(_ config: UserSensorConfiguration,
+                modules: [MWModules.ID:MWModules],
+                mode: RecordingModes
+    ) {
+        self.mode = mode
 
         if config.accelerometer {
             self.accelerometer = .init(rate: config.accelerometerRate,
@@ -77,7 +83,7 @@ public struct ModulesConfiguration: Equatable, Hashable {
             }
         }
 
-        if config.button {
+        if config.button || mode == .remote {
             self.button = MWMechanicalButton()
         }
     }

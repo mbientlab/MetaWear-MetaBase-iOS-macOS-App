@@ -55,6 +55,7 @@ extension HistoryScreen {
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .animation(.easeOut, value: vm.canCancelLogging)
                 }
             }
             .animation(.easeOut, value: vm.cta)
@@ -76,7 +77,6 @@ extension HistoryScreen {
                 .offset(x: vm.showSessionStartAlert ? 0 : 9)
                 .animation(.easeIn, value: vm.showSessionStartAlert)
                 .accessibilityHidden(vm.showSessionStartAlert == false)
-
         }
 
         private var cta: some View {
@@ -87,7 +87,7 @@ extension HistoryScreen {
         }
 
         @ViewBuilder private var stopLoggingCTA: some View {
-            if vm.cta == .downloadLog {
+            if vm.cta == .downloadLog, vm.canCancelLogging {
                 CTAButton("Stop Logging",
                           hover: .myPrimary,
                           base: .myTertiary,
@@ -95,6 +95,7 @@ extension HistoryScreen {
                 )
                     .disabled(!vm.enableCTA)
                     .allowsHitTesting(vm.enableCTA)
+                    .transition(.opacity)
             }
         }
     }
