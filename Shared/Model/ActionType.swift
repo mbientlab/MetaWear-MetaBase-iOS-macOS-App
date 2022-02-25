@@ -17,6 +17,7 @@ public enum ActionType {
 protocol ActionController: AnyObject {
 
     var startDate:       Date { get }
+    var tempLoadDate:    [MACAddress: Date] { get set }
     var timeoutDuration: DispatchQueue.SchedulerTimeType.Stride { get }
     var workQueue:       DispatchQueue { get }
     var streamCancel:    PassthroughSubject<Void,Never> { get }
@@ -63,8 +64,11 @@ extension ActionType {
             .mapToMWError()
             .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .first()
+            .handleEvents(receiveOutput: { [weak controller] _ in
+                controller?.tempLoadDate[mac] = Date()
+            })
             .loggersStart()
-            .delay(for: 0.3, tolerance: 0, scheduler: controller.workQueue)
+            .delay(for: 0.1, tolerance: 0, scheduler: controller.workQueue)
             .downloadLogs(startDate: controller.startDate)
             .receive(on: controller.workQueue)
             .handleEvents(receiveOutput: { [weak controller] download in
@@ -78,11 +82,13 @@ extension ActionType {
                 controller?.saveData(for: mac, didComplete: false)
             })
             .drop(while: { $0.percentComplete < 1 })
-            .map { _ in () }
             .handleEvents(receiveOutput: { [weak controller] _ in
                 controller?.saveData(for: mac, didComplete: true)
                 controller?.removeLoggingToken()
             })
+            .compactMap { [weak device] _ in device }
+            .command(.led(.green, .pulse(repetitions: 1)))
+            .map { _ in () }
             .eraseToAnyPublisher()
     }
 }
@@ -180,10 +186,36 @@ fileprivate extension AnyPublisher where Output == MetaWear, Failure == MWError 
             .recordEvents(for: .buttonPressEvens) { record in
                 record.command(.led(.yellow, .solid()))
             }
+            .command(.led(.yellow, .slowRecordingFlash()))
     }
 }
 
 extension MWDataTable {
+    
+    func prefixUntil(date: Date?) -> MWDataTable {
+        guard let date = date else { return self }
+
+        let lastIndexBeforeDate = self.rows.lastIndex(where: {
+            guard let epoch = Double($0.first ?? "")
+            else { return false }
+            return epoch < date.timeIntervalSince1970
+        })
+
+        guard let lastIndex = lastIndexBeforeDate else {
+            var edited = self
+            edited.rows = []
+            return edited
+        }
+
+        guard lastIndex < self.rows.endIndex - 1 else {
+            return self
+        }
+
+        var edited = self
+        edited.rows = Array(edited.rows.prefix(through: lastIndex))
+        return edited
+    }
+
     func formatButtonLogs() -> MWDataTable {
         guard self.source == .mechanicalButton,
               var dataIndex = self.rows.first?.endIndex
@@ -334,34 +366,34 @@ public extension ActionType {
 
     var title: String {
         switch self {
-            case .stream:       return "Stream"
-            case .log:          return "Log"
-            case .downloadLogs: return "Download Logs"
+        case .stream:       return "Stream"
+        case .log:          return "Log"
+        case .downloadLogs: return "Download Logs"
         }
     }
 
     var workingLabel: String {
         switch self {
-            case .stream:       return "Streaming"
-            case .log:          return "Programming"
-            case .downloadLogs: return "Downloading"
+        case .stream:       return "Streaming"
+        case .log:          return "Programming"
+        case .downloadLogs: return "Downloading"
         }
     }
 
     var completedLabel: String {
         switch self {
-            case .stream:       return "Streamed"
-            case .log:          return "Logging"
-            case .downloadLogs: return "Downloaded"
+        case .stream:       return "Streamed"
+        case .log:          return "Logging"
+        case .downloadLogs: return "Downloaded"
         }
     }
 
     init(destination: Routing.Destination) {
         switch destination {
-            case .stream: self = .stream
-            case .log: self = .log
-            case .downloadLogs: self = .downloadLogs
-            default: fatalError("Unrecognized action")
+        case .stream: self = .stream
+        case .log: self = .log
+        case .downloadLogs: self = .downloadLogs
+        default: fatalError("Unrecognized action")
         }
     }
 }

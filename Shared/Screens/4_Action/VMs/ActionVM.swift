@@ -18,6 +18,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     public var representativeConfig:    ModulesConfiguration { configs.first ?? .init() }
     public let actionType:              ActionType
     public var actionDidComplete:       Bool { actionState.allSatisfy { $0.value == .completed } }
+    public var hasErrors:               Bool { actionState.contains(where: { $0.value.hasError }) }
     @Published private(set) var retrievingPriorSession = false
 
     /// Device currently the focus of connect/stream/log/download command
@@ -30,8 +31,8 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
 
     // Data export state
     @Published private(set) var export: Any? = nil
-    @Published var showExportFilesCTA = false
-    @Published var isExporting        = false
+    @Published public var showExportFilesCTA = false
+    @Published var isExporting               = false
     @Published var cloudSaveState:      CloudSaveState = .notStarted
     private let sessionID:              UUID
     public let title:                   String
@@ -49,6 +50,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     private var actionFails:            [QueueItem] = []
     private var actions:                [MACAddress:AnyCancellable] = [:]
     private let configs:                [ModulesConfiguration]
+    internal var tempLoadDate:           [MACAddress : Date] = [:]
     internal let streamCancel            = PassthroughSubject<Void,Never>()
     private var bleQueue:               DispatchQueue { store.bleQueue }
     internal unowned let workQueue:     DispatchQueue
@@ -331,9 +333,11 @@ private extension ActionVM {
     /// Success cases: Advance to the next item, no need to update UI state
     func succeed(fromCurrent: MetaWearMetadata) {
         if Thread.isMainThread {
+            guard actionState[fromCurrent.mac] != .error("No data found") else { return }
             actionState[fromCurrent.mac] = .completed
         } else {
             DispatchQueue.main.sync { [weak self] in
+                guard self?.actionState[fromCurrent.mac] != .error("No data found") else { return }
                 self?.actionState[fromCurrent.mac] = .completed
             }
         }
@@ -383,16 +387,17 @@ extension ActionVM: ActionController {
     /// Call after downloading or completing streaming for one device
     func saveData(for mac: MACAddress, didComplete: Bool) {
         workQueue.async(flags: .barrier) { [weak self] in
-            guard let self = self, let tables = self.currentDataStream[mac] else { return }
+            guard let self = self, var tables = self.currentDataStream[mac] else { return }
 
-            for table in tables {
-                guard table.rows.isEmpty == false else { continue }
+            for tableIndex in tables.indices {
+
+                guard tables[tableIndex].rows.isEmpty == false else { continue }
                 let deviceName = self.devices.first(where: { $0.meta.mac == mac })?.meta.name ?? mac
 
                 var newFile = File(
                     csv: .init(),
                     deviceName: deviceName,
-                    signal: table.source,
+                    signal: tables[tableIndex].source,
                     date: self.startDate
                 )
 
@@ -404,10 +409,26 @@ extension ActionVM: ActionController {
 
                 // Add new data to the end of any existing data
                 let newCSVPrefix = newFile.csv.isEmpty ? "" : "\n"
-                let parsedTable = table.formatButtonLogs()
-                let newCSV = parsedTable.makeCSV(withHeaderRow: newFile.csv.isEmpty)
+                tables[tableIndex] = tables[tableIndex]
+                    .formatButtonLogs()
+                    .prefixUntil(date: self.tempLoadDate[mac])
+
+                // Only create a CSV if there is data.
+                guard tables[tableIndex].rows.isEmpty == false else {
+                    if newFile.csv.isEmpty { continue }
+                    self.files.append(newFile)
+                    continue
+                }
+
+                let newCSV = tables[tableIndex].makeCSV(withHeaderRow: newFile.csv.isEmpty)
                 newFile.csv.append((newCSVPrefix + newCSV).data(using: .utf8) ?? .init())
                 self.files.append(newFile)
+            }
+
+            if tables.isEmpty || tables.allSatisfy({ $0.rows.isEmpty }) {
+                DispatchQueue.main.async { [weak self] in
+                    self?.actionState[mac] = .error("No data found")
+                }
             }
 
             self.updateDevicesExportReadyState(didComplete: didComplete)
@@ -420,7 +441,15 @@ internal extension ActionVM {
     /// Call on background queue to trigger, when all devices' data are ready, a database write + option for user to immediately export
     private func updateDevicesExportReadyState(didComplete: Bool) {
         devicesExportReady += 1
-        guard devicesExportReady == devices.endIndex, files.isEmpty == false else { return }
+
+        guard devicesExportReady == devices.endIndex,
+              files.isEmpty == false
+        else {
+            DispatchQueue.main.async { [weak self] in
+                self?.actionState = self?.actionState.mapValues { _ in .error("No data found") } ?? [:]
+            }
+            return
+        }
         self.saveSessionToAppDatabase(didComplete: didComplete)
 
         do { self.exporter = try .init(id: sessionID, name: title, files: files) }

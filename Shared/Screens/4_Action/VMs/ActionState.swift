@@ -19,6 +19,13 @@ public enum ActionState: Hashable, Equatable {
         }
     }
 
+    public var hasError: Bool {
+        switch self {
+        case .error: return true
+        default: return false
+        }
+    }
+
     public var info: String {
         switch self {
             case .working(let int): return String(int)

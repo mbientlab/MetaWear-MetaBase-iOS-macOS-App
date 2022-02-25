@@ -40,8 +40,15 @@ extension ActionScreen {
             CTAButton("Cancel", hover: .mySecondary, base: .mySecondary) { vm.cancelAndUndo() }
         }
 
+        @State private var showPauseAlert = false
         private var pauseDownloadCTA: some View {
-            CTAButton("Stop", hover: .mySecondary, base: .mySecondary) { vm.pauseDownload() }
+            CTAButton("Stop", hover: .mySecondary, base: .mySecondary) { userDidTapPause() }
+            .alert(isPresented: $showPauseAlert, content: { DownloadAlert.alert(stop: vm.pauseDownload) })
+        }
+
+        private func userDidTapPause() {
+            guard vm.showExportFilesCTA == false else { return }
+            showPauseAlert = true
         }
 
         @ViewBuilder private var successCTAs: some View {

@@ -67,6 +67,8 @@
 		941A08FE276FB75C006D52E3 /* PresetSensorConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */; };
 		9428FA0127C8437F00245F06 /* RecordingPreferenceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9428FA0027C8437F00245F06 /* RecordingPreferenceStore.swift */; };
 		9428FA0227C8437F00245F06 /* RecordingPreferenceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9428FA0027C8437F00245F06 /* RecordingPreferenceStore.swift */; };
+		9428FA0427C855B300245F06 /* DownloadAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9428FA0327C855B300245F06 /* DownloadAlert.swift */; };
+		9428FA0527C855B300245F06 /* DownloadAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9428FA0327C855B300245F06 /* DownloadAlert.swift */; };
 		942C82DD279241CC008F146D /* SessionRepoSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942C82DC279241CC008F146D /* SessionRepoSpy.swift */; };
 		942C82DF27924228008F146D /* MockDefaultsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942C82DE27924228008F146D /* MockDefaultsContainer.swift */; };
 		942C82E227924395008F146D /* Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv in Resources */ = {isa = PBXBuildFile; fileRef = 942C82E127924395008F146D /* Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv */; };
@@ -304,6 +306,7 @@
 		941A08F5276FB2AE006D52E3 /* PresetSensorParametersStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorParametersStore.swift; sourceTree = "<group>"; };
 		941A08FC276FB75C006D52E3 /* PresetSensorConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetSensorConfiguration.swift; sourceTree = "<group>"; };
 		9428FA0027C8437F00245F06 /* RecordingPreferenceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingPreferenceStore.swift; sourceTree = "<group>"; };
+		9428FA0327C855B300245F06 /* DownloadAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadAlert.swift; sourceTree = "<group>"; };
 		942C82DC279241CC008F146D /* SessionRepoSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRepoSpy.swift; sourceTree = "<group>"; };
 		942C82DE27924228008F146D /* MockDefaultsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDefaultsContainer.swift; sourceTree = "<group>"; };
 		942C82E127924395008F146D /* Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Bart_2022-01-14T15.28.32.189_E2EDDF1A1AA4_Accelerometer.csv"; sourceTree = "<group>"; };
@@ -669,6 +672,7 @@
 				9409C5DE2762E186001FE850 /* Action+ProgrammingState.swift */,
 				9409C5E12762E3FB001FE850 /* ActionScreen+CTAs.swift */,
 				9409C5E42762E732001FE850 /* ActionHeader.swift */,
+				9428FA0327C855B300245F06 /* DownloadAlert.swift */,
 			);
 			path = 4_Action;
 			sourceTree = "<group>";
@@ -1115,6 +1119,7 @@
 				9481D768276FD5CE00AB97FA /* Configure+Presets.swift in Sources */,
 				9409C5D92762D7DA001FE850 /* ActionState.swift in Sources */,
 				9452857A275BE77A004D815B /* Choose+EditGroup.swift in Sources */,
+				9428FA0427C855B300245F06 /* DownloadAlert.swift in Sources */,
 				949E5AAB2773BCDA00D45740 /* SessionMO+CoreDataClass.swift in Sources */,
 				9446F64D2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift in Sources */,
 				94336F07277523E500759C55 /* CoreDataController.swift in Sources */,
@@ -1230,6 +1235,7 @@
 				9481D769276FD5CE00AB97FA /* Configure+Presets.swift in Sources */,
 				9409C5DA2762D7DA001FE850 /* ActionState.swift in Sources */,
 				94E3A7F6275FF5CF007E2BAE /* HistoryScreen.swift in Sources */,
+				9428FA0527C855B300245F06 /* DownloadAlert.swift in Sources */,
 				949E5AAC2773BCDA00D45740 /* SessionMO+CoreDataClass.swift in Sources */,
 				9446F64E2782ED1F00B535AD /* ActiveLoggingSessionsStore.swift in Sources */,
 				94336F08277523E500759C55 /* CoreDataController.swift in Sources */,

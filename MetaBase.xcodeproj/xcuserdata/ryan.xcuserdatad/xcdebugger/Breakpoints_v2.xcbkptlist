@@ -60,7 +60,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "EC18D0D1-3508-4BCC-BA36-FEA73550B166"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             nameForDebugger = "SDKLoggersFound"
             ignoreCount = "0"
             continueAfterRunningActions = "Yes"
@@ -91,40 +91,8 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "BB93D2B1-C3A7-4416-AA3A-96CEFC66B330"
-            shouldBeEnabled = "Yes"
-            nameForDebugger = "SDKRowsDownloaded"
-            ignoreCount = "0"
-            continueAfterRunningActions = "Yes"
-            filePath = "Shared/Model/ActionType.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "downloadLogs(for:_:_:)"
-            landmarkType = "7">
-            <Actions>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.Log">
-                  <ActionContent
-                     message = "Downloaded data row count"
-                     conveyanceType = "0">
-                  </ActionContent>
-               </BreakpointActionProxy>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.DebuggerCommand">
-                  <ActionContent
-                     consoleCommand = "po download.data.map(\.rows.count)">
-                  </ActionContent>
-               </BreakpointActionProxy>
-            </Actions>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "6807099F-C1FB-48C2-AA7E-84E8F2C5CD21"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             nameForDebugger = "SDKLoggersRemovingLoggers"
             ignoreCount = "0"
             continueAfterRunningActions = "Yes"
@@ -150,15 +118,15 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "25536769-BB7D-48D3-BE47-D050F3D7509D"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             nameForDebugger = "ActionVMCreation"
             ignoreCount = "0"
             continueAfterRunningActions = "Yes"
             filePath = "Shared/UI/UIFactory.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
             landmarkName = "makeActionVM()"
             landmarkType = "7">
             <Actions>
@@ -180,66 +148,8 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B1507CE5-6B6F-4290-AA27-F931870931B9"
-            shouldBeEnabled = "Yes"
-            nameForDebugger = "SessionRetrievalFailure"
-            ignoreCount = "1"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/Screens/4_Action/VMs/ActionVM.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
-            landmarkName = "onAppear()"
-            landmarkType = "7">
-            <Actions>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.Log">
-                  <ActionContent
-                     message = ""
-                     conveyanceType = "0">
-                  </ActionContent>
-               </BreakpointActionProxy>
-            </Actions>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A6AA804F-375C-4A0A-A31C-1F39ECBF2B4F"
-            shouldBeEnabled = "Yes"
-            nameForDebugger = "SessionFilesRetrieved"
-            ignoreCount = "0"
-            continueAfterRunningActions = "Yes"
-            filePath = "Shared/Screens/4_Action/VMs/ActionVM.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "onAppear()"
-            landmarkType = "7">
-            <Actions>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.Log">
-                  <ActionContent
-                     message = "&quot;Retrieved saved files&quot;"
-                     conveyanceType = "0">
-                  </ActionContent>
-               </BreakpointActionProxy>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.DebuggerCommand">
-                  <ActionContent
-                     consoleCommand = "po files">
-                  </ActionContent>
-               </BreakpointActionProxy>
-            </Actions>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "18A73D25-EF8C-41C9-98C3-A5B92782C966"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             nameForDebugger = "SDKAnonymousSignals"
             ignoreCount = "0"
             continueAfterRunningActions = "Yes"
@@ -270,78 +180,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "60213EC5-08F5-4AD4-A531-F95FA4240E11"
-            shouldBeEnabled = "Yes"
-            nameForDebugger = "ReadyToSaveData"
+            uuid = "7ADCF5CF-C3D7-4ABF-A0C1-5CF6EE0E23FA"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
-            continueAfterRunningActions = "Yes"
+            continueAfterRunningActions = "No"
             filePath = "Shared/Screens/4_Action/VMs/ActionVM.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "378"
-            endingLineNumber = "378"
-            landmarkName = "saveData(for:didComplete:)"
+            startingLineNumber = "444"
+            endingLineNumber = "444"
+            landmarkName = "updateDevicesExportReadyState(didComplete:)"
             landmarkType = "7">
-            <Actions>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.Log">
-                  <ActionContent
-                     message = "&quot;Existing Files&quot;"
-                     conveyanceType = "0">
-                  </ActionContent>
-               </BreakpointActionProxy>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.DebuggerCommand">
-                  <ActionContent
-                     consoleCommand = "po self.files">
-                  </ActionContent>
-               </BreakpointActionProxy>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.Log">
-                  <ActionContent
-                     message = "&quot;New Data&quot;"
-                     conveyanceType = "0">
-                  </ActionContent>
-               </BreakpointActionProxy>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.DebuggerCommand">
-                  <ActionContent
-                     consoleCommand = "po self.currentDataStream.mapValues { $0.map(\.rows.count) }">
-                  </ActionContent>
-               </BreakpointActionProxy>
-            </Actions>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F45E356E-2B9F-49FF-8DFD-04CBEA7806B2"
-            shouldBeEnabled = "Yes"
-            nameForDebugger = "SavedData"
-            ignoreCount = "0"
-            continueAfterRunningActions = "Yes"
-            filePath = "Shared/Screens/4_Action/VMs/ActionVM.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "401"
-            endingLineNumber = "401"
-            landmarkName = "saveData(for:didComplete:)"
-            landmarkType = "7">
-            <Actions>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.DebuggerCommand">
-                  <ActionContent
-                     consoleCommand = "po self.files">
-                  </ActionContent>
-               </BreakpointActionProxy>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.Log">
-                  <ActionContent
-                     message = "Files after modification"
-                     conveyanceType = "0">
-                  </ActionContent>
-               </BreakpointActionProxy>
-            </Actions>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
