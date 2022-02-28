@@ -215,7 +215,7 @@ private extension MetaBase4SessionDataImporter {
                     missingFiles.append(path)
                     return
                 }
-                let file = File(id: .init(), csv: data, name: legacyFile.csvFilename)
+                let file = File(id: .init(), csv: data, name: legacyFile.csvFilename, mac: legacy.mac)
                 output.append(file)
             }
         }

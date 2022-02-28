@@ -88,6 +88,7 @@ public extension Root {
 #if DEBUG
             root = self
             defaults = self.userDefaults
+            sessionsRepo = self.sessions
             printUserDefaults()
 #endif
         } catch { NSLog("Load Failure: \(error.localizedDescription)") }

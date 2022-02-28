@@ -38,8 +38,8 @@ extension FileMO: ModelConvertible {
               let name = name,
               let csv = csv
         else { throw CocoaError(.coderInvalidValue) }
-
-        return File(id: id, csv: csv, name: name)
+        let mac = device?.mac ?? ""
+        return File(id: id, csv: csv, name: name, mac: mac)
     }
 }
 

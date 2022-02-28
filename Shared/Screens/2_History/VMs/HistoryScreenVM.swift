@@ -87,7 +87,7 @@ public extension HistoryScreenVM {
                 // No need to reset focus
                 routing.setDestination(.configure)
             case .downloadLog:
-                let ongoingSessionName = logging.session(for: routing.focus!.item)?.name ?? "New Session"
+            let ongoingSessionName = logging.session(for: routing.focus!.item)?.name ?? Session.defaultName
                 routing.setSessionName(ongoingSessionName)
                 routing.setDestination(.downloadLogs)
         }

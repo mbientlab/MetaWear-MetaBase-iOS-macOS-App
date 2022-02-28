@@ -21,23 +21,20 @@ struct EditableSubhead<T: View>: View {
     let trailing: () -> T
 
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
+        HStack(spacing: 15) {
 
-                ResigningTextField(placeholderText: placeholder,
-                                   initialText: label.wrappedValue,
-                                   config: .largeDeviceStyle(),
-                                   onCommit: { label.wrappedValue = $0 })
-                    .padding(.horizontal, 4)
+            ResigningTextField(placeholderText: placeholder,
+                               initialText: label.wrappedValue,
+                               config: .largeDeviceStyle(),
+                               onCommit: { label.wrappedValue = $0 })
+                .padding(.horizontal, 8)
+                .padding(.vertical, 7)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.myGroupBackground2))
 
-                Spacer()
+            Spacer()
 
-                trailing()
-            }
-
-            Divider()
-                .padding(.top, 4)
-                .padding(.bottom, 8)
+            trailing()
         }
+        .padding(.bottom)
     }
 }

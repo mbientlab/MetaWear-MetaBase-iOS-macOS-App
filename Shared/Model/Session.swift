@@ -14,6 +14,7 @@ public struct Session: Identifiable, Hashable {
     /// Did the download complete
     public var didComplete: Bool
 
+    static let defaultName = "Session"
 
     public func duplicate(files: [File]) -> (session: Self, files: [File]) {
         let files = files.map { $0.duplicate() }
@@ -48,30 +49,35 @@ public struct File: Identifiable {
     public var id: UUID
     public var csv: Data
     public var name: String
+    public var mac: MACAddress
 
-    public init(id: UUID, csv: Data, name: String) {
+    public init(id: UUID, csv: Data, name: String, mac: MACAddress) {
         self.id = id
         self.csv = csv
         self.name = name
+        self.mac = mac
     }
 
     public init(id: UUID = .init(),
                 csv: Data,
                 deviceName: String,
                 signal: MWNamedSignal,
-                date: Date
+                date: Date,
+                mac: MACAddress
     ) {
         self.id = id
         self.csv = csv
-
-        let date = shortDateTimeFormatter.string(from: date)
-            .components(separatedBy: .alphanumerics.inverted)
-            .joined(separator: "-")
-
-        self.name = [deviceName, signal.name, date].joined(separator: " ")
+        self.name = [mac.filenameFormat(), deviceName, signal.name, date.filenameFormat()].joined(separator: "_")
+        self.mac = mac
     }
 
     func duplicate() -> Self {
-        Self.init(id: .init(), csv: csv, name: name)
+        Self.init(id: .init(), csv: csv, name: name, mac: mac)
+    }
+}
+
+extension MACAddress {
+    func filenameFormat() -> String {
+        self.replacingOccurrences(of: ":", with: "").uppercased()
     }
 }
