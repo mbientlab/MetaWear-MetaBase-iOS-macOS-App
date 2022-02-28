@@ -125,6 +125,8 @@ extension CoreDataSessionRepository: SessionRepository {
                         continue
                     }
                     fileMO.csv = file.csv
+                    guard let device = deviceMOs.first(where: { $0.mac == file.mac }) else { continue }
+                    fileMO.device = device
                 }
                 fileMOs.forEach { sessionMO.addToFiles($0) }
                 return (deviceMOs, context, sessionMO, fileMOs)

@@ -51,7 +51,13 @@ public class CloudKitCoreDataController: CoreDataBackgroundController {
         container = {
             let cloud = NSPersistentCloudKitContainer(name: "Sessions")
             let description = cloud.persistentStoreDescriptions.first
-            description?.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+
+            [NSMigratePersistentStoresAutomaticallyOption,
+             NSInferMappingModelAutomaticallyOption,
+             NSPersistentStoreRemoteChangeNotificationPostOptionKey,
+             NSPersistentHistoryTrackingKey
+            ].forEach { description?.setOption(true as NSNumber, forKey: $0) }
+
             return cloud
         }()
 

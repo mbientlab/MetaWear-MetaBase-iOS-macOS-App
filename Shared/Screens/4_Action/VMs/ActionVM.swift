@@ -398,7 +398,8 @@ extension ActionVM: ActionController {
                     csv: .init(),
                     deviceName: deviceName,
                     signal: tables[tableIndex].source,
-                    date: self.startDate
+                    date: self.startDate,
+                    mac: mac
                 )
 
                 // If a prior session was loaded, use this as the starting data
