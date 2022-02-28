@@ -14,6 +14,7 @@ public struct Session: Identifiable, Hashable {
     /// Did the download complete
     public var didComplete: Bool
 
+    static let defaultName = "Session"
 
     public func duplicate(files: [File]) -> (session: Self, files: [File]) {
         let files = files.map { $0.duplicate() }

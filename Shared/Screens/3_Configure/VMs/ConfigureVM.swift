@@ -49,7 +49,7 @@ public class ConfigureVM: ObservableObject, HeaderVM {
     // User intent
     @Published private(set) var sessionName: String? = nil
     public var sessionNameBinding: Binding<String> {
-        Binding(get: { [weak self] in self?.sessionName ?? self?.selectedPreset?.name ?? "New Session" },
+        Binding(get: { [weak self] in self?.sessionName ?? self?.selectedPreset?.name ?? Session.defaultName },
                 set: { [weak self] newName in
             guard newName.isEmpty == false
             else { self?.sessionName = nil; return }
