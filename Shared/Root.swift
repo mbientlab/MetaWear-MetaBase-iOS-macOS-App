@@ -34,8 +34,10 @@ public class Root: ObservableObject {
     public init() {
         self.coreData = CloudKitCoreDataController(inMemory: false)
         self.sessions = CoreDataSessionRepository(coreData: coreData)
-
+        
+#if DEBUG
         MWConsoleLogger.activateConsoleLoggingOnAllMetaWears = true
+#endif
         self.userDefaults    = .init(cloud: .default, local: .standard)
         self.metawearLoader  = MetaWeariCloudSyncLoader(userDefaults.local, userDefaults.cloud)
         self.presetsLoader   = SensorPresetsCloudLoader(userDefaults)
