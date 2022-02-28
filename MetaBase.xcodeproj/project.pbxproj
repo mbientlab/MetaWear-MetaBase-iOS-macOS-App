@@ -125,6 +125,8 @@
 		945494F927656A840021E3D6 /* MetaWear in Frameworks */ = {isa = PBXBuildFile; productRef = 945494F827656A840021E3D6 /* MetaWear */; };
 		9464CA81278B61F500BE70C6 /* HistoryScreen+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9464CA80278B61F500BE70C6 /* HistoryScreen+CTAs.swift */; };
 		9464CA82278B61F500BE70C6 /* HistoryScreen+CTAs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9464CA80278B61F500BE70C6 /* HistoryScreen+CTAs.swift */; };
+		9464EC3F27CC5740004C3777 /* RemoteHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9464EC3E27CC5740004C3777 /* RemoteHelpView.swift */; };
+		9464EC4027CC5740004C3777 /* RemoteHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9464EC3E27CC5740004C3777 /* RemoteHelpView.swift */; };
 		946F64D5277BCEB700AE293C /* FilesExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946F64D4277BCEB700AE293C /* FilesExporter.swift */; };
 		946F64D6277BCEB700AE293C /* FilesExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946F64D4277BCEB700AE293C /* FilesExporter.swift */; };
 		9473B7B52770FAC4006F4994 /* KnownDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9473B7B42770FAC4006F4994 /* KnownDevice+.swift */; };
@@ -334,6 +336,7 @@
 		9452856C275BE1D5004D815B /* Root.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Root.swift; sourceTree = "<group>"; };
 		94528579275BE77A004D815B /* Choose+EditGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Choose+EditGroup.swift"; sourceTree = "<group>"; };
 		9464CA80278B61F500BE70C6 /* HistoryScreen+CTAs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryScreen+CTAs.swift"; sourceTree = "<group>"; };
+		9464EC3E27CC5740004C3777 /* RemoteHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteHelpView.swift; sourceTree = "<group>"; };
 		946F64D4277BCEB700AE293C /* FilesExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesExporter.swift; sourceTree = "<group>"; };
 		9473B7B42770FAC4006F4994 /* KnownDevice+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KnownDevice+.swift"; sourceTree = "<group>"; };
 		9477FACB2784A3AC0019F9A8 /* MetaBase4SessionDataImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaBase4SessionDataImporter.swift; sourceTree = "<group>"; };
@@ -659,6 +662,7 @@
 				940E01AD2780DEB9002AD641 /* Configure+Estimates.swift */,
 				9409C5D12762971D001FE850 /* Configure+CTAs.swift */,
 				94BBC21227C5535A002D9396 /* HighlightingSegmentedControl.swift */,
+				9464EC3E27CC5740004C3777 /* RemoteHelpView.swift */,
 			);
 			path = 3_Configure;
 			sourceTree = "<group>";
@@ -1202,6 +1206,7 @@
 				94A165C1275F2F8600FA355D /* History+SessionsList.swift in Sources */,
 				9408E6DF276829280011B5F5 /* BluetoothErrorButton.swift in Sources */,
 				94EBA3A3275A14DE008C62E7 /* Dimensions.swift in Sources */,
+				9464EC3F27CC5740004C3777 /* RemoteHelpView.swift in Sources */,
 				94A165C3275F2F8600FA355D /* History+AboutDevices.swift in Sources */,
 				94CF3F102764286B00C2D8B0 /* ScreenSubsection.swift in Sources */,
 			);
@@ -1318,6 +1323,7 @@
 				9409C5C427613895001FE850 /* ConfigureVM.swift in Sources */,
 				9408E6E0276829280011B5F5 /* BluetoothErrorButton.swift in Sources */,
 				94A165C4275F2F8600FA355D /* History+AboutDevices.swift in Sources */,
+				9464EC4027CC5740004C3777 /* RemoteHelpView.swift in Sources */,
 				94528559275BDE1E004D815B /* Choose+DeviceIterator.swift in Sources */,
 				94CF3F112764286B00C2D8B0 /* ScreenSubsection.swift in Sources */,
 			);
