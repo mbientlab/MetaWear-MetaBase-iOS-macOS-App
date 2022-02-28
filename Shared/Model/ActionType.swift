@@ -106,10 +106,9 @@ extension ActionType {
             .publishWhenConnected()
             .first()
             .mapToMWError()
-            .command(.resetActivities)
             .command(.macroEraseAll)
+            .command(.resetActivities)
             .command(.restart)
-            .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .map { _ in () }
             .eraseToAnyPublisher()
 
@@ -128,14 +127,16 @@ extension ActionType {
             .mapToMWError()
             .writeRemoteStartPauseEvents(config)
             .writeLoggingMacro(config)
-            .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .map { _ in () }
             .handleEvents(receiveOutput: { [weak controller] _ in
                 controller?.registerLoggingToken(isLogging: true)
             })
             .eraseToAnyPublisher()
 
-        return Publishers.Zip3(reset, reconnect, program).map { _ in () }.eraseToAnyPublisher()
+        return Publishers.Zip3(program, reconnect, reset)
+            .map { _ in () }
+            .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
+            .eraseToAnyPublisher()
     }
 }
 
