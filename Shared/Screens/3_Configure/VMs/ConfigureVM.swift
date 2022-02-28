@@ -98,6 +98,9 @@ public class ConfigureVM: ObservableObject, HeaderVM {
         self.models = devices.map(\.meta.model)
         self.recordingStore = prefs
         self.mode = recordingStore.lastMode
+        if self.mode == .remote {
+            self.config.button = true
+        }
         update(presets: presets)
         updateLifetimeEstimates()
     }
