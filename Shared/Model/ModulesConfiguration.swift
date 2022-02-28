@@ -30,11 +30,6 @@ public struct ModulesConfiguration: Equatable, Hashable {
     ) {
         self.mode = mode
 
-        if config.accelerometer {
-            self.accelerometer = .init(rate: config.accelerometerRate,
-                                       gravity: config.accelerometerScale)
-        }
-
         if config.altitude {
             self.altitude = .init(standby: config.barometerRate,
                                   iir: .off,
@@ -47,17 +42,12 @@ public struct ModulesConfiguration: Equatable, Hashable {
                                       rate: config.ambientLightRate)
         }
 
-        if config.gyroscope {
-            self.gyroscope = .init(rate: config.gyroscopeRate,
-                                   range: config.gyroscopeScale)
+        if config.button || mode == .remote {
+            self.button = MWMechanicalButton()
         }
 
         if config.humidity {
             self.humidity = .init(oversampling: .x1, rate: config.humidityRate.freq)
-        }
-
-        if config.magnetometer {
-            self.magnetometer = .init(freq: config.magnetometerRate)
         }
 
         if config.pressure {
@@ -73,6 +63,8 @@ public struct ModulesConfiguration: Equatable, Hashable {
             self.thermometer = .init(rate: config.temperatureRate.freq, type: .onboard, channel: onboardChannel)
         }
 
+        // Ensure sensor fusion and component sensors are logged exclusively
+
         if config.sensorFusion {
             let mode: MWSensorFusion.Mode = modules.keys.contains(.magnetometer) ? .ndof : .imuplus
             switch config.sensorFusionType {
@@ -81,10 +73,22 @@ public struct ModulesConfiguration: Equatable, Hashable {
                 case .gravity:              self.fusionGravity = .init(mode: mode)
                 case .quaternion:           self.fusionQuaternion = .init(mode: mode)
             }
-        }
 
-        if config.button || mode == .remote {
-            self.button = MWMechanicalButton()
+        } else {
+
+            if config.accelerometer {
+                self.accelerometer = .init(rate: config.accelerometerRate,
+                                           gravity: config.accelerometerScale)
+            }
+
+            if config.magnetometer {
+                self.magnetometer = .init(freq: config.magnetometerRate)
+            }
+
+            if config.gyroscope {
+                self.gyroscope = .init(rate: config.gyroscopeRate,
+                                       range: config.gyroscopeScale)
+            }
         }
     }
 
