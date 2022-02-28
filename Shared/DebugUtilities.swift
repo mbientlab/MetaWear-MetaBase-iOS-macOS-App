@@ -7,6 +7,7 @@ import Combine
 let useMetabaseConsoleLogger = false
 var root: Root!
 var defaults: UserDefaultsContainer!
+var sessionsRepo: SessionRepository!
 
 func printUserDefaults() {
     let defaultsPath = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first ?? "Error"
@@ -32,6 +33,18 @@ func printUserDefaults() {
 }
 
 fileprivate var subs = Set<AnyCancellable>()
+
+func wipeCloudSessionData() {
+    sessionsRepo.fetchAllSessions()
+        .sink { _ in } receiveValue: { allSessions in
+            allSessions.forEach { session in
+                sessionsRepo.deleteSession(session)
+                    .sink { _ in } receiveValue: { _ in }
+                    .store(in: &subs)
+            }
+        }
+        .store(in: &subs)
+}
 
 func wipeDefaults(preserveMetaWearData: Bool) {
     wipeOnboarding()

@@ -54,6 +54,7 @@ struct DebugMenu: View {
         Button("Wipe UserDefaults, Keeping MetaWears") { wipeDefaults(preserveMetaWearData: true) }
         Button("Wipe All UserDefaults") { wipeDefaults(preserveMetaWearData: false) }
         Button("Reset Onboarding State") { wipeOnboarding() }
+        Button("Wipe iCloud Session Data") { wipeCloudSessionData() }
     }
 }
 #endif
