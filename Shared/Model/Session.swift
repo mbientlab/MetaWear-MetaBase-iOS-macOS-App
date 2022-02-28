@@ -64,15 +64,18 @@ public struct File: Identifiable {
     ) {
         self.id = id
         self.csv = csv
-
-        let date = shortDateTimeFormatter.string(from: date)
-            .components(separatedBy: .alphanumerics.inverted)
-            .joined(separator: "-")
-
-        self.name = [deviceName, signal.name, date].joined(separator: " ")
+        self.name = [deviceName, signal.name, date.filenameFormat()].joined(separator: " ")
+        self.mac = mac
     }
 
     func duplicate() -> Self {
         Self.init(id: .init(), csv: csv, name: name)
+
+extension Date {
+    func filenameFormat() -> String {
+        shortDateTimeFormatter.string(from: self)
+            .components(separatedBy: .alphanumerics.inverted)
+            .joined(separator: "-")
+            .replacingOccurrences(of: "--", with: " ")
     }
 }

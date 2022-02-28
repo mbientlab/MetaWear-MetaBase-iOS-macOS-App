@@ -452,7 +452,8 @@ internal extension ActionVM {
         }
         self.saveSessionToAppDatabase(didComplete: didComplete)
 
-        do { self.exporter = try .init(id: sessionID, name: title, files: files) }
+        let folderName = [title, startDate.filenameFormat()].joined(separator: " ")
+        do { self.exporter = try .init(id: sessionID, name: folderName, files: files) }
         catch { NSLog("\(Self.self)" + error.localizedDescription) }
 
         DispatchQueue.main.async { [weak self] in

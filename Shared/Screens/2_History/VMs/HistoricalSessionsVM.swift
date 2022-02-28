@@ -100,9 +100,10 @@ public extension HistoricalSessionsVM {
         sessionRepo.fetchFiles(sessionID: session.id)
             .receive(on: backgroundQueue)
             .tryMap { files -> FilesExporter in
-                try FilesExporter(
+                let folderName = [session.name, session.date.filenameFormat()].joined(separator: " ")
+                return try FilesExporter(
                     id: session.id,
-                    name: session.name,
+                    name: folderName,
                     files: files
                 )
             }
