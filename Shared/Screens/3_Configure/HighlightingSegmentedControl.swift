@@ -199,7 +199,7 @@ struct PopoverView<Popover: View>: View {
         .padding(.horizontal)
 #if os(macOS)
         .padding(.bottom)
-        .frame(width: 350, height: 475, alignment: .leading)
+        .frame(width: 350, height: 500, alignment: .leading)
 #elseif os(iOS)
         .ignoresSafeArea(.container, edges: .bottom)
 #endif

@@ -106,10 +106,9 @@ extension ActionType {
             .publishWhenConnected()
             .first()
             .mapToMWError()
-            .command(.resetActivities)
             .command(.macroEraseAll)
+            .command(.resetActivities)
             .command(.restart)
-            .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .map { _ in () }
             .eraseToAnyPublisher()
 
@@ -128,14 +127,16 @@ extension ActionType {
             .mapToMWError()
             .writeRemoteStartPauseEvents(config)
             .writeLoggingMacro(config)
-            .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .map { _ in () }
             .handleEvents(receiveOutput: { [weak controller] _ in
                 controller?.registerLoggingToken(isLogging: true)
             })
             .eraseToAnyPublisher()
 
-        return Publishers.Zip3(reset, reconnect, program).map { _ in () }.eraseToAnyPublisher()
+        return Publishers.Zip3(program, reconnect, reset)
+            .map { _ in () }
+            .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
+            .eraseToAnyPublisher()
     }
 }
 
@@ -165,6 +166,7 @@ fileprivate extension AnyPublisher where Output == MetaWear, Failure == MWError 
     func writeRemoteStartPauseEvents(_ config: ModulesConfiguration) -> MWPublisher<MetaWear> {
         guard config.mode == .remote else {
             return self
+                .command(.led(.red, .blink(repetitions: 1)))
                 .command(.led(.red, .slowRecordingFlash()))
         }
         return self
@@ -172,12 +174,14 @@ fileprivate extension AnyPublisher where Output == MetaWear, Failure == MWError 
                 record
                     .loggersStart()
                     .command(.logUserEvent(flag: 3))
+                    .command(.led(.red, .blink(repetitions: 1)))
                     .command(.led(.red, .slowRecordingFlash()))
             }
             .recordEvents(for: .buttonReleaseEvens) { record in
                 record
                     .command(.logUserEvent(flag: 4))
                     .loggersPause()
+                    .command(.led(.yellow, .blink(repetitions: 1)))
                     .command(.led(.yellow, .slowRecordingFlash()))
             }
             .recordEvents(for: .buttonPressOdds) { record in
@@ -186,6 +190,7 @@ fileprivate extension AnyPublisher where Output == MetaWear, Failure == MWError 
             .recordEvents(for: .buttonPressEvens) { record in
                 record.command(.led(.yellow, .solid()))
             }
+            .command(.led(.yellow, .blink(repetitions: 1)))
             .command(.led(.yellow, .slowRecordingFlash()))
     }
 }

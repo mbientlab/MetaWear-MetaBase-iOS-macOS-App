@@ -11,8 +11,14 @@ public class ConfigureVM: ObservableObject, HeaderVM {
 
     // State
     /// Stream, log, etc.
-    @Published var mode: RecordingModes
-    { didSet { recordingStore.updateMode(to: mode) } }
+    @Published var mode: RecordingModes {
+        didSet {
+            recordingStore.updateMode(to: mode)
+            if mode == .remote {
+                config.button = true
+            }
+        }
+    }
 
     /// Sensors chosen
     @Published var config: UserSensorConfiguration
@@ -92,6 +98,9 @@ public class ConfigureVM: ObservableObject, HeaderVM {
         self.models = devices.map(\.meta.model)
         self.recordingStore = prefs
         self.mode = recordingStore.lastMode
+        if self.mode == .remote {
+            self.config.button = true
+        }
         update(presets: presets)
         updateLifetimeEstimates()
     }
