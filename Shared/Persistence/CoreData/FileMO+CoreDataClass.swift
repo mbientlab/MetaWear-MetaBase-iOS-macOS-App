@@ -10,6 +10,7 @@ public class FileMO: NSManagedObject, Identifiable {
     @NSManaged public var csv: Data?
     @NSManaged public var name: String?
     @NSManaged public var session: SessionMO?
+    @NSManaged public var device: DeviceMO?
 }
 
 extension FileMO {

@@ -9,6 +9,12 @@ let shortDateTimeFormatter: DateFormatter = {
     return date
 }()
 
+let descendingMetaBase4DateTimeFormatter: DateFormatter = {
+    let date = DateFormatter()
+    date.dateFormat = "yyyy-MM-dd'T'HH.mm.ss.SSS"
+    return date
+}()
+
 let mediumDateFormatter: DateFormatter = {
     let date = DateFormatter()
     date.dateStyle = idiom == .iPhone ? .short : .medium
@@ -40,5 +46,12 @@ extension DateComponentsFormatter {
         formatter.unitsStyle = .short
         formatter.zeroFormattingBehavior = .dropAll
         return formatter
+    }
+}
+
+
+extension Date {
+    func filenameFormat() -> String {
+        descendingMetaBase4DateTimeFormatter.string(from: self)
     }
 }

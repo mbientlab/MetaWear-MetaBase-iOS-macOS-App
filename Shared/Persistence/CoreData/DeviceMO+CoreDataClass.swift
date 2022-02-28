@@ -8,6 +8,7 @@ import CoreData
 public class DeviceMO: NSManagedObject, Identifiable {
     @NSManaged public var mac: String?
     @NSManaged public var session: NSSet?
+    @NSManaged public var files: NSSet?
 }
 
 extension DeviceMO {
@@ -32,5 +33,17 @@ extension DeviceMO {
 
     @objc(removeSession:)
     @NSManaged public func removeFromSession(_ values: NSSet)
+
+    @objc(addFilesObject:)
+    @NSManaged public func addToFiles(_ value: FileMO)
+
+    @objc(removeFilesObject:)
+    @NSManaged public func removeFromFiles(_ value: FileMO)
+
+    @objc(addFiles:)
+    @NSManaged public func addToFiles(_ values: NSSet)
+
+    @objc(removeFiles:)
+    @NSManaged public func removeFromFiles(_ values: NSSet)
 
 }
