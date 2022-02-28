@@ -54,7 +54,7 @@ public class ActionVM: ObservableObject, ActionHeaderVM {
     internal let streamCancel            = PassthroughSubject<Void,Never>()
     private var bleQueue:               DispatchQueue { store.bleQueue }
     internal unowned let workQueue:     DispatchQueue
-    internal let timeoutDuration = DispatchQueue.SchedulerTimeType.Stride(30)
+    internal let timeoutDuration = DispatchQueue.SchedulerTimeType.Stride(45)
 
     // References
     private let devices:                [MWKnownDevice]
