@@ -38,7 +38,12 @@ extension HistoryScreen {
                     } else { empty }
                 }
 
-                Color.clear.frame(height: ScrollFadeMask.defaultSize / 2)
+                if #available(iOS 15.0, *) {
+                    Color.clear.frame(height: ScrollFadeMask.defaultSize / 2)
+                        .listRowSeparator(.hidden)
+                } else {
+                    Color.clear.frame(height: ScrollFadeMask.defaultSize / 2)
+                }
             }
             .mask(ScrollFadeMask(edge: .bottom).offset(y: 1))
             .onPreferenceChange(DateWK.self) { if $0 > dateWidth { dateWidth = $0 } }
