@@ -28,16 +28,26 @@ extension ConfigureScreen {
             }
             .animation(.easeOut, value: vm.mode)
             .animation(.easeOut, value: vm.config.totalFreq.rateHz)
-            #if os(iOS)
+#if os(iOS)
             .onAppear {
-                if !didOnboardRemote { showRemoteLoggingSheet = true }
+                let didOnboard = UserDefaults.standard.bool(forKey: UserDefaults.MetaWear.Keys.didOnboardRemoteMode)
+                if !didOnboard {
+                    showRemoteLoggingSheet = true
+                    didOnboardRemote = true
+                }
             }
             .popover(isPresented: $showRemoteLoggingSheet) {
                 ScrollView {
                     RemoteHelpView(showNewToMetaBase: true)
+                        .frame(
+                            maxWidth:  idiom == .iPhone ? nil : 430,
+                            alignment: .leading
+                        )
+                        .padding(.bottom)
+                        .padding(.horizontal)
                 }
             }
-            #endif
+#endif
         }
     }
 }

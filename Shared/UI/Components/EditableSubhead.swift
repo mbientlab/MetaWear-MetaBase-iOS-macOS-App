@@ -27,7 +27,7 @@ struct EditableSubhead<T: View>: View {
                                initialText: label.wrappedValue,
                                config: .largeDeviceStyle(),
                                onCommit: { label.wrappedValue = $0 })
-                .padding(.horizontal, 8)
+                .padding(.horizontal, idiom == .macOS ? 8 : 12)
                 .padding(.vertical, 7)
                 .background(RoundedRectangle(cornerRadius: 8).fill(Color.myGroupBackground2))
 

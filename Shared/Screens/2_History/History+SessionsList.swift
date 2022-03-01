@@ -37,10 +37,12 @@ extension HistoryScreen {
 #endif
                     } else { empty }
                 }
-
+                
                 if #available(iOS 15.0, *) {
                     Color.clear.frame(height: ScrollFadeMask.defaultSize / 2)
+#if os(iOS)
                         .listRowSeparator(.hidden)
+#endif
                 } else {
                     Color.clear.frame(height: ScrollFadeMask.defaultSize / 2)
                 }

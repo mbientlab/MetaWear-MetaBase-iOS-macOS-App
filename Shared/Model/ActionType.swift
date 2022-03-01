@@ -62,14 +62,29 @@ extension ActionType {
         device
             .publishWhenConnected()
             .mapToMWError()
-            .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .first()
-            .handleEvents(receiveOutput: { [weak controller] _ in
-                controller?.tempLoadDate[mac] = Date()
-            })
-            .loggersStart()
-            .delay(for: 0.1, tolerance: 0, scheduler: controller.workQueue)
+            .command(.led(.yellow, .pulse(repetitions: .max)))
+            .loggerSignalsCollectAll()
+            .flatMap { signals -> MWPublisher<MetaWear> in
+                if signals.isEmpty {
+                    return Just(device)
+                        .loggersStart()
+                        .handleEvents(receiveOutput: { [weak controller] _ in
+                            controller?.tempLoadDate[mac] = Date()
+                        })
+                        .delay(for: 0.2, tolerance: 0, scheduler: controller.workQueue)
+                        .eraseToAnyPublisher()
+                } else {
+                    return Just(device)
+                        .handleEvents(receiveOutput: { [weak controller] _ in
+                            controller?.tempLoadDate[mac] = Date()
+                        })
+                        .setFailureType(to: MWError.self)
+                        .eraseToAnyPublisher()
+                }
+            }
             .downloadLogs(startDate: controller.startDate)
+            .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
             .receive(on: controller.workQueue)
             .handleEvents(receiveOutput: { [weak controller] download in
                 // Update data and report current progress
@@ -88,6 +103,9 @@ extension ActionType {
             })
             .compactMap { [weak device] _ in device }
             .command(.led(.green, .pulse(repetitions: 1)))
+            .command(.macroEraseAll)
+            .command(.resetActivities)
+            .command(.restart)
             .map { _ in () }
             .eraseToAnyPublisher()
     }
@@ -231,11 +249,11 @@ extension MWDataTable {
             switch row[dataIndex] {
             case "3":
                 var row = row
-                row[dataIndex] = "Start"
+                row[dataIndex] = "LoggingStarted"
                 return row
             case "4":
                 var row = row
-                row[dataIndex] = "Pause"
+                row[dataIndex] = "LoggingPaused"
                 return row
             default:
                 return row

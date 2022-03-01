@@ -27,25 +27,24 @@ struct RemoteHelpView: View {
             if showNewToMetaBase { newLabel }
 
             Text("Remote Control Logging")
-                .adaptiveFont(idiom == .macOS ? .configureTileTitle : .screenHeader)
+                .adaptiveFont(.configureTileTitle)
                 .foregroundColor(.myHighlight)
 
-            Text("Use the MetaWear's button to start or pause data recording.")
+            Text("Use the MetaWear's button to start or pause data recording (without MetaBase), saving battery and flash memory space.")
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .adaptiveFont(.configureTileMenu)
 
-            Text("Compared to logging that starts immediately from MetaBase, this mode minimizes writes to onboard flash memory and related battery use.")
+            Text("Timing").bold().foregroundColor(.mySecondary)
+
+            Text("When you release the button, logging starts (or pauses). To help you process data, timestamps for button events are logged in a CSV tagged \"switch\".")
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .adaptiveFont(.body)
 
-            Text("Logging starts (or pauses) the moment the button is released. While pressed, the LED's color indicates what will happen on release. While logging, the LED will blink red every 5 seconds. While paused, the LED will blink yellow.")
-                .multilineTextAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
-                .adaptiveFont(.body)
+            Text("LED Indicators").bold().foregroundColor(.mySecondary)
 
-            Text("Downloaded logs will include button events.")
+            Text("While pressing the button, the LED's color indicates what will happen upon release. Red means logging will start. Yellow means logging will pause. Every five seconds after button release, the LED will blink red or yellow to indicate the current logging state.")
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .adaptiveFont(.body)

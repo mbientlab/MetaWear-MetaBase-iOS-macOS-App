@@ -97,7 +97,11 @@ struct HighlightedSegmentedControl<Selection: Selectable>: View {
 #if os(macOS)
                     .onHover { delayedHover($0, mode) }
 #else
-                    .onLongPressGesture { longPress(mode) }
+                    .simultaneousGesture(
+                        LongPressGesture(minimumDuration: 0.5)
+                            .onEnded { if $0 { longPress(mode) } },
+                        including: GestureMask.all
+                    )
 #endif
             } else {
                 
@@ -194,13 +198,12 @@ struct HighlightedSegmentedControl<Selection: Selectable>: View {
 struct PopoverView<Popover: View>: View {
     var popover: Popover
     var body: some View {
-        ScrollView { popover }
-        .padding(.top)
+        ScrollView { popover.padding(.vertical) }
         .padding(.horizontal)
 #if os(macOS)
-        .padding(.bottom)
-        .frame(width: 350, height: 500, alignment: .leading)
+        .frame(width: 375, height: 550, alignment: .leading)
 #elseif os(iOS)
+        .frame(width: 430, alignment: .leading)
         .ignoresSafeArea(.container, edges: .bottom)
 #endif
     }
