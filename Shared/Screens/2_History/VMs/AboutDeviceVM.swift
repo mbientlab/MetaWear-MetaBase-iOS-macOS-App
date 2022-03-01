@@ -6,6 +6,7 @@ import MetaWear
 import MetaWearSync
 import mbientSwiftUI
 import CoreBluetooth
+import MetaWearFirmware
 #if os(iOS)
 import MessageUI
 #endif
@@ -41,6 +42,7 @@ public class AboutDeviceVM: NSObject, ObservableObject, Identifiable {
     private var stopLoggingSub:    AnyCancellable? = nil
     private var deleteDataSub:     AnyCancellable? = nil
     private var diagnosticsSub:    AnyCancellable? = nil
+    private var firmwareSubs       = Set<AnyCancellable>()
     private var misc               = Set<AnyCancellable>()
     private unowned let store:     MetaWearSyncStore
     private unowned let logging:   ActiveLoggingSessionsStore
@@ -245,6 +247,10 @@ public extension AboutDeviceVM {
             })
 
         connectIfNeeded()
+    }
+
+    func updateFirmware() {
+        
     }
 }
 
