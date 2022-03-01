@@ -6,12 +6,15 @@ import MetaWear
 import MetaWearSync
 import mbientSwiftUI
 import CoreBluetooth
+#if os(iOS)
+import MessageUI
+#endif
 
 /// Provides up-to-date information about a device,
 /// excluding any updates to metadata from the
 /// MetaWearSyncStore (e.g., a name change).
 ///
-public class AboutDeviceVM: ObservableObject, Identifiable {
+public class AboutDeviceVM: NSObject, ObservableObject, Identifiable {
 
     public var isLocallyKnown: Bool { device != nil }
     public var matchedGeometryID: String { meta.id }
@@ -37,6 +40,7 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     private var refreshSub:        AnyCancellable? = nil
     private var stopLoggingSub:    AnyCancellable? = nil
     private var deleteDataSub:     AnyCancellable? = nil
+    private var diagnosticsSub:    AnyCancellable? = nil
     private var misc               = Set<AnyCancellable>()
     private unowned let store:     MetaWearSyncStore
     private unowned let logging:   ActiveLoggingSessionsStore
@@ -46,6 +50,9 @@ public class AboutDeviceVM: ObservableObject, Identifiable {
     // Debug
     var isStreaming                = false
     let cancel                     = PassthroughSubject<Void,Never>()
+    #if os(macOS)
+    var diagnosticsEmail:          NSSharingService? = nil
+    #endif
 
     public init(device: MWKnownDevice,
                 store: MetaWearSyncStore,
@@ -225,6 +232,20 @@ public extension AboutDeviceVM {
 
         connectIfNeeded()
     }
+
+    func runDiagnostics() {
+        diagnosticsSub = device?
+            .publishWhenConnected()
+            .first()
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] mw in
+                guard let battery = self?.battery else { return }
+                let diagnostics = DiagnosticData(mw, batteryLevel: battery)
+                let json = diagnostics.json.data(using: .utf8)
+                self?.sendEmail(attaching: json)
+            })
+
+        connectIfNeeded()
+    }
 }
 
 // MARK: - Rename Delegate
@@ -241,9 +262,64 @@ extension AboutDeviceVM: RenameDelegate {
 
 // MARK: - Internal - State updates
 
+#if os(iOS)
+extension AboutDeviceVM: MFMailComposeViewControllerDelegate {
+
+    public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+}
+#endif
+
 private extension AboutDeviceVM {
 
-    private func connectIfNeeded() {
+    func sendEmail(attaching data: Data?) {
+        #if os(iOS)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if MFMailComposeViewController.canSendMail() {
+                let vc = MFMailComposeViewController()
+                vc.setToRecipients(["hello@mbientlab.com"])
+                vc.setSubject("[MbientLab Diagnostic] MetaSensor \(self.info.mac)")
+                vc.setMessageBody("Please describe your current issue so we could reproduce it.", isHTML: false)
+                if let data = data {
+                    let attachmentName = "diagnostic_\(self.info.mac.replacingOccurrences(of: ":", with: "")).json"
+                    vc.addAttachmentData(
+                        data,
+                        mimeType: "application/json",
+                        fileName: attachmentName
+                    )
+                }
+                vc.mailComposeDelegate = self
+                UIApplication.shared.getActiveController()?.present(vc, animated: true, completion: nil)
+                return
+            }
+        }
+        #elseif os(macOS)
+        let service = NSSharingService.init(named: .composeEmail)
+        service?.recipients = ["hello@mbientlab"]
+        service?.subject = "[MbientLab Diagnostic] MetaSensor \(info.mac)"
+        var items: [Any] = ["Please describe your current issue so we could reproduce it."]
+        if let data = data {
+            let attachmentName = "diagnostic_\(info.mac.replacingOccurrences(of: ":", with: "")).json"
+            let url = FileManager.default.temporaryDirectory.appendingPathComponent(attachmentName)
+            do {
+                try data.write(to: url, options: .atomicWrite)
+                items.append(url)
+            } catch {
+                NSLog(error.localizedDescription)
+            }
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.diagnosticsEmail = service
+            if self?.diagnosticsEmail?.canPerform(withItems: items) == true {
+                self?.diagnosticsEmail?.perform(withItems: items)
+            }
+        }
+        #endif
+    }
+
+    func connectIfNeeded() {
         if (device?.connectionState ?? .connecting) < .connecting {
             connect()
         }
