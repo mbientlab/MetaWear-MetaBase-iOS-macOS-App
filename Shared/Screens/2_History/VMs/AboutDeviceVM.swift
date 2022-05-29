@@ -209,6 +209,21 @@ public extension AboutDeviceVM {
         connectIfNeeded()
     }
 
+  func stopLoggingAndDeleteLoggedData() {
+    stopLoggingSub = device?
+        .publishWhenConnected()
+        .first()
+        .loggersPause()
+        .command(.powerDownSensors)
+        .command(.deleteLoggedData)
+        .command(.led(.systemPink, .pulse(repetitions: 1)))
+        .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] _ in
+            self?.updateLoggedDataSize()
+        })
+
+    connectIfNeeded()
+  }
+
     func deleteLoggedData() {
         deleteDataSub = device?
             .publishWhenConnected()

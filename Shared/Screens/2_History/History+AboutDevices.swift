@@ -87,8 +87,9 @@ extension HistoryScreen.DevicesList {
                 MiniMenuButton {
                     Button("Rename") { vm.rename() }
                     Divider()
-                    Button("Stop logging") { vm.stopLogging() }
                     Button("Delete logged data") { vm.deleteLoggedData() }
+                    Button("Stop logging") { vm.stopLogging() }
+                    Button("Stop logging & delete data") { vm.stopLoggingAndDeleteLoggedData() }
                     Button("Reset to factory defaults") { vm.reset() }
                     Divider()
                     Button("Capture diagnostics") { vm.runDiagnostics() }
