@@ -46,7 +46,7 @@ public extension MigrateDataPanelVM {
         importSub = importer.importPriorSessions()
             .sink { [self] completion in
                 self.canImport = false
-                DispatchQueue.main.asyncAfter(wallDeadline: wall) {
+                DispatchQueue.main.asyncAfter(wallDeadline: wall) { [self] in
                     isImporting = .completed
                 }
                 switch completion {
