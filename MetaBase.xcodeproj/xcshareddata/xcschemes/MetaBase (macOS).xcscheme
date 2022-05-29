@@ -83,6 +83,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-cv_note 0"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-com.apple.CoreDisplay.Logging.stderr 0"
             isEnabled = "YES">
          </CommandLineArgument>
