@@ -120,41 +120,38 @@ extension ActionType {
                      _ controller: ActionController
     ) -> MWPublisher<Void> {
 
-        let reset =  device
-            .publishWhenConnected()
-            .first()
-            .mapToMWError()
-            .command(.macroEraseAll)
-            .command(.resetActivities)
-            .command(.restart)
-            .map { _ in () }
-            .eraseToAnyPublisher()
+      let resetAndDisconnect =  device
+        .publishWhenConnected()
+        .first()
+        .mapToMWError()
+        .command(.macroEraseAll)
+        .command(.resetActivities)
+        .command(.restart)
+        .eraseToAnyPublisher()
 
-        let reconnect = device
-            .publishWhenDisconnected()
-            .first()
-            .handleEvents(receiveOutput: { $0.connect() })
-            .mapToMWError()
-            .map { _ in () }
-            .eraseToAnyPublisher()
+      let waitForDisconnectAndRestart = device
+        .publishWhenDisconnected()
+        .first()
+        .flatMap { mw -> AnyPublisher<MetaWear, Never> in
+          mw.connect()
+          return mw.publishWhenConnected().first().eraseToAnyPublisher()
+        }
 
-        let program = device
-            .publishWhenConnected()
-            .dropFirst()
-            .first()
-            .mapToMWError()
-            .writeRemoteStartPauseEvents(config)
-            .writeLoggingMacro(config)
-            .map { _ in () }
-            .handleEvents(receiveOutput: { [weak controller] _ in
-                controller?.registerLoggingToken(isLogging: true)
-            })
-            .eraseToAnyPublisher()
+      let programLogging = device
+        .publish()
+        .writeRemoteStartPauseEvents(config)
+        .writeLoggingMacro(config)
+        .handleEvents(receiveOutput: { [weak controller] _ in
+          controller?.registerLoggingToken(isLogging: true)
+        })
+        .eraseToAnyPublisher()
 
-        return Publishers.Zip3(program, reconnect, reset)
-            .map { _ in () }
-            .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
-            .eraseToAnyPublisher()
+      return resetAndDisconnect
+        .flatMap { _ in waitForDisconnectAndRestart }
+        .flatMap { _ in programLogging }
+        .map { _ in () }
+        .timeout(controller.timeoutDuration, scheduler: controller.workQueue) { .operationFailed("Timeout") }
+        .eraseToAnyPublisher()
     }
 }
 
