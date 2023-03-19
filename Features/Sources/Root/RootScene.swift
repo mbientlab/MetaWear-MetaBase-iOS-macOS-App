@@ -1,6 +1,5 @@
-import MbientlabFoundation
 import MbientlabUI
-import MetawearScanner
+import MainTabsScreen
 
 public struct RootScene: Scene {
 
@@ -15,14 +14,14 @@ public struct RootScene: Scene {
 
 struct RootView: View {
   var body: some View {
-    VStack {
-      Text("MetaBase 6.0")
-    }
-    .padding()
+    #if os(iOS)
+    MainTabsScreen()
+    #elseif os(macOS)
+    #endif
   }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct RootView_Previews: PreviewProvider {
   static var previews: some View {
     RootView()
   }
