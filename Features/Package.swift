@@ -12,6 +12,7 @@ let package = Package(
   ],
   products: [
     .library(name: "Root", targets: ["Root"]),
+    .library(name: "MainSplitScreen", targets: ["MainSplitScreen"]),
     .library(name: "MainTabsScreen", targets: ["MainTabsScreen"]),
   ],
   dependencies: [
@@ -26,7 +27,15 @@ let package = Package(
         .product(name: "MetawearScanner", package: "Clients"),
         "MbientlabFoundation",
         "MbientlabUI",
+        "MainSplitScreen",
         "MainTabsScreen",
+      ]
+    ),
+    .target(
+      name: "MainSplitScreen",
+      dependencies: [
+        "MbientlabFoundation",
+        "MbientlabUI"
       ]
     ),
     .target(

@@ -1,4 +1,5 @@
 import MbientlabUI
+import MainSplitScreen
 import MainTabsScreen
 
 public struct RootScene: Scene {
@@ -17,6 +18,7 @@ struct RootView: View {
     #if os(iOS)
     MainTabsScreen()
     #elseif os(macOS)
+    MainSplitScreen()
     #endif
   }
 }
