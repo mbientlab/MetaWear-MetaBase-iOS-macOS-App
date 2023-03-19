@@ -64,4 +64,29 @@ extension Session: Buildable {
     )
   }
 }
+
+// MARK: - Buildable
+
+extension Session: Buildable {
+
+  func setting<Value>(_ targetKeyPath: KeyPath<Self,Value>, _ newValue: Value) -> Self {
+
+    func build<PathValue>(_ objectInitPath: KeyPath<Self, PathValue>) -> PathValue {
+      if objectInitPath == targetKeyPath {
+        return newValue as! PathValue
+      }
+      return self[keyPath: objectInitPath]
+    }
+
+    return Self(
+      id: build(\.id),
+      comments: build(\.comments),
+      configuration: build(\.configuration),
+      date: build(\.date),
+      devices: build(\.devices),
+      location: build(\.location),
+      name: build(\.name)
+    )
+  }
+}
 #endif
