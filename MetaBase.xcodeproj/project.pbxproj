@@ -15,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		941AC13C29C7A0FF00A149B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9464EDD129C798D300E928A5 /* MetaBase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetaBase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9464EDD429C798D300E928A5 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		9464EDD829C798D400E928A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -42,9 +43,10 @@
 		9464EDC829C798D300E928A5 = {
 			isa = PBXGroup;
 			children = (
-				9464EDEB29C79E6600E928A5 /* Clients */,
+				941AC13C29C7A0FF00A149B7 /* README.md */,
 				9464EDEA29C79D7500E928A5 /* MbientlabFoundation */,
 				9464EDE729C79B5600E928A5 /* MbientlabUI */,
+				9464EDEB29C79E6600E928A5 /* Clients */,
 				9464EDE329C798F800E928A5 /* Features */,
 				9464EDD329C798D300E928A5 /* MetaBase */,
 				9464EDD229C798D300E928A5 /* Products */,
