@@ -1,6 +1,7 @@
 // Copyright © 2023 by MBIENTLAB, Inc. All rights reserved.
 
 import MbientlabUI
+import Sessions
 
 public struct MainTabsScreen: View {
 
@@ -20,7 +21,7 @@ public struct MainTabsScreen: View {
           Label("Record", symbol: .record)
         }
 
-      Color.clear
+      SessionsTabView()
         .tabItem {
           Label("Sessions", symbol: .sessions)
         }

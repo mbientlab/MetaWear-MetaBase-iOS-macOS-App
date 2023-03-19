@@ -14,6 +14,7 @@ let package = Package(
     .library(name: "Root", targets: ["Root"]),
     .library(name: "MainSplitScreen", targets: ["MainSplitScreen"]),
     .library(name: "MainTabsScreen", targets: ["MainTabsScreen"]),
+    .library(name: "Sessions", targets: ["Sessions"]),
   ],
   dependencies: [
     .package(path: "../Clients"),
@@ -40,6 +41,14 @@ let package = Package(
     ),
     .target(
       name: "MainTabsScreen",
+      dependencies: [
+        "MbientlabFoundation",
+        "MbientlabUI",
+        "Sessions",
+      ]
+    ),
+    .target(
+      name: "Sessions",
       dependencies: [
         "MbientlabFoundation",
         "MbientlabUI"
