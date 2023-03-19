@@ -1,13 +1,24 @@
 // Copyright © 2023 by MBIENTLAB, Inc. All rights reserved.
 
 import MbientlabUI
+import Models
+#if DEBUG
+import Mocks
+#endif
 import SwiftUI
 
 public struct SessionsTabView: View {
 
   public init() {
-    self.cachedSessions = []
-    self.sessions = []
+    #if DEBUG
+    let sourceSessions: [Session] = [
+      .mockROM1,
+      .mockROM2,
+      .mockROM3,
+    ]
+    #endif
+    self.cachedSessions = sourceSessions
+    self.sessions = sourceSessions
   }
 
   private let cachedSessions: [Session]
@@ -39,6 +50,10 @@ public struct SessionsTabView: View {
         sessions.sort(using: newSortOrder)
       }
       .onChange(of: searchQuery) { newSearchQuery in
+        if newSearchQuery.isEmpty {
+          sessions = cachedSessions.sorted(using: sortOrder)
+          return
+        }
         sessions = cachedSessions.filter { $0.name.localizedCaseInsensitiveContains(newSearchQuery) }
       }
     }
