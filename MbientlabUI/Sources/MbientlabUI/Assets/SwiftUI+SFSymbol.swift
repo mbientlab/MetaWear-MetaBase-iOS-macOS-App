@@ -1,4 +1,4 @@
-// Copyright © 2023 by Ryan Ferrell. GitHub: importRyan
+// Copyright © 2023 by MBIENTLAB, Inc. All rights reserved.
 
 import SwiftUI
 

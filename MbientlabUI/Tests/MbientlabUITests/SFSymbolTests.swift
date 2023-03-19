@@ -1,3 +1,5 @@
+// Copyright © 2023 by MBIENTLAB, Inc. All rights reserved.
+
 import XCTest
 @testable import MbientlabUI
 
