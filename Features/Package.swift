@@ -18,6 +18,7 @@ let package = Package(
   ],
   dependencies: [
     .package(path: "../Clients"),
+    .package(path: "../Models"),
     .package(path: "../MbientlabFoundation"),
     .package(path: "../MbientlabUI"),
   ],
@@ -51,7 +52,9 @@ let package = Package(
       name: "Sessions",
       dependencies: [
         "MbientlabFoundation",
-        "MbientlabUI"
+        "MbientlabUI",
+        .product(name: "Models", package: "Models"),
+        .product(name: "Mocks", package: "Models"),
       ]
     ),
   ]

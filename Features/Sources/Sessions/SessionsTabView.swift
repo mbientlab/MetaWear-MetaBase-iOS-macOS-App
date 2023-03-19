@@ -44,13 +44,3 @@ public struct SessionsTabView: View {
     }
   }
 }
-
-struct Session: Identifiable, Equatable {
-  let id: UUID
-  let comments: AttributedString
-  let configuration: String
-  let date: Date
-  let devices: Set<String>
-  let location: String
-  let name: String
-}
