@@ -16,3 +16,17 @@ final class SFSymbolTests: XCTestCase {
     }
   }
 }
+
+final class VariableSFSymbolTests: XCTestCase {
+
+  func testRawValuesResolveToSystemNames() {
+    for systemName in VariableSFSymbol.allCases.map(\.rawValue) {
+      #if os(macOS)
+      let image = NSImage(systemSymbolName: systemName, variableValue: 0.25, accessibilityDescription: nil)
+      #elseif os(iOS)
+      let image = UIImage(systemName: systemName, variableValue: 0.25)
+      #endif
+      XCTAssertNotNil(image, systemName)
+    }
+  }
+}
