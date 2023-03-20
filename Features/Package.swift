@@ -12,6 +12,7 @@ let package = Package(
   ],
   products: [
     .library(name: "Root", targets: ["Root"]),
+    .library(name: "Devices", targets: ["Devices"]),
     .library(name: "MainSplitScreen", targets: ["MainSplitScreen"]),
     .library(name: "MainTabsScreen", targets: ["MainTabsScreen"]),
     .library(name: "Sessions", targets: ["Sessions"]),
@@ -34,6 +35,15 @@ let package = Package(
       ]
     ),
     .target(
+      name: "Devices",
+      dependencies: [
+        "MbientlabFoundation",
+        "MbientlabUI",
+        .product(name: "Models", package: "Models"),
+        .product(name: "Mocks", package: "Models"),
+      ]
+    ),
+    .target(
       name: "MainSplitScreen",
       dependencies: [
         "MbientlabFoundation",
@@ -45,6 +55,7 @@ let package = Package(
       dependencies: [
         "MbientlabFoundation",
         "MbientlabUI",
+        "Devices",
         "Sessions",
       ]
     ),

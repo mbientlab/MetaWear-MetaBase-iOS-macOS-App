@@ -1,6 +1,7 @@
 // Copyright © 2023 by MBIENTLAB, Inc. All rights reserved.
 
 import MbientlabUI
+import Devices
 import Sessions
 
 public struct MainTabsScreen: View {
@@ -11,9 +12,9 @@ public struct MainTabsScreen: View {
 
   public var body: some View {
     TabView(selection: $tab) {
-      Color.clear
+      DevicesTabView()
         .tabItem {
-          Label("Devices", symbol: .devices)
+          Label("MetaWear", symbol: .devices)
         }
 
       Color.clear
