@@ -11,16 +11,21 @@ let package = Package(
     .watchOS(.v9),
   ],
   products: [
-    .library(name: "MetawearScanner", targets: ["MetawearScanner"]),
+    .library(name: "Scanner", targets: ["Scanner"]),
   ],
   dependencies: [
     .package(path: "../MbientlabFoundation"),
+    .package(
+      url: "https://github.com/pointfreeco/swift-composable-architecture",
+      branch: "prerelease/1.0"
+    ),
   ],
   targets: [
     .target(
-      name: "MetawearScanner",
+      name: "Scanner",
       dependencies: [
         "MbientlabFoundation",
+        .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
       ]
     ),
   ]

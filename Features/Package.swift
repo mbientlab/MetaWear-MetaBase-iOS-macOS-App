@@ -27,7 +27,7 @@ let package = Package(
     .target(
       name: "Root",
       dependencies: [
-        .product(name: "MetawearScanner", package: "Clients"),
+        .product(name: "Scanner", package: "Clients"),
         "MbientlabFoundation",
         "MbientlabUI",
         "MainSplitScreen",
