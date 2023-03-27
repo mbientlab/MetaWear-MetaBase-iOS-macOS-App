@@ -34,6 +34,12 @@ public struct SessionsTabView: View {
         TableColumn("Date", value: \.date) {
           Text($0.date, style: .date)
         }
+        // Device names / IDs
+        // Accelerometer etc
+        // Location
+        // Length of time
+        // Recording scheme
+        // File size
       }
       .searchable(text: $searchQuery)
       .navigationTitle("Downloads")
