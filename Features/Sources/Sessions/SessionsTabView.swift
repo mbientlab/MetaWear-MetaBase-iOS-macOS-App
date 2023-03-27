@@ -36,7 +36,7 @@ public struct SessionsTabView: View {
         }
       }
       .searchable(text: $searchQuery)
-      .navigationTitle("Sessions")
+      .navigationTitle("Downloads")
       .toolbar {
         #if os(iOS)
         if !selections.isEmpty {

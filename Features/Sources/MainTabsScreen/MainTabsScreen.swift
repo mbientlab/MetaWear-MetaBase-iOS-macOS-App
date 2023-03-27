@@ -13,18 +13,21 @@ public struct MainTabsScreen: View {
   public var body: some View {
     TabView(selection: $tab) {
       DevicesTabView()
+        .tag(Tabs.devices)
         .tabItem {
-          Label("MetaWear", symbol: .devices)
+          Label("Sensors", symbol: .devices)
         }
 
       Color.clear
+        .tag(Tabs.record)
         .tabItem {
           Label("Record", symbol: .record)
         }
 
       SessionsTabView()
+        .tag(Tabs.sessions)
         .tabItem {
-          Label("Sessions", symbol: .sessions)
+          Label("Downloads", symbol: .sessions)
         }
     }
   }
