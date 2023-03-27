@@ -11,6 +11,23 @@ public struct MainTabsScreen: View {
   @State private var tab = Tabs.record
 
   public var body: some View {
+    VStack(spacing: 0) {
+      VStack {
+        HStack(spacing: 10) {
+          ProgressView()
+          Text("Downloading...")
+            .bold()
+        }
+        .foregroundColor(.white)
+        .tint(.white)
+      }
+      .frame(maxWidth: .infinity, minHeight: 30, alignment: .center)
+      .background(Color.red)
+      tabs
+    }
+  }
+
+  var tabs: some View {
     TabView(selection: $tab) {
       DevicesTabView()
         .tag(Tabs.devices)
